@@ -21,6 +21,10 @@ Centauri.View = {};
 Centauri.load = function() {
     Centauri_loadFunctions();
 
+    if(Centauri.isNotUndefined(CentauriEnv)) {
+        CentauriEnv();
+    }
+
     Centauri.Utility.Ajax();
 
     Centauri.View.LoginView();
