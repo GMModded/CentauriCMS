@@ -1,17 +1,16 @@
 <?php
-
-namespace App;
+namespace Centauri\CMS\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BackendLayout extends Model
+class Language extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = "backend_layouts";
+    protected $table = "languages";
 
     /**
      * The primary key associated with the table.
@@ -43,6 +42,8 @@ class BackendLayout extends Model
      * @var array
      */
     protected $attributes = [
-        "data" => ""
+        "title" => "",
+        "lang_code" => "",
+        "slug" => "",
     ];
 }

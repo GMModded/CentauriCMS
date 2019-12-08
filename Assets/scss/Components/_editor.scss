@@ -72,6 +72,18 @@
                 }
             }
 
+            label {
+                input[type="checkbox"]:checked + span {
+                    &.lever {
+                        background-color: #ffc66d;
+
+                        &:after {
+                            background-color: #ffd46f;
+                        }
+                    }
+                }
+            }
+
             .field {
                 margin: 10px 0;
             }

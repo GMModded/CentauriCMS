@@ -16,7 +16,7 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
         if(Centauri.isNotUndefined(data.options)) {
             $.each(data.options, function(index, optionObj) {
                 // options += "<div class='item' data-value='" + optionObj.value + "'>" + optionObj.name + "</div>";
-                options += "<option value='" + optionObj.value + "'>" + optionObj.name + "</select>";
+                options += "<option value='" + optionObj.value + "'>" + optionObj.name;
             });
         }
 
@@ -37,7 +37,25 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
         }
 
         additionalFieldClasses = " custom-control custom-checkbox";
-        html = "<input id='input-" + data.label + "' class='custom-control-input' type='checkbox'" + checked + " /><label class='custom-control-label' for='input-" + data.label + "' class='d-block m-0'>" + data.label + "</label>";
+        html = "<input id='input-checkbox-" + inputObj.id + "' class='custom-control-input' type='checkbox'" + checked + " /><label class='custom-control-label d-block m-0' for='input-checkbox-" + inputObj.id + "'>" + data.label + "</label>";
+    }
+
+    if(type == "switch") {
+        var checked = "";
+        var onClick = "";
+
+        if(Centauri.isNotUndefined(data.isChecked)) {
+            if(data.isChecked) {
+                checked = " checked";
+            }
+        }
+
+        if(Centauri.isNotUndefined(data.onClick)) {
+            var onClick = " onclick='" + data.onClick + "'";
+        }
+
+        additionalFieldClasses = " switch";
+        html = "<label><input type='checkbox'" + checked + " id='" + inputObj.id + "' /><span class='ml-1 lever'></span>" + data.label + "</label>";
     }
 
     return "<div class='field" + additionalFieldClasses + "'>" + html + "</div>";

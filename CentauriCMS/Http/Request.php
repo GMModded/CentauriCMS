@@ -1,10 +1,10 @@
 <?php
 namespace Centauri\CMS\Http;
 
-use App\Page;
-use App\Language;
 use Centauri\CMS\Centauri;
+use Centauri\CMS\Model\Page;
 use Centauri\CMS\Component\ElementComponent;
+use Centauri\CMS\Model\Language;
 use Illuminate\Support\Str;
 
 class Request
@@ -64,30 +64,19 @@ class Request
         }
 
         $page = null;
-        $centauriLanguages = config("centauri.languages");
+        $centauriLanguages = Language::all();
 
         if(Str::contains($nodes, "/") && $nodes != "/") {
+            $page = Page::where("slugs", $nodes)->get()->first();
             $nodes = explode("/", $nodes);
-            
-            if(in_array($nodes[0], $centauriLanguages)) {
-                dd("hi");
-            } else {
-                self::throwNotFound(true);
-            }
         } else {
-            $slugs = $nodes;
-            $page = Page::where("slugs", $slugs)->get()->toArray();
-
-            if(empty($page)) {
-                self::throwNotFound(true);
-            }
+            $slugs = str_replace("/", "", $nodes);
+            $page = Page::where("slugs", $slugs)->orWhere("slugs", "/" . $slugs)->get()->first();
         }
-
-        $page = Page::find($page[0]["uid"]);
 
         self::throwNotFound(false, $page);
 
-        dd($page);
+        $page = Page::find($page->uid);
 
         $uid = $page->getAttribute("uid");
         $renderedHTML = ElementComponent::render("FE", $uid);

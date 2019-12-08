@@ -12,7 +12,7 @@ class ContentElementsAjax implements AjaxInterface
             $pid = $request->input("pid");
             $lid = 0; // $request->input("lid");
 
-            $elements = \App\Element::where([
+            $elements = \Centauri\CMS\Model\Element::where([
                 "pid" => $pid,
                 "lid" => $lid
             ])->get();

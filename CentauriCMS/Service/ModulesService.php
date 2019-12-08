@@ -1,8 +1,8 @@
 <?php
 namespace Centauri\CMS\Service;
 
-use App\Language;
-use App\Page;
+use Centauri\CMS\Model\Page;
+use Centauri\CMS\Model\Language;
 
 class ModulesService
 {

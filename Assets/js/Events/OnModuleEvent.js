@@ -27,13 +27,22 @@ Centauri.Events.OnModuleEvent = function(module) {
                                 data = JSON.parse(data);
                                 var rootpages = data;
 
-                                console.log(rootpages);
-
                                 Centauri.Components.EditorComponent("show", {
                                     id: "CreateNewPage",
                                     title: "Page-Editor - New",
 
                                     form: [
+                                        {
+                                            id: "parent",
+                                            type: "custom",
+                                            custom: "select",
+
+                                            data: {
+                                                label: "Parent-Page",
+                                                options: rootpages
+                                            }
+                                        },
+
                                         {
                                             id: "title",
                                             type: "text",
@@ -47,24 +56,60 @@ Centauri.Events.OnModuleEvent = function(module) {
                                         },
 
                                         {
-                                            id: "parent",
+                                            id: "is_rootpage",
                                             type: "custom",
-                                            custom: "select",
+                                            custom: "switch",
 
                                             data: {
-                                                label: "Parent-Page",
-                                                options: rootpages
+                                                label: "Root page?",
+                                                isChecked: false,
+                                                onClick: Centauri.Events.EditorComponent.Checkbox.OnClick
                                             }
                                         }
                                     ],
 
                                     callbacks: {
+                                        beforeLoaded: function($editor) {
+                                            if(rootpages.length == 0) {
+                                                $("#is_rootpage", $editor).prop("checked", true);
+                                                $("#is_rootpage", $editor).attr("disabled", " ");
+                                            }
+                                        },
+
+                                        afterFormInitialized: function($editor) {
+                                            if(rootpages.length == 0) {
+                                                Centauri.Components.EditorComponent.FormData[0] = {
+                                                    id: "language",
+                                                    type: "custom",
+                                                    custom: "select",
+
+                                                    data: {
+                                                        label: "Parent-Page",
+                                                        options: [
+                                                            {
+                                                                name: "English",
+                                                                value: 1
+                                                            },
+
+                                                            {
+                                                                name: "Deutsch",
+                                                                value: 2
+                                                            }
+                                                        ]
+                                                    }
+                                                };
+                                            }
+                                        },
+
                                         save: function() {
                                             CentauriAjax(
                                                 "Page",
                                                 "newPage",
 
                                                 {
+                                                    parentuid: $("#parent", $editor).val(),
+                                                    language: $("#language", $editor).val(),
+                                                    is_rootpage: $("#is_rootpage", $editor).prop("checked"),
                                                     title: $("#CreateNewPage_title").val(),
                                                     url: $("#CreateNewPage_url").val()
                                                 },

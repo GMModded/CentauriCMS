@@ -36,8 +36,8 @@ class BackendAjax implements AjaxInterface
         if($ajaxName == "getBackendLayout") {
             $pid = $request->input("pid");
 
-            $page = \App\Page::find($pid);
-            $backendLayout = \App\BackendLayout::find($page->getAttribute("backend_layout"));
+            $page = \Centauri\CMS\Model\Page::find($pid);
+            $backendLayout = \Centauri\CMS\Model\BackendLayout::find($page->getAttribute("backend_layout"));
 
             // $backendLayoutData = json_decode($backendLayout->getAttribute("data"));
             return $backendLayout->getAttribute("data");

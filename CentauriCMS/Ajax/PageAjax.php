@@ -1,12 +1,12 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
-use App\Language;
-use Centauri\CMS\AjaxInterface;
 use Illuminate\Http\Request;
-use App\Page;
 use Centauri\CMS\Centauri;
+use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Service\PageService;
+use Centauri\CMS\Model\Page;
+use Centauri\CMS\Model\Language;
 
 class PageAjax implements AjaxInterface
 {
@@ -22,57 +22,65 @@ class PageAjax implements AjaxInterface
         $params = $request->input();
 
         if($ajaxName == "newPage") {
+            $parentuid = $params["parentuid"] ?? null;
+
+            $is_rootpage = $params["is_rootpage"];
             $title = $params["title"];
             $url = $params["url"];
 
-            // $page = new Page;
+            $parentPage = Page::where("uid", $parentuid)->get()->first();
 
-            // $page->title = $title;
-            // $page->slugs = $url;
-            // $page->backend_layout = 1;
-            // $page->is_rootpage = 1;
-            // $page->lid = 1;
+            if(is_null($parentPage) && !$is_rootpage) {
+                return json_encode([
+                    "type" => "error",
+                    "title" => "Parent page not found",
+                    "description" => "Please refresh or abort the current action."
+                ]);
+            } else if($is_rootpage) {
+                $page = new Page;
 
-            $page = $this->pageService->createNewPage([
-                "title" => $title,
-                "slugs" => $url,
-                "backend_layout" => 1,
-                "is_rootpage" => 1,
-                "lid" => 1
-            ]);
+                $page->pid = (!is_null($parentuid)) ? $parentuid : 0;
+                $page->lid = $params["language"];
+                $page->backend_layout = 1;
+                $page->is_rootpage = 1;
+                $page->title = $title;
+                $page->slugs = $params["url"];//($parentPage->slugs == "/" ? "" : $parentPage->slugs . "/") . strtolower($title);
 
-            $existingPage = Page::where("slugs", $url)->first();
-
-            if(is_null($existingPage)) {
-                $existingPage = Page::where("title", $title)->first();
+                $existingPage = Page::where("slugs", $url)->first();
 
                 if(is_null($existingPage)) {
-                    if($page->save()) {
+                    $existingPage = Page::where("title", $title)->first();
+
+                    if(is_null($existingPage)) {
+                        if($page->save()) {
+                            return json_encode([
+                                "type" => "success",
+                                "title" => "Page '" . $title . "' created",
+                                "description" => "Successfuly created '" . $title . "'"
+                            ]);
+                        }
+
                         return json_encode([
-                            "type" => "success",
-                            "title" => "Page '" . $title . "' created",
-                            "description" => "Successfuly created '" . $title . "'"
+                            "type" => "error",
+                            "title" => "New Page failed",
+                            "description" => "An error occured while creating '" . $title . "'"
+                        ]);
+                    } else {
+                        return json_encode([
+                            "type" => "error",
+                            "title" => "Page exists",
+                            "description" => "The page '" . $existingPage->title . "' has this title already!"
                         ]);
                     }
-
-                    return json_encode([
-                        "type" => "error",
-                        "title" => "New Page failed",
-                        "description" => "An error occured while creating '" . $title . "'"
-                    ]);
                 } else {
                     return json_encode([
                         "type" => "error",
                         "title" => "Page exists",
-                        "description" => "The page '" . $existingPage->title . "' has this title already!"
+                        "description" => "The page '" . $existingPage->title . "' has this URL already!"
                     ]);
                 }
-            } else {
-                return json_encode([
-                    "type" => "error",
-                    "title" => "Page exists",
-                    "description" => "The page '" . $existingPage->title . "' has this URL already!"
-                ]);
+            } else if(!is_null($parentPage)) {
+
             }
         }
 

@@ -315,6 +315,10 @@ input:read-only {
       background: -webkit-linear-gradient(50deg, #FFD86F, #FC6262) !important;
       background: -o-linear-gradient(50deg, #FFD86F, #FC6262) !important;
       background: linear-gradient(40deg, #FFD86F, #FC6262) !important; }
+    #editor > .bottom form label input[type="checkbox"]:checked + span.lever {
+      background-color: #ffc66d; }
+      #editor > .bottom form label input[type="checkbox"]:checked + span.lever:after {
+        background-color: #ffd46f; }
     #editor > .bottom form .field {
       margin: 10px 0; }
     #editor > .bottom .container .row[data-rowPos]:not(:last-child) {

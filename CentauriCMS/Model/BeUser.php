@@ -1,17 +1,16 @@
 <?php
-
-namespace App;
+namespace Centauri\CMS\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Element extends Model
+class BeUser extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = "elements";
+    protected $table = "be_users";
 
     /**
      * The primary key associated with the table.
@@ -43,9 +42,7 @@ class Element extends Model
      * @var array
      */
     protected $attributes = [
-        "pid" => 0,
-        "lid" => 0,
-        "data" => "",
-        "colPos" => 0
+        "username" => "",
+        "password" => "",
     ];
 }

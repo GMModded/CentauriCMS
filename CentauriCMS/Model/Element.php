@@ -1,23 +1,16 @@
 <?php
-
-namespace App;
+namespace Centauri\CMS\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Page extends Model
+class Element extends Model
 {
-    /**
-     * For soft deletions (using 'deleted_at' column in database table)
-     */
-    use SoftDeletes;
-
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = "pages";
+    protected $table = "elements";
 
     /**
      * The primary key associated with the table.
@@ -40,8 +33,8 @@ class Page extends Model
      */
     public $timestamps = true;
 
-    const CREATED_AT = "created_at";
-    const UPDATED_AT = "updated_at";
+    const CREATED_AT = "creation_date";
+    const UPDATED_AT = "last_update";
 
     /**
      * The model's default values for attributes.
@@ -49,9 +42,9 @@ class Page extends Model
      * @var array
      */
     protected $attributes = [
-        "pid" => 1,
+        "pid" => 0,
         "lid" => 0,
-        "is_rootpage" => 0,
-        "backend_layout" => 0
+        "data" => "",
+        "colPos" => 0
     ];
 }

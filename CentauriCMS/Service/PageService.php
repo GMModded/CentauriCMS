@@ -1,7 +1,7 @@
 <?php
 namespace Centauri\CMS\Service;
 
-use App\Page;
+use Centauri\CMS\Model\Page;
 
 class PageService
 {
