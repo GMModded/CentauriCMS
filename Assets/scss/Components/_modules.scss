@@ -1,0 +1,117 @@
+#dashboard {
+    position: relative;
+    width: 300px;
+    background: linear-gradient(180deg, #303a4f, #2a3345);
+    transition: width .4s cubic-bezier(.5,.32,.01,1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    color: white;
+
+    small {
+        color: #d1d9e0;
+        font-size: 70%;
+        position: relative;
+        top: -5px;
+    }
+
+    #modules {
+        .module {
+            display: flex;
+            padding: 5px;
+
+            &:hover,
+            &.active {
+                background: #364159;
+                cursor: default;
+            }
+
+            &:not(.active) {
+                cursor: pointer;
+            }
+
+            .icon-view {
+                margin: 10px 15px;
+            }
+
+            .text-view {
+                margin: 10px;
+            }
+        }
+    }
+
+    #user {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid black;
+        padding: 20px 0;
+        background: #323c52;
+
+        &:hover {
+            background: #364159;
+        }
+
+        &.active i {
+            transform: rotate(-180deg);
+        }
+
+        i {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 63px;
+            height: 63px;
+            text-align: center;
+            padding-top: 22.5px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .avatar-view {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+            background: #e0e6eb no-repeat 50%;
+            background-size: cover;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #fff;
+            user-select: none;
+            background-color: rgb(255, 215, 0);
+            font-size: 16px;
+            line-height: 39px;
+            margin: 10px 15px;
+        }
+
+        .text-view {
+            margin: 10px 10px 10px 0;
+
+            p:first-child {
+                font-weight: bold;
+                margin-bottom: -5px !important;
+            }
+        }
+    }
+
+    .dropdown-view {
+        .item {
+            padding: 15px;
+            display: flex;
+
+            p {
+                font-weight: normal;
+            }
+
+            .icon-view {
+                margin: 10px 15px 10px 6.5px;
+            }
+
+            .text-view {
+                margin: 10px;
+            }
+        }
+    }
+}

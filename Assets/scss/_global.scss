@@ -1,0 +1,38 @@
+html,
+body,
+#app {
+    height: 100%;
+    overflow: hidden;
+}
+
+#app {
+    display: flex;
+}
+
+
+#content {
+    width: 100%;
+    padding: 30px;
+    box-shadow: inset 0 0 15px #0a0a0a;
+    overflow-y: auto;
+}
+
+.overlayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 2;
+    transition: .3s;
+
+    &.hidden {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+input:read-only {
+    cursor: not-allowed !important;
+}

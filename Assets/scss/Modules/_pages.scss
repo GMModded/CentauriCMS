@@ -1,0 +1,13 @@
+table {
+    &#pages {
+        tr {
+            &.subpage {
+                td {
+                    &:not(:last-child) {
+                        padding-left: 30px;
+                    }
+                }
+            }
+        }
+    }
+}

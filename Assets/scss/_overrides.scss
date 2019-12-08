@@ -1,0 +1,59 @@
+$tablegradient: linear-gradient(180deg,#303a4f,#2a3345);
+$tablebordercolor: #2b3447;
+
+#content {
+    .table {
+        &.table-dark {
+            background: $tablegradient;
+
+            thead {
+                tr {
+                    th {
+                        background: $tablegradient;
+                    }
+                }
+            }
+
+            th,
+            td {
+                border-color: $tablebordercolor;
+            }
+
+            th,
+            td {
+                cursor: default;
+
+                &::selection {
+                    background: transparent;
+                }
+            }
+
+            td {
+                &[data-type="lid"] {
+                    img {
+                        box-shadow: 0 0 15px #212121;
+                        width: 30px;
+                    }
+                }
+            }
+
+            .actions {
+                display: flex;
+
+                .action {
+                    cursor: pointer;
+                    transition: .3s;
+
+                    &:hover {
+                        // color: #1e2533;
+                        transform: scale(1.33);
+
+                        &:active {
+                            transform: scale(.9);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
