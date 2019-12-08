@@ -207,6 +207,7 @@
             </div>
         </div>
 
-        <script id="centauriscript" src="{{ asset('public/js/centauri.min.js') }}"></script>
+        <script src="{{ asset('public/js/centauri.min.js') }}"></script>
+        <script src="{{ asset('resources/js/centauri-env.js') }}"></script>
     </body>
 </html>

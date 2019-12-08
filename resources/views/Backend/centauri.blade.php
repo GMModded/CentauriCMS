@@ -137,15 +137,18 @@
         </div>
 
         <script>
-            var jsFile = "@php echo asset('public/js/centauri.min.js'); @endphp";
-            if(document.getElementById("centauriscript") == null && typeof Centauri == "undefined") {
-                script = document.createElement("script");
-                script.src = jsFile;
+            var centauriJsFile = "@php echo asset('public/js/centauri.min.js'); @endphp";
+            var centauriEnvJsFile = "@php echo asset('resources/js/centauri-env.js'); @endphp";
 
-                document.getElementsByTagName("body")[0].appendChild(script);
+            if(document.getElementById("centauriscript") == null && typeof Centauri == "undefined") {
+                centauriScript = document.createElement("script");
+                centauriScript.src = centauriJsFile;
+                document.getElementsByTagName("body")[0].appendChild(centauriScript);
+
+                centauriEnvScript = document.createElement("script");
+                centauriEnvScript.src = centauriEnvJsFile;
+                document.getElementsByTagName("body")[0].appendChild(centauriEnvScript);
             }
         </script>
-
-        <script src="{{ asset('resources/js/centauri-env.js') }}"></script>
     </body>
 </html>
