@@ -33,6 +33,31 @@ body,
     }
 }
 
-input:read-only {
-    cursor: not-allowed !important;
+input {
+    &:not(.select-dropdown) {
+        &:read-only {
+            cursor: not-allowed !important;
+        }
+    }
+}
+
+.md-form {
+    input {
+        &.error {
+            border-bottom-color: red;
+
+            + label {
+                color: red;
+            }
+        }
+    }
+}
+
+.md-form {
+    input {
+        &[readonly],
+        &[disabled] {
+            color: #bdbdbd;
+        }
+    }
 }

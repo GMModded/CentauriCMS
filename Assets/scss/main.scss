@@ -1,22 +1,41 @@
-// Toastr
+/**
+ * Packages
+ *
+ * Toastr, Bootstrap 4.1.3
+ */
 @import "../../packages/scss/toastr";
+@import "../../packages/css/bootstrap.min.css";
+@import "../../packages/css/mdb.min.css";
 
-// Overrides
+
+/**
+ * Overrides
+ */
 @import "overrides";
 
-// Global
+/**
+ * Global
+ */
 @import "global";
 
-// Sections
+/**
+ * Sections
+ */
 @import "Sections/dashboard";
 @import "Sections/content";
 
-// Components
+/**
+ * Components
+ */
 @import "Components/editor";
 @import "Components/modules";
 
-// Modules
+/**
+ * Modules
+ */
 @import "Modules/pages";
 
-// Centauri
+/**
+ * Centauri
+ */
 @import "Centauri/loader";

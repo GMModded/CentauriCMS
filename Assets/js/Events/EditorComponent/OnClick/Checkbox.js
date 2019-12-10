@@ -4,11 +4,11 @@ Centauri.Events.EditorComponent.Checkbox.OnClick = function(element) {
 
     if(id == "is_rootpage") {
         if(checked) {
-            $("#parent", $editor).parent().hide();
-            $("#language", $editor).parent().attr("style", "display: block!important;");
+            $("#parent", $editor).parent().parent().hide();
+            $("#language", $editor).parent().parent().attr("style", "display: block!important;");
         } else {
-            $("#language", $editor).parent().hide();
-            $("#parent", $editor).parent().attr("style", "display: block!important;");
+            $("#language", $editor).parent().parent().hide();
+            $("#parent", $editor).parent().parent().attr("style", "display: block!important;");
         }
     }
 };

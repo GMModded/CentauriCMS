@@ -23,6 +23,7 @@ Centauri.Components.PagesComponent = function(module) {
                     form: [
                         {
                             id: "uid",
+                            label: "UID",
                             type: "text",
                             value: Centauri.Components.PagesComponent.uid,
                             extraAttr: "readonly"
@@ -41,20 +42,21 @@ Centauri.Components.PagesComponent = function(module) {
 
                         {
                             id: "title",
+                            label: "Title",
                             type: "text",
-                            placeholder: "Title",
                             value: title
                         },
 
                         {
                             id: "url",
+                            label: "URL",
                             type: "text",
-                            placeholder: "URLs",
                             value: url
                         },
 
                         {
                             id: "created_at",
+                            label: "Created at",
                             type: "text",
                             value: created_at,
                             extraAttr: "readonly"
@@ -62,6 +64,7 @@ Centauri.Components.PagesComponent = function(module) {
 
                         {
                             id: "updated_at",
+                            label: "Updated at",
                             type: "text",
                             value: updated_at,
                             extraAttr: "readonly"
@@ -304,22 +307,26 @@ Centauri.Components.PagesComponent = function(module) {
 
                                     {
                                         id: "title",
+                                        label: "Title",
                                         type: "text",
-                                        placeholder: "Title",
                                         value: title
                                     },
 
                                     {
                                         id: "url",
+                                        label: "URL",
                                         type: "text",
-                                        placeholder: "URLs",
                                         value: url
                                     }
                                 ],
 
                                 callbacks: {
                                     save: function() {
+                                        var id = "#TranslatePage-" + Centauri.Components.PagesComponent.uid;
+
                                         var lid = $("select#language", $editor).val();
+                                        var title = $(id + "_title", $editor).val();
+                                        var url = $(id + "_url", $editor).val();
 
                                         CentauriAjax(
                                             "Page",

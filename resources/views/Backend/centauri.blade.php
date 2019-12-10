@@ -7,8 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Centauri - Login</title>
         <script src="https://kit.fontawesome.com/20ea993ef1.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ asset('public/css/mdb.min.css') }}">
+        {{-- <link rel="stylesheet" href="{{ asset('public/css/mdb.min.css') }}"> --}}
         <link rel="stylesheet" href="{{ asset('public/css/centauri.min.css') }}">
     </head>
 

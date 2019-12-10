@@ -98,7 +98,7 @@ class PageAjax implements AjaxInterface
             $title = $params["title"];
             $url = $params["url"];
 
-            $page = Page::find($uid);
+            $page = Page::where("uid", $uid)->get()->first();
 
             $page->title = $title;
             $page->slugs = $url;
@@ -120,7 +120,7 @@ class PageAjax implements AjaxInterface
 
         if($ajaxName == "showPage") {
             $uid = $params["uid"];
-            $page = Page::find($uid);
+            $page = Page::where("uid", $uid)->get()->first();
 
             $url = $page->slugs;
             return $url;
@@ -129,7 +129,7 @@ class PageAjax implements AjaxInterface
         if($ajaxName == "deletePage") {
             $uid = $params["uid"];
 
-            $page = Page::find($uid);
+            $page = Page::where("uid", $uid)->get()->first();
             $title = $page->title;
 
             Page::destroy($uid);
@@ -147,7 +147,7 @@ class PageAjax implements AjaxInterface
             $title = $params["title"];
             $url = $params["url"];
 
-            $page = Page::find($uid);
+            $page = Page::where("uid", $uid)->get()->first();
 
             $newPage = $page->replicate();
             $newPage->title = $title;
@@ -155,7 +155,7 @@ class PageAjax implements AjaxInterface
             $newPage->lid = $lid;
             $newPage->push();
 
-            $language = Language::find($lid);
+            $language = Language::get("uid", $lid)->get()->first();
 
             return json_encode([
                 "type" => "success",
@@ -197,26 +197,21 @@ class PageAjax implements AjaxInterface
             $uid = $params["uid"];
             $page = Page::where("uid", $uid)->first();
 
-            $nlanguages = Language::all()->filter(function($language) use ($page) {
-                if(!is_null($page)) {
-                    dump($language->uid);
-                    dump($page->lid);
-
-                    if($language->uid != $page->lid) {
-                        return $language;
-                    }
-                } else {
-                    return $language;
-                }
-            });
-
             $languages = [];
+            $nlanguages = Language::all();
 
             foreach($nlanguages as $language) {
-                $languages[] = [
+                $languages[$language->uid] = [
                     "value" => $language->uid,
                     "name" => $language->title
                 ];
+            }
+
+            $pages = Page::all();
+            foreach($pages as $page) {
+                if(isset($languages[$page->lid])) {
+                    unset($languages[$page->lid]);
+                }
             }
 
             return json_encode($languages);

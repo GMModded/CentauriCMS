@@ -39,6 +39,7 @@ Centauri.Components.EditorComponent = function(type, data) {
                         var placeholder = "";
                         var value = "";
                         var extraAttr = "";
+                        var label = "";
 
                         if(Centauri.isNotUndefined(inputObj.type)) {
                             type = inputObj.type;
@@ -56,7 +57,17 @@ Centauri.Components.EditorComponent = function(type, data) {
                             extraAttr = " " + inputObj.extraAttr;
                         }
 
-                        var html = "<input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + id + "_" +  inputObj.id + "'" + extraAttr + " />";
+                        if(Centauri.isNotUndefined(inputObj.label)) {
+                            var activeClass = "";
+
+                            if(value.length != 0) {
+                                activeClass = " class='active'";
+                            }
+
+                            label = "<label for='" + id + "_" + inputObj.id + "'" + activeClass + ">" + inputObj.label + "</label>";
+                        }
+
+                        var html = "<div class='md-form'><input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + id + "_" + inputObj.id + "'" + extraAttr + " />" + label + "</div>";
 
                         if(type == "custom") {
                             html = Centauri.Utility.EditorUtility.getCustomHTMLByType(inputObj);
@@ -65,6 +76,8 @@ Centauri.Components.EditorComponent = function(type, data) {
                         $("form", $editor).append(html);
                     }
                 });
+
+                $("form .mdb-select", $editor).materialSelect();
             }
         }
 

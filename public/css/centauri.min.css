@@ -1,3 +1,10 @@
+/**
+ * Packages
+ *
+ * Toastr, Bootstrap 4.1.3
+ */
+@import url(../../packages/css/bootstrap.min.css);
+@import url(../../packages/css/mdb.min.css);
 .toast-title {
   font-weight: bold; }
 
@@ -202,6 +209,9 @@ button.toast-close-button {
     padding: 15px 15px 15px 50px;
     width: 25em; } }
 
+/**
+ * Overrides
+ */
 #content .table.table-dark {
   background: linear-gradient(180deg, #303a4f, #2a3345); }
   #content .table.table-dark thead tr th {
@@ -228,6 +238,9 @@ button.toast-close-button {
         #content .table.table-dark .actions .action:hover:active {
           transform: scale(0.9); }
 
+/**
+ * Global
+ */
 html,
 body,
 #app {
@@ -256,9 +269,20 @@ body,
     visibility: hidden;
     opacity: 0; }
 
-input:read-only {
+input:not(.select-dropdown):read-only {
   cursor: not-allowed !important; }
 
+.md-form input.error {
+  border-bottom-color: red; }
+  .md-form input.error + label {
+    color: red; }
+
+.md-form input[readonly], .md-form input[disabled] {
+  color: #bdbdbd; }
+
+/**
+ * Sections
+ */
 #dashboard {
   z-index: 2; }
 
@@ -268,6 +292,9 @@ input:read-only {
 #content {
   z-index: 0; }
 
+/**
+ * Components
+ */
 #editor {
   position: fixed;
   top: 0;
@@ -426,9 +453,15 @@ input:read-only {
     #dashboard .dropdown-view .item .text-view {
       margin: 10px; }
 
+/**
+ * Modules
+ */
 table#pages tr.subpage td:not(:last-child) {
   padding-left: 30px; }
 
+/**
+ * Centauri
+ */
 .loader {
   position: absolute;
   top: 50%;
