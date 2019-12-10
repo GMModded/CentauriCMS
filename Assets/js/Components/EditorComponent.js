@@ -113,14 +113,14 @@ Centauri.Components.EditorComponent = function(type, data) {
 
             $("button[data-id='cancel']", $editor).on("click", function() {
                 Centauri.Components.EditorComponent("hide");
-    
-                var closer = $(".overlayer").attr("data-closer");
 
-                if(closer == "EditorComponent") {
-                    $(".overlayer").addClass("hidden");
-                    Centauri.Events.OnOverlayerHiddenEvent(closer);
-                    Centauri.Events.OnEditorComponentClosedEvent();
-                }
+                $(".overlayer").addClass("hidden");
+                Centauri.Events.OnOverlayerHiddenEvent(closer);
+                Centauri.Events.OnEditorComponentClosedEvent();
+
+                setTimeout(function() {
+                    Centauri.Components.EditorComponent("clear");
+                }, transitionTime);
 
                 if(Centauri.isNotUndefined(data.callbacks.cancel)) {
                     data.callbacks.cancel();

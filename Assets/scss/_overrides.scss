@@ -29,8 +29,8 @@ $tablebordercolor: #2b3447;
             }
 
             td {
-                &[data-type="lid"] {
-                    img {
+                img {
+                    &.flag {
                         box-shadow: 0 0 15px #212121;
                         width: 30px;
                     }

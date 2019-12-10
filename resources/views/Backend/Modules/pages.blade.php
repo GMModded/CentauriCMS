@@ -50,7 +50,7 @@
                                     </td>
 
                                     <td data-type="lid" data-lid="{{ $page->lid }}">
-                                        <img src="{!! $page->language["flagsrc"] !!}" class="img-fluid" />
+                                        <img src="{!! $page->language["flagsrc"] !!}" class="img-fluid flag" />
                                     </td>
 
                                     <td data-type="title">

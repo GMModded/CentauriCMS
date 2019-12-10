@@ -23,64 +23,72 @@ class PageAjax implements AjaxInterface
 
         if($ajaxName == "newPage") {
             $parentuid = $params["parentuid"] ?? null;
+            $is_rootpage = $params["is_rootpage"] ?? false;
 
-            $is_rootpage = $params["is_rootpage"];
+            $page = new Page;
+
             $title = $params["title"];
             $url = $params["url"];
 
-            $parentPage = Page::where("uid", $parentuid)->get()->first();
-
-            if(is_null($parentPage) && !$is_rootpage) {
-                return json_encode([
-                    "type" => "error",
-                    "title" => "Parent page not found",
-                    "description" => "Please refresh or abort the current action."
-                ]);
-            } else if($is_rootpage) {
-                $page = new Page;
-
-                $page->pid = (!is_null($parentuid)) ? $parentuid : 0;
+            if($is_rootpage) {
+                $page->pid = $parentuid;
                 $page->lid = $params["language"];
                 $page->backend_layout = 1;
                 $page->is_rootpage = 1;
                 $page->title = $title;
-                $page->slugs = $params["url"];//($parentPage->slugs == "/" ? "" : $parentPage->slugs . "/") . strtolower($title);
+                $page->slugs = $url;
+            } else {
+                $parentPage = Page::where("uid", $parentuid)->get()->first();
 
-                $existingPage = Page::where("slugs", $url)->first();
+                if(is_null($parentPage)) {
+                    return json_encode([
+                        "type" => "error",
+                        "title" => "Parent page not found",
+                        "description" => "Please refresh or abort the current action."
+                    ]);
+                }
+
+                $page->pid = $parentuid;
+                $page->lid = $params["language"];
+                $page->backend_layout = 1;
+                $page->is_rootpage = 1;
+
+                $page->title = $title;
+                $page->slugs = $params["url"] ?? "/";
+            }
+
+            $existingPage = Page::where("slugs", $url)->first();
+
+            if(is_null($existingPage)) {
+                $existingPage = Page::where("title", $title)->first();
 
                 if(is_null($existingPage)) {
-                    $existingPage = Page::where("title", $title)->first();
-
-                    if(is_null($existingPage)) {
-                        if($page->save()) {
-                            return json_encode([
-                                "type" => "success",
-                                "title" => "Page '" . $title . "' created",
-                                "description" => "Successfuly created '" . $title . "'"
-                            ]);
-                        }
-
+                    if($page->save()) {
                         return json_encode([
-                            "type" => "error",
-                            "title" => "New Page failed",
-                            "description" => "An error occured while creating '" . $title . "'"
-                        ]);
-                    } else {
-                        return json_encode([
-                            "type" => "error",
-                            "title" => "Page exists",
-                            "description" => "The page '" . $existingPage->title . "' has this title already!"
+                            "type" => "success",
+                            "title" => "Page '" . $title . "' created",
+                            "description" => "Successfuly created '" . $title . "'"
                         ]);
                     }
+
+                    return json_encode([
+                        "type" => "error",
+                        "title" => "New Page failed",
+                        "description" => "An error occured while creating '" . $title . "'"
+                    ]);
                 } else {
                     return json_encode([
                         "type" => "error",
                         "title" => "Page exists",
-                        "description" => "The page '" . $existingPage->title . "' has this URL already!"
+                        "description" => "The page '" . $existingPage->title . "' has this title already!"
                     ]);
                 }
-            } else if(!is_null($parentPage)) {
-
+            } else {
+                return json_encode([
+                    "type" => "error",
+                    "title" => "Page exists",
+                    "description" => "The page '" . $existingPage->title . "' has this URL already!"
+                ]);
             }
         }
 
@@ -169,6 +177,49 @@ class PageAjax implements AjaxInterface
             }
 
             return json_encode($data);
+        }
+
+        if($ajaxName == "getLanguages") {
+            $nlanguages = Language::all();
+            $languages = [];
+
+            foreach($nlanguages as $language) {
+                $languages[] = [
+                    "value" => $language->uid,
+                    "name" => $language->title
+                ];
+            }
+
+            return json_encode($languages);
+        }
+
+        if($ajaxName == "getTranslateableLanguages") {
+            $uid = $params["uid"];
+            $page = Page::where("uid", $uid)->first();
+
+            $nlanguages = Language::all()->filter(function($language) use ($page) {
+                if(!is_null($page)) {
+                    dump($language->uid);
+                    dump($page->lid);
+
+                    if($language->uid != $page->lid) {
+                        return $language;
+                    }
+                } else {
+                    return $language;
+                }
+            });
+
+            $languages = [];
+
+            foreach($nlanguages as $language) {
+                $languages[] = [
+                    "value" => $language->uid,
+                    "name" => $language->title
+                ];
+            }
+
+            return json_encode($languages);
         }
 
         return json_encode([

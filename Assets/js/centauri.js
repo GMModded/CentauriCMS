@@ -28,7 +28,6 @@ Centauri.load = function() {
     Centauri.Utility.Ajax();
 
     Centauri.View.LoginView();
-    Centauri.View.PagesView();
 
     Centauri.Components.ModulesComponent({
         type: "init"
@@ -43,11 +42,3 @@ Centauri.load = function() {
 $(document).ready(function() {
     Centauri.load();
 });
-
-// function disableF5(e) {
-//     if ((e.which || e.keyCode) == 116 || (e.which || e.keyCode) == 82) e.preventDefault();
-// };
-
-// $(document).ready(function() {
-//     $(document).on("keydown", disableF5);
-// });

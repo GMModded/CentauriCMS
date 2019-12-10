@@ -1,6 +1,10 @@
 <?php
 
-use App\Page;
+use Centauri\CMS\Model\BeUser;
+use Centauri\CMS\Model\Page;
+use Centauri\CMS\Model\Language;
+use Centauri\CMS\Model\Element;
+use Centauri\CMS\Model\BackendLayout;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
 
         // Backend Users
-        $users = \App\BeUser::all();
+        $users = BeUser::all();
 
         if(count($users) == 0) {
             DB::table("be_users")->insert([
@@ -34,7 +38,7 @@ class DatabaseSeeder extends Seeder
 
 
         // Pages
-        $pages = \App\Page::all();
+        $pages = Page::all();
 
         if(count($pages) == 0) {
             DB::table("pages")->insert([
@@ -55,7 +59,7 @@ class DatabaseSeeder extends Seeder
 
 
         // Languages
-        $languages = \App\Language::all();
+        $languages = Language::all();
 
         if(count($languages) == 0) {
             DB::table("languages")->insert([
@@ -76,14 +80,23 @@ class DatabaseSeeder extends Seeder
                 "updated_at" => date("Y-m-d H:i:s")
             ]);
 
-            echo "Created default languages (english & german).\n";
+            DB::table("languages")->insert([
+                "title" => "Francé",
+                "lang_code" => "fr-FR",
+                "slug" => "fr",
+                "flagsrc" => "CentauriCMS/public/images/flags/FR.png",
+                "created_at" => date("Y-m-d H:i:s"),
+                "updated_at" => date("Y-m-d H:i:s")
+            ]);
+
+            echo "Created default languages (english, german & french).\n";
         } else {
             echo "Atleast one language has been found in languages-table.\n";
         }
 
 
         // Elements
-        $elements = \App\Element::all();
+        $elements = Element::all();
 
         if(count($elements) == 0) {
             DB::table("elements")->insert([
@@ -108,7 +121,7 @@ class DatabaseSeeder extends Seeder
 
 
         // Backend Layout
-        $backendLayouts = \App\BackendLayout::all();
+        $backendLayouts = BackendLayout::all();
 
         if(count($backendLayouts) == 0) {
             DB::table("backend_layouts")->insert([

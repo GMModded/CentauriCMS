@@ -42,6 +42,14 @@ class ModulesService
             ];
         }
 
+        if($moduleid == "languages") {
+            $languages = Language::all();
+
+            $data = [
+                "languages" => $languages
+            ];
+        }
+
         return $data;
     }
 }

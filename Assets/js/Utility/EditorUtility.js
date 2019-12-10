@@ -10,12 +10,15 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
     if(type == "select") {
         var options = "";
 
-        // html = "<div class='centauri-select' id='" + inputObj.id + "'>|</div>";
+        var labelHTML = "<label class='d-block m-0' for='" + inputObj.id + "'>" + data.label + "</label>";
         html = "<select style='display:block!important;' class='form-control' id='" + inputObj.id + "'>|</select>";
+
+        if(Centauri.isNotUndefined(data.label)) {
+            html = labelHTML + html;
+        }
 
         if(Centauri.isNotUndefined(data.options)) {
             $.each(data.options, function(index, optionObj) {
-                // options += "<div class='item' data-value='" + optionObj.value + "'>" + optionObj.name + "</div>";
                 options += "<option value='" + optionObj.value + "'>" + optionObj.name;
             });
         }
@@ -55,8 +58,8 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
         }
 
         additionalFieldClasses = " switch";
-        html = "<label><input type='checkbox'" + checked + " id='" + inputObj.id + "' /><span class='ml-1 lever'></span>" + data.label + "</label>";
+        html = "<label><input type='checkbox'" + checked + " id='" + inputObj.id + "'" + onClick + " /><span class='ml-1 lever'></span>" + data.label + "</label>";
     }
 
-    return "<div class='field" + additionalFieldClasses + "'>" + html + "</div>";
+    return "<div class='field" + additionalFieldClasses + "'" + (Centauri.isNotUndefined(inputObj.extraAttr) ? " " + inputObj.extraAttr : "") + ">" + html + "</div>";
 };

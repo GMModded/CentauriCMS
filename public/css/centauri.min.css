@@ -215,7 +215,7 @@ button.toast-close-button {
     #content .table.table-dark th::selection,
     #content .table.table-dark td::selection {
       background: transparent; }
-  #content .table.table-dark td[data-type="lid"] img {
+  #content .table.table-dark td img.flag {
     box-shadow: 0 0 15px #212121;
     width: 30px; }
   #content .table.table-dark .actions {
@@ -303,7 +303,7 @@ input:read-only {
   #editor > .bottom {
     height: calc(100% - 170px);
     margin-top: 30px;
-    box-shadow: 0 0 15px #bbb;
+    box-shadow: 10px 0 15px #bbb;
     padding-top: 10px; }
     #editor > .bottom > .row {
       position: absolute;
