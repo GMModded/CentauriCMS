@@ -53,4 +53,13 @@ function Centauri_loadFunctions() {
     Centauri.isNotUndefined = function(variable) {
         return (typeof variable != undefined && typeof variable != "undefined");
     };
+
+    /**
+     * @function eExists - Checks if a given element (by selector) exists or not
+     * @param selector - the selector for this function
+     * @return {boolean}
+     */
+    Centauri.elExists = function(selector) {
+        return ($(selector).length === 1 ? true : false);
+    };
 }

@@ -39,6 +39,7 @@ Centauri.Components.EditorComponent = function(type, data) {
                         var placeholder = "";
                         var value = "";
                         var extraAttr = "";
+                        var required = "";
                         var label = "";
 
                         if(Centauri.isNotUndefined(inputObj.type)) {
@@ -57,6 +58,12 @@ Centauri.Components.EditorComponent = function(type, data) {
                             extraAttr = " " + inputObj.extraAttr;
                         }
 
+                        if(Centauri.isNotUndefined(inputObj.required)) {
+                            if(inputObj.required) {
+                                required = " required";
+                            }
+                        }
+
                         if(Centauri.isNotUndefined(inputObj.label)) {
                             var activeClass = "";
 
@@ -67,7 +74,7 @@ Centauri.Components.EditorComponent = function(type, data) {
                             label = "<label for='" + id + "_" + inputObj.id + "'" + activeClass + ">" + inputObj.label + "</label>";
                         }
 
-                        var html = "<div class='md-form'><input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + id + "_" + inputObj.id + "'" + extraAttr + " />" + label + "</div>";
+                        var html = "<div class='md-form'><input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + id + "_" + inputObj.id + "'" + extraAttr + required + " />" + label + "</div>";
 
                         if(type == "custom") {
                             html = Centauri.Utility.EditorUtility.getCustomHTMLByType(inputObj);
@@ -78,6 +85,7 @@ Centauri.Components.EditorComponent = function(type, data) {
                 });
 
                 $("form .mdb-select", $editor).materialSelect();
+                Centauri.Utility.EditorUtility.Validator();
             }
         }
 
@@ -106,6 +114,11 @@ Centauri.Components.EditorComponent = function(type, data) {
             Centauri.Components.EditorComponent.ButtonsInitialized = true;
 
             $("button[data-id='save']", $editor).on("click", function() {
+                
+                if(Centauri.elExists($("input.error", $editor))) {
+                    Centauri.Notify("error", "Form Validation", "Please fill out all fields!");
+                }
+
                 data.callbacks.save();
 
                 if(Centauri.Components.EditorComponent.ClearOnSave) {

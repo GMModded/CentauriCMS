@@ -71,13 +71,15 @@ Centauri.Events.OnModuleEvent = function(module) {
                                                     {
                                                         id: "title",
                                                         type: "text",
-                                                        label: "Title"
+                                                        label: "Title",
+                                                        required: true
                                                     },
 
                                                     {
                                                         id: "url",
                                                         type: "text",
-                                                        label: "URL"
+                                                        label: "URL",
+                                                        required: true
                                                     },
 
                                                     {
