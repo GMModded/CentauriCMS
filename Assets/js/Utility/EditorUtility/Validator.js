@@ -1,10 +1,15 @@
-Centauri.Utility.EditorUtility.Validator = function(form) {
-    // const inputs = [];
+Centauri.Utility.EditorUtility.Validator = function() {
+    $form = $("form", $editor);
 
-    // $form = $(form, $editor);
+    $("input", $form).on("focusout", function() {
+        var required = $(this).attr("required");
 
-    // $("input", $form).on("focus", function() {
-    //     var id = $(this).attr("id");
-        
-    // });
+        if(Centauri.isNotUndefined(required)) {
+            var value = $(this).val();
+
+            if(value == "") {
+                $(this).addClass("error");
+            }
+        }
+    });
 };

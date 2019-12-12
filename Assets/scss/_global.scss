@@ -34,8 +34,8 @@ body,
 }
 
 input {
-    &:not(.select-dropdown) {
-        &:read-only {
+    &:read-only {
+        &:not(.select-dropdown) {
             cursor: not-allowed !important;
         }
     }
@@ -44,10 +44,12 @@ input {
 .md-form {
     input {
         &.error {
-            border-bottom-color: red;
+            color: red !important;
+            box-shadow: none !important;
+            border-bottom-color: red !important;
 
             + label {
-                color: red;
+                color: red !important;
             }
         }
     }

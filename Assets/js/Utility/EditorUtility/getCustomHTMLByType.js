@@ -9,7 +9,8 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
         var options = "";
 
         var labelHTML = "<label class='mdb-main-label' for='" + inputObj.id + "'>" + data.label + "</label>";
-        html = "<select class='mdb-select md-form' id='" + inputObj.id + "'>|</select>";
+        // html = "<select class='mdb-select md-form' id='" + inputObj.id + "'>|</select>";
+        html = "<select class='mdb-select select2 colorful-select dropdown-primary md-form' searchable='Search here..'>|</select>";
 
         if(Centauri.isNotUndefined(data.label)) {
             html.split("|").join("<option value='' disabled selected>" + data.label + "</option>|");

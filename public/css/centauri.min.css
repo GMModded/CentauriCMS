@@ -238,6 +238,9 @@ button.toast-close-button {
         #content .table.table-dark .actions .action:hover:active {
           transform: scale(0.9); }
 
+.md-form input.form-control:read-only {
+  color: #495057; }
+
 /**
  * Global
  */
@@ -269,13 +272,15 @@ body,
     visibility: hidden;
     opacity: 0; }
 
-input:not(.select-dropdown):read-only {
+input:read-only:not(.select-dropdown) {
   cursor: not-allowed !important; }
 
 .md-form input.error {
-  border-bottom-color: red; }
+  color: red !important;
+  box-shadow: none !important;
+  border-bottom-color: red !important; }
   .md-form input.error + label {
-    color: red; }
+    color: red !important; }
 
 .md-form input[readonly], .md-form input[disabled] {
   color: #bdbdbd; }
@@ -347,7 +352,11 @@ input:not(.select-dropdown):read-only {
       #editor > .bottom form label input[type="checkbox"]:checked + span.lever:after {
         background-color: #ffd46f; }
     #editor > .bottom form .field {
+      position: relative;
       margin: 10px 0; }
+      #editor > .bottom form .field label {
+        margin-top: -30px;
+        left: 0; }
     #editor > .bottom .container .row[data-rowPos]:not(:last-child) {
       padding-bottom: 30px;
       margin-bottom: 30px;

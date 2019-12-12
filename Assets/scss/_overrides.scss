@@ -57,3 +57,13 @@ $tablebordercolor: #2b3447;
         }
     }
 }
+
+.md-form {
+    input {
+        &.form-control {
+            &:read-only {
+                color: #495057;
+            }
+        }
+    }
+}
