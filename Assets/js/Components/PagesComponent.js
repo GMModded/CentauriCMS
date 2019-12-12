@@ -26,7 +26,7 @@ Centauri.Components.PagesComponent = function(module) {
                             label: "UID",
                             type: "text",
                             value: Centauri.Components.PagesComponent.uid,
-                            extraAttr: "readonly"
+                            extraAttr: "disabled"
                         },
 
                         {
@@ -44,14 +44,16 @@ Centauri.Components.PagesComponent = function(module) {
                             id: "title",
                             label: "Title",
                             type: "text",
-                            value: title
+                            value: title,
+                            required: true
                         },
 
                         {
                             id: "url",
                             label: "URL",
                             type: "text",
-                            value: url
+                            value: url,
+                            required: true
                         },
 
                         {
@@ -59,7 +61,7 @@ Centauri.Components.PagesComponent = function(module) {
                             label: "Created at",
                             type: "text",
                             value: created_at,
-                            extraAttr: "readonly"
+                            extraAttr: "disabled"
                         },
 
                         {
@@ -67,7 +69,7 @@ Centauri.Components.PagesComponent = function(module) {
                             label: "Updated at",
                             type: "text",
                             value: updated_at,
-                            extraAttr: "readonly"
+                            extraAttr: "disabled"
                         }
                     ],
 
@@ -309,14 +311,16 @@ Centauri.Components.PagesComponent = function(module) {
                                         id: "title",
                                         label: "Title",
                                         type: "text",
-                                        value: title
+                                        value: title,
+                                        required: true
                                     },
 
                                     {
                                         id: "url",
                                         label: "URL",
                                         type: "text",
-                                        value: url
+                                        value: url,
+                                        required: true
                                     }
                                 ],
 
@@ -324,7 +328,7 @@ Centauri.Components.PagesComponent = function(module) {
                                     save: function() {
                                         var id = "#TranslatePage-" + Centauri.Components.PagesComponent.uid;
 
-                                        var lid = $("select#language", $editor).val();
+                                        var lid = $("#language", $editor).val();
                                         var title = $(id + "_title", $editor).val();
                                         var url = $(id + "_url", $editor).val();
 

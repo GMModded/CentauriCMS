@@ -1,4 +1,5 @@
 Centauri.Events.OnModuleEvent = function(module) {
+    Centauri.Module = module;
     Centauri.Components.PagesComponent(module);
 
     if(module == "dashboard") {}
@@ -112,8 +113,8 @@ Centauri.Events.OnModuleEvent = function(module) {
                                                                 parentuid: $("#parent", $editor).val(),
                                                                 language: $("#language", $editor).val(),
                                                                 is_rootpage: $("#is_rootpage", $editor).prop("checked"),
-                                                                title: $("#CreateNewPage_title").val(),
-                                                                url: $("#CreateNewPage_url").val()
+                                                                title: $("#title").val(),
+                                                                url: $("#url").val()
                                                             },
 
                                                             {

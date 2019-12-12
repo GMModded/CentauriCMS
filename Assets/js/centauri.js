@@ -5,11 +5,19 @@ const Centauri = {};
  */
 Centauri.Env = "Development";
 
+/**
+ * Centauri Module - ID
+ * Default one when logging into the backend
+ */
+Centauri.defaultModule = "dashboard";
+
 
 /**
  * Centauri Core
  */
+Centauri.Module = Centauri.defaultModule;
 Centauri.Events = {};
+Centauri.Listeners = {};
 Centauri.Components = {};
 Centauri.Utility = {};
 Centauri.View = {};

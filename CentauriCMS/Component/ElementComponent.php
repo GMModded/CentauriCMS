@@ -12,7 +12,6 @@ class ElementComponent
      * @param string $view Can be either "frontend", "FE", "backend" or "BE"
      * @param string|int $pageUid Uid of the page to render
      * @param string|int $lid Elements from specific language
-     * 
      * @return void
      */
     public static function render($view, $pageUid, $lid = 0)

@@ -86,6 +86,7 @@ Centauri.Components.EditorComponent = function(type, data) {
 
                 $("form .mdb-select", $editor).materialSelect();
                 Centauri.Utility.EditorUtility.Validator();
+                Centauri.Listeners.EditorListener();
             }
         }
 
@@ -183,7 +184,7 @@ Centauri.Components.EditorComponent = function(type, data) {
     if(type == "clear") {
         var clearOnClose = Centauri.Components.EditorComponent.ClearOnClose;
 
-        if(clearOnClose || (Centauri.isNotUndefined(data.forceClear) && data.forceClear)) {
+        if(clearOnClose || (Centauri.isNotUndefined(data) && data.forceClear)) {
             $("form", $editor).empty();
             $editor.removeAttr("data-id");
         }

@@ -13,23 +13,30 @@ class Request
      * This function manages all requests before anything else happens
      * 
      * @param string $view - Can be either frontend or backend/centauri
-     * 
      * @return void
      */
     public static function handle($nodes)
     {
         if($nodes == "centauri") {
-            if(request()->session()->get("CENTAURI_BE_USER")) {
-                return view("Backend.centauri");
-            }
-
-            return view("Backend.login");
+            self::showBE();
         }
 
         if(Str::contains($nodes, "/")) {
             $nnodes = explode("/", $nodes);
 
             if($nnodes[0] == "centauri") {
+                // If requested lang_code exists in languages table
+                // OR the !in_array()-call is true -> setting $showBE to true
+                $language = Language::all()->filter(function($language) use ($nnodes) {
+                    if($language->getAttribute("slug") == $nnodes[1]) {
+                        return $language;
+                    }
+                })->first();
+
+                if(is_null($language)) {
+                    return redirect("centauri");
+                }
+
                 if($nnodes[1] == "ajax" || $nnodes[1] == "action") {
                     $classname = $nnodes[2];
                     $method = $nnodes[3];
@@ -59,6 +66,8 @@ class Request
                             $nnodes[3]
                         ]
                     );
+                } else {
+                    self::showBE($language);
                 }
             }
         }
@@ -100,5 +109,20 @@ class Request
         if($throwNotFound) {
             dd("404");
         }
+    }
+
+    public static function showBE($language = null)
+    {
+        $Centauri = new Centauri();
+
+        if(request()->session()->get("CENTAURI_BE_USER")) {
+            $data = $Centauri->initBE();
+
+            echo view("Backend.centauri", [
+                "data" => $data
+            ]);
+        }
+
+        echo view("Backend.login");
     }
 }

@@ -38,7 +38,7 @@ function Centauri_loadFunctions() {
 
     /**
      * @function isUndefined - Handles conditions for variable if it's undefined
-     * @param variable - the variable of this function
+     * @param {mixin} variable - the variable of this function
      * @return {boolean}
      */
     Centauri.isUndefined = function(variable) {
@@ -47,7 +47,7 @@ function Centauri_loadFunctions() {
 
     /**
      * @function isNotUndefined - Handles conditions for variable if it's not undefined
-     * @param variable - the variable of this function
+     * @param {mixin} variable - the variable of this function
      * @return {boolean}
      */
     Centauri.isNotUndefined = function(variable) {
@@ -55,11 +55,35 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function eExists - Checks if a given element (by selector) exists or not
-     * @param selector - the selector for this function
+     * @function elExists - Checks if a given element (by selector) exists or not
+     * @param {element} selector - the selector for this function
      * @return {boolean}
      */
     Centauri.elExists = function(selector) {
         return ($(selector).length === 1 ? true : false);
+    };
+
+    /**
+     * @function stringContains - Checks if a string contains a specific (given) char
+     * @param {string} string
+     * @param {string} char
+     * @return {boolean}
+     */
+    Centauri.stringContains = function(string, char) {
+        var parameter = "";
+
+        if(Centauri.isUndefined(string)) {
+            parameter = "string";
+        }
+        if(Centauri.isUndefined(char)) {
+            parameter = "char";
+        }
+
+        if(parameter != "") {
+            console.error("Centauri-Core: stringContains(string, char) can't be called without a " + parameter + "-parameter!");
+            return;
+        }
+
+        return (~string.indexOf(char));
     };
 }

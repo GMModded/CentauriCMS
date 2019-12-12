@@ -44,7 +44,7 @@ Centauri.Components.ModulesComponent = function(data) {
         });
 
         setTimeout(function() {
-            $("#dashboard #modules .module[data-module-id='dashboard']").trigger("click");
+            $("#dashboard #modules .module[data-module-id='" + Centauri.defaultModule + "']").trigger("click");
         }, 333);
 
         $("#dashboard #user i").on("click", function() {

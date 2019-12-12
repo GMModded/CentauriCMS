@@ -64,9 +64,12 @@ return [
             'url' => env('AWS_URL'),
         ],
 
-        'centauri' => [
-            'driver' => 'local',
-            'root' => storage_path('Centauri')
+        /**
+         * Centauri local driver Storage
+         */
+        "centauri" => [
+            "driver" => "local",
+            "root" => storage_path("Centauri")
         ],
 
     ],

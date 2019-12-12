@@ -1,7 +1,9 @@
 Centauri.Utility.EditorUtility.Validator = function() {
     $form = $("form", $editor);
 
-    $("input", $form).on("focusout", function() {
+    var $input = $("input", $form);
+
+    $input.on("focusout", function() {
         var required = $(this).attr("required");
 
         if(Centauri.isNotUndefined(required)) {
@@ -13,7 +15,7 @@ Centauri.Utility.EditorUtility.Validator = function() {
         }
     });
 
-    $("input", $form).on("keyup", function() {
+    $input.on("keyup", function() {
         var required = $(this).attr("required");
 
         if(Centauri.isNotUndefined(required)) {
