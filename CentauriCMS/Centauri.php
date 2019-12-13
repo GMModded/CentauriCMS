@@ -25,6 +25,9 @@ class Centauri
      */
     public function __construct()
     {
+        // $translationLoader = app("translation.loader");
+        // $translationLoader->addNamespace("CentauriCMS", base_path("Centauri/CMS/Language"));
+
         $this->modulesService = Centauri::makeInstance(ModulesService::class);
     }
 

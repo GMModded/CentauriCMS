@@ -19,7 +19,7 @@ Centauri.Events.OnModuleEvent = function(module) {
                 }
 
                 if($(this).data("button-type") == "create") {
-                    CentauriAjax(
+                    Centauri.Ajax(
                         "Page",
                         "getRootPages",
 
@@ -30,7 +30,7 @@ Centauri.Events.OnModuleEvent = function(module) {
                                 data = JSON.parse(data);
                                 var rootpages = data;
 
-                                CentauriAjax(
+                                Centauri.Ajax(
                                     "Page",
                                     "getLanguages",
 
@@ -105,7 +105,7 @@ Centauri.Events.OnModuleEvent = function(module) {
                                                     },
 
                                                     save: function() {
-                                                        CentauriAjax(
+                                                        Centauri.Ajax(
                                                             "Page",
                                                             "newPage",
 

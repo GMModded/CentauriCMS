@@ -77,7 +77,7 @@ Centauri.Components.PagesComponent = function(module) {
                         save: function() {
                             var id = $("#editor").attr("data-id");
 
-                            CentauriAjax(
+                            Centauri.Ajax(
                                 "Page",
                                 "editPage",
 
@@ -126,7 +126,7 @@ Centauri.Components.PagesComponent = function(module) {
                     callbacks: {
                         loaded: function($container, exists) {
                             if(!exists) {
-                                CentauriAjax(
+                                Centauri.Ajax(
                                     "Backend",
                                     "getBackendLayout",
 
@@ -149,7 +149,7 @@ Centauri.Components.PagesComponent = function(module) {
                                                 });
                                             });
         
-                                            CentauriAjax(
+                                            Centauri.Ajax(
                                                 "ContentElements",
                                                 "findByPid",
         
@@ -207,7 +207,7 @@ Centauri.Components.PagesComponent = function(module) {
             }
 
             if(action == "page-show") {
-                CentauriAjax(
+                Centauri.Ajax(
                     "Page",
                     "showPage",
 
@@ -233,7 +233,7 @@ Centauri.Components.PagesComponent = function(module) {
 
             if(action == "page-delete") {
                 if(confirm("Delete this page?")) {
-                    CentauriAjax(
+                    Centauri.Ajax(
                         "Page",
                         "deletePage",
 
@@ -267,7 +267,7 @@ Centauri.Components.PagesComponent = function(module) {
             }
 
             if(action == "page-translations") {
-                CentauriAjax(
+                Centauri.Ajax(
                     "Page",
                     "getTranslateableLanguages",
 
@@ -332,7 +332,7 @@ Centauri.Components.PagesComponent = function(module) {
                                         var title = $(id + "_title", $editor).val();
                                         var url = $(id + "_url", $editor).val();
 
-                                        CentauriAjax(
+                                        Centauri.Ajax(
                                             "Page",
                                             "createTranslatedPage",
 

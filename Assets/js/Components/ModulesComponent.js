@@ -7,13 +7,9 @@ Centauri.Components.ModulesComponent = function(data) {
                 $(".overlayer").removeClass("hidden");
 
                 $module = $(this);
+                var moduleID = $module.data("module-id");
 
-                $("#dashboard #modules .module.active").removeClass("active");
-                $module.addClass("active");
-
-                var moduleID = $(this).data("module-id");
-
-                CentauriAjax(
+                Centauri.Ajax(
                     "Modules",
                     "show",
 
@@ -23,6 +19,9 @@ Centauri.Components.ModulesComponent = function(data) {
 
                     {
                         success: function(data) {
+                            $("#dashboard #modules .module.active").removeClass("active");
+                            $module.addClass("active");
+
                             $(".overlayer").addClass("hidden");
                             $("#content").html(data);
 
@@ -56,7 +55,7 @@ Centauri.Components.ModulesComponent = function(data) {
     if(data.type == "load") {
         var module = data.module;
 
-        CentauriAjax(
+        Centauri.Ajax(
             "Modules",
             "show",
 

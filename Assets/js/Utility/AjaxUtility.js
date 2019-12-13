@@ -1,4 +1,4 @@
-const CentauriAjax = function(ajax, method, data, callbacks) {
+Centauri.Ajax = function(ajax, method, data, callbacks) {
     var url = Centauri.Utility.PathsUtility.root + Centauri.Utility.PathsUtility.centauri + Centauri.Utility.PathsUtility.ajax + ajax + "/" + method;
 
     $("#maincontent .overlayer").removeClass("hidden");
@@ -39,4 +39,10 @@ Centauri.Utility.Ajax = function() {
 
 window.onload = function() {
     Centauri.Utility.Ajax();
+
+    $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+        if(thrownError == "Internal Server Error") {
+            toastr["error"](thrownError, jqxhr.responseText);
+        }
+    });
 };

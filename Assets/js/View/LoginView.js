@@ -8,7 +8,7 @@ Centauri.View.LoginView = function() {
     $("#login form").submit(function(e) {
         e.preventDefault();
 
-        CentauriAjax(
+        Centauri.Ajax(
             "Backend",
             "login",
 

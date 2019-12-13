@@ -17,15 +17,19 @@ class ModulesService
     {
         $modules = [
             "dashboard" => [
-                "title" => trans("backend/modules.dashboard.title")
+                "title" => trans("CentauriCMS/backend.modules.dashboard.title")
             ],
 
             "pages" => [
-                "title" => trans("backend/modules.pages.title")
+                "title" => trans("CentauriCMS/backend/modules.pages.title")
             ],
 
             "languages" => [
-                "title" => trans("backend/modules.languages.title")
+                "title" => trans("CentauriCMS/backend/modules.languages.title")
+            ],
+
+            "extensions" => [
+                "title" => trans("CentauriCMS/backend/modules.extensions.title")
             ]
         ];
 
