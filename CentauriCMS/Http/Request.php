@@ -63,6 +63,29 @@ class Request
                             $nnodes[3]
                         ]
                     );
+                } else {
+                    // Module-View has been requested
+                    $moduleid = $nnodes[1];
+
+                    $modulesService = Centauri::makeInstance(\Centauri\CMS\Service\ModulesService::class);
+                    $modulesService->init();
+
+                    $modules = $GLOBALS["Centauri"]["Core"]["Modules"];
+                    $moduledata = $modulesService->findDataByModuleid($moduleid);
+
+                    if(!view()->exists("Backend.Modules.$moduleid")) {
+                        return response("Template for Module '" . $moduleid . "' not found!", 500)->header("Content-Type", "text/json");
+                    }
+
+                    return view("Backend.centauri", [
+                        "data" => [
+                            "modules" => $modules,
+                            "module" => [
+                                "moduleid" => $moduleid,
+                                "data" => $moduledata
+                            ]
+                        ]
+                    ]);
                 }
             }
         }

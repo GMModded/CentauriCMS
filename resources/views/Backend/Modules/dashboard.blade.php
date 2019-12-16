@@ -1,110 +1,124 @@
 <div class="container">
 	<div class="row">
 		<div class="col-12">
-			<h3 id="title">
-				Centauri - Dashboard
-			</h3>
+			<div class="row mb-3">
+				<div class="col align-items-center d-flex">
+					<h3 id="title">
+						Centauri » Dashboard
+					</h3>
+				</div>
 
-			<hr>
+				<div class="col col-md-4">
+					<div class="md-form">
+						<input id="filter" class="form-control" type="text" />
+
+						<label for="filter">
+							Search
+						</label>
+					</div>
+				</div>
+			</div>
 
 			<div class="container-fluid">
-				<div class="card shadow mb-4">
-					<div class="card-header py-3">
-						<h6 class="m-0 font-weight-bold text-primary">
-							Stats
-						</h6>
-					</div>
+				<div class="row">
+					<div class="card shadow mb-4 w-100">
+						<div class="card-header py-3">
+							<h6 class="m-0 font-weight-bold text-primary">
+								System
+							</h6>
+						</div>
 
-					<div class="card-body">
-		  				<div class="row">
-							<div class="col-xl-3 col-md-6 mb-4">
-								<div class="card border-left-success shadow h-100 py-2">
-									<div class="card-body">
-										<div class="row no-gutters align-items-center">
-											<div class="col mr-2">
-												<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-													Root Pages
+						<div class="card-body">
+							<div class="row">
+								<div class="col-xl-3 col-md-6 mb-4">
+									<div class="card border-left-success shadow h-100 py-2">
+										<div class="card-body">
+											<div class="row no-gutters align-items-center">
+												<div class="col mr-2">
+													<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+														Root Pages
+													</div>
+
+													<div class="h5 mb-0 font-weight-bold text-gray-800">
+														{!! $data["rootpages"] !!}
+													</div>
 												</div>
 
-												<div class="h5 mb-0 font-weight-bold text-gray-800">
-													1
+												<div class="col-auto">
+													<i class="fas fa-globe fa-2x text-gray-300"></i>
 												</div>
 											</div>
+										</div>
+									</div>
+								</div>
 
-											<div class="col-auto">
-												<i class="fas fa-globe fa-2x text-gray-300"></i>
+								<div class="col-xl-3 col-md-6 mb-4">
+									<div class="card border-left-primary shadow h-100 py-2">
+										<div class="card-body">
+											<div class="row no-gutters align-items-center">
+												<div class="col mr-2">
+													<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+														Pages
+													</div>
+
+													<div class="h5 mb-0 font-weight-bold text-gray-800">
+														{!! $data["pages"] !!}
+													</div>
+												</div>
+
+												<div class="col-auto">
+													<i class="fas fa-file fa-2x text-gray-300"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-xl-3 col-md-6 mb-4">
+									<div class="card border-left-warning shadow h-100 py-2">
+										<div class="card-body">
+											<div class="row no-gutters align-items-center">
+												<div class="col mr-2">
+													<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+														Languages
+													</div>
+
+													<div class="h5 mb-0 font-weight-bold text-gray-800">
+														{!! $data["languages"] !!}
+													</div>
+												</div>
+
+												<div class="col-auto">
+													<i class="fas fa-calendar fa-2x text-gray-300"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-xl-3 col-md-6 mb-4">
+									<div class="card border-left-danger shadow h-100 py-2">
+										<div class="card-body">
+											<div class="row no-gutters align-items-center">
+												<div class="col mr-2">
+													<div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+														Notifications
+													</div>
+
+													<div class="h5 mb-0 font-weight-bold text-gray-800">
+														-
+													</div>
+												</div>
+
+												<div class="col-auto">
+													<i class="fas fa-calendar fa-2x text-gray-300"></i>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-
-							<div class="col-xl-3 col-md-6 mb-4">
-								<div class="card border-left-primary shadow h-100 py-2">
-									<div class="card-body">
-										<div class="row no-gutters align-items-center">
-											<div class="col mr-2">
-												<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-													Pages
-												</div>
-
-												<div class="h5 mb-0 font-weight-bold text-gray-800">
-													3
-												</div>
-											</div>
-
-											<div class="col-auto">
-												<i class="fas fa-file fa-2x text-gray-300"></i>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="col-xl-3 col-md-6 mb-4">
-								<div class="card border-left-warning shadow h-100 py-2">
-									<div class="card-body">
-										<div class="row no-gutters align-items-center">
-											<div class="col mr-2">
-												<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-													Events
-												</div>
-
-												<div class="h5 mb-0 font-weight-bold text-gray-800">
-													0
-												</div>
-											</div>
-
-											<div class="col-auto">
-												<i class="fas fa-calendar fa-2x text-gray-300"></i>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="col-xl-3 col-md-6 mb-4">
-								<div class="card border-left-danger shadow h-100 py-2">
-									<div class="card-body">
-										<div class="row no-gutters align-items-center">
-											<div class="col mr-2">
-												<div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-													Notifications
-												</div>
-
-												<div class="h5 mb-0 font-weight-bold text-gray-800">
-													0
-												</div>
-											</div>
-
-											<div class="col-auto">
-												<i class="fas fa-calendar fa-2x text-gray-300"></i>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-					   </div>
+						</div>
 					</div>
 				</div>
 			</div>

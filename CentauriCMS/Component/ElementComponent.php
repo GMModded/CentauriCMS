@@ -1,9 +1,6 @@
 <?php
 namespace Centauri\CMS\Component;
 
-use App;
-use Illuminate\Contracts\Support\Arrayable;
-
 class ElementComponent
 {
     /**

@@ -1,0 +1,17 @@
+#modal {
+    .element {
+        .top {
+            color: #212529;
+            cursor: pointer;
+            padding: 15px;
+        }
+
+        .bottom {
+            padding: 0 15px 15px;
+
+            & > div:first-child {
+                margin-top: 0 !important;
+            }
+        }
+    }
+}

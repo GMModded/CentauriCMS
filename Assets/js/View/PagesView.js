@@ -7,7 +7,7 @@ Centauri.View.PagesView = function() {
 
             var uid = $(this).data("uid") ? $(this).data("uid") : undefined;
 
-            Centauri.Ajax(
+            Centauri.fn.Ajax(
                 "Modal",
                 "pageedit",
 

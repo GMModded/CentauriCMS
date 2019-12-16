@@ -1,11 +1,23 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h3 id="title">
-                Centauri - Languages
-            </h3>
+            <div class="row mb-3">
+                <div class="col align-items-center d-flex">
+                    <h3 id="title">
+                        Centauri » Languages
+                    </h3>
+                </div>
 
-            <hr>
+                <div class="col col-md-4">
+                    <div class="md-form">
+                        <input id="filter" class="form-control" type="text" />
+
+                        <label for="filter">
+                            Search
+                        </label>
+                    </div>
+                </div>
+            </div>
 
             <table id="languages" class="table table-dark table-hover z-depth-1-half">
                 <thead class="thead-dark">

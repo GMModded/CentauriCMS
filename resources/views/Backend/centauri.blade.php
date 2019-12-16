@@ -12,18 +12,30 @@
 
     <body>
         <div id="app">
-            <section id="dashboard" class="py-3">
-                <h4 class="text-center">
-                    Centauri CMS<br/>
+            <section id="dashboard">
+                <div class="logo-view">
+                    <h4 class="text-center">
+                        <span>
+                            Centauri CMS
+                        </span>
 
-                    <small>
-                        v1.0.1 <small><i>EA 1</i></small>
-                    </small>
-                </h4>
+                        <i class="fas fa-rocket"></i>
+
+                        <br/>
+
+                        <small>
+                            v1.0.1
+
+                            <small>
+                                <i>EA 1</i>
+                            </small>
+                        </small>
+                    </h4>
+                </div>
 
                 <div id="modules" class="mt-5">
                     @foreach($data["modules"] as $moduleid => $module)
-                        <div class="module waves-effect waves-light active" data-module-id="{{ $moduleid }}">
+                        <div class="module waves-effect waves-light{{ isset($data['module']) ? ($data['module']['moduleid'] == $moduleid ? ' active' : '') : '' }}" data-module-id="{{ $moduleid }}">
                             <div class="icon-view">
                                 {!! $module["icon"] !!}
                             </div>
@@ -101,11 +113,29 @@
 
             <section id="maincontent" class="w-100 h-100">
                 <div class="overlayer">
-                    <div class="loader hidden">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <div class="preloader-wrapper active loader hidden">
+                        <div class="spinner-layer spinner-blue-only">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-none">
+                        <div class="loader hidden">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                     </div>
                 </div>
 
@@ -122,18 +152,14 @@
                         <form action="" method="POST"></form>
                     </div>
 
-                    <div class="row m-0 w-100 p-3">
-                        <div class="col pl-0 pr-2">
-                            <button class="btn btn-success waves-effect waves-light m-0 w-100" data-id="save" data-trigger="">
-                                <i class="fas fa-save fa-lg"></i>
-                            </button>            
-                        </div>
+                    <div class="row m-0 p-3">
+                        <button class="col btn btn-success waves-effect waves-light btn-floating" data-id="save" data-trigger="saveAllElements">
+                            <i class="fas fa-save" aria-hidden="true"></i>
+                        </button>
 
-                        <div class="col pr-0 pl-2">
-                            <button class="btn btn-danger waves-effect waves-light m-0 w-100" data-id="cancel" data-trigger="CloseEditorComponent">
-                                <i class="fas fa-times fa-lg"></i>
-                            </button>
-                        </div>
+                        <button class="col btn btn-danger waves-effect waves-light btn-floating" data-id="cancel" data-trigger="CloseEditorComponent" style="">
+                            <i class="fas fa-times" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,10 @@ Centauri.Events.OnModuleEvent = function(module) {
     Centauri.Module = module;
     Centauri.Components.PagesComponent(module);
 
+    if(Centauri.DAPLoader.historyPushState) {
+        history.pushState({page: 1}, module, Centauri.Utility.PathsUtility.root + "centauri/" + module);
+    }
+
     if(module == "dashboard") {}
 
     else if(module == "pages") {
@@ -19,7 +23,7 @@ Centauri.Events.OnModuleEvent = function(module) {
                 }
 
                 if($(this).data("button-type") == "create") {
-                    Centauri.Ajax(
+                    Centauri.fn.Ajax(
                         "Page",
                         "getRootPages",
 
@@ -30,7 +34,7 @@ Centauri.Events.OnModuleEvent = function(module) {
                                 data = JSON.parse(data);
                                 var rootpages = data;
 
-                                Centauri.Ajax(
+                                Centauri.fn.Ajax(
                                     "Page",
                                     "getLanguages",
 
@@ -101,26 +105,30 @@ Centauri.Events.OnModuleEvent = function(module) {
                                                         if(rootpages.length == 0) {
                                                             $("#is_rootpage", $editor).prop("checked", true);
                                                             $("#is_rootpage", $editor).attr("disabled", " ");
+                                                            $("form .field #language").parent().parent().removeAttr("style");
+                                                            $("form .field #parent").parent().parent().attr("style", "display: none!important;");
                                                         }
                                                     },
 
                                                     save: function() {
-                                                        Centauri.Ajax(
+                                                        Centauri.fn.Ajax.Overlayer = false;
+
+                                                        Centauri.fn.Ajax(
                                                             "Page",
                                                             "newPage",
 
                                                             {
                                                                 parentuid: $("#parent", $editor).val(),
                                                                 language: $("#language", $editor).val(),
-                                                                is_rootpage: $("#is_rootpage", $editor).prop("checked"),
-                                                                title: $("#title").val(),
-                                                                url: $("#url").val()
+                                                                isrootpage: $("#is_rootpage", $editor).prop("checked"),
+                                                                title: $("#CreateNewPage_title", $editor).val(),
+                                                                url: $("#CreateNewPage_url", $editor).val()
                                                             },
 
                                                             {
                                                                 success: function(data) {
                                                                     data = JSON.parse(data);
-                                                                    toastr[data.type](data.title, data.description);
+                                                                    Centauri.Notify(data.type, data.title, data.description);
 
                                                                     Centauri.Components.EditorComponent("clear");
                                                                     Centauri.Components.EditorComponent("hide");
@@ -132,7 +140,11 @@ Centauri.Events.OnModuleEvent = function(module) {
                                                                 },
 
                                                                 error: function(data) {
-                                                                    console.error(data);
+                                                                    
+                                                                },
+
+                                                                complete: function() {
+                                                                    Centauri.fn.Ajax.Overlayer = true;
                                                                 }
                                                             }
                                                         );

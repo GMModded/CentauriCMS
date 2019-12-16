@@ -8,7 +8,7 @@ Centauri.View.LoginView = function() {
     $("#login form").submit(function(e) {
         e.preventDefault();
 
-        Centauri.Ajax(
+        Centauri.fn.Ajax(
             "Backend",
             "login",
 
@@ -20,11 +20,11 @@ Centauri.View.LoginView = function() {
             {
                 success: function(data) {
                     data = JSON.parse(data);
-                    toastr[data.type](data.title, data.description);
+                    Centauri.Notify(data.type, data.title, data.description);
 
                     if(data.type == "success") {
                         $(document.body).load(window.location.href, function() {
-                            toastr[data.type](data.title, data.description);
+                            Centauri.Notify(data.type, data.title, data.description);
                             Centauri.Events.OnBackendEvent();
                         });
 

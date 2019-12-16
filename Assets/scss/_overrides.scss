@@ -66,4 +66,12 @@ $tablebordercolor: #2b3447;
             }
         }
     }
+
+    .ck + label {
+        transform: translateY(-25px);
+    }
+}
+
+.ck-editor__editable_inline {
+    min-height: 150px;
 }

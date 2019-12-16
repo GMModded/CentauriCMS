@@ -44,7 +44,6 @@ function Centauri_loadFunctions() {
     Centauri.isUndefined = function(variable) {
         return (typeof variable == undefined || typeof variable == "undefined");
     };
-
     /**
      * @function isNotUndefined - Handles conditions for variable if it's not undefined
      * @param {mixin} variable - the variable of this function
@@ -52,6 +51,23 @@ function Centauri_loadFunctions() {
      */
     Centauri.isNotUndefined = function(variable) {
         return (typeof variable != undefined && typeof variable != "undefined");
+    };
+
+    /**
+     * @function isNull - Handles conditions for variable if it's null
+     * @param {mixin} variable - the variable of this function
+     * @return {boolean}
+     */
+    Centauri.isNull = function(variable) {
+        return (typeof variable === null);
+    };
+    /**
+     * @function isNotNull - Handles conditions for variable if it's not null
+     * @param {mixin} variable - the variable of this function
+     * @return {boolean}
+     */
+    Centauri.isNotNull = function(variable) {
+        return (typeof variable !== null);
     };
 
     /**

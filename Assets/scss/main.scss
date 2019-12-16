@@ -1,17 +1,28 @@
 /**
  * Packages
  *
- * Toastr, Bootstrap 4.1.3
+ * Toastr, Bootstrap 4.1.3, MDB Pro 4.8.x
  */
-@import "../../packages/scss/toastr";
-@import "../../packages/css/bootstrap.min.css";
-@import "../../packages/css/mdb.min.css";
+@import "../../packages/toastr/toastr";
+
+@import "../../packages/bootstrap/scss/mixins";
+@import "../../packages/bootstrap/scss/functions";
+@import "../../packages/bootstrap/scss/variables";
+@import "../../packages/bootstrap/dist/css/bootstrap.min.css";
+
+@import "../../packages/mdb/css/mdb.min.css";
+
 
 
 /**
  * Overrides
  */
 @import "overrides";
+
+/*
+ * Fonts
+ */
+@import "fonts";
 
 /**
  * Global
@@ -28,7 +39,6 @@
  * Components
  */
 @import "Components/editor";
-@import "Components/modules";
 
 /**
  * Modules
@@ -39,3 +49,8 @@
  * Centauri
  */
 @import "Centauri/loader";
+
+/**
+ * Modals
+ */
+@import "Modals/newContentElement";

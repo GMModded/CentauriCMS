@@ -33,8 +33,8 @@ class Element extends Model
      */
     public $timestamps = true;
 
-    const CREATED_AT = "creation_date";
-    const UPDATED_AT = "last_update";
+    const CREATED_AT = "created_at";
+    const UPDATED_AT = "updated_at";
 
     /**
      * The model's default values for attributes.
@@ -44,7 +44,8 @@ class Element extends Model
     protected $attributes = [
         "pid" => 0,
         "lid" => 0,
-        "data" => "",
-        "colPos" => 0
+        "header" => "",
+        "subheader" => "",
+        "rte" => ""
     ];
 }

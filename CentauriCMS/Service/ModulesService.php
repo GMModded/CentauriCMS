@@ -17,19 +17,19 @@ class ModulesService
     {
         $modules = [
             "dashboard" => [
-                "title" => trans("CentauriCMS/backend.modules.dashboard.title")
+                "title" => trans("backend/modules.dashboard.title")
             ],
 
             "pages" => [
-                "title" => trans("CentauriCMS/backend/modules.pages.title")
+                "title" => trans("backend/modules.pages.title")
             ],
 
             "languages" => [
-                "title" => trans("CentauriCMS/backend/modules.languages.title")
+                "title" => trans("backend/modules.languages.title")
             ],
 
             "extensions" => [
-                "title" => trans("CentauriCMS/backend/modules.extensions.title")
+                "title" => trans("backend/modules.extensions.title")
             ]
         ];
 
@@ -61,10 +61,10 @@ class ModulesService
      * @param boolean $viewsOptimized
      * @return void
      */
-    public function findAll($viewsOptimized = false)
-    {
+    // public function findAll($viewsOptimized = false)
+    // {
         
-    }
+    // }
 
     /**
      * Handles different dynamic data for every single module in the backend
@@ -76,6 +76,18 @@ class ModulesService
     {
         $data = [];
 
+        if($moduleid == "dashboard") {
+            $rootpages = Page::where("is_rootpage", "1")->get()->count();
+            $pages = Page::where("is_rootpage", "0")->get()->count();
+            $languages = Language::all()->count();
+
+            $data = [
+                "rootpages" => $rootpages,
+                "pages" => $pages,
+                "languages" => $languages
+            ];
+        }
+
         if($moduleid == "pages") {
             $languages = Language::all();
 
@@ -84,13 +96,23 @@ class ModulesService
 
             foreach($pages as $page) {
                 if($page->getAttribute("is_rootpage")) {
-                    $page->language = Language::where("uid", $page->lid)->get()->toArray()[0];
+                    $language = Language::where("uid", $page->lid)->get()->toArray()[0];
+
+                    $flagsrc = env("APP_URL") . "/" . $language["flagsrc"];
+                    $language["flagsrc"] = $flagsrc;
+
+                    $page->language = $language;
                     $npages[$page->getAttribute("lid")][$page->getAttribute("uid")][] = $page;
                 }
             }
             foreach($pages as $page) {
                 if(!$page->getAttribute("is_rootpage")) {
-                    $page->language = Language::where("uid", $page->lid)->get()->toArray()[0];
+                    $language = Language::where("uid", $page->lid)->get()->toArray()[0];
+
+                    $flagsrc = env("APP_URL") . "/" . $language["flagsrc"];
+                    $language["flagsrc"] = $flagsrc;
+
+                    $page->language["flagsrc"] = $flagsrc;
                     $npages[$page->getAttribute("lid")][$page->getAttribute("pid")][] = $page;
                 }
             }
@@ -107,6 +129,14 @@ class ModulesService
             $data = [
                 "languages" => $languages
             ];
+        }
+
+
+        if(isset($data["languages"]) && gettype($data["languages"]) != "integer") {
+            foreach($languages as $language) {
+                $flagsrc = env("APP_URL") . "/" . $language->getAttribute("flagsrc");
+                $language->setAttribute("flagsrc", $flagsrc);
+            }
         }
 
         return $data;

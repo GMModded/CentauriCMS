@@ -1,10 +1,12 @@
 /**
  * Packages
  *
- * Toastr, Bootstrap 4.1.3
+ * Toastr, Bootstrap 4.1.3, MDB Pro 4.8.x
  */
-@import url(../../packages/css/bootstrap.min.css);
-@import url(../../packages/css/mdb.min.css);
+@import url(../../packages/bootstrap/dist/css/bootstrap.min.css);
+@import url(../../packages/mdb/css/mdb.min.css);
+@import url("https://fonts.googleapis.com/css?family=Raleway&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Nanum+Myeongjo&display=swap");
 .toast-title {
   font-weight: bold; }
 
@@ -241,6 +243,22 @@ button.toast-close-button {
 .md-form input.form-control:read-only {
   color: #495057; }
 
+.md-form .ck + label {
+  transform: translateY(-25px); }
+
+.ck-editor__editable_inline {
+  min-height: 150px; }
+
+/*
+ * Fonts
+ */
+h1, h2, h3, h4, h5, h6, p, span, label, input, textarea, td, small,
+.text-view {
+  font-family: Raleway; }
+
+.ft-nanum {
+  font-family: "Nanum Myeongjo"; }
+
 /**
  * Global
  */
@@ -289,102 +307,6 @@ input:read-only:not(.select-dropdown) {
  * Sections
  */
 #dashboard {
-  z-index: 2; }
-
-#maincontent {
-  position: relative; }
-
-#content {
-  z-index: 0; }
-
-/**
- * Components
- */
-#editor {
-  position: fixed;
-  top: 0;
-  right: -320px;
-  width: 320px;
-  height: 100%;
-  background-color: white;
-  box-shadow: 0 0 15px #0f0f0f;
-  z-index: 2;
-  transition: 0.66s cubic-bezier(1, -0.5, 0.25, 1.42); }
-  #editor.active {
-    right: 0; }
-  #editor.fluid {
-    width: calc(100% - 260px); }
-    #editor.fluid > .bottom {
-      margin: 30px;
-      overflow-y: auto;
-      height: calc(100% - 175px);
-      box-shadow: 0 0 15px #cecece; }
-      #editor.fluid > .bottom > .row {
-        padding: 15px 30px !important; }
-    #editor.fluid:not(.active) {
-      right: calc((100% - 260px) * -1); }
-  #editor > .top {
-    background: linear-gradient(180deg, #303a4f, #2a3345); }
-    #editor > .top > p {
-      color: white;
-      font-weight: bold;
-      text-align: center;
-      text-transform: uppercase;
-      margin-bottom: 0;
-      cursor: default; }
-  #editor > .bottom {
-    height: calc(100% - 170px);
-    margin-top: 30px;
-    box-shadow: 10px 0 15px #bbb;
-    padding-top: 10px; }
-    #editor > .bottom > .row {
-      position: absolute;
-      left: 0;
-      bottom: 0; }
-    #editor > .bottom form input:not(:last-child) {
-      margin-bottom: 10px; }
-    #editor > .bottom form input[type="checkbox"]:checked + label:before {
-      background: -webkit-linear-gradient(50deg, #FFD86F, #FC6262) !important;
-      background: -o-linear-gradient(50deg, #FFD86F, #FC6262) !important;
-      background: linear-gradient(40deg, #FFD86F, #FC6262) !important; }
-    #editor > .bottom form label input[type="checkbox"]:checked + span.lever {
-      background-color: #ffc66d; }
-      #editor > .bottom form label input[type="checkbox"]:checked + span.lever:after {
-        background-color: #ffd46f; }
-    #editor > .bottom form .field {
-      position: relative;
-      margin: 10px 0; }
-      #editor > .bottom form .field label {
-        margin-top: -30px;
-        left: 0; }
-    #editor > .bottom .container .row[data-rowPos]:not(:last-child) {
-      padding-bottom: 30px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #cecece; }
-    #editor > .bottom .content-element {
-      margin-top: 15px; }
-      #editor > .bottom .content-element i {
-        position: absolute;
-        top: 15px;
-        right: 20px;
-        transition: .3s; }
-      #editor > .bottom .content-element.active i {
-        top: 20px;
-        transform: rotate(-180deg); }
-      #editor > .bottom .content-element .top {
-        cursor: pointer; }
-        #editor > .bottom .content-element .top .title {
-          text-transform: capitalize;
-          font-size: 20px;
-          display: inline-block;
-          padding: 15px; }
-      #editor > .bottom .content-element .fields {
-        padding: 0 15px 15px; }
-        #editor > .bottom .content-element .fields label {
-          margin-bottom: 0;
-          font-weight: bold; }
-
-#dashboard {
   position: relative;
   width: 300px;
   background: linear-gradient(180deg, #303a4f, #2a3345);
@@ -392,12 +314,28 @@ input:read-only:not(.select-dropdown) {
   height: 100%;
   display: flex;
   flex-direction: column;
-  color: white; }
-  #dashboard small {
+  color: white;
+  padding: 1rem 0;
+  z-index: 2; }
+  @media (max-width: 991.98px) {
+    #dashboard {
+      display: none; } }
+  #dashboard .logo-view span,
+  #dashboard .logo-view small {
+    text-shadow: 0 0 15px #000; }
+  #dashboard .logo-view span {
+    font-family: "Nanum Myeongjo"; }
+  #dashboard .logo-view small {
     color: #d1d9e0;
     font-size: 70%;
     position: relative;
     top: -5px; }
+  #dashboard .logo-view i.fas.fa-rocket {
+    position: absolute;
+    margin-left: 5px;
+    margin-top: -2.5px;
+    font-size: .66em;
+    text-shadow: 0 0 15px #000; }
   #dashboard #modules .module {
     display: flex;
     padding: 5px; }
@@ -462,6 +400,102 @@ input:read-only:not(.select-dropdown) {
     #dashboard .dropdown-view .item .text-view {
       margin: 10px; }
 
+#maincontent {
+  position: relative; }
+
+#content {
+  z-index: 0; }
+
+/**
+ * Components
+ */
+#editor {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 0 0 15px #c7c7c7;
+  z-index: 2;
+  transition: 0.66s cubic-bezier(1, -0.5, 0.25, 1.42); }
+  #editor.active {
+    right: 0; }
+  #editor.fluid {
+    top: 30px;
+    right: 30px;
+    width: calc(100% - 320px);
+    height: calc(100% - 60px); }
+    #editor.fluid > .bottom {
+      margin: 30px;
+      overflow-y: auto;
+      height: calc(100% - 175px);
+      box-shadow: 0 0 15px #cecece; }
+      #editor.fluid > .bottom > .row {
+        padding: 15px 30px !important; }
+    #editor.fluid:not(.active) {
+      right: calc((100% - 260px) * -1); }
+  #editor > .top {
+    background: linear-gradient(180deg, #303a4f, #2a3345); }
+    #editor > .top > p {
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      text-transform: uppercase;
+      margin-bottom: 0;
+      cursor: default; }
+  #editor > .bottom {
+    height: calc(100% - 170px);
+    margin-top: 30px;
+    box-shadow: 10px 0 15px #bbb;
+    padding-top: 10px; }
+    #editor > .bottom > .row {
+      position: absolute;
+      right: 0;
+      bottom: 0; }
+    #editor > .bottom form input:not(:last-child) {
+      margin-bottom: 10px; }
+    #editor > .bottom form input[type="checkbox"]:checked + label:before {
+      background: -webkit-linear-gradient(50deg, #FFD86F, #FC6262) !important;
+      background: -o-linear-gradient(50deg, #FFD86F, #FC6262) !important;
+      background: linear-gradient(40deg, #FFD86F, #FC6262) !important; }
+    #editor > .bottom form label input[type="checkbox"]:checked + span.lever {
+      background-color: #ffc66d; }
+      #editor > .bottom form label input[type="checkbox"]:checked + span.lever:after {
+        background-color: #ffd46f; }
+    #editor > .bottom form .field {
+      position: relative;
+      margin: 10px 0; }
+      #editor > .bottom form .field label {
+        margin-top: -30px;
+        left: 0; }
+    #editor > .bottom .container .row[data-rowPos]:not(:last-child) {
+      padding-bottom: 30px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #cecece; }
+    #editor > .bottom .content-element {
+      margin-top: 15px; }
+      #editor > .bottom .content-element.active .top i {
+        top: 20px;
+        transform: rotate(-180deg); }
+      #editor > .bottom .content-element .top {
+        cursor: pointer; }
+        #editor > .bottom .content-element .top i {
+          position: absolute;
+          top: 15px;
+          right: 20px;
+          transition: .3s; }
+        #editor > .bottom .content-element .top .title {
+          text-transform: capitalize;
+          font-size: 20px;
+          display: inline-block;
+          padding: 15px; }
+      #editor > .bottom .content-element .fields {
+        padding: 0 15px 15px; }
+        #editor > .bottom .content-element .fields label {
+          margin-bottom: 0;
+          font-weight: bold; }
+
 /**
  * Modules
  */
@@ -475,31 +509,23 @@ table#pages tr.subpage td:not(:last-child) {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 999;
-  transition: .3s; }
+  margin-left: -5rem;
+  margin-top: -5rem; }
   .loader.hidden {
     opacity: 0;
     visibility: hidden; }
-  .loader span {
-    display: inline-block;
-    width: 10px;
-    height: 45px;
-    border-radius: 10px;
-    margin-right: 5px;
-    background-color: white;
-    box-shadow: 0 0 15px black; }
-    .loader span:nth-child(1) {
-      animation: grow 1s ease-in-out infinite; }
-    .loader span:nth-child(2) {
-      animation: grow 1s ease-in-out .15s infinite; }
-    .loader span:nth-child(3) {
-      animation: grow 1s ease-in-out .30s infinite; }
-    .loader span:nth-child(4) {
-      animation: grow 1s ease-in-out .45s infinite; }
+  .loader .spinner-layer {
+    border-color: #fff !important; }
 
-@keyframes grow {
-  0%, 100% {
-    transform: scaleY(1); }
-  50% {
-    transform: scaleY(1.8); } }
+/**
+ * Modals
+ */
+#modal .element .top {
+  color: #212529;
+  cursor: pointer;
+  padding: 15px; }
+
+#modal .element .bottom {
+  padding: 0 15px 15px; }
+  #modal .element .bottom > div:first-child {
+    margin-top: 0 !important; }

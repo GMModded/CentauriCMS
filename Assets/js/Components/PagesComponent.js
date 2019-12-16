@@ -77,7 +77,7 @@ Centauri.Components.PagesComponent = function(module) {
                         save: function() {
                             var id = $("#editor").attr("data-id");
 
-                            Centauri.Ajax(
+                            Centauri.fn.Ajax(
                                 "Page",
                                 "editPage",
 
@@ -90,7 +90,7 @@ Centauri.Components.PagesComponent = function(module) {
                                 {
                                     success: function(data) {
                                         data = JSON.parse(data);
-                                        toastr[data.type](data.title, data.description);
+                                        Centauri.Notify(data.type, data.title, data.description);
 
                                         Centauri.Components.EditorComponent("clear");
                                         Centauri.Components.EditorComponent("hide");
@@ -112,8 +112,6 @@ Centauri.Components.PagesComponent = function(module) {
             }
 
             if(action == "page-contentelement-edit") {
-                var backendLayout = null;
-
                 var container = "container";
 
                 Centauri.Components.EditorComponent("show", {
@@ -126,72 +124,47 @@ Centauri.Components.PagesComponent = function(module) {
                     callbacks: {
                         loaded: function($container, exists) {
                             if(!exists) {
-                                Centauri.Ajax(
-                                    "Backend",
-                                    "getBackendLayout",
+                                Centauri.fn.Ajax(
+                                    "ContentElements",
+                                    "findByPid",
 
                                     {
-                                        pid: Centauri.Components.PagesComponent.uid
+                                        pid: 1
                                     },
 
                                     {
                                         success: function(data) {
-                                            var newCEButton = Centauri.Components.PagesComponent.pages.newCEButton;
-                                            data = JSON.parse(data);
-        
-                                            $.each(data, function(rowPos, row) {
-                                                $container.append("<div class='row' data-rowPos='" + rowPos + "'></div>");
-        
-                                                $.each(row, function(a, cols) {
-                                                    $.each(cols, function(b, col) {
-                                                        $(".row[data-rowPos='" + rowPos + "']", $container).append("<div class='col' data-colPos='" + col + "'>" + newCEButton + "</div>");
-                                                    });
-                                                });
-                                            });
-        
-                                            Centauri.Ajax(
-                                                "ContentElements",
-                                                "findByPid",
-        
-                                                {
-                                                    pid: Centauri.Components.PagesComponent.uid
-                                                },
-        
-                                                {
-                                                    success: function(elements) {
-                                                        elements = JSON.parse(elements);
-        
-                                                        $.each(elements, function(index, elementObj) {
-                                                            $.each(elementObj, function(subindex, contentElement) {
-                                                                $(".col[data-colPos='" + contentElement.colPos + "'").append("<div class='content-element z-depth-1' data-uid='" + contentElement.uid + "'><div class='top waves-effect'><span class='title'>" + contentElement.ctype + "</span><i class='fas fa-sort-down'></i></div><div class='fields' style='display: none;'></div></div>");
-        
-                                                                $.each(contentElement.data, function(key, value) {
-                                                                    $(".content-element[data-uid='" + contentElement.uid + "'] .fields", $container).append("<div class='field'><label>" + key + "</label><input class='form-control' type='text' data-field='" + key + "' value='" + value + "' /></div>");
-                                                                });
-                                                            });
-                                                        });
-        
-                                                        $tops = $(".top", $container);
-                                                        $tops.each(function() {
-                                                            $top = $(this);
-        
-                                                            $top.on("click", function() {
-                                                                $top = $(this);
-                                                                $top.parent().toggleClass("active");
-        
-                                                                if(!$top.hasClass("toggling")) {
-                                                                    $top.addClass("toggling");
-        
-                                                                    $fields = $top.parent().find(".fields");
-                                                                    $fields.slideToggle(function() {
-                                                                        $top.removeClass("toggling");
-                                                                    });
-                                                                }
-                                                            });
+                                            var $container = $("#editor > .bottom > .container");
+                                            $container.html(data);
+
+                                            /**
+                                             * Registering click-event for newCEButton
+                                             */
+                                            Centauri.Modal.NewContentElementModal();
+
+                                            /**
+                                             * Initializing CKEditor 5
+                                             */
+                                            Centauri.Helper.NewContentElementHelper();
+
+                                            var $tops = $(".top", $container);
+                                            $tops.each(function() {
+                                                var $top = $(this);
+
+                                                $top.on("click", function() {
+                                                    $top = $(this);
+                                                    $top.parent().toggleClass("active");
+
+                                                    if(!$top.hasClass("toggling")) {
+                                                        $top.addClass("toggling");
+
+                                                        $fields = $top.parent().find(".fields");
+                                                        $fields.slideToggle(function() {
+                                                            $top.removeClass("toggling");
                                                         });
                                                     }
-                                                }
-                                            );
+                                                });
+                                            });
                                         }
                                     }
                                 );
@@ -207,7 +180,7 @@ Centauri.Components.PagesComponent = function(module) {
             }
 
             if(action == "page-show") {
-                Centauri.Ajax(
+                Centauri.fn.Ajax(
                     "Page",
                     "showPage",
 
@@ -232,42 +205,63 @@ Centauri.Components.PagesComponent = function(module) {
             }
 
             if(action == "page-delete") {
-                if(confirm("Delete this page?")) {
-                    Centauri.Ajax(
-                        "Page",
-                        "deletePage",
+                Centauri.Modal(
+                    "Delete this page",
+                    "Are you sure to continue deleting this page with all its content?",
 
-                        {
-                            uid: Centauri.Components.PagesComponent.uid
+                    {
+                        // size: "lg",
+
+                        close: {
+                            label: "Cancel",
+                            class: "warning"
                         },
 
-                        {
-                            success: function(data) {
-                                data = JSON.parse(data);
-                                if(Centauri.isNotUndefined(data.request)) {
-                                    toastr["error"]("An error occurred!", "Please contact an administrator to handle this internal error.\nError: " + data.request, {
-                                        timeOut: -1
-                                    });
-                                } else {
-                                    toastr[data.type](data.title, data.description);
-                                }
-
-                                Centauri.Components.ModulesComponent({
-                                    type: "load",
-                                    module: "pages"
-                                });
-                            },
-
-                            error: function(data) {
-                                console.error(data);
-                            }
+                        save: {
+                            label: "Delete",
+                            class: "danger"
                         }
-                    );
-                }
+                    },
+
+                    {
+                        save() {
+                            Centauri.fn.Ajax(
+                                "Page",
+                                "deletePage",
+
+                                {
+                                    uid: Centauri.Components.PagesComponent.uid
+                                },
+
+                                {
+                                    success: function(data) {
+                                        data = JSON.parse(data);
+                                        if(Centauri.isNotUndefined(data.request)) {
+                                            Centauri.Notify("error", "An error occurred!", "Please contact an administrator to handle this internal error.\nError: " + data.request, {
+                                                timeOut: -1
+                                            });
+                                        } else {
+                                            Centauri.Notify(data.type, data.title, data.description);
+                                        }
+
+                                        Centauri.Components.ModulesComponent({
+                                            type: "load",
+                                            module: "pages"
+                                        });
+                                    },
+
+                                    error: function(data) {
+                                        console.error(data);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
             }
 
             if(action == "page-translations") {
-                Centauri.Ajax(
+                Centauri.fn.Ajax(
                     "Page",
                     "getTranslateableLanguages",
 
@@ -332,7 +326,7 @@ Centauri.Components.PagesComponent = function(module) {
                                         var title = $(id + "_title", $editor).val();
                                         var url = $(id + "_url", $editor).val();
 
-                                        Centauri.Ajax(
+                                        Centauri.fn.Ajax(
                                             "Page",
                                             "createTranslatedPage",
 

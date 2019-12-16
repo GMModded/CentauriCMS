@@ -1,5 +1,7 @@
 const Centauri = {};
 
+
+
 /**
  * Centauri Environment
  */
@@ -16,10 +18,14 @@ Centauri.defaultModule = "dashboard";
  * Centauri Core
  */
 Centauri.Module = Centauri.defaultModule;
+
+Centauri.fn = {};
+Centauri.Helper = {};
 Centauri.Events = {};
 Centauri.Listeners = {};
 Centauri.Components = {};
 Centauri.Utility = {};
+Centauri.Modal = {};
 Centauri.View = {};
 
 
@@ -35,11 +41,11 @@ Centauri.load = function() {
 
     Centauri.Utility.Ajax();
 
+    Centauri.DAPLoader();
+
     Centauri.View.LoginView();
 
-    Centauri.Components.ModulesComponent({
-        type: "init"
-    });
+    Centauri.Components.ModulesComponent({type: "init"});
     Centauri.Components.EditorComponent.init();
 };
 

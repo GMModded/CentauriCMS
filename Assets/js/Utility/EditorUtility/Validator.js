@@ -1,7 +1,5 @@
 Centauri.Utility.EditorUtility.Validator = function() {
-    $form = $("form", $editor);
-
-    var $input = $("input", $form);
+    var $input = $("form input", $editor);
 
     $input.on("focusout", function() {
         var required = $(this).attr("required");

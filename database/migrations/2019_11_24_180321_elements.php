@@ -24,9 +24,14 @@ class Elements extends Migration
             $table->increments("uid"),
             $table->integer("pid"),
             $table->integer("lid"),
+            $table->integer("rowPos"),
             $table->integer("colPos"),
-            $table->string("ctype")->nullable(),
-            $table->text("data"),
+            $table->string("ctype"),
+
+            $table->string("header"),
+            $table->string("subheader"),
+            $table->text("rte"),
+
             $table->timestamps()
         ];
     }

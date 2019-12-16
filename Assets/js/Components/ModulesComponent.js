@@ -9,7 +9,7 @@ Centauri.Components.ModulesComponent = function(data) {
                 $module = $(this);
                 var moduleID = $module.data("module-id");
 
-                Centauri.Ajax(
+                Centauri.fn.Ajax(
                     "Modules",
                     "show",
 
@@ -43,7 +43,11 @@ Centauri.Components.ModulesComponent = function(data) {
         });
 
         setTimeout(function() {
-            $("#dashboard #modules .module[data-module-id='" + Centauri.defaultModule + "']").trigger("click");
+            if(Centauri.elExists($("#dashboard #modules .module.active"))) {
+                $("#dashboard #modules .module.active").trigger("click");
+            } else {
+                $("#dashboard #modules .module[data-module-id='" + Centauri.defaultModule + "']").trigger("click");
+            }
         }, 333);
 
         $("#dashboard #user i").on("click", function() {
@@ -55,7 +59,7 @@ Centauri.Components.ModulesComponent = function(data) {
     if(data.type == "load") {
         var module = data.module;
 
-        Centauri.Ajax(
+        Centauri.fn.Ajax(
             "Modules",
             "show",
 
@@ -74,6 +78,8 @@ Centauri.Components.ModulesComponent = function(data) {
                     ]);
 
                     Centauri.Events.OnModuleEvent(module);
+
+                    Centauri.DAPLoader.historyPushState = true;
                 },
 
                 error: function(data) {

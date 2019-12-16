@@ -22,8 +22,7 @@ class ModulesAjax implements AjaxInterface
         $data = $this->modulesService->findDataByModuleid($moduleid);
 
         if(!view()->exists("Backend.Modules.$moduleid")) {
-            return response("Template for Module '" . $moduleid . "' not found!", 500)
-                ->header("Content-Type", "text/json");
+            return response("Template for Module '" . $moduleid . "' not found!", 500)->header("Content-Type", "text/json");
         }
 
         return view("Backend.Modules.$moduleid", [

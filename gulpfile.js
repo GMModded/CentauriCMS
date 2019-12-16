@@ -27,13 +27,13 @@ var gulp     = require('gulp');
 //    you've to link it here in order the task for js recognize it and concat & uglifys it.
 // NOTE: Watch out for case-sensivity of directory names!
 	var modules = {
-		"jquery"              : "packages/js/jquery.min.js",
+		"jquery"              : "packages/jquery/jquery.min.js",
 
-		"bootstrap"           : "packages/js/bootstrap.min.js",
-		"popperjs"            : "packages/js/popper.min.js",
-		"mdbootstrap"         : "packages/js/mdb.min.js",
+		"bootstrap"           : "packages/bootstrap/dist/js/bootstrap.min.js",
+		"popperjs"            : "packages/popperjs/popper.min.js",
+		"mdbootstrap"         : "packages/mdb/js/mdb.min.js",
 
-		"ckeditor"            : "packages/ckeditor/ckeditor.js",
+		"ckeditor"            : "packages/ckeditor5/ckeditor.js",
 
 		"cropperjs"           : "packages/cropperjs/dist/cropper.min.js",
 		"jquery-cropper"      : "packages/jquery-cropper/dist/jquery-cropper.min.js"
@@ -67,6 +67,7 @@ gulp.task('js:build', function() {
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],
+		modules["ckeditor"],
 
 		inputSrc + "js/**/*.js"
 	])
@@ -81,6 +82,7 @@ gulp.task('js:deploy', function() {
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],
+		modules["ckeditor"],
 
 		inputSrc + "js/**/*.js"
 	])

@@ -1,7 +1,7 @@
-Centauri.Utility.NotificationUtility = function(severity, title, description) {
-    return toastr[severity](title, description);
+Centauri.Utility.NotificationUtility = function(severity, title, description, options={}) {
+    return toastr[severity](title, description, options);
 };
 
-Centauri.Notify = function(data) {
-    return Centauri.Utility.NotificationUtility(data);
+Centauri.Notify = function(severity, title, description, options={}) {
+    return Centauri.Utility.NotificationUtility(severity, title, description, options);
 };

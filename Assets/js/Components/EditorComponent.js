@@ -1,6 +1,4 @@
 Centauri.Components.EditorComponent = function(type, data) {
-    var transitionTime = 660;
-
     $editor = $("#editor");
 
     if(type == "show") {
@@ -115,26 +113,37 @@ Centauri.Components.EditorComponent = function(type, data) {
             Centauri.Components.EditorComponent.ButtonsInitialized = true;
 
             $("button[data-id='save']", $editor).on("click", function() {
-                
-                if(Centauri.elExists($("input.error", $editor))) {
+                var formValErr = false;
+                var $inputs = $("input.error", $editor);
+
+                $inputs.each(function() {
+                    var $input = $(this);
+
+                    if(!$input.parent().hasClass("mdb-select")) {
+                        formValErr = true;
+                        return;
+                    }
+                });
+
+                if(Centauri.elExists($("input.error:not(.select-dropdown)", $editor)) || formValErr) {
                     Centauri.Notify("error", "Form Validation", "Please fill out all fields!");
-                }
+                } else {
+                    data.callbacks.save();
 
-                data.callbacks.save();
-
-                if(Centauri.Components.EditorComponent.ClearOnSave) {
-                    Centauri.Components.ModulesComponent({
-                        type: "load",
-                        module: "pages"
-                    });
-
-                    Centauri.Components.EditorComponent("hide");
-
-                    setTimeout(function() {
-                        Centauri.Components.EditorComponent("clear", {
-                            forceClear: true
+                    if(Centauri.Components.EditorComponent.ClearOnSave) {
+                        Centauri.Components.ModulesComponent({
+                            type: "load",
+                            module: "pages"
                         });
-                    }, transitionTime);
+    
+                        Centauri.Components.EditorComponent("hide");
+    
+                        setTimeout(function() {
+                            Centauri.Components.EditorComponent("clear", {
+                                forceClear: true
+                            });
+                        }, Centauri.Components.EditorComponent.TransitionTime);
+                    }
                 }
             });
 
@@ -142,12 +151,16 @@ Centauri.Components.EditorComponent = function(type, data) {
                 Centauri.Components.EditorComponent("hide");
 
                 $(".overlayer").addClass("hidden");
+
+                var closer = $(".overlayer").attr("data-closer");
                 Centauri.Events.OnOverlayerHiddenEvent(closer);
                 Centauri.Events.OnEditorComponentClosedEvent();
 
                 setTimeout(function() {
-                    Centauri.Components.EditorComponent("clear");
-                }, transitionTime);
+                    Centauri.Components.EditorComponent("clear", {
+                        forceClear: Centauri.Components.EditorComponent.ClearOnClose
+                    });
+                }, Centauri.Components.EditorComponent.TransitionTime);
 
                 if(Centauri.isNotUndefined(data.callbacks.cancel)) {
                     data.callbacks.cancel();
@@ -167,7 +180,7 @@ Centauri.Components.EditorComponent = function(type, data) {
             if(Centauri.isNotUndefined(data.callbacks.loaded)) {
                 data.callbacks.loaded($("." + Centauri.Components.EditorComponent.Container, $editor), (crtID == id));
             }
-        }, transitionTime);
+        }, Centauri.Components.EditorComponent.TransitionTime);
 
         Centauri.Components.EditorComponent.init();
     }
@@ -178,13 +191,15 @@ Centauri.Components.EditorComponent = function(type, data) {
         setTimeout(function() {
             $(".overlayer").addClass("hidden");
             $(".overlayer").removeAttr("data-closer");
-        }, transitionTime);
+        }, Centauri.Components.EditorComponent.TransitionTime);
     }
 
     if(type == "clear") {
-        var clearOnClose = Centauri.Components.EditorComponent.ClearOnClose;
-
-        if(clearOnClose || (Centauri.isNotUndefined(data) && data.forceClear)) {
+        if(
+            Centauri.Components.EditorComponent.ClearOnClose
+        ||
+            (Centauri.isNotUndefined(data) && data.forceClear)
+        ) {
             $("form", $editor).empty();
             $editor.removeAttr("data-id");
         }
@@ -198,7 +213,7 @@ Centauri.Components.EditorComponent = function(type, data) {
         if(Centauri.Components.EditorComponent.Container) {
             Centauri.Components.EditorComponent.Container = "undefined";
 
-            if(clearOnClose) {
+            if(Centauri.Components.EditorComponent.ClearOnClose) {
                 $(".bottom > .container", $editor).remove();
             }
         }
@@ -210,8 +225,12 @@ Centauri.Components.EditorComponent.init = function() {
         var closer = $(this).attr("data-closer");
 
         if(closer == "EditorComponent") {
-            $(".overlayer").removeAttr("data-closer");
-            $(this).addClass("hidden");
+            setTimeout(function() {
+                Centauri.Components.EditorComponent("clear", {
+                    forceClear: true
+                });
+            }, Centauri.Components.EditorComponent.TransitionTime);
+
             Centauri.Events.OnOverlayerHiddenEvent(closer);
             Centauri.Events.OnEditorComponentClosedEvent();
         }
@@ -222,8 +241,14 @@ Centauri.Components.EditorComponent.init = function() {
             var closer = $(".overlayer").attr("data-closer");
 
             if(closer == "EditorComponent") {
-                $(".overlayer").removeAttr("data-closer");
-                $(".overlayer").addClass("hidden");
+                Centauri.Components.EditorComponent("hide");
+
+                setTimeout(function() {
+                    Centauri.Components.EditorComponent("clear", {
+                        forceClear: true
+                    });
+                }, Centauri.Components.EditorComponent.TransitionTime);
+
                 Centauri.Events.OnOverlayerHiddenEvent(closer);
                 Centauri.Events.OnEditorComponentClosedEvent();
             }
@@ -231,9 +256,10 @@ Centauri.Components.EditorComponent.init = function() {
     });
 };
 
+Centauri.Components.EditorComponent.TransitionTime = 660;
 Centauri.Components.EditorComponent.Size = null;
 Centauri.Components.EditorComponent.Container = "undefined";
 Centauri.Components.EditorComponent.ButtonsInitialized = false;
-Centauri.Components.EditorComponent.ClearOnClose = false;
 Centauri.Components.EditorComponent.ClearOnSave = true;
+Centauri.Components.EditorComponent.ClearOnClose = true;
 Centauri.Components.EditorComponent.FormData = null;
