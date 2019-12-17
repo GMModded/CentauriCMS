@@ -12,8 +12,8 @@
     @foreach($CCE["tabs"] as $tabKey => $tabArr)
         <div class="tab-pane fade {{ $loop->first ? ' show active' : '' }}" id="{{ $tabKey }}-md" role="tabpanel" aria-labelledby="{{ $tabKey }}-tab-md">
             @foreach($tabArr["fields"] as $ctype => $fields)
-                <div class="element z-depth-1" data-ctype="{{ $ctype }}">
-                    <div class="top">
+                <div class="element z-depth-1 mb-3" data-ctype="{{ $ctype }}">
+                    <div class="top waves-effect">
                         @lang("backend/modals.newContentElement.Elements.$ctype")
                     </div>
 

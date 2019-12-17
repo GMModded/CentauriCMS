@@ -69,10 +69,10 @@ Centauri.Components.EditorComponent = function(type, data) {
                                 activeClass = " class='active'";
                             }
 
-                            label = "<label for='" + id + "_" + inputObj.id + "'" + activeClass + ">" + inputObj.label + "</label>";
+                            label = "<label for='" + inputObj.id + "'" + activeClass + ">" + inputObj.label + "</label>";
                         }
 
-                        var html = "<div class='md-form'><input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + id + "_" + inputObj.id + "'" + extraAttr + required + " />" + label + "</div>";
+                        var html = "<div class='md-form'><input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + inputObj.id + "'" + extraAttr + required + " />" + label + "</div>";
 
                         if(type == "custom") {
                             html = Centauri.Utility.EditorUtility.getCustomHTMLByType(inputObj);
@@ -128,21 +128,24 @@ Centauri.Components.EditorComponent = function(type, data) {
                 if(Centauri.elExists($("input.error:not(.select-dropdown)", $editor)) || formValErr) {
                     Centauri.Notify("error", "Form Validation", "Please fill out all fields!");
                 } else {
-                    data.callbacks.save();
+                    var formData = [];
 
-                    if(Centauri.Components.EditorComponent.ClearOnSave) {
+                    $("form input", $editor).each(function() {
+                        var id = $(this).attr("id");
+
+                        if(Centauri.isNotUndefined(id)) {
+                            var value = $(this).val();
+                            formData[id] = value;
+                        }
+                    });
+
+                    data.callbacks.save(formData);
+
+                    if(Centauri.isNotUndefined(data.loadModuleAfterSaved)) {
                         Centauri.Components.ModulesComponent({
                             type: "load",
-                            module: "pages"
+                            module: data.loadModuleAfterSaved
                         });
-    
-                        Centauri.Components.EditorComponent("hide");
-    
-                        setTimeout(function() {
-                            Centauri.Components.EditorComponent("clear", {
-                                forceClear: true
-                            });
-                        }, Centauri.Components.EditorComponent.TransitionTime);
                     }
                 }
             });
@@ -260,6 +263,5 @@ Centauri.Components.EditorComponent.TransitionTime = 660;
 Centauri.Components.EditorComponent.Size = null;
 Centauri.Components.EditorComponent.Container = "undefined";
 Centauri.Components.EditorComponent.ButtonsInitialized = false;
-Centauri.Components.EditorComponent.ClearOnSave = true;
 Centauri.Components.EditorComponent.ClearOnClose = true;
 Centauri.Components.EditorComponent.FormData = null;

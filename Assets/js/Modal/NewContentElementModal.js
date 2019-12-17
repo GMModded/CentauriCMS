@@ -1,8 +1,24 @@
 Centauri.Modal.NewContentElementModal = function() {
-    $("button", $editor).on("click", function() {
+    $("button", $editor).on("click", this, function() {
         var action = $(this).data("action");
 
         if(action == "newContentElement") {
+            var rowPos = $(this).parent().parent().attr("data-rowpos");
+            var colPos = $(this).parent().attr("data-colpos");
+            var sorting = $(this).attr("data-sorting");
+
+            var sorting, $element;
+            var insert = $(this).attr("data-insert");
+
+            if(insert == "before") {
+                $element = $(this).next();
+            }
+            if(insert == "after") {
+                $element = $(this).next();
+            }
+
+            sorting = $element.attr("data-sorting");
+
             Centauri.fn.Ajax(
                 "ContentElements",
                 "getConfigCCE",
@@ -67,8 +83,14 @@ Centauri.Modal.NewContentElementModal = function() {
                                         "newElement",
 
                                         {
+                                            pid: Centauri.Components.PagesComponent.uid,
                                             ctype: Centauri.Helper.NewContentElementHelper.Element.data("ctype"),
-                                            datas: JSON.stringify(datas)
+                                            datas: JSON.stringify(datas),
+
+                                            rowPos: rowPos,
+                                            colPos: colPos,
+                                            insert: insert,
+                                            sorting: sorting
                                         },
 
                                         {
@@ -81,12 +103,13 @@ Centauri.Modal.NewContentElementModal = function() {
                                                     "findByPid",
 
                                                     {
-                                                        pid: 1
+                                                        pid: Centauri.Components.PagesComponent.uid
                                                     },
 
                                                     {
                                                         success: function(data) {
-                                                            $container.append(data);
+                                                            var $container = $("#editor > .bottom > .container");
+                                                            $container.html(data);
 
                                                             /**
                                                              * Registering click-event for newCEButton

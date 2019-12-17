@@ -26,6 +26,7 @@ class Elements extends Migration
             $table->integer("lid"),
             $table->integer("rowPos"),
             $table->integer("colPos"),
+            $table->integer("sorting"),
             $table->string("ctype"),
 
             $table->string("header"),

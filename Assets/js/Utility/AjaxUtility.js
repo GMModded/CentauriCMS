@@ -1,4 +1,4 @@
-Centauri.fn.Ajax = function(ajax, method, data, callbacks) {
+Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
     var url = Centauri.Utility.PathsUtility.root + Centauri.Utility.PathsUtility.centauri + Centauri.Utility.PathsUtility.ajax + ajax + "/" + method;
 
     if(Centauri.fn.Ajax.Overlayer) {
@@ -13,10 +13,37 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks) {
         data: data,
 
         success: function(data) {
+            if(Centauri.isNotUndefined(options)) {
+                if(
+                    Centauri.isNotUndefined(options.closeEditorComponentOnSuccess)
+                &&
+                    (options.closeEditorComponentOnSuccess)
+                ) {
+                    Centauri.Components.EditorComponent("hide");
+
+                    if(Centauri.Components.EditorComponent.ClearOnSave) {
+                        setTimeout(function() {
+                            Centauri.Components.EditorComponent("clear", {
+                                forceClear: true
+                            });
+                        }, Centauri.Components.EditorComponent.TransitionTime);
+                    }
+                }
+            }
+
+            if(Centauri.fn.Ajax.Overlayer) {
+                $("#maincontent .overlayer").addClass("hidden");
+                $("#maincontent .overlayer .loader").addClass("hidden");
+            }
+
             callbacks.success(data);
         },
 
         error: function(data) {
+            if(Centauri.fn.Ajax.Overlayer) {
+                $("#maincontent .overlayer .loader").addClass("hidden");
+            }
+
             if(Centauri.isNotUndefined(callbacks.error)) {
                 callbacks.error(data);
             } else {
@@ -25,11 +52,6 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks) {
         },
 
         complete: function(data) {
-            if(Centauri.fn.Ajax.Overlayer) {
-                $("#maincontent .overlayer").addClass("hidden");
-                $("#maincontent .overlayer .loader").addClass("hidden");
-            }
-
             if(Centauri.isNotUndefined(callbacks.complete)) {
                 callbacks.complete(data);
             }

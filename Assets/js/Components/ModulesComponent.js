@@ -30,7 +30,7 @@ Centauri.Components.ModulesComponent = function(data) {
                                 ["title", title]
                             ]);
 
-                            Centauri.Events.OnModuleEvent(moduleID);
+                            Centauri.Events.OnModuleLoadEvent(moduleID);
                         },
 
                         error: function(data) {
@@ -77,7 +77,7 @@ Centauri.Components.ModulesComponent = function(data) {
                         ["title", title]
                     ]);
 
-                    Centauri.Events.OnModuleEvent(module);
+                    Centauri.Events.OnModuleLoadEvent(module);
 
                     Centauri.DAPLoader.historyPushState = true;
                 },

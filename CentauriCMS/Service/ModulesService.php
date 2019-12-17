@@ -101,7 +101,7 @@ class ModulesService
                     $flagsrc = env("APP_URL") . "/" . $language["flagsrc"];
                     $language["flagsrc"] = $flagsrc;
 
-                    $page->language = $language;
+                    $page->setAttribute("language", $language);
                     $npages[$page->getAttribute("lid")][$page->getAttribute("uid")][] = $page;
                 }
             }
@@ -112,7 +112,7 @@ class ModulesService
                     $flagsrc = env("APP_URL") . "/" . $language["flagsrc"];
                     $language["flagsrc"] = $flagsrc;
 
-                    $page->language["flagsrc"] = $flagsrc;
+                    $page->setAttribute("language", ["flagsrc" => $flagsrc]);
                     $npages[$page->getAttribute("lid")][$page->getAttribute("pid")][] = $page;
                 }
             }

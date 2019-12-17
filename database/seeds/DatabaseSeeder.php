@@ -100,10 +100,11 @@ class DatabaseSeeder extends Seeder
 
         if(count($elements) == 0) {
             DB::table("elements")->insert([
-                "pid" => 0,
+                "pid" => 1,
                 "lid" => 0,
                 "rowPos" => 0,
                 "colPos" => 0,
+                "sorting" => 1,
                 "ctype" => "headerdescription",
 
                 "header" => "Welcome to CentauriCMS",
@@ -118,36 +119,6 @@ class DatabaseSeeder extends Seeder
         } else {
             echo "Atleast one element has been found in elements-table.\n";
         }
-
-
-        // Backend Layout
-        $backendLayouts = BackendLayout::all();
-
-        if(count($backendLayouts) == 0) {
-            DB::table("backend_layouts")->insert([
-                "data" => json_encode([
-                    [0 => [0]]
-                ]),
-
-                "created_at" => date("Y-m-d H:i:s"),
-                "updated_at" => date("Y-m-d H:i:s")
-            ]);
-
-            DB::table("backend_layouts")->insert([
-                "data" => json_encode([
-                    [0 => [0]],
-                    [1 => [1, 2]]
-                ]),
-
-                "created_at" => date("Y-m-d H:i:s"),
-                "updated_at" => date("Y-m-d H:i:s")
-            ]);
-
-            echo "Created two backend-layouts.\n";
-        } else {
-            echo "Atleast one backend layout has been found in backend_layouts-table.\n";
-        }
-
 
 
 

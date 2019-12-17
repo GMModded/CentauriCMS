@@ -13,13 +13,23 @@ return [
             "config" => [
                 // rowPos
                 0 => [
-                    "label" => "backend/be_layout.layouts.default.cols.content",
-
-                    // Column Definitions - either => string OR => array
+                    // "cols" => Array
                     "cols" => [
-                        0 => "",
-                        1 => ""
-                    ],
+                        0 => [
+                            "label" => "backend/be_layout.layouts.default.cols.content"
+                        ]
+                    ]
+
+                    // "cols" => [
+                    //     0 => [
+                    //         "label" => "backend/be_layout.layouts.default.cols.content",
+                    //         "col" => "3"
+                    //     ],
+                    //     1 => [
+                    //         "label" => "backend/be_layout.layouts.default.cols.content",
+                    //         "col" => "7"
+                    //     ]
+                    // ],
 
                     /**
                      * Example with custom col-width (using Bootstrap 4 inside template)

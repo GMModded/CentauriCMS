@@ -26,7 +26,7 @@ class PageAjax implements AjaxInterface
             if($request->has("parentuid")) {
                 $parentuid = filter_var($params["parentuid"], FILTER_VALIDATE_INT);
             } else {
-                return response("Parent-Page not found.\nPlease refresh/abort the current action!", 500)->header("Content-Type", "text/json");
+                return response("Parent-Page not found.\nPlease refresh/abort the current action!", 500);
             }
 
             $isrootpage = false;
@@ -35,7 +35,7 @@ class PageAjax implements AjaxInterface
             }
 
             if(!$request->has("title") || $params["title"] == "") {
-                return response("Title can't be empty.\nPlease type in a title for your page name!", 500)->header("Content-Type", "text/json");
+                return response("Title can't be empty.\nPlease type in a title for your page name!", 500);
             }
 
             $page = new Page;
@@ -48,7 +48,7 @@ class PageAjax implements AjaxInterface
 
             if($isrootpage) {
                 if(!$request->has("language")) {
-                    return response("Selected language is not available as a rootpage!", 500)->header("Content-Type", "text/json");
+                    return response("Selected language is not available as a rootpage!", 500);
                 }
 
                 $page->lid = $params["language"];
@@ -78,7 +78,7 @@ class PageAjax implements AjaxInterface
                 return json_encode([
                     "type" => "success",
                     "title" => "Page '" . $title . "' saved",
-                    "description" => "Successfuly updated '" . $title . "'"
+                    "description" => "Successfully updated '" . $title . "'"
                 ]);
             }
 
@@ -131,7 +131,7 @@ class PageAjax implements AjaxInterface
             return json_encode([
                 "type" => "success",
                 "title" => "Page '$title' translated to " . $language->lang_code,
-                "description" => "This page has successfuly been translated"
+                "description" => "This page has successfully been translated"
             ]);
         }
 
@@ -194,10 +194,6 @@ class PageAjax implements AjaxInterface
 
             return json_encode($languages);
         }
-
-        return json_encode([
-            "request" => "'$ajaxName' is invalid."
-        ]);
     }
 
     public function savePage($page)
@@ -212,7 +208,7 @@ class PageAjax implements AjaxInterface
                     return json_encode([
                         "type" => "success",
                         "title" => "Page '" . $page->title . "' created",
-                        "description" => "Successfuly created '" . $page->title . "'"
+                        "description" => "Successfully created '" . $page->title . "'"
                     ]);
                 }
 

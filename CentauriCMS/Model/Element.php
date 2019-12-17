@@ -42,8 +42,8 @@ class Element extends Model
      * @var array
      */
     protected $attributes = [
-        "pid" => 0,
-        "lid" => 0,
+        "hidden" => 0,
+
         "header" => "",
         "subheader" => "",
         "rte" => ""

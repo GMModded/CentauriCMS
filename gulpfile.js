@@ -28,6 +28,7 @@ var gulp     = require('gulp');
 // NOTE: Watch out for case-sensivity of directory names!
 	var modules = {
 		"jquery"              : "packages/jquery/jquery.min.js",
+		"jquery-ui"           : "packages/jquery-ui/jquery-ui.min.js",
 
 		"bootstrap"           : "packages/bootstrap/dist/js/bootstrap.min.js",
 		"popperjs"            : "packages/popperjs/popper.min.js",
@@ -64,6 +65,7 @@ gulp.task('css:deploy', function() {
 gulp.task('js:build', function() {
 	return gulp.src([
 		modules["jquery"],
+		modules["jquery-ui"],
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],
@@ -79,6 +81,7 @@ gulp.task('js:build', function() {
 gulp.task('js:deploy', function() {
 	return gulp.src([
 		modules["jquery"],
+		modules["jquery-ui"],
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],

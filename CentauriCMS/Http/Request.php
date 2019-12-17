@@ -74,7 +74,7 @@ class Request
                     $moduledata = $modulesService->findDataByModuleid($moduleid);
 
                     if(!view()->exists("Backend.Modules.$moduleid")) {
-                        return response("Template for Module '" . $moduleid . "' not found!", 500)->header("Content-Type", "text/json");
+                        return response("Template for Module '" . $moduleid . "' not found!", 500);
                     }
 
                     return view("Backend.centauri", [
@@ -93,7 +93,11 @@ class Request
         $page = null;
 
         if(Str::contains($nodes, "/") && $nodes != "/") {
-            $page = Page::where("slugs", $nodes)->get()->first();
+            $page = Page::where([
+                "slugs" => $nodes,
+                "slugs" => "/" . $nodes
+            ])->get()->first();
+
             $nodes = explode("/", $nodes);
         } else {
             $slugs = str_replace("/", "", $nodes);

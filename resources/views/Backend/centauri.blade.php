@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Centauri - Login</title>
-        <script src="https://kit.fontawesome.com/20ea993ef1.js" crossorigin="anonymous"></script>
+        {{-- <script src="https://kit.fontawesome.com/20ea993ef1.js" crossorigin="anonymous"></script> --}}
         <link rel="stylesheet" href="{{ asset('public/css/centauri.min.css') }}">
     </head>
 

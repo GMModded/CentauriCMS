@@ -1,57 +1,45 @@
-{{-- {{ dd($data) }} --}}
-
-@foreach($data["beLayout"]["config"] as $rowPos => $colPositions["cols"])
+@foreach($data["beLayout"]["config"] as $rowPos => $rowPosArr)
     <div class="row" data-rowPos="{{ $rowPos }}">
-        @foreach($colPositions as $colPos => $colData)
-            @if(gettype($colData) == "array")
-                @if(isset($colData["col"]))
-                    <div class="col-12 col-md-{{ $colData['col'] }}">
-                @else
-                    <div class="col-12 col-md" data-colPos="{{ $colPos }}">
-                @endif
+        @foreach($rowPosArr["cols"] as $colPos => $colData)
+            @if(isset($colData["col"]))
+                <div class="col-12 col-md-{{ $colData['col'] }}">
             @else
                 <div class="col-12 col-md" data-colPos="{{ $colPos }}">
             @endif
-                    <h6>
-                        @lang($data["beLayout"]["label"])
-                    </h6>
+                    @if(isset($colData["label"]))
+                        <h6>
+                            @lang($colData["label"])
+                        </h6>
+                    @endif
 
                     @foreach($data["elements"] as $element)
                         @if($element->colPos == $colPos)
-                            <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement">
+                            <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="before">
                                 <i class="fas fa-plus"></i>
                                 Content
                             </button>
 
-                            <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}">
-                                <div class="top waves-effect">
-                                    <span class="title">
-                                        {{ $element->ctype }}
-                                    </span>
+                            {{-- <div class="allowed-pos hidden" style="margin-left:-15px;background:orange;width:calc(100% + 30px);height:100px;z-index:999;"></div> --}}
 
-                                    <i class="fas fa-sort-down"></i>
-                                </div>
+                            {{-- <div class="current-pos"> --}}
+                                <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}">
+                                    <div class="top">
+                                        <span class="title">
+                                            {{ $element->ctype }}
+                                        </span>
 
-                                <div class="fields" style="display: none;">
-                                    @foreach($data["fields"] as $ctype => $field)
-                                        @if(!is_null($element->getAttribute($ctype)))
-                                            {!! $field["_HTML"] !!}
-                                        @endif
-                                    @endforeach
-
-                                    <div class="row">
-                                        <div class="col text-right">
-                                            <button class="btn btn-success waves-effect waves-light btn-floating" data-id="save" data-trigger="saveSingleElement">
-                                                <i class="fas fa-save" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
+                                        <button class="edit btn btn-primary waves-effect waves-light float-right btn-floating my-2">
+                                            <i class="fas fa-pen"></i>
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
+                            {{-- </div> --}}
+
+                            {{-- <div class="allowed-pos hidden" style="margin-left:-15px;background:orange;width:calc(100% + 30px);height:100px;z-index:999;"></div> --}}
                         @endif
                     @endforeach
 
-                    <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement">
+                    <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="after">
                         <i class="fas fa-plus"></i>
                         Content
                     </button>

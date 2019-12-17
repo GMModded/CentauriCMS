@@ -39,7 +39,7 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
         }
 
         additionalFieldClasses = " custom-control custom-checkbox";
-        html = "<input id='input-checkbox-" + inputObj.id + "' class='custom-control-input' type='checkbox'" + checked + " /><label class='custom-control-label d-block m-0' for='input-checkbox-" + inputObj.id + "'>" + data.label + "</label>";
+        html = "<input id='" + inputObj.id + "' class='custom-control-input' type='checkbox'" + checked + " /><label class='custom-control-label d-block m-0' for='" + inputObj.id + "'>" + data.label + "</label>";
     }
 
     if(type == "switch") {
