@@ -77,4 +77,12 @@ window.onload = function() {
             Centauri.Notify("error", thrownError, jqxhr.responseText);
         }
     });
+
+    $(document).ajaxSuccess(function(event, xhr, settings) {
+        if(Centauri.Helper.Variables.__closeAjax) {
+            Centauri.Components.EditorComponent("hide");
+
+            Centauri.Helper.Variables.__closeAjax = false;
+        }
+    });
 };

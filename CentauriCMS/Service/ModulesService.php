@@ -4,6 +4,7 @@ namespace Centauri\CMS\Service;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Model\Language;
+use Centauri\CMS\Model\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class ModulesService
@@ -30,6 +31,10 @@ class ModulesService
 
             "extensions" => [
                 "title" => trans("backend/modules.extensions.title")
+            ],
+
+            "notifications" => [
+                "title" => trans("backend/modules.notifications.title")
             ]
         ];
 
@@ -96,10 +101,22 @@ class ModulesService
 
             foreach($pages as $page) {
                 if($page->getAttribute("is_rootpage")) {
-                    $language = Language::where("uid", $page->lid)->get()->toArray()[0];
+                    $language = Language::where("uid", $page->lid)->get()->first();
+                    
+                    if(is_null($language)) {
+                        $notification = new Notification;
 
-                    $flagsrc = env("APP_URL") . "/" . $language["flagsrc"];
-                    $language["flagsrc"] = $flagsrc;
+                        $notification->severity = "WARN";
+                        $notification->title = "Page with lid '" . $page->lid . "' doesn't exists";
+                        $notification->text = "This issue may caused by removing a language-entry from the 'languages' table.";
+
+                        $notification->save();
+
+                        return;
+                    }
+
+                    $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
+                    $language->flagsrc = $flagsrc;
 
                     $page->setAttribute("language", $language);
                     $npages[$page->getAttribute("lid")][$page->getAttribute("uid")][] = $page;
@@ -107,10 +124,22 @@ class ModulesService
             }
             foreach($pages as $page) {
                 if(!$page->getAttribute("is_rootpage")) {
-                    $language = Language::where("uid", $page->lid)->get()->toArray()[0];
+                    $language = Language::where("uid", $page->lid)->get()->first();
 
-                    $flagsrc = env("APP_URL") . "/" . $language["flagsrc"];
-                    $language["flagsrc"] = $flagsrc;
+                    if(is_null($language)) {
+                        $notification = new Notification;
+
+                        $notification->severity = "WARN";
+                        $notification->title = "Page with lid '" . $page->lid . "' doesn't exists";
+                        $notification->text = "This issue may caused by removing a language-entry from the 'languages' table.";
+
+                        $notification->save();
+
+                        return;
+                    }
+
+                    $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
+                    $language->flagsrc = $flagsrc;
 
                     $page->setAttribute("language", ["flagsrc" => $flagsrc]);
                     $npages[$page->getAttribute("lid")][$page->getAttribute("pid")][] = $page;

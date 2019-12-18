@@ -170,6 +170,8 @@ Centauri.Components.PagesComponent = function(module) {
 
                                                             {
                                                                 success: function(data) {
+                                                                    $(".overlayer").removeClass("hidden");
+
                                                                     $top.parent().append(data);
 
                                                                     /**

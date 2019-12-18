@@ -9,7 +9,7 @@ var gulp     = require('gulp');
 	clean    = require('gulp-clean');
 	watch    = require('gulp-watch');
 	concat   = require('gulp-concat');
-	uglify   = require('gulp-uglify');
+	terser   = require('gulp-terser');
 	sass     = require('gulp-sass');
 	minify   = require('gulp-minify-css');
 
@@ -91,7 +91,7 @@ gulp.task('js:deploy', function() {
 	])
 
 	.pipe(concat(fileName + ".js"))
-	.pipe(uglify())
+	.pipe(terser())
 	.pipe(gulp.dest(outputSrc + "js"));
 });
 // ============================================================================================================

@@ -64,7 +64,7 @@
         & > .row {
             position: absolute;
             right: 0;
-            bottom: 0;
+            bottom: -5px;
         }
 
         form {
@@ -119,8 +119,9 @@
             background-color: white;
             margin-top: 15px;
 
-            &.dragging {
-                z-index: 999;
+            &.ui-draggable-dragging {
+                cursor: move !important;
+                z-index: 999 !important;
             }
 
             .top {

@@ -109,7 +109,7 @@ class DatabaseSeeder extends Seeder
 
                 "header" => "Welcome to CentauriCMS",
                 "subheader" => "Flexible. Fast. Extendable.",
-                "rte" => "RTEEEEE",
+                "rte" => "<h1>RTEEEEE</h1>",
 
                 "created_at" => date("Y-m-d H:i:s"),
                 "updated_at" => date("Y-m-d H:i:s")

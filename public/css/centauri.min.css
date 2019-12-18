@@ -460,7 +460,7 @@ input:read-only:not(.select-dropdown) {
     #editor > .bottom > .row {
       position: absolute;
       right: 0;
-      bottom: 0; }
+      bottom: -5px; }
     #editor > .bottom form input:not(:last-child) {
       margin-bottom: 10px; }
     #editor > .bottom form input[type="checkbox"]:checked + label:before {
@@ -484,8 +484,9 @@ input:read-only:not(.select-dropdown) {
     #editor > .bottom .content-element {
       background-color: white;
       margin-top: 15px; }
-      #editor > .bottom .content-element.dragging {
-        z-index: 999; }
+      #editor > .bottom .content-element.ui-draggable-dragging {
+        cursor: move !important;
+        z-index: 999 !important; }
       #editor > .bottom .content-element .top .title {
         text-transform: capitalize;
         font-size: 20px;

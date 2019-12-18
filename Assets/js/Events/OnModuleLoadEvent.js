@@ -211,6 +211,8 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                             loadModuleAfterSaved: "languages",
 
                             save: function(data) {
+                                Centauri.Helper.Variables.__closeAjax = true;
+
                                 Centauri.fn.Ajax(
                                     "Language",
                                     "newLanguage",

@@ -3,13 +3,14 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
-class Elements extends Migration
+class Notifications extends Migration
 {
     /**
      * Name of this table
      */
-    private $table = "elements";
+    private $table = "notifications";
 
     /**
      * Columns of this table
@@ -22,18 +23,9 @@ class Elements extends Migration
     {
         return [
             $table->increments("uid"),
-            $table->integer("pid"),
-            $table->integer("lid"),
-            $table->integer("rowPos"),
-            $table->integer("colPos"),
-            $table->integer("sorting"),
-            $table->string("ctype"),
-
-            $table->string("header"),
-            $table->string("subheader"),
-            $table->text("rte"),
-
-            $table->integer("hidden"),
+            $table->string("severity"),
+            $table->string("title"),
+            $table->text("text"),
             $table->timestamps()
         ];
     }
