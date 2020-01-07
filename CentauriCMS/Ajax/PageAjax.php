@@ -33,7 +33,11 @@ class PageAjax implements AjaxInterface
             $page->pid = $parentuid;
             $page->title = $params["title"];
             $page->is_rootpage = $isrootpage;
-            $page->backend_layout = 1;
+            $page->backend_layout = $params["belayout"] ?? "";
+
+            if($page->backend_layout == "") {
+                return response("Backend-Layout can't be an empty string!", 500);
+            }
 
             $url = $params["url"];
 

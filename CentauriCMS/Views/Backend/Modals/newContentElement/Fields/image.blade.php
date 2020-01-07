@@ -1,5 +1,5 @@
 <div class="md-form">
-    <div class="image-field d-flex">
+    <div class="image-field d-flex mt-2">
         <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3 mr-2" data-centauri-btn="addimage" data-required="{{ $config["required"] ?? '' }}" data-maxitems="{{ $config["maxItems"] ?? '' }}">
             <i class="fas fa-images mr-2"></i>
 
@@ -15,7 +15,7 @@
 
     <input class="form-control d-none" type="text" id="{{ $id }}" value="{{ $value ?? '' }}" />
 
-    <label for="{{ $id }}"{{ (isset($value) ? ' class=active' : '') }}>
+    <label for="{{ $id }}"{{ (isset($value) ? ' class=active' : '') }} style="margin-top: -25px;">
         {{ $label }}
     </label>
 

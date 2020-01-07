@@ -7,7 +7,7 @@ Centauri.Helper.PagesHelper = function($container) {
             var $this = $(this);
 
             var $top = $this.parent();
-            var $contentelement = $top.parent();
+            $contentelement = $top.parent();
 
             $contentelement.toggleClass("active");
 
@@ -137,8 +137,7 @@ Centauri.Helper.PagesHelper = function($container) {
                             setTimeout(function() {
                                 $(".fields", $contentelement).slideDown(function() {
                                     $this.toggleClass("btn-primary btn-info");
-
-                                    Centauri.View.ContentElementsView();
+                                    Centauri.View.ContentElementsView($contentelement);
                                 });
                             }, 100);
                         },

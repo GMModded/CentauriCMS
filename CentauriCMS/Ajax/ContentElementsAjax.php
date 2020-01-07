@@ -40,7 +40,11 @@ class ContentElementsAjax implements AjaxInterface
             $fields = $CCE["fields"];
 
             $page = \Centauri\CMS\Model\Page::where("uid", $uid)->get()->first();
-            $backendLayout = config("centauri")["beLayouts"]["default"]; // \Centauri\CMS\Model\BackendLayout::find($page->getAttribute("backend_layout"));
+            $backendLayout = config("centauri")["beLayouts"][$page->getAttribute("backend_layout")] ?? null;
+
+            if(is_null($backendLayout)) {
+                return response("Backend-Layout '" . $page->getAttribute("backend_layout") . "' not found for page with ID: " . $page->getAttribute("uid"), 500);
+            }
 
             return view("Centauri::Backend.Partials.elements", [
                 "data" => [

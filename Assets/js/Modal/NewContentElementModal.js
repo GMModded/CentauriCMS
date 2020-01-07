@@ -37,11 +37,13 @@ Centauri.Modal.NewContentElementModal = function() {
                                 closeOnSave: false,
 
                                 close: {
-                                    label: Centauri.__trans.modals.btn_cancel
+                                    label: "",
+                                    class: "danger fas fa-times"
                                 },
-
+        
                                 save: {
-                                    label: Centauri.__trans.modals.btn_create
+                                    label: "",
+                                    class: "success fas fa-save"
                                 }
                             },
 
@@ -116,11 +118,6 @@ Centauri.Modal.NewContentElementModal = function() {
                             }
                         );
 
-                        // $("#modal .md-form label").on("click", function(e) {
-                        //     e.preventDefault();
-                        //     $(this).parent().find("input").focus();
-                        // });
-
                         /**
                          * Initializing CKEditor 5
                          */
@@ -135,6 +132,11 @@ Centauri.Modal.NewContentElementModal = function() {
                             if(!$(Centauri.Helper.ModalHelper.Element).is($element)) {
                                 Centauri.Helper.ModalHelper.Element = $element;
                                 $(".bottom", $element).slideToggle();
+
+                                if(Centauri.isUndefined($element.attr("initialized"))) {
+                                    $element.attr("initialized", "true");
+                                    Centauri.View.ContentElementsView($element);
+                                }
                             } else {
                                 Centauri.Helper.ModalHelper.Element = null;
                             }

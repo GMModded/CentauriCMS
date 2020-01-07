@@ -24,7 +24,7 @@ class Pages extends Migration
             $table->increments("uid"),
             $table->integer("pid"),
             $table->integer("lid"),
-            $table->integer("backend_layout"),
+            $table->string("backend_layout"),
             $table->integer("is_rootpage"),
             $table->string("title"),
             $table->text("slugs"),

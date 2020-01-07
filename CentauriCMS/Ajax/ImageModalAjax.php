@@ -14,16 +14,12 @@ class ImageModalAjax implements AjaxInterface
             $images = File::where("cropable", 1)->get()->all();
             $value = $request->input("value");
 
-            // dump($value);
-
             $uidArr = [];
             if(Str::contains($value, ",")) {
                 $uidArr = explode(",", $value);
             } else {
                 $uidArr = [$value];
             }
-
-            // dd($uidArr);
 
             return view("Centauri::Backend.Modals.imageslist", [
                 "images" => $images,
