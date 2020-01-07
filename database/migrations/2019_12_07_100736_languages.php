@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 class Languages extends Migration
 {
@@ -27,7 +26,9 @@ class Languages extends Migration
             $table->string("lang_code"),
             $table->string("slug"),
             $table->string("flagsrc"),
-            $table->timestamps()
+
+            $table->timestamps(),
+            $table->softDeletes()
         ];
     }
 

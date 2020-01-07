@@ -73,16 +73,24 @@ window.onload = function() {
     Centauri.Utility.Ajax();
 
     $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+        console.log(thrownError);
+
+        // Session is over => throws unknown status
+        if(thrownError == "unknown status") {
+            location.href = "action/Backend/logout";
+        }
+
+        // General AJAX errors - some of Internal Server Errors are custom and some by Laravel default
         if(thrownError == "Internal Server Error") {
             Centauri.Notify("error", thrownError, jqxhr.responseText);
+            console.error(jqxhr);
         }
     });
 
     $(document).ajaxSuccess(function(event, xhr, settings) {
-        if(Centauri.Helper.Variables.__closeAjax) {
-            Centauri.Components.EditorComponent("hide");
-
-            Centauri.Helper.Variables.__closeAjax = false;
+        if(Centauri.Helper.VariablesHelper.__closeAjax) {
+            Centauri.Components.EditorComponent("close");
+            Centauri.Helper.VariablesHelper.__closeAjax = false;
         }
     });
 };

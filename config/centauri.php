@@ -1,83 +1,92 @@
 <?php
 
 return [
-    "languages" => [
-        "en",
-        "de"
-    ],
-
     "beLayouts" => [
         "default" => [
             "label" => "backend/be_layout.layouts.default.label",
 
             "config" => [
-                // rowPos
+                // rowPos - will be saved into the DB as key
                 0 => [
                     // "cols" => Array
                     "cols" => [
+                        // colPositions - will be saved into the DB as key
                         0 => [
                             "label" => "backend/be_layout.layouts.default.cols.content"
                         ]
                     ]
-
-                    // "cols" => [
-                    //     0 => [
-                    //         "label" => "backend/be_layout.layouts.default.cols.content",
-                    //         "col" => "3"
-                    //     ],
-                    //     1 => [
-                    //         "label" => "backend/be_layout.layouts.default.cols.content",
-                    //         "col" => "7"
-                    //     ]
-                    // ],
-
-                    /**
-                     * Example with custom col-width (using Bootstrap 4 inside template)
-
-                    "cols" => [
-                        0 => [
-                            "col" => "6"
-                        ],
-
-                        1 => ""
-                    ]
-                    */
                 ]
             ]
-        ],
-
-        ""
+        ]
     ],
 
+    # CentauriContentElements - CCE
     "CCE" => [
         "fields" => [
             "header" => [
-                "col" => "6",
                 "label" => "Header",
                 "type" => "input"
             ],
             "subheader" => [
-                "col" => "6",
                 "label" => "Subheader",
                 "type" => "input"
             ],
             "rte" => [
-                "col" => "6",
                 "label" => "RTE",
                 "type" => "RTE"
             ],
+            "plugin" => [
+                "label" => "Plugin",
+                "type" => "plugin"
+            ],
+            "image" => [
+                "label" => "Image",
+                "type" => "image",
+
+                "config" => [
+                    "required" => 1,
+                    "maxItems" => 2,
+                ],
+            ]
+        ],
+
+        "elements" => [
+            "headerimage" => [
+                "image",
+                "header;subheader",
+                "rte"
+            ],
+
+            "headerdescription" => [
+                "header;subheader",
+                "rte"
+            ],
+
+            "plugin" => [
+                "header;plugin"
+            ]
         ],
 
         "tabs" => [
             "general" => [
                 "label" => "backend/modals.newContentElement.Tabs.general",
-
-                "fields" => [
-                    "headerdescription" => [
-                        "header;subheader",
-                        "rte"
-                    ]
+                "elements" => [
+                    "headerimage",
+                    "headerdescription",
+                    "plugin"
                 ]
+            ]
+        ]
+    ],
+
+    # CentauriModelElements - CME
+    "CME" => [
+        "models" => [],
+
+        "tabs" => [
+            "general" => [
+                "label" => "General",
+                "models" => []
             ]
         ]
     ]

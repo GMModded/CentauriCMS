@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class BeUsers extends Migration
@@ -24,6 +25,7 @@ class BeUsers extends Migration
             $table->increments("uid"),
             $table->string("username"),
             $table->string("password"),
+
             $table->timestamps()
         ];
     }
@@ -45,6 +47,11 @@ class BeUsers extends Migration
             Schema::create($this->table, function(Blueprint $table) {
                 $this->cols($table);
             });
+
+            DB::table($this->table)->insert([
+                "username" => "admin",
+                "password" => "password"
+            ]);
         }
     }
 

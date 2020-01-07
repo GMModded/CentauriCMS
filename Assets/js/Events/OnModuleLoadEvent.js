@@ -1,12 +1,72 @@
 Centauri.Events.OnModuleLoadEvent = function(module) {
+    $("#dashboard #modules .module.active").removeClass("active");
+    $("#dashboard #modules .module[data-module-id='" + module + "']").addClass("active");
+
     Centauri.Module = module;
     Centauri.Components.PagesComponent(module);
 
+    var splittedTitle = $.trim($("title", $(document.head)).text()).split("»");
+    var moduleName = Centauri.__trans.modules[Centauri.Module];
+    if(Centauri.isUndefined(moduleName)) moduleName = "";
+    var title = splittedTitle[0] + "» " + moduleName
+    $("title", document.head).text(title);
+
+    // Initialize a-tags turning into AJAX-calls
+    Centauri.Service.ATagAjaxService();
+
+    // DAPLoader
     if(Centauri.DAPLoader.historyPushState) {
         history.pushState({page: 1}, module, Centauri.Utility.PathsUtility.root + "centauri/" + module);
     }
 
-    if(module == "dashboard") {}
+    // Hamburger toggler
+    if(
+        (
+            Centauri.Helper.VariablesHelper.__BreakpointView == "sm"
+        ||
+            Centauri.Helper.VariablesHelper.__BreakpointView == "md"
+        )
+    &&
+        $(".overlayer").attr("data-closer") == "DashboardView"
+    ) {
+        $(".hamburger").trigger("click");
+
+        $(".overlayer").addClass("hidden");
+        Centauri.Events.OnOverlayerHiddenEvent($(".overlayer").attr("data-closer"));
+    }
+
+    // Table Search-Filter
+    $("#content input#filter").on("keyup", function(e) {
+        var value = $(this).val();
+    
+        if(value != "") {
+            $("table tbody tr").css("display", "none");
+    
+            $("table tbody td").each(function() {
+                var $td = $(this);
+    
+                var text = $.trim($td.text());
+    
+                if(Centauri.strContains(text, value)) {
+                    $td.parent().css("display", "table-row");
+                }
+            });
+        } else {
+            $("table tbody tr").css("display", "table-row");
+        }
+    });
+
+    // Refresh Button
+    $("#content > section button[data-button-type='refresh']").on("click", function() {
+        Centauri.Components.ModulesComponent({
+            type: "load",
+            module: Centauri.Module
+        });
+    });
+
+    // Modules
+    if(module == "dashboard") {
+    }
 
     else if(module == "pages") {
         $("table#pages tr").on("dblclick", this, function() {
@@ -18,13 +78,6 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
 
             $button.on("click", this, function() {
                 var btnType = $(this).data("button-type");
-
-                if(btnType == "refresh") {
-                    Centauri.Components.ModulesComponent({
-                        type: "load",
-                        module: "pages"
-                    });
-                }
 
                 if(btnType == "create") {
                     Centauri.fn.Ajax(
@@ -60,7 +113,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                         custom: "select",
 
                                                         data: {
-                                                            label: "Parent Page",
+                                                            label: Centauri.__trans.EditorComponent.label_rootpage,
                                                             options: rootpages
                                                         }
                                                     },
@@ -72,7 +125,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                         extraAttr: "style='display: none!important;'",
 
                                                         data: {
-                                                            label: "Languages",
+                                                            label: Centauri.__trans.global.label_languages,
                                                             options: languages
                                                         }
                                                     },
@@ -80,7 +133,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                     {
                                                         id: "title",
                                                         type: "text",
-                                                        label: "Title",
+                                                        label: Centauri.__trans.global.label_title,
                                                         required: true
                                                     },
 
@@ -97,7 +150,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                         custom: "switch",
 
                                                         data: {
-                                                            label: "Root page?",
+                                                            label: Centauri.__trans.EditorComponent.label_rootpage + "?",
                                                             isChecked: false,
                                                             onClick: "Centauri.Events.EditorComponent.Checkbox.OnClick(this)"
                                                         }
@@ -146,7 +199,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                                 },
 
                                                                 error: function(data) {
-                                                                    
+                                                                    console.error(data);
                                                                 },
 
                                                                 complete: function() {
@@ -172,7 +225,25 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
         });
     }
 
+    else if(module == "filelist") {
+        $("#filelistmodule_buttons button").each(function() {
+            $button = $(this);
+
+            $button.on("click", this, function() {
+                var btnType = $(this).data("button-type");
+
+                if(btnType == "upload") {
+                    // $("input", $(this))[0].trigger("click");
+                }
+            });
+        });
+    }
+
     else if(module == "languages") {
+        $("table#languages tr").on("dblclick", this, function() {
+            $(".actions .action[data-action='language-edit']", $(this)).trigger("click");
+        });
+
         $("#languagemodule_buttons button").each(function() {
             $button = $(this);
 
@@ -188,7 +259,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                             {
                                 id: "title",
                                 type: "text",
-                                label: "Title",
+                                label: Centauri.__trans.global.label_title,
                                 required: true
                             },
 
@@ -211,7 +282,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                             loadModuleAfterSaved: "languages",
 
                             save: function(data) {
-                                Centauri.Helper.Variables.__closeAjax = true;
+                                Centauri.Helper.VariablesHelper.__closeAjax = true;
 
                                 Centauri.fn.Ajax(
                                     "Language",
@@ -243,17 +314,112 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                         }
                     });
                 }
+            });
+        });
+    }
 
-                if(btnType == "refresh") {
-                    Centauri.Components.ModulesComponent({
-                        type: "load",
-                        module: "languages"
-                    });
+    else if(module == "extensions") {
+        $("#extensionsmodule_buttons button").each(function() {
+            $button = $(this);
+
+            $button.on("click", this, function() {
+                var btnType = $(this).data("button-type");
+            });
+        });
+    }
+
+    else if(module == "notifications") {}
+
+    else if(module == "models") {
+        $("#modelsmodule_buttons button").each(function() {
+            $button = $(this);
+
+            $button.on("click", this, function() {
+                var btnType = $(this).data("button-type");
+
+                if(btnType == "create") {
+                    Centauri.fn.Ajax(
+                        "Models",
+                        "getModelConfigs",
+
+                        {},
+
+                        {
+                            success: function(data) {
+                                Centauri.fn.Modal(
+                                    "New Model",
+
+                                    data,
+
+                                    {
+                                        size: "xl",
+                                        closeOnSave: false,
+
+                                        close: {
+                                            label: Centauri.__trans.modals.btn_cancel
+                                        },
+
+                                        save: {
+                                            label: Centauri.__trans.modals.btn_create
+                                        }
+                                    },
+
+                                    {
+                                        save: function() {
+                                            if(Centauri.isNull(Centauri.Helper.ModalHelper.Element)) {
+                                                toastr["error"]("Models Error", "Please select any model in order to create one!");
+                                                return;
+                                            }
+
+                                            Centauri.fn.Modal.close();
+                                            var datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
+
+                                            Centauri.fn.Ajax(
+                                                "Models",
+                                                "newModel",
+
+                                                {
+                                                    model: Centauri.Helper.ModalHelper.Element.data("model"),
+                                                    datas: JSON.stringify(datas)
+                                                },
+
+                                                {
+                                                    success: function(data) {
+                                                        data = JSON.parse(data);
+                                                        Centauri.Notify(data.type, data.title, data.description);
+
+                                                        Centauri.Components.ModulesComponent({
+                                                            type: "load",
+                                                            module: Centauri.Module
+                                                        });
+                                                    },
+
+                                                    error: function(data) {
+                                                        console.error(data);
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    }
+                                );
+
+                                Centauri.Modal.ModelModal();
+
+                                Centauri.Service.CKEditorInitService();
+                            },
+
+                            error: function(data) {
+                                console.error(data);
+                            }
+                        }
+                    );
                 }
             });
         });
+    }
 
-    } else {
-        console.error("Centauri.Events.OnModuleLoadEvent: Module '" + module + "' has not been registered with Centauri.Events.OnModuleLoadEvent!");
+
+    else {
+        console.warn("Centauri.Events.OnModuleLoadEvent: Module '" + module + "' has not been registered with Centauri.Events.OnModuleLoadEvent");
     }
 };

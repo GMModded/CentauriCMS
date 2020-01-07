@@ -38,11 +38,37 @@ $tablebordercolor: #2b3447;
             }
 
             .actions {
+                position: relative;
                 display: flex;
 
                 .action {
                     cursor: pointer;
                     transition: .3s;
+
+                    &[data-action="actions-trigger"].active + .d-none {
+                        @include media-breakpoint-down(md) {
+                            display: flex !important;
+                            position: absolute;
+                            top: -5px;
+                            right: 65px;
+                            width: 250px;
+                            background: #262d3d;
+                            padding: 5px;
+                            box-shadow: 0 0 5px #000;
+
+                            &:after {
+                                content: " ";
+                                width: 0;
+                                height: 0;
+                                border-style: solid;
+                                border-width: 17.5px 0 17.5px 20px;
+                                border-color: transparent transparent transparent #262d3d;
+                                position: absolute;
+                                right: -20px;
+                                top: 6px;
+                            }
+                        }
+                    }
 
                     &:hover {
                         // color: #1e2533;
@@ -74,4 +100,14 @@ $tablebordercolor: #2b3447;
 
 .ck-editor__editable_inline {
     min-height: 150px;
+}
+
+.cropper-container {
+    margin: 30px 0 !important;
+}
+
+#modal {
+    .cropper-container {
+        margin: 0 -1rem !important;
+    }
 }

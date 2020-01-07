@@ -1,6 +1,4 @@
 <?php
-
-use Centauri\CMS\Centauri;
 use Centauri\CMS\Http\Request;
 
 /*

@@ -1,1 +1,1 @@
-Centauri.Helper.Variables = {};
+Centauri.Helper.VariablesHelper.__CME__FIELDS = {};

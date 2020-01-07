@@ -15,7 +15,7 @@ return [
 
     'paths' => [
         resource_path('views'),
-        base_path('Centauri/CMS/Views'),
+        base_path("Centauri/CMS/Views"),
     ],
 
     /*

@@ -34,49 +34,26 @@ Centauri.Modal.NewContentElementModal = function() {
 
                             {
                                 size: "xl",
+                                closeOnSave: false,
 
                                 close: {
-                                    label: "Clöse"
+                                    label: Centauri.__trans.modals.btn_cancel
                                 },
 
                                 save: {
-                                    label: "Create"
+                                    label: Centauri.__trans.modals.btn_create
                                 }
                             },
 
                             {
                                 save: function() {
-                                    var datas = [];
+                                    if(Centauri.isNull(Centauri.Helper.ModalHelper.Element)) {
+                                        toastr["error"]("Content Elements Error", "Please select any element in order to create one!");
+                                        return;
+                                    }
 
-                                    $("#modal .element .bottom .md-form > input").each(function() {
-                                        var id = $(this).attr("id");
-
-                                        if(Centauri.isNotUndefined(id)) {
-                                            var val = $(this).val();
-
-                                            datas.push(
-                                                {
-                                                    id: id,
-                                                    value: val
-                                                }
-                                            );
-                                        }
-                                    });
-
-                                    $(".element .bottom .md-form > div.ck-editor").each(function() {
-                                        var id = $(this).parent().find("textarea").attr("id");
-
-                                        if(Centauri.isNotUndefined(id)) {
-                                            var val = $(".ck-content", $(this)).html();
-
-                                            datas.push(
-                                                {
-                                                    id: id,
-                                                    value: val
-                                                }
-                                            );
-                                        }
-                                    });
+                                    Centauri.fn.Modal.close();
+                                    var datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
 
                                     Centauri.fn.Ajax(
                                         "ContentElements",
@@ -84,7 +61,7 @@ Centauri.Modal.NewContentElementModal = function() {
 
                                         {
                                             pid: Centauri.Components.PagesComponent.uid,
-                                            ctype: Centauri.Helper.NewContentElementHelper.Element.data("ctype"),
+                                            ctype: Centauri.Helper.ModalHelper.Element.data("ctype"),
                                             datas: JSON.stringify(datas),
 
                                             rowPos: rowPos,
@@ -112,6 +89,11 @@ Centauri.Modal.NewContentElementModal = function() {
                                                             $container.html(data);
 
                                                             /**
+                                                             * Initializing edit-button for elements
+                                                             */
+                                                            Centauri.Helper.PagesHelper($container);
+
+                                                            /**
                                                              * Registering click-event for newCEButton
                                                              */
                                                             Centauri.Modal.NewContentElementModal();
@@ -119,26 +101,7 @@ Centauri.Modal.NewContentElementModal = function() {
                                                             /**
                                                              * Initializing CKEditor 5
                                                              */
-                                                            Centauri.Helper.NewContentElementHelper();
-
-                                                            var $tops = $(".top", $container);
-                                                            $tops.each(function() {
-                                                                var $top = $(this);
-
-                                                                $top.on("click", function() {
-                                                                    $top = $(this);
-                                                                    $top.parent().toggleClass("active");
-
-                                                                    if(!$top.hasClass("toggling")) {
-                                                                        $top.addClass("toggling");
-
-                                                                        $fields = $top.parent().find(".fields");
-                                                                        $fields.slideToggle(function() {
-                                                                            $top.removeClass("toggling");
-                                                                        });
-                                                                    }
-                                                                });
-                                                            });
+                                                            Centauri.Service.CKEditorInitService();
                                                         }
                                                     }
                                                 );
@@ -153,24 +116,28 @@ Centauri.Modal.NewContentElementModal = function() {
                             }
                         );
 
-                        $("#modal .md-form label").on("click", function(e) {
-                            e.preventDefault();
-                            $(this).parent().find("input").focus();
-                        });
+                        // $("#modal .md-form label").on("click", function(e) {
+                        //     e.preventDefault();
+                        //     $(this).parent().find("input").focus();
+                        // });
 
                         /**
                          * Initializing CKEditor 5
                          */
-                        Centauri.Helper.NewContentElementHelper();
+                        Centauri.Service.CKEditorInitService();
 
-                        /**
-                         * Label focus fix for elements
-                         */
-                        $(".element").each(function() {
-                            $(".top", $(this)).on("click", function() {
-                                Centauri.Helper.NewContentElementHelper.Element = $(this).parent();
-                                $(this).parent().find(".bottom").slideToggle();
-                            });
+                        $(".element .top").on("click", function() {
+                            var $this = $(this);
+                            var $element = $this.parent();
+
+                            $(Centauri.Helper.ModalHelper.Element).find(".bottom").slideUp();
+
+                            if(!$(Centauri.Helper.ModalHelper.Element).is($element)) {
+                                Centauri.Helper.ModalHelper.Element = $element;
+                                $(".bottom", $element).slideToggle();
+                            } else {
+                                Centauri.Helper.ModalHelper.Element = null;
+                            }
                         });
                     }
                 }
@@ -178,5 +145,3 @@ Centauri.Modal.NewContentElementModal = function() {
         }
     });
 };
-
-Centauri.Helper.NewContentElementHelper.Element = null;

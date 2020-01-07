@@ -5,6 +5,10 @@
     margin-left: -5rem;
     margin-top: -5rem;
 
+    @include media-breakpoint-down(md) {
+        margin: 0 0 0 -1.5rem;
+    }
+
     &.hidden {
         opacity: 0;
         visibility: hidden;

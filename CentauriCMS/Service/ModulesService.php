@@ -5,6 +5,8 @@ use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Model\Language;
 use Centauri\CMS\Model\Notification;
+use Centauri\CMS\Component\ExtensionsComponent;
+use Centauri\CMS\Model\File;
 use Illuminate\Support\Facades\Storage;
 
 class ModulesService
@@ -18,58 +20,65 @@ class ModulesService
     {
         $modules = [
             "dashboard" => [
-                "title" => trans("backend/modules.dashboard.title")
+                "title" => trans("backend/modules.dashboard.title"),
+                "icon" => "fas fa-tachometer-alt"
             ],
 
             "pages" => [
-                "title" => trans("backend/modules.pages.title")
+                "title" => trans("backend/modules.pages.title"),
+                "icon" => "fas fa-file-alt"
+            ],
+
+            "models" => [
+                "title" => trans("backend/modules.models.title"),
+                "icon" => "fas fa-plus"
+            ],
+
+            "filelist" => [
+                "title" => trans("backend/modules.filelist.title"),
+                "icon" => "fas fa-cloud-upload-alt"
             ],
 
             "languages" => [
-                "title" => trans("backend/modules.languages.title")
+                "title" => trans("backend/modules.languages.title"),
+                "icon" => "fas fa-language"
             ],
 
             "extensions" => [
-                "title" => trans("backend/modules.extensions.title")
+                "title" => trans("backend/modules.extensions.title"),
+                "icon" => "fas fa-boxes"
             ],
 
             "notifications" => [
-                "title" => trans("backend/modules.notifications.title")
+                "title" => trans("backend/modules.notifications.title"),
+                "icon" => "fas fa-bell"
+            ],
+
+            "database" => [
+                "title" => trans("backend/modules.database.title"),
+                "icon" => "fas fa-database"
             ]
         ];
 
-        $hooks = (!empty($GLOBALS["Centauri"]["Hook"]["ModulesHook"])) ?? $GLOBALS["Centauri"]["Hook"]["ModulesHook"];
-        if($hooks) {
-            foreach($hooks as $hook) {
-                $hookClass = Centauri::makeInstance($hook);
-                dd($hookClass);
-            }
-        } else {
-            foreach($modules as $moduleid => $data) {
-                // Default icon for BE-Modules
-                $icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#758CA3" fill-rule="evenodd" d="M10,9 C9.44771525,9 9,9.44771525 9,10 L9,21 C9,21.5522847 9.44771525,22 10,22 L21,22 C21.5522847,22 22,21.5522847 22,21 L22,10 C22,9.44771525 21.5522847,9 21,9 L10,9 Z M15,7 L15,3 C15,2.44771525 14.5522847,2 14,2 L3,2 C2.44771525,2 2,2.44771525 2,3 L2,14 C2,14.5522847 2.44771525,15 3,15 L7,15 L7,10 C7,8.34314575 8.34314575,7 10,7 L15,7 Z M17,7 L21,7 C22.6568542,7 24,8.34314575 24,10 L24,21 C24,22.6568542 22.6568542,24 21,24 L10,24 C8.34314575,24 7,22.6568542 7,21 L7,17 L3,17 C1.34314575,17 1.09108455e-15,15.6568542 8.8817842e-16,14 L0,3 C-2.02906125e-16,1.34314575 1.34314575,7.80279975e-16 3,8.8817842e-16 L14,8.8817842e-16 C15.6568542,6.15657427e-16 17,1.34314575 17,3 L17,7 Z"></path></svg>';
+        foreach($modules as $moduleid => $data) {
+            $icon = "fas fa-box";
 
+            if(!isset($data["icon"])) {
                 if(Storage::exists("icon-" . $moduleid)) {
                     $icon = Storage::get("icon_" . $moduleid);
                 }
-
-                $modules[$moduleid]["icon"] = $icon;
+            } else {
+                $icon = "<i class='" . $data["icon"] . "'></i>";
             }
+
+            $modules[$moduleid]["icon"] = $icon;
         }
 
-        $GLOBALS["Centauri"]["Core"]["Modules"] = $modules;
-    }
+        $modules["notifications"]["data"] = Notification::get()->count();
 
-    /**
-     * Returns all modules - optionally for views optimized - for blades eaching it etc
-     * 
-     * @param boolean $viewsOptimized
-     * @return void
-     */
-    // public function findAll($viewsOptimized = false)
-    // {
-        
-    // }
+        $extensionModules = $GLOBALS["Centauri"]["Modules"];
+        $GLOBALS["Centauri"]["Modules"] = array_merge($modules, $extensionModules);
+    }
 
     /**
      * Handles different dynamic data for every single module in the backend
@@ -79,30 +88,33 @@ class ModulesService
      */
     public function findDataByModuleid($moduleid)
     {
+        $__notification = null;
         $data = [];
 
         if($moduleid == "dashboard") {
             $rootpages = Page::where("is_rootpage", "1")->get()->count();
             $pages = Page::where("is_rootpage", "0")->get()->count();
             $languages = Language::all()->count();
+            $notifications = Notification::all()->count();
 
             $data = [
                 "rootpages" => $rootpages,
                 "pages" => $pages,
-                "languages" => $languages
+                "languages" => $languages,
+                "notifications" => $notifications
             ];
         }
 
         if($moduleid == "pages") {
             $languages = Language::all();
 
-            $pages = Page::all();
+            $pages = Page::get()->all();
             $npages = [];
 
             foreach($pages as $page) {
                 if($page->getAttribute("is_rootpage")) {
                     $language = Language::where("uid", $page->lid)->get()->first();
-                    
+
                     if(is_null($language)) {
                         $notification = new Notification;
 
@@ -111,15 +123,13 @@ class ModulesService
                         $notification->text = "This issue may caused by removing a language-entry from the 'languages' table.";
 
                         $notification->save();
-
-                        return;
+                    } else {
+                        $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
+                        $language->flagsrc = $flagsrc;
+    
+                        $page->setAttribute("language", $language);
+                        $npages[$page->getAttribute("lid")][$page->getAttribute("uid")][] = $page;
                     }
-
-                    $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
-                    $language->flagsrc = $flagsrc;
-
-                    $page->setAttribute("language", $language);
-                    $npages[$page->getAttribute("lid")][$page->getAttribute("uid")][] = $page;
                 }
             }
             foreach($pages as $page) {
@@ -134,21 +144,72 @@ class ModulesService
                         $notification->text = "This issue may caused by removing a language-entry from the 'languages' table.";
 
                         $notification->save();
-
-                        return;
+                    } else {
+                        $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
+                        $language->flagsrc = $flagsrc;
+    
+                        $page->setAttribute("language", $language);
+                        $npages[$page->getAttribute("lid")][$page->getAttribute("pid")][] = $page;
                     }
-
-                    $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
-                    $language->flagsrc = $flagsrc;
-
-                    $page->setAttribute("language", ["flagsrc" => $flagsrc]);
-                    $npages[$page->getAttribute("lid")][$page->getAttribute("pid")][] = $page;
                 }
+            }
+
+            if(is_null($npages) || empty($npages) && !empty($pages)) {
+                $__notification = [
+                    "severity" => "ERROR",
+                    "title" => "Page(s) with a language which doesn't exists anymore",
+                    "text" => "Delete remaining pages which has a connection to the non-existing language to fix this issue.",
+                    "html" => "<a href='" . url("./centauri/fix/deletePagesWithNotExistingLanguage") . "'><button class='btn btn-warn waves-effect waves-light'>Fix issue</button></a>"
+                ];
             }
 
             $data = [
                 "pages" => $npages,
                 "languages" => $languages
+            ];
+        }
+
+        if($moduleid == "models") {
+            $models = collect();
+
+            foreach($GLOBALS["Centauri"]["Models"] as $key => $model) {
+                $models[$key] = [
+                    "label" => $model["label"],
+                    "loaded" => (class_exists($key))
+                ];
+            }
+
+            $data = [
+                "models" => $models
+            ];
+        }
+
+        if($moduleid == "filelist") {
+            $files = File::get()->all();
+
+            $nFiles = [];
+            foreach($files as $file) {
+                $nFile = [
+                    "uid" => $file->uid,
+                    "name" => $file->name,
+                    "cropable" => $file->cropable,
+                    "path" => $_ENV["APP_URL"] . "/storage/Centauri/Filelist/" . $file->name,
+                    "URLpath" => $_ENV["APP_URL"] . "/storage/Centauri/Filelist/" . $file->name,
+                    "type" => $file->type,
+                    "size" => filesize(storage_path("Centauri\\Filelist\\" . $file->name))
+                ];
+
+                $nFiles[] = $nFile;
+            }
+
+            $data = [
+                "files" => $nFiles
+            ];
+        }
+
+        if($moduleid == "selectfilefromlist") {
+            $data = [
+
             ];
         }
 
@@ -160,12 +221,48 @@ class ModulesService
             ];
         }
 
+        if($moduleid == "extensions") {
+            Centauri::makeInstance(ExtensionsComponent::class);
 
-        if(isset($data["languages"]) && gettype($data["languages"]) != "integer") {
-            foreach($languages as $language) {
-                $flagsrc = env("APP_URL") . "/" . $language->getAttribute("flagsrc");
-                $language->setAttribute("flagsrc", $flagsrc);
+            $extensions = [];
+            foreach($GLOBALS["Centauri"]["Extensions"] as $extKey => $ext) {
+                if(!isset($ext["state"])) {
+                    $ext["state"] = "Beta";
+                }
+
+                $extensions[$extKey] = $ext;
             }
+
+            $data = [
+                "extensions" => $extensions
+            ];
+        }
+
+        if($moduleid == "notifications") {
+            $notifications = Notification::all();
+
+            $data = [
+                "notifications" => $notifications
+            ];
+        }
+
+        else {
+            if(isset($GLOBALS["Centauri"]["Modules"][$moduleid]["DataFetcher"])) {
+                $data = Centauri::makeInstance($GLOBALS["Centauri"]["Modules"][$moduleid]["DataFetcher"]);
+            }
+        }
+
+        if(gettype($data) == "array") {
+            if(isset($data["languages"]) && gettype($data["languages"]) != "integer") {
+                foreach($languages as $language) {
+                    $flagsrc = env("APP_URL") . "/" . $language->getAttribute("flagsrc");
+                    $language->setAttribute("flagsrc", $flagsrc);
+                }
+            }
+        }
+
+        if(!is_null($__notification)) {
+            $data["__notification"] = $__notification;
         }
 
         return $data;

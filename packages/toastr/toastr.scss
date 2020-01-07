@@ -142,7 +142,7 @@
   #toast-container > .toast-warning {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGYSURBVEhL5ZSvTsNQFMbXZGICMYGYmJhAQIJAICYQPAACiSDB8AiICQQJT4CqQEwgJvYASAQCiZiYmJhAIBATCARJy+9rTsldd8sKu1M0+dLb057v6/lbq/2rK0mS/TRNj9cWNAKPYIJII7gIxCcQ51cvqID+GIEX8ASG4B1bK5gIZFeQfoJdEXOfgX4QAQg7kH2A65yQ87lyxb27sggkAzAuFhbbg1K2kgCkB1bVwyIR9m2L7PRPIhDUIXgGtyKw575yz3lTNs6X4JXnjV+LKM/m3MydnTbtOKIjtz6VhCBq4vSm3ncdrD2lk0VgUXSVKjVDJXJzijW1RQdsU7F77He8u68koNZTz8Oz5yGa6J3H3lZ0xYgXBK2QymlWWA+RWnYhskLBv2vmE+hBMCtbA7KX5drWyRT/2JsqZ2IvfB9Y4bWDNMFbJRFmC9E74SoS0CqulwjkC0+5bpcV1CZ8NMej4pjy0U+doDQsGyo1hzVJttIjhQ7GnBtRFN1UarUlH8F3xict+HY07rEzoUGPlWcjRFRr4/gChZgc3ZL2d8oAAAAASUVORK5CYII=") !important;
   }
-  #toast-container > .toast-classic {
+  #toast-container > .toast-primary {
     background-image: url("http://png-2.findicons.com/files/icons/2252/iphone_toolbar_icons/30/icon_bell.png") !important;
   }
   #toast-container.toast-top-center > div,
@@ -156,12 +156,12 @@
     margin: auto;
   }
   
-  .toast         { background-color: #030303; }
-  .toast-success { background-color: #00c851; }
-  .toast-error   { background-color: #ff3547; }
-  .toast-info    { background-color: #28d;    }
-  .toast-warning { background-color: #FFD700; }
-  .toast-classic { background-color: grey;    }
+  .toast         { background-color: #030303; border-color: #030303; }
+  .toast-success { background-color: #00c851; border-color: #00c851; }
+  .toast-error   { background-color: #ff3547; border-color: #ff3547; }
+  .toast-info    { background-color: #28d;    border-color: #28d;    }
+  .toast-warning { background-color: #FFD700; border-color: #FFD700; }
+  .toast-primary { background-color: #4285f4; border-color: #4285f4; }
   
   .toast {
     .toast-progress {

@@ -1,7 +1,11 @@
 /**
  * Packages
  *
- * Toastr, Bootstrap 4.1.3, MDB Pro 4.8.x, FontAwesome 5.12.0
+ * Toastr (customized),
+ * Bootstrap v4.1.3,
+ * MDB Pro v4.8.x,
+ * FontAwesome v5.12.0,
+ * cropperjs v1.0.1
  */
 @import "../../packages/toastr/toastr";
 
@@ -16,6 +20,7 @@
 @import "../../packages/fontawesome5.12.0/css/solid.min.css";
 @import "../../packages/fontawesome5.12.0/css/brands.min.css";
 
+@import "../../packages/cropperjs/dist/cropper.min.css";
 
 
 /**
@@ -47,6 +52,8 @@
 /**
  * Modules
  */
+@import "Modules/_modules-view";
+@import "Modules/dashboard";
 @import "Modules/pages";
 
 /**
@@ -58,3 +65,13 @@
  * Modals
  */
 @import "Modals/newContentElement";
+
+/**
+ * Utilities
+ */
+@import "Utility/tablewrapper";
+
+/**
+ * Customizations
+ */
+@import "custom";

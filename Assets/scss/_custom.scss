@@ -1,0 +1,17 @@
+.md-form {
+    &.has-abs-btn {
+        & > button {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            margin: 0;
+        }
+
+        > input {
+            position: relative;
+            top: 17.5px;
+            margin-left: 60px;
+            width: calc(100% - 60px);
+        }
+    }
+}

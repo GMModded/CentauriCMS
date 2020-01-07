@@ -28,6 +28,8 @@ class Pages extends Migration
             $table->integer("is_rootpage"),
             $table->string("title"),
             $table->text("slugs"),
+
+            $table->integer("hidden"),
             $table->timestamps(),
             $table->softDeletes()
         ];

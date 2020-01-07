@@ -19,11 +19,23 @@ return [
     "pages" => [
         "title" => "Pages"
     ],
+    "models" => [
+        "title" => "Models"
+    ],
+    "filelist" => [
+        "title" => "Filelist"
+    ],
     "languages" => [
         "title" => "Languages"
     ],
     "extensions" => [
         "title" => "Extensions"
+    ],
+    "notifications" => [
+        "title" => "Notifications"
+    ],
+    "database" => [
+        "title" => "Database"
     ],
 
 ];

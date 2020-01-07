@@ -19,11 +19,23 @@ return [
     "pages" => [
         "title" => "Seiten"
     ],
+    "models" => [
+        "title" => "Models"
+    ],
+    "filelist" => [
+        "title" => "Dateien"
+    ],
     "languages" => [
         "title" => "Sprachen"
     ],
     "extensions" => [
         "title" => "Erweiterungen"
+    ],
+    "notifications" => [
+        "title" => "Benachrichtigungen"
+    ],
+    "database" => [
+        "title" => "Datenbank"
     ],
 
 ];

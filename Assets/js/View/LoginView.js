@@ -1,9 +1,3 @@
-$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
-    if(thrownError == "unknown status") {
-        location.href = "centauri/action/Backend/logout";
-    }
-});
-
 Centauri.View.LoginView = function() {
     $("#login form").submit(function(e) {
         e.preventDefault();
@@ -27,8 +21,6 @@ Centauri.View.LoginView = function() {
                             Centauri.Notify(data.type, data.title, data.description);
                             Centauri.Events.OnBackendEvent();
                         });
-
-                        Centauri.Utility.UpdateHeadTags(data.headtags);
                     }
                 },
 

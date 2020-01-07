@@ -2,21 +2,12 @@
 namespace Centauri\CMS\Ajax;
 
 use Illuminate\Http\Request;
-use Centauri\CMS\Centauri;
 use Centauri\CMS\AjaxInterface;
-use Centauri\CMS\Service\PageService;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Model\Language;
 
 class PageAjax implements AjaxInterface
 {
-    private $pageService;
-
-    public function __construct()
-    {
-        $this->pageService = Centauri::makeInstance(PageService::class);
-    }
-
     public function request(Request $request, String $ajaxName)
     {
         $params = $request->input();

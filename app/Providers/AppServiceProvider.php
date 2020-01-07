@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
-use PHPUnit\Util\FileLoader;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +25,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Loads localization files of all extensions
+        $extensions = Storage::disk("centauri_extensions")->allDirectories();
+
+        foreach($extensions as $extension) {
+            if(!Str::contains($extension, "/")) {
+                $extName = $extension;
+                $extConfigFilePath = storage_path("Centauri/Extensions/$extName/ext_config.php");
+
+                $config = require_once($extConfigFilePath);
+                $localizationFolder = $config["localizationFolder"] ?? "Language";
+
+                $this->loadTranslationsFrom(storage_path("Centauri/Extensions/$extName/$localizationFolder"), $extName);
+           }
+        }
     }
 }

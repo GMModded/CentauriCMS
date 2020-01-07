@@ -59,7 +59,7 @@ function Centauri_loadFunctions() {
      * @return {boolean}
      */
     Centauri.isNull = function(variable) {
-        return (typeof variable === null);
+        return (variable === null);
     };
     /**
      * @function isNotNull - Handles conditions for variable if it's not null
@@ -67,7 +67,7 @@ function Centauri_loadFunctions() {
      * @return {boolean}
      */
     Centauri.isNotNull = function(variable) {
-        return (typeof variable !== null);
+        return (variable !== null);
     };
 
     /**
@@ -80,12 +80,12 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function stringContains - Checks if a string contains a specific (given) char
+     * @function strContains - Checks if a string contains a specific (given) char
      * @param {string} string
      * @param {string} char
      * @return {boolean}
      */
-    Centauri.stringContains = function(string, char) {
+    Centauri.strContains = function(string, char, ignoreCamelCase = false) {
         var parameter = "";
 
         if(Centauri.isUndefined(string)) {
@@ -96,10 +96,24 @@ function Centauri_loadFunctions() {
         }
 
         if(parameter != "") {
-            console.error("Centauri-Core: stringContains(string, char) can't be called without a " + parameter + "-parameter!");
+            console.error("Centauri-Core: strContains(string, char) can't be called without a " + parameter + "-parameter!");
             return;
         }
 
+        if(ignoreCamelCase) {
+            return (~(string.toLowerCase()).indexOf(char.toLowerCase()));
+        }
+
         return (~string.indexOf(char));
+    };
+
+    /**
+     * @function strReplace - Replaces a specific part of a string with a given value
+     * @param {string} string
+     * @param {string} replace
+     * @return {string}
+     */
+    Centauri.strReplace = function(string, searchValue, replaceValue) {
+        return string.replace(searchValue, replaceValue, string);
     };
 }

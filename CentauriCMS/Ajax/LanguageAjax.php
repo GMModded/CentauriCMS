@@ -34,6 +34,34 @@ class LanguageAjax implements AjaxInterface
             }
         }
 
+        if($ajaxName == "editLanguage") {
+            $uid = $params["uid"];
+
+            $title = $params["title"];
+            $url = $params["slug"];
+            $langcode = $params["langcode"];
+
+            $language = Language::where("uid", $uid)->get()->first();
+
+            $language->title = $title;
+            $language->slug = $url;
+            $language->lang_code = $langcode;
+
+            if($language->save()) {
+                return json_encode([
+                    "type" => "success",
+                    "title" => "Language '" . $title . "' saved",
+                    "description" => "Successfully updated '" . $title . "'"
+                ]);
+            }
+
+            return json_encode([
+                "type" => "error",
+                "title" => "Updating Language failed",
+                "description" => "An error occured while updating '" . $title . "'"
+            ]);
+        }
+
         if($ajaxName == "deleteLanguage") {
             $uid = $params["uid"];
 
@@ -49,6 +77,6 @@ class LanguageAjax implements AjaxInterface
             ]);
         }
 
-        return response("LanguageAjax - an action like '" . $ajaxName . "' doesn't exists!", 500);
+        return response("LanguageAjax - the action '" . $ajaxName . "' doesn't exists!", 500);
     }
 }

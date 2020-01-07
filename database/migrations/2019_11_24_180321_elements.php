@@ -29,12 +29,15 @@ class Elements extends Migration
             $table->integer("sorting"),
             $table->string("ctype"),
 
+            $table->string("image")->nullable(),
             $table->string("header"),
             $table->string("subheader"),
             $table->text("rte"),
+            $table->string("plugin")->nullable(),
 
             $table->integer("hidden"),
-            $table->timestamps()
+            $table->timestamps(),
+            $table->softDeletes()
         ];
     }
 

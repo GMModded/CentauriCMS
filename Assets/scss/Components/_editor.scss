@@ -10,7 +10,7 @@
     transition: .66s cubic-bezier(1,-.5,.25,1.42);
 
     &.active {
-        right: 0;
+        right: 0 !important;
     }
 
     &.fluid {
@@ -18,6 +18,14 @@
         right: 30px;
         width: calc(100% - 320px);
         height: calc(100% - 60px);
+
+        @include media-breakpoint-down(md) {
+            top: 0;
+            right: -100%;
+            height: 100%;
+            width: 100%;
+            box-shadow: none;
+        }
 
         > .bottom {
             padding-bottom: 15px;
@@ -33,7 +41,8 @@
             }
 
             > .row {
-                padding: 15px 30px !important;
+                padding: 30px !important;
+                z-index: 2;
             }
         }
 
@@ -136,10 +145,15 @@
             .fields {
                 width: 100%;
                 padding: 0 15px 15px;
+                margin-top: -15px;
 
                 label {
                     margin-bottom: 0;
                     font-weight: bold;
+                }
+
+                .image-field {
+                    padding-top: 1px;
                 }
             }
         }

@@ -4,7 +4,6 @@ use Centauri\CMS\Model\BeUser;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Model\Language;
 use Centauri\CMS\Model\Element;
-use Centauri\CMS\Model\BackendLayout;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -44,6 +43,7 @@ class DatabaseSeeder extends Seeder
             DB::table("pages")->insert([
                 "pid" => 0,
                 "lid" => 1,
+                "hidden" => 1,
                 "backend_layout" => 1,
                 "is_rootpage" => 1,
                 "title" => "Home",
@@ -102,6 +102,7 @@ class DatabaseSeeder extends Seeder
             DB::table("elements")->insert([
                 "pid" => 1,
                 "lid" => 0,
+                "hidden" => 0,
                 "rowPos" => 0,
                 "colPos" => 0,
                 "sorting" => 1,

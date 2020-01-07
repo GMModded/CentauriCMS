@@ -50,6 +50,7 @@ class Page extends Model
     protected $attributes = [
         "pid" => 1,
         "lid" => 0,
+        "hidden" => 0,
         "is_rootpage" => 0,
         "backend_layout" => 0
     ];

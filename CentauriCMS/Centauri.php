@@ -1,14 +1,27 @@
 <?php
 namespace Centauri\CMS;
 
+use Centauri\CMS\Component\ExtensionsComponent;
 use Centauri\CMS\Service\ModulesService;
+use Exception;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
-class Centauri
+class Centauri extends ServiceProvider
 {
     /**
      * Centauri Core version
      */
     protected $version = "1.0;EA1";
+
+    protected $tables = [
+        "be_users",
+        "elements",
+        "languages",
+        "notifications",
+        "pages"
+    ];
 
     /**
      * CentauriCMS root directory
@@ -25,10 +38,14 @@ class Centauri
      */
     public function __construct()
     {
-        // $translationLoader = app("translation.loader");
-        // $translationLoader->addNamespace("CentauriCMS", base_path("Centauri/CMS/Language"));
+        $this->initDB();
 
+        View::addNamespace("Centauri", base_path("CentauriCMS/Views"));
+
+        $this->extensionsComponent = Centauri::makeInstance(ExtensionsComponent::class);
         $this->modulesService = Centauri::makeInstance(ModulesService::class);
+
+        $this->initBE();
     }
 
 
@@ -38,9 +55,9 @@ class Centauri
      * @param class $class - Class name as class-object
      * @return class
      */
-    public static function makeInstance($class)
+    public static function makeInstance($class, $params = [])
     {
-        return new $class;
+        return new $class($params);
     }
 
     /**
@@ -48,15 +65,21 @@ class Centauri
      */
     public function initBE()
     {
-        $GLOBALS["Centauri"]["Core"]["BE"]["LID"] = 0;
+        \Illuminate\Support\Facades\App::setLocale(request()->session()->get("CENTAURI_LANGUAGE"));
 
+        $this->extensionsComponent;
         $this->modulesService->init();
+    }
 
-        // GlobalsCentauriCore
-        $GCC = $GLOBALS["Centauri"]["Core"];
-
-        return [
-            "modules" => $GCC["Modules"]
-        ];
+    /**
+     * Initialization of the tables which are required in order to run Centauri properly.
+     */
+    public function initDB()
+    {
+        foreach($this->tables as $table) {
+            if(!Schema::hasTable($table)) {
+                throw new Exception("Table: $table doesn't exists - please run a refresh of the migration for this table with Laravel Artisan.");
+            }
+        }
     }
 }

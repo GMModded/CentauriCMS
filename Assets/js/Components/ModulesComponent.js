@@ -4,41 +4,42 @@ Centauri.Components.ModulesComponent = function(data) {
             $module = $(this);
 
             $module.on("click", function() {
-                $(".overlayer").removeClass("hidden");
+                var $thismodule = $(this);
 
-                $module = $(this);
-                var moduleID = $module.data("module-id");
+                if(Centauri.Components.EditorComponent("isOpen")) {
+                    Centauri.fn.Modal(
+                        Centauri.__trans.modals.areyousure,
+                        Centauri.__trans.modals.editorcomponent_switch,
 
-                Centauri.fn.Ajax(
-                    "Modules",
-                    "show",
+                        {
+                            close: {
+                                label: Centauri.__trans.modals.btn_cancel,
+                                class: "warning"
+                            },
 
-                    {
-                        moduleid: moduleID
-                    },
-
-                    {
-                        success: function(data) {
-                            $("#dashboard #modules .module.active").removeClass("active");
-                            $module.addClass("active");
-
-                            $(".overlayer").addClass("hidden");
-                            $("#content").html(data);
-
-                            var title = $.trim($("#content").find("#title").text());
-                            Centauri.Utility.UpdateHeadTags([
-                                ["title", title]
-                            ]);
-
-                            Centauri.Events.OnModuleLoadEvent(moduleID);
+                            save: {
+                                label: Centauri.__trans.modals.btn_switch,
+                                class: "danger"
+                            }
                         },
 
-                        error: function(data) {
-                            $(".overlayer").addClass("hidden");
-                            console.error(data);
+                        {
+                            save() {
+                                Centauri.Components.EditorComponent("close");
+
+                                Centauri.Components.ModulesComponent({
+                                    type: "switch",
+                                    moduleEl: $thismodule
+                                });
+                            }
                         }
-                    }
-                );
+                    );
+                } else {
+                    Centauri.Components.ModulesComponent({
+                        type: "switch",
+                        moduleEl: $thismodule
+                    });
+                }
             });
         });
 
@@ -46,7 +47,9 @@ Centauri.Components.ModulesComponent = function(data) {
             if(Centauri.elExists($("#dashboard #modules .module.active"))) {
                 $("#dashboard #modules .module.active").trigger("click");
             } else {
-                $("#dashboard #modules .module[data-module-id='" + Centauri.defaultModule + "']").trigger("click");
+                if((location.href + "/" == location.origin + Centauri.Utility.PathsUtility.root + Centauri.Utility.PathsUtility.centauri)) {
+                    $("#dashboard #modules .module[data-module-id='" + Centauri.defaultModule + "']").trigger("click");
+                }
             }
         }, 333);
 
@@ -54,6 +57,38 @@ Centauri.Components.ModulesComponent = function(data) {
             $("#dashboard #user").toggleClass("active");
             $("#dashboard #user .dropdown-view").slideToggle();
         });
+    }
+
+    if(data.type == "switch") {
+        $(".overlayer").removeClass("hidden");
+
+        var $module = $(data.moduleEl);
+        var moduleID = $module.data("module-id");
+
+        Centauri.fn.Ajax(
+            "Modules",
+            "show",
+
+            {
+                moduleid: moduleID
+            },
+
+            {
+                success: function(data) {
+                    $("#dashboard #modules .module.active").removeClass("active");
+                    $module.addClass("active");
+
+                    $(".overlayer").addClass("hidden");
+                    $("#content").html(data);
+
+                    Centauri.Events.OnModuleLoadEvent(moduleID);
+                },
+
+                error: function(data) {
+                    $(".overlayer").addClass("hidden");
+                }
+            }
+        );
     }
 
     if(data.type == "load") {
@@ -71,11 +106,6 @@ Centauri.Components.ModulesComponent = function(data) {
                 success: function(data) {
                     $(".overlayer").addClass("hidden");
                     $("#content").html(data);
-
-                    var title = $.trim($("#content").find("#title").text());
-                    Centauri.Utility.UpdateHeadTags([
-                        ["title", title]
-                    ]);
 
                     Centauri.Events.OnModuleLoadEvent(module);
 

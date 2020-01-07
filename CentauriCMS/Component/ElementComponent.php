@@ -1,6 +1,8 @@
 <?php
 namespace Centauri\CMS\Component;
 
+use Centauri\CMS\Centauri;
+
 class ElementComponent
 {
     /**
@@ -11,29 +13,34 @@ class ElementComponent
      * @param string|int $lid Elements from specific language
      * @return void
      */
-    public static function render($view, $pageUid, $lid = 0)
+    public function render($view, $pageUid, $lid = 0)
     {
         if($view == "frontend" || $view == "FE") {
             $elements = \Centauri\CMS\Model\Element::where([
                 "pid" => $pageUid,
-                "lid" => $lid
-            ])->get();
+                "lid" => $lid,
+                "hidden" => 0
+            ])->orderBy("sorting", "asc")->get();
 
             $renderedHTML = "";
 
             foreach($elements as $element) {
-                $element->data = json_decode($element->getAttribute("data"));
+                $data = [];
 
-                $renderedHTML .= view("Frontend.Elements." . $element->getAttribute("ctype"), [
-                    "data" => $element->getAttribute("data")
-                ]);
+                if($element->ctype == "plugin") {
+                    $className = $element->plugin;
+                    $data = Centauri::makeInstance($className, $element);
+                }
+
+                $element = \Centauri\CMS\Processor\FieldProcessor::process($element, $data);
+
+                $renderedHTML .= view("Centauri::Frontend.Elements." . $element->getAttribute("ctype"), [
+                    "element" => $element,
+                    "data" => $data
+                ])->render();
             }
 
             return $renderedHTML;
-        }
-
-        if($view == "backend" || $view == "BE") {
-            dd("BACKEND RENDER");
         }
 
         return;

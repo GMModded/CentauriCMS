@@ -1,9 +1,17 @@
 Centauri.Components.PagesComponent = function(module) {
+    Centauri.Components.PagesComponent.uid = null;
+
+    Centauri.Components.PagesComponent.pages = {};
+    Centauri.Components.PagesComponent.pages.newCEButton = "<button class='btn btn-default m-0 py-2 px-2 waves-effect waves-light' data-action='newContentElement'><i class='fas fa-plus'></i> " + Centauri.__trans.modals.btn_content + "</button>";
+
+    Centauri.Components.PagesComponent.languages = {};
+
+
     if(module == "pages") {
         $action = $("table#pages .actions .action");
 
         $action.on("click", function() {
-            $tr = $(this).parent().parent().parent();
+            $tr = $(this).parent().parent().parent().parent();
 
             Centauri.Components.PagesComponent.uid = $(this).attr("data-uid");
             var action = $(this).attr("data-action");
@@ -14,6 +22,10 @@ Centauri.Components.PagesComponent = function(module) {
             var url = $.trim($("td[data-type='url']", $tr).text());
             var created_at = $.trim($("td[data-type='created_at']", $tr).text());
             var updated_at = $.trim($("td[data-type='updated_at']", $tr).text());
+
+            if(action == "actions-trigger") {
+                $(this).toggleClass("active");
+            }
 
             if(action == "page-edit") {
                 Centauri.Components.EditorComponent("show", {
@@ -35,14 +47,14 @@ Centauri.Components.PagesComponent = function(module) {
                             custom: "image",
 
                             data: {
-                                label: "Language",
+                                label: Centauri.__trans.global.label_language,
                                 src: flagsrc
                             }
                         },
 
                         {
                             id: "title",
-                            label: "Title",
+                            label: Centauri.__trans.global.label_language,
                             type: "text",
                             value: title,
                             required: true
@@ -58,7 +70,7 @@ Centauri.Components.PagesComponent = function(module) {
 
                         {
                             id: "created_at",
-                            label: "Created at",
+                            label: Centauri.__trans.global.label_createdat,
                             type: "text",
                             value: created_at,
                             extraAttr: "disabled"
@@ -66,7 +78,7 @@ Centauri.Components.PagesComponent = function(module) {
 
                         {
                             id: "updated_at",
-                            label: "Updated at",
+                            label: Centauri.__trans.global.label_modifiedat,
                             type: "text",
                             value: updated_at,
                             extraAttr: "disabled"
@@ -75,8 +87,6 @@ Centauri.Components.PagesComponent = function(module) {
 
                     callbacks: {
                         save: function(formData) {
-                            var id = $("#editor").attr("data-id");
-
                             Centauri.fn.Ajax(
                                 "Page",
                                 "editPage",
@@ -92,8 +102,7 @@ Centauri.Components.PagesComponent = function(module) {
                                         data = JSON.parse(data);
                                         Centauri.Notify(data.type, data.title, data.description);
 
-                                        Centauri.Components.EditorComponent("clear");
-                                        Centauri.Components.EditorComponent("hide");
+                                        Centauri.Components.EditorComponent("close");
 
                                         Centauri.Components.ModulesComponent({
                                             type: "load",
@@ -124,107 +133,7 @@ Centauri.Components.PagesComponent = function(module) {
                     callbacks: {
                         loaded: function($container, exists) {
                             if(!exists) {
-                                Centauri.fn.Ajax.Overlayer = false;
-
-                                Centauri.fn.Ajax(
-                                    "ContentElements",
-                                    "findByPid",
-
-                                    {
-                                        pid: Centauri.Components.PagesComponent.uid
-                                    },
-
-                                    {
-                                        success: function(data) {
-                                            Centauri.fn.Ajax.Overlayer = true;
-
-                                            var $container = $("#editor > .bottom > .container");
-                                            $container.html(data);
-
-                                            /**
-                                             * Initializing drag-drop for the elements so they can be moved
-                                             */
-                                            Centauri.Helper.PagesHelper();
-
-                                            /**
-                                             * Registering click-event for newCEButton
-                                             */
-                                            Centauri.Modal.NewContentElementModal();
-
-                                            var $tops = $(".top", $container);
-                                            $tops.each(function() {
-                                                var $top = $(this);
-
-                                                $(".edit", $top).on("click", function() {
-                                                    var $top = $(this).parent();
-                                                    $top.parent().toggleClass("active");
-
-                                                    if(!Centauri.elExists($top.parent().find(".fields"))) {
-                                                        Centauri.fn.Ajax(
-                                                            "ContentElements",
-                                                            "findFieldsByUid",
-
-                                                            {
-                                                                uid: $top.parent().attr("data-uid")
-                                                            },
-
-                                                            {
-                                                                success: function(data) {
-                                                                    $(".overlayer").removeClass("hidden");
-
-                                                                    $top.parent().append(data);
-
-                                                                    /**
-                                                                     * Initializing CKEditor 5
-                                                                     */
-                                                                    Centauri.Helper.NewContentElementHelper();
-
-                                                                    $(".fields button").on("click", function() {
-                                                                        var uid = $(this).parent().parent().parent().parent().data("uid");
-                                                                        var trigger = $(this).data("trigger");
-
-                                                                        if(trigger == "hideElementByUid") {
-                                                                            $(this).toggleClass("btn-primary btn-info");
-                                                                            $("i", $(this)).toggleClass("fa-eye fa-eye-slash");
-
-                                                                            Centauri.fn.Ajax(
-                                                                                "ContentElements",
-                                                                                "hideElementByUid",
-
-                                                                                {
-                                                                                    uid: uid
-                                                                                },
-
-                                                                                {
-                                                                                    success: function(data) {
-                                                                                        console.log(data);
-                                                                                    },
-
-                                                                                    error: function(data) {
-                                                                                        console.error(data);
-                                                                                    }
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                    });
-
-                                                                    $(".fields", $top.parent()).slideDown();
-                                                                },
-
-                                                                error: function(data) {
-                                                                    console.error(data);
-                                                                }
-                                                            }
-                                                        );
-                                                    } else {
-                                                        $fields = $top.parent().find(".fields");
-                                                        $fields.slideToggle();
-                                                    }
-                                                });
-                                            });
-                                        }
-                                    }
-                                );
+                                Centauri.Helper.findByPidHelper(Centauri.Components.PagesComponent.uid);
                             }
                         },
 
@@ -268,17 +177,17 @@ Centauri.Components.PagesComponent = function(module) {
 
             if(action == "page-delete") {
                 Centauri.fn.Modal(
-                    "Delete this page",
-                    "Are you sure to continue deleting this page with all its content?",
+                    Centauri.__trans.modals.deletePage_title,
+                    Centauri.__trans.modals.deletePage_body,
 
                     {
                         close: {
-                            label: "Cancel",
+                            label: Centauri.__trans.modals.btn_cancel,
                             class: "warning"
                         },
 
                         save: {
-                            label: "Delete",
+                            label: Centauri.__trans.modals.btn_delete,
                             class: "danger"
                         }
                     },
@@ -345,7 +254,7 @@ Centauri.Components.PagesComponent = function(module) {
                                         custom: "select",
 
                                         data: {
-                                            label: "Language",
+                                            label: Centauri.__trans.global.label_language,
                                             options: languages
                                         }
                                     },
@@ -363,7 +272,7 @@ Centauri.Components.PagesComponent = function(module) {
 
                                     {
                                         id: "title",
-                                        label: "Title",
+                                        label: Centauri.__trans.global.label_title,
                                         type: "text",
                                         value: title,
                                         required: true
@@ -419,6 +328,185 @@ Centauri.Components.PagesComponent = function(module) {
         });
     }
 
+    else if(module == "filelist") {
+        $action = $("table#filelist .actions .action");
+
+        $action.on("click", function() {
+            $tr = $(this).parent().parent().parent().parent();
+
+            Centauri.Components.PagesComponent.uid = $(this).attr("data-uid");
+            var action = $(this).attr("data-action");
+
+            var uid  = $.trim($("td[data-type='uid']", $tr).text());
+                uid  = Centauri.strReplace(uid, "# ", "");
+            var name = $.trim($("td[data-type='name']", $tr).text());
+            var path = $.trim($("td[data-type='path']", $tr).text());
+
+            if(action == "actions-trigger") {
+                $(this).toggleClass("active");
+            }
+
+            if(action == "file-edit") {
+                Centauri.fn.Modal(
+                    Centauri.__trans.modules[Centauri.Module] + " - Editor",
+                    "<div class='md-form'><input id='file_name' type='text' value='" + name + "' class='form-control' /><label class='active'>" + Centauri.__trans.global.label_title + "</label></div>",
+
+                    {
+                        size: "xl",
+
+                        close: {
+                            label: "",
+                            class: "danger fas fa-times"
+                        },
+
+                        save: {
+                            label: "",
+                            class: "success fas fa-save"
+                        }
+                    },
+
+                    {
+                        save() {
+                            Centauri.fn.Ajax(
+                                "Image",
+                                "edit",
+
+                                {
+                                    oldName: name,
+                                    name: $("#modal #file_name").val()
+                                },
+
+                                {
+                                    success: (data) => {
+                                        data = JSON.parse(data);
+                                        Centauri.Notify(data.type, data.title, data.description);
+
+                                        Centauri.Components.ModulesComponent({
+                                            type: "load",
+                                            module: "filelist"
+                                        });
+                                    },
+
+                                    error: (data) => {
+                                        console.error(data);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+
+            if(action == "file-crop") {
+                Centauri.fn.Modal(
+                    Centauri.__trans.modules[Centauri.Module] + " - Editor",
+                    "<div class='md-form'><input id='file_name' type='text' value='" + name + "' class='form-control' /><label class='active'>" + Centauri.__trans.global.label_title + "</label></div><img id='croppableimage' src='" + path + "' class='img-fluid' />",
+
+                    {
+                        size: "xl",
+
+                        close: {
+                            label: "",
+                            class: "danger fas fa-times"
+                        },
+
+                        save: {
+                            label: "",
+                            class: "success fas fa-save"
+                        }
+                    },
+
+                    {
+                        save() {
+                            var fileData = Centauri.Helper.VariablesHelper.fileData;
+
+                            var formData = new FormData();
+                            formData.append("_method", "HEAD");
+                            formData.append("image", fileData.blob);
+                            formData.append("name", $("#modal #file_name").val());
+
+                            $.ajax({
+                                type: "POST",
+                                url: Centauri.Utility.PathsUtility.root + Centauri.Utility.PathsUtility.centauri + Centauri.Utility.PathsUtility.ajax + "File/crop",
+                                data: formData,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+
+                                success: (data) => {
+                                    Centauri.Notify("success", "Filelist - Crop", "Image '" + name + "' has been cropped");
+
+                                    Centauri.Components.ModulesComponent({
+                                        type: "load",
+                                        module: "filelist"
+                                    });
+                                },
+
+                                error: (data) => {
+                                    console.error(data);
+                                }
+                            });
+                        }
+                    }
+                );
+
+                Centauri.Service.ImageCroppingService($("#modal #croppableimage"));
+            }
+
+            if(action == "file-show") {
+                window.open(path, "_blank");
+            }
+
+            if(action == "file-delete") {
+                Centauri.fn.Modal(
+                    Centauri.__trans.modals.areyousure,
+                    "Do you want to continue deleting this file?",
+
+                    {
+                        close: {
+                            label: Centauri.__trans.modals.btn_cancel,
+                            class: "warning"
+                        },
+
+                        save: {
+                            label: Centauri.__trans.modals.btn_delete,
+                            class: "danger"
+                        }
+                    },
+
+                    {
+                        save() {
+                            Centauri.fn.Ajax(
+                                "File",
+                                "delete",
+
+                                {
+                                    uid: uid
+                                },
+
+                                {
+                                    success: (data) => {
+                                        data = JSON.parse(data);
+                                        Centauri.Notify(data.type, data.title, data.description);
+
+                                        Centauri.Components.ModulesComponent({
+                                            type: "load",
+                                            module: "filelist"
+                                        });
+                                    },
+
+                                    error: (data) => {
+                                        console.error(data);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+        });
+    }
+
     else if(module == "languages") {
         $action = $("table#languages .actions .action");
 
@@ -429,20 +517,117 @@ Centauri.Components.PagesComponent = function(module) {
             var action = $(this).attr("data-action");
 
             var title = $.trim($("td[data-type='title']", $tr).text());
+            var langcode = $.trim($("td[data-type='lang_code']", $tr).text());
+            var url = $.trim($("td[data-type='url']", $tr).text());
+            var created_at = $.trim($("td[data-type='created_at']", $tr).text());
+            var modified_at = $.trim($("td[data-type='updated_at']", $tr).text());
+
+            if(action == "language-edit") {
+                Centauri.Components.EditorComponent("show", {
+                    id: "EditLanguage-" + Centauri.Components.PagesComponent.uid,
+                    title: "Language-Editor - Edit",
+
+                    form: [
+                        {
+                            id: "uid",
+                            label: "UID",
+                            type: "text",
+                            value: Centauri.Components.PagesComponent.uid,
+                            extraAttr: "disabled"
+                        },
+
+                        {
+                            id: "title",
+                            label: Centauri.__trans.global.label_title,
+                            type: "text",
+                            value: title,
+                            required: true
+                        },
+
+                        {
+                            id: "langcode",
+                            label: "Lang-Code",
+                            type: "text",
+                            value: langcode,
+                            required: true
+                        },
+
+                        {
+                            id: "url",
+                            label: "Slug",
+                            type: "text",
+                            value: url,
+                            required: true
+                        },
+
+                        {
+                            id: "created_at",
+                            label: Centauri.__trans.global.label_createdat,
+                            type: "text",
+                            value: created_at,
+                            extraAttr: "disabled"
+                        },
+
+                        {
+                            id: "modified_at",
+                            label: Centauri.__trans.global.label_modifiedat,
+                            type: "text",
+                            value: modified_at,
+                            extraAttr: "disabled"
+                        }
+                    ],
+
+                    callbacks: {
+                        save: function(formData) {
+                            Centauri.fn.Ajax(
+                                "Language",
+                                "editLanguage",
+
+                                {
+                                    uid: Centauri.Components.PagesComponent.uid,
+                                    title: formData.title,
+                                    slug: formData.url,
+                                    langcode: formData.langcode
+                                },
+
+                                {
+                                    success: function(data) {
+                                        data = JSON.parse(data);
+                                        Centauri.Notify(data.type, data.title, data.description);
+
+                                        Centauri.Components.EditorComponent("close");
+
+                                        Centauri.Components.ModulesComponent({
+                                            type: "load",
+                                            module: "languages"
+                                        });
+                                    },
+
+                                    error: function(data) {
+                                        console.error(data);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                });
+            }
 
             if(action == "language-delete") {
                 Centauri.fn.Modal(
-                    "Delete " + title + " language",
-                    "Are you sure to continue deleting the language '" + title + "' with all its bounded content?",
+                    // "Delete " + title + " language",
+                    // "Are you sure to continue deleting the language '" + title + "' with all its bounded content?",
+                    Centauri.strReplace(Centauri.__trans.modals.deleteLanguage_title, "{title}", title),
+                    Centauri.strReplace(Centauri.__trans.modals.deleteLanguage_body, "{title}", title),
 
                     {
                         close: {
-                            label: "Cancel",
+                            label: Centauri.__trans.modals.btn_cancel,
                             class: "warning"
                         },
 
                         save: {
-                            label: "Delete",
+                            label: Centauri.__trans.modals.btn_delete,
                             class: "danger"
                         }
                     },
@@ -479,11 +664,39 @@ Centauri.Components.PagesComponent = function(module) {
             }
         });
     }
+
+    else if(module == "notifications") {
+        $action = $("table#notifications .actions .action");
+
+        $action.on("click", function() {
+            $tr = $(this).parent().parent().parent();
+
+            Centauri.Components.PagesComponent.uid = $(this).attr("data-uid");
+
+            Centauri.fn.Ajax(
+                "Notification",
+                "deleteByUid",
+
+                {
+                    uid: Centauri.Components.PagesComponent.uid
+                },
+
+                {
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        Centauri.Notify(data.type, data.title, data.description);
+
+                        Centauri.Components.ModulesComponent({
+                            type: "load",
+                            module: "notifications"
+                        });
+                    },
+
+                    error: function(data) {
+                        console.error(data);
+                    }
+                }
+            );
+        });
+    }
 };
-
-Centauri.Components.PagesComponent.uid = null;
-
-Centauri.Components.PagesComponent.pages = {};
-Centauri.Components.PagesComponent.pages.newCEButton = "<button class='btn btn-default m-0 py-2 px-2 waves-effect waves-light' data-action='newContentElement'><i class='fas fa-plus'></i> Content</button>";
-
-Centauri.Components.PagesComponent.languages = {};

@@ -65,11 +65,32 @@ return [
         ],
 
         /**
-         * Centauri local driver Storage
+         * Centauri local drivers for Storage
          */
         "centauri" => [
             "driver" => "local",
-            "root" => storage_path("Centauri")
+            "root" => storage_path("Centauri"),
+            "url" => env("APP_URL") . "/storage/Centauri",
+        ],
+        "centauri_core" => [
+            "driver" => "local",
+            "root" => base_path("CentauriCMS"),
+            "url" => env("APP_URL") . "/CentauriCMS",
+        ],
+        "centauri_core_sql" => [
+            "driver" => "local",
+            "root" => base_path("CentauriCMS/SQL"),
+            "url" => env("APP_URL") . "/CentauriCMS/SQL",
+        ],
+        "centauri_extensions" => [
+            "driver" => "local",
+            "root" => storage_path("Centauri/Extensions"),
+            "url" => env("APP_URL") . "/storage/Centauri/Extensions",
+        ],
+        "centauri_filelist" => [
+            "driver" => "local",
+            "root" => storage_path("Centauri/Filelist"),
+            "url" => env("APP_URL") . "/storage/Centauri/Filelist",
         ],
 
     ],

@@ -4,7 +4,8 @@ namespace Centauri\CMS\Http;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Component\ElementComponent;
-use Centauri\CMS\Model\Language;
+use Centauri\CMS\Utility\FixerUtility;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class Request
@@ -18,17 +19,23 @@ class Request
      */
     public static function handle($nodes)
     {
+        $Centauri = new Centauri();
+
         if($nodes == "centauri") {
             if(request()->session()->get("CENTAURI_BE_USER")) {
-                $Centauri = new Centauri();
-                $data = $Centauri->initBE();
+                $Centauri->initBE();
+                $localizedArr = \Centauri\CMS\Service\Locales2JSService::getLocalizedArray();
 
-                return view("Backend.centauri", [
-                    "data" => $data
+                return view("Centauri::Backend.centauri", [
+                    "data" => [
+                        "modules" => $GLOBALS["Centauri"]["Modules"],
+                        "localizedArr" => $localizedArr,
+                        "dashboard" => $_GET["dashboard"] ?? "1"
+                    ]
                 ]);
             }
 
-            return view("Backend.login");
+            return view("Centauri::Backend.login");
         }
 
         if(Str::contains($nodes, "/")) {
@@ -64,27 +71,35 @@ class Request
                         ]
                     );
                 } else {
-                    // Module-View has been requested
+                    if($nnodes[1] == "fix") {
+                        $fixID = $nnodes[2];
+                        $FixerUtility = Centauri::makeInstance(FixerUtility::class);
+                        return $FixerUtility->fix($fixID);
+                    }
+
                     $moduleid = $nnodes[1];
 
                     $modulesService = Centauri::makeInstance(\Centauri\CMS\Service\ModulesService::class);
                     $modulesService->init();
+                    $modules = $modulesService->findDataByModuleid($moduleid);
 
-                    $modules = $GLOBALS["Centauri"]["Core"]["Modules"];
-                    $moduledata = $modulesService->findDataByModuleid($moduleid);
+                    $data = array_merge(
+                        [
+                            "moduleid" => $moduleid,
+                            "modules" => $GLOBALS["Centauri"]["Modules"]
+                        ],
 
-                    if(!view()->exists("Backend.Modules.$moduleid")) {
-                        return response("Template for Module '" . $moduleid . "' not found!", 500);
-                    }
+                        (gettype($modules) == "array" ? $modules : [])
+                    );
 
-                    return view("Backend.centauri", [
-                        "data" => [
-                            "modules" => $modules,
-                            "module" => [
-                                "moduleid" => $moduleid,
-                                "data" => $moduledata
-                            ]
-                        ]
+                    $title = trans("backend/modules.$moduleid.title");
+
+                    $data["localizedArr"] = \Centauri\CMS\Service\Locales2JSService::getLocalizedArray();
+                    $data["dashboard"] = $_GET["dashboard"] ?? "1";
+
+                    return view("Centauri::Backend.centauri", [
+                        "title" => $title,
+                        "data" => $data
                     ]);
                 }
             }
@@ -93,11 +108,7 @@ class Request
         $page = null;
 
         if(Str::contains($nodes, "/") && $nodes != "/") {
-            $page = Page::where([
-                "slugs" => $nodes,
-                "slugs" => "/" . $nodes
-            ])->get()->first();
-
+            $page = Page::where("slugs", $nodes)->orWhere("slugs", "/" . $nodes)->get()->first();
             $nodes = explode("/", $nodes);
         } else {
             $slugs = str_replace("/", "", $nodes);
@@ -109,12 +120,13 @@ class Request
         $page = Page::find($page->uid);
         $uid = $page->getAttribute("uid");
 
-        $renderedHTML = ElementComponent::render("FE", $uid);
+        $ElementComponent = Centauri::makeInstance(ElementComponent::class);
+        $renderedHTML = $ElementComponent->render("FE", $uid);
 
-        echo view("frontend", [
+        return view("Centauri::Frontend", [
             "page" => $page,
             "content" => $renderedHTML
-        ]);
+        ])->render();
     }
 
     public static function throwNotFound($force = false, $page = null)

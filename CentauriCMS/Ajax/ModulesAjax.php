@@ -17,16 +17,32 @@ class ModulesAjax implements AjaxInterface
 
     public function request(Request $request, String $ajaxName)
     {
-        $moduleid = $request->input("moduleid");
+        if($ajaxName == "show") {
+            $moduleid = $request->input("moduleid");
+            $data = $this->modulesService->findDataByModuleid($moduleid);
 
-        $data = $this->modulesService->findDataByModuleid($moduleid);
+            $loadedViews = $GLOBALS["Centauri"]["Helper"]["VariablesHelper"]["__LoadedViews"] ?? [];
+            $namespace = "";
 
-        if(!view()->exists("Backend.Modules.$moduleid")) {
-            return response("Template for Module '" . $moduleid . "' not found!", 500);
+            foreach($loadedViews as $key => $loadedView) {
+                if(view()->exists($key . "::Backend.Modules.$moduleid")) {
+                    $namespace = $key;
+                    break;
+                }
+            }
+
+            // if(!view()->exists($namespace . "::" . $moduleid) && !view()->exists("Centauri::Backend.Modules.$moduleid")) {
+            //     return response("Template for Module '" . $moduleid . "' not found!", 500);
+            // }
+
+            $bladeNamespace = "Centauri";
+            if($namespace != "") {
+                $bladeNamespace = $namespace;
+            }
+
+            return view($bladeNamespace . "::Backend.Modules.$moduleid", [
+                "data" => $data
+            ]);
         }
-
-        return view("Backend.Modules.$moduleid", [
-            "data" => $data
-        ]);
     }
 }

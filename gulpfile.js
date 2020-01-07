@@ -37,7 +37,7 @@ var gulp     = require('gulp');
 		"ckeditor"            : "packages/ckeditor5/ckeditor.js",
 
 		"cropperjs"           : "packages/cropperjs/dist/cropper.min.js",
-		"jquery-cropper"      : "packages/jquery-cropper/dist/jquery-cropper.min.js"
+		"jquery-cropper"      : "packages/jquery-cropper/dist/jquery-cropper.js"
 	};
 
 
@@ -66,6 +66,8 @@ gulp.task('js:build', function() {
 	return gulp.src([
 		modules["jquery"],
 		modules["jquery-ui"],
+		modules["cropperjs"],
+		modules["jquery-cropper"],
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],
@@ -82,6 +84,8 @@ gulp.task('js:deploy', function() {
 	return gulp.src([
 		modules["jquery"],
 		modules["jquery-ui"],
+		modules["cropperjs"],
+		modules["jquery-cropper"],
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],

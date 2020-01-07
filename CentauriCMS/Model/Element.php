@@ -2,9 +2,15 @@
 namespace Centauri\CMS\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Element extends Model
 {
+    /**
+     * For soft deletions (using 'deleted_at' column in database table)
+     */
+    use SoftDeletes;
+
     /**
      * The table associated with the model.
      *
@@ -46,6 +52,9 @@ class Element extends Model
 
         "header" => "",
         "subheader" => "",
-        "rte" => ""
+        "rte" => "",
+
+        "plugin" => null,
+        "image" => null
     ];
 }

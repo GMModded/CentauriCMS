@@ -11,7 +11,7 @@ Centauri.Events.EditorComponent.Select.OnChange = function(select) {
     }
 
     if(
-        Centauri.stringContains(dataID, "TranslatePage-")
+        Centauri.strContains(dataID, "TranslatePage-")
     ||
         dataID == "CreateNewPage"
     ) {
@@ -19,9 +19,9 @@ Centauri.Events.EditorComponent.Select.OnChange = function(select) {
             if(id == "language") {
                 var slugs = $.trim($(option).text()).toLowerCase();
                 slugs = slugs[0] + slugs[1];
-    
-                $("form #" + dataID + "_url", $editor).focus();
-                $("form #" + dataID + "_url", $editor).val(slugs);
+
+                $("form #url", $editor).focus();
+                $("form #url", $editor).val(slugs);
             }
         }
     }
@@ -45,15 +45,19 @@ Centauri.Events.EditorComponent.Select.OnChange = function(select) {
                     slugs += "/";
                 }
 
-                $("form #" + dataID + "_url", $editor, $editor).focus();
+                $("form #url", $editor, $editor).focus();
 
                 if(uid != parseInt($.trim($("table#pages tr:first-child td[data-type='uid']").text()))) {
-                    $("form #" + dataID + "_url", $editor).val(slugs);
+                    if(slugs != "/") {
+                        $("form #url", $editor).val(slugs + $("form #title", $editor).val());
+                    } else {
+                        $("form #url", $editor).val(slugs + $("form #title", $editor).val().toLowerCase());
+                    }
                 }
 
-                if(slugs != "/") {
-                    $("form #" + dataID + "_title", $editor, $editor).focus();
-                }
+                // if(slugs != "/") {
+                $("form #title", $editor, $editor).focus();
+                // }
             }
         }
     }

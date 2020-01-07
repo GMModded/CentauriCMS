@@ -1,3 +1,13 @@
+/**
+ * Centauri
+ * 
+ * @website https://centauricms.de/
+ * @author GMModded@centauricms.de
+ * @file Centauri Core JS file
+ * @copyright Matiullah Sediqi 2019
+ * 
+ * © 2019 All rights reserved.
+ */
 const Centauri = {};
 
 
@@ -17,14 +27,19 @@ Centauri.defaultModule = "dashboard";
 /**
  * Centauri Core
  */
+Centauri.Service = {};
+Centauri.Utility = {};
+
 Centauri.Module = Centauri.defaultModule;
 
 Centauri.fn = {};
+
 Centauri.Helper = {};
+Centauri.Helper.VariablesHelper = {};
+
 Centauri.Events = {};
-Centauri.Listeners = {};
+Centauri.Listener = {};
 Centauri.Components = {};
-Centauri.Utility = {};
 Centauri.Modal = {};
 Centauri.View = {};
 
@@ -39,14 +54,25 @@ Centauri.load = function() {
         CentauriEnv();
     }
 
+    // Window related stuff (events etc.)
+    Centauri.Events.Window.OnLoadResize();
+
+    // Utilities
     Centauri.Utility.Ajax();
 
+    // DynamicAjaxPushLoader - DAP
     Centauri.DAPLoader();
 
+    // Views
     Centauri.View.LoginView();
+    Centauri.View.DashboardView();
 
+    // Initialization of Components
     Centauri.Components.ModulesComponent({type: "init"});
     Centauri.Components.EditorComponent.init();
+
+    // Listeners which register events mainly
+    Centauri.Listener.OverlayerListener();
 };
 
 

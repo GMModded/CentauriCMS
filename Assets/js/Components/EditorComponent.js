@@ -2,6 +2,7 @@ Centauri.Components.EditorComponent = function(type, data) {
     $editor = $("#editor");
 
     if(type == "show") {
+        Centauri.Helper.VariablesHelper.__EditorComponentIsOpen = true;
         Centauri.Components.EditorComponent.FormData = null;
         Centauri.Components.EditorComponent.ButtonsInitialized = false;
 
@@ -84,7 +85,7 @@ Centauri.Components.EditorComponent = function(type, data) {
 
                 $("form .mdb-select", $editor).materialSelect();
                 Centauri.Utility.EditorUtility.Validator();
-                Centauri.Listeners.EditorListener();
+                Centauri.Listener.EditorListener();
             }
         }
 
@@ -189,6 +190,7 @@ Centauri.Components.EditorComponent = function(type, data) {
     }
 
     if(type == "hide") {
+        Centauri.Helper.VariablesHelper.__EditorComponentIsOpen = false;
         $editor.removeClass("active");
 
         setTimeout(function() {
@@ -221,6 +223,21 @@ Centauri.Components.EditorComponent = function(type, data) {
             }
         }
     }
+
+    if(type == "close") {
+        Centauri.Components.EditorComponent("hide");
+        Centauri.Components.EditorComponent("clear", {
+            forceClear: true
+        });
+    }
+
+    if(type == "isOpen") {
+        return Centauri.Helper.VariablesHelper.__EditorComponentIsOpen;
+    }
+
+    if(type == "hasChanged") {
+        return Centauri.Helper.VariablesHelper.__EditorComponentHasChanged;
+    }
 };
 
 Centauri.Components.EditorComponent.init = function() {
@@ -240,7 +257,7 @@ Centauri.Components.EditorComponent.init = function() {
     });
 
     $(document).on("keyup", function(e) {
-        if(e.which == 27) {
+        if(e.which == 27 && !Centauri.elExists($("#modal"))) {
             var closer = $(".overlayer").attr("data-closer");
 
             if(closer == "EditorComponent") {
@@ -259,9 +276,14 @@ Centauri.Components.EditorComponent.init = function() {
     });
 };
 
+// Component data
 Centauri.Components.EditorComponent.TransitionTime = 660;
 Centauri.Components.EditorComponent.Size = null;
 Centauri.Components.EditorComponent.Container = "undefined";
 Centauri.Components.EditorComponent.ButtonsInitialized = false;
 Centauri.Components.EditorComponent.ClearOnClose = true;
 Centauri.Components.EditorComponent.FormData = null;
+
+// Variables declared for and as helper
+Centauri.Helper.VariablesHelper.__EditorComponentIsOpen = false;
+Centauri.Helper.VariablesHelper.__EditorComponentHasChanged = false;
