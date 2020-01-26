@@ -23,6 +23,24 @@ return [
     # CentauriContentElements - CCE
     "CCE" => [
         "fields" => [
+            "htag" => [
+                "label" => "aaa",
+                "type" => "select",
+
+                "config" => [
+                    "items" => [
+                        [
+                            "label" => "labelellll",
+                            "value" => "valueueue"
+                        ],
+
+                        [
+                            "label" => "2222",
+                            "value" => "2222"
+                        ]
+                    ]
+                ]
+            ],
             "header" => [
                 "label" => "Header",
                 "type" => "input"
@@ -79,7 +97,7 @@ return [
             ],
 
             "headerdescription" => [
-                "header;subheader",
+                "htag;header;subheader",
                 "rte"
             ],
 
