@@ -45,9 +45,30 @@ return [
 
                 "config" => [
                     "required" => 1,
-                    "maxItems" => 2,
+                    "minItems" => 1,
+                    "maxItems" => 1,
                 ],
-            ]
+            ],
+            "file" => [
+                "label" => "File",
+                "type" => "file",
+
+                "config" => [
+                    // "saveToColumn" => "file",
+                    "required" => 1,
+                    "maxItems" => 1
+                ]
+            ]/*,
+            "image" => [
+                "label" => "Image",
+                "type" => "image",
+
+                "config" => [
+                    "type" => "image",
+                    "required" => 1,
+                    "maxItems" => 1
+                ]
+            ]*/
         ],
 
         "elements" => [

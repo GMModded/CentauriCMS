@@ -34,6 +34,10 @@ body,
         visibility: hidden;
         opacity: 0;
     }
+
+    &[data-closer="ImageSelectorComponent"] {
+        z-index: 9;
+    }
 }
 
 input {

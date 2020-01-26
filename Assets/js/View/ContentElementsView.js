@@ -4,16 +4,25 @@ Centauri.View.ContentElementsView = ($contentelement) => {
      */
     Centauri.Components.AccordionComponent();
 
-    $("[data-centauri-btn='addimage']").on("click", function(e) {
+    $("[data-centauri-btn]").on("click", function(e) {
         e.preventDefault();
 
         var type = $(this).data("centauri-btn");
+        var fileListType = "file";
 
         if(type == "addimage") {
+            fileListType = "images";
+        }
+
+        if(type == "addfile" || type == "addimage") {
             var $input = $(this).parent().parent().find("input");
-            var id = $input.attr("id");
+
+            // Currently not used
+            var id = $input.attr("data-id");
 
             var value = $input.val();
+
+            // Needed for validation
             var required = $(this).data("required");
             var minItems = $(this).data("minitems");
             var maxItems = $(this).data("maxitems");
@@ -21,99 +30,66 @@ Centauri.View.ContentElementsView = ($contentelement) => {
             var $accordions = $("> .accordions", $input.parent());
 
             Centauri.fn.Ajax(
-                "ImageModal",
+                "File",
                 "list",
 
                 {
-                    value: value
+                    value: value,
+                    type: fileListType
                 },
 
                 {
                     success: (data) => {
                         var html = data;
-
                         $("body").append(html);
 
-                        // Centauri.fn.Modal(
-                        //     Centauri.__trans.modules["filelist"],
-                        //     html,
+                        setTimeout(() => {
+                            $("#file-selector").removeClass("inactive");
 
-                        //     {
-                        //         size: "xl",
-                        //         closeOnSave: false,
+                            setTimeout(() => {
+                                if($(".accordion", $accordions).length != 0) {
+                                    $(".accordion", $accordions).each(function(index) {
+                                        let uid = $(this).attr("data-uid");
 
-                        //         close: {
-                        //             label: "",
-                        //             class: "danger fas fa-times"
-                        //         },
+                                        if(Centauri.Components.FileSelectorComponent.AnimatedSelectedFiles) {
+                                            $("#file-selector .items .item[data-uid='" + uid + "']").delay(165 * index).queue(function() {
+                                                $(this).addClass("selected");
+                                            });
+                                        } else {
+                                            $("#file-selector .items .item[data-uid='" + uid + "']").addClass("selected");
+                                        }
+                                    });
+                                }
+                            }, (510));
+                        }, 150);
 
-                        //         save: {
-                        //             label: "",
-                        //             class: "success fas fa-save"
-                        //         }
-                        //     },
+                        Centauri.Components.FileSelectorComponent("show", (data) => {
+                            let selectedFiles = data.selectedFiles,
+                                selectedUids = data.selectedUids;
 
-                        //     {
-                        //         save() {
-                        //             var selectedFiles = [];
+                            Centauri.fn.Ajax(
+                                "InlineRecords",
+                                "list",
 
-                        //             $("#modal table tr td .form-check > input").each(function() {
-                        //                 var $input = $(this);
+                                {
+                                    type: "files",
+                                    uids: selectedUids
+                                },
 
-                        //                 if($input.prop("checked")) {
-                        //                     selectedFiles.push({
-                        //                         "uid": $input.attr("id").split("_")[1]
-                        //                     });
-                        //                 }
-                        //             });
+                                {
+                                    success: (data) => {
+                                        $accordions.html(data);
+                                        Centauri.Components.AccordionComponent();
+                                    },
 
-                        //             if(selectedFiles.length > maxItems) {
-                        //                 Centauri.Notify(
-                        //                     "error",
-                        //                     "File Validation",
-                        //                     "Selected too many files - max. " + maxItems + " are allowed!"
-                        //                 );
+                                    error: (data) => {
+                                        console.error(data);
+                                    }
+                                }
+                            );
 
-                        //                 return;
-                        //             }
-
-                        //             var stringUids = "";
-
-                        //             $.each(selectedFiles, function(index, obj) {
-                        //                 stringUids += obj.uid;
-
-                        //                 if(selectedFiles.length - 1 != index) {
-                        //                     stringUids += ",";
-                        //                 }
-                        //             });
-
-                        //             $input.val(stringUids);
-
-                        //             Centauri.fn.Ajax(
-                        //                 "InlineRecords",
-                        //                 "list",
-
-                        //                 {
-                        //                     type: "files",
-                        //                     uids: stringUids
-                        //                 },
-
-                        //                 {
-                        //                     success: (data) => {
-                        //                         $accordions.html(data);
-                        //                         Centauri.Components.AccordionComponent();
-                        //                     },
-
-                        //                     error: (data) => {
-                        //                         console.error(data);
-                        //                     }
-                        //                 }
-                        //             );
-
-                        //             Centauri.fn.Modal.close();
-                        //         }
-                        //     }
-                        // );
+                            // Centauri.fn.Modal.close();
+                        });
                     },
 
                     error: (data) => {

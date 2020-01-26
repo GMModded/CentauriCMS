@@ -7,6 +7,7 @@ use Centauri\CMS\Model\Language;
 use Centauri\CMS\Model\Notification;
 use Centauri\CMS\Component\ExtensionsComponent;
 use Centauri\CMS\Model\File;
+use Centauri\CMS\Utility\DomainsUtility;
 use Illuminate\Support\Facades\Storage;
 
 class ModulesService
@@ -29,6 +30,16 @@ class ModulesService
                 "icon" => "fas fa-file-alt"
             ],
 
+            "domains" => [
+                "title" => "Domains",
+                "icon" => "fas fa-globe"
+            ],
+
+            "languages" => [
+                "title" => trans("backend/modules.languages.title"),
+                "icon" => "fas fa-language"
+            ],
+
             "models" => [
                 "title" => trans("backend/modules.models.title"),
                 "icon" => "fas fa-plus"
@@ -37,11 +48,6 @@ class ModulesService
             "filelist" => [
                 "title" => trans("backend/modules.filelist.title"),
                 "icon" => "fas fa-cloud-upload-alt"
-            ],
-
-            "languages" => [
-                "title" => trans("backend/modules.languages.title"),
-                "icon" => "fas fa-language"
             ],
 
             "extensions" => [
@@ -57,7 +63,7 @@ class ModulesService
             "database" => [
                 "title" => trans("backend/modules.database.title"),
                 "icon" => "fas fa-database"
-            ]
+            ],
         ];
 
         foreach($modules as $moduleid => $data) {
@@ -92,14 +98,14 @@ class ModulesService
         $data = [];
 
         if($moduleid == "dashboard") {
-            $rootpages = Page::where("is_rootpage", "1")->get()->count();
-            $pages = Page::where("is_rootpage", "0")->get()->count();
+            $domains = count(DomainsUtility::findAll());
+            $pages = Page::all()->count();
             $languages = Language::all()->count();
             $notifications = Notification::all()->count();
 
             $data = [
-                "rootpages" => $rootpages,
                 "pages" => $pages,
+                "domains" => $domains,
                 "languages" => $languages,
                 "notifications" => $notifications
             ];
@@ -110,6 +116,8 @@ class ModulesService
 
             $pages = Page::get()->all();
             $npages = [];
+
+            $domainFiles = DomainsUtility::findAll();
 
             foreach($pages as $page) {
                 if($page->getAttribute("is_rootpage")) {
@@ -124,9 +132,25 @@ class ModulesService
 
                         $notification->save();
                     } else {
+                        if($page->is_rootpage) {
+                            $domainFileForUidExists = false;
+
+                            foreach($domainFiles as $domainFile) {
+                                if($domainFile->content->rootpageuid == $page->uid) {
+                                    $page->slugs = $domainFile->content->domain;
+                                    $domainFileForUidExists = true;
+                                }
+                            }
+
+                            if(!$domainFileForUidExists) {
+                                echo "<script id='_'>Centauri.Notify('primary', 'Domains', 'Please create a new domain-record for your new rootpage <br><i>" . $page->title . " [" . $language->title . " - #" . $page->uid . "]</i>, so it can be connected.', {timeOut: 20000});$('script#_').remove();</script>";
+                                break;
+                            }
+                        }
+
                         $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
                         $language->flagsrc = $flagsrc;
-    
+
                         $page->setAttribute("language", $language);
                         $npages[$page->getAttribute("lid")][$page->getAttribute("uid")][] = $page;
                     }
@@ -147,7 +171,7 @@ class ModulesService
                     } else {
                         $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
                         $language->flagsrc = $flagsrc;
-    
+
                         $page->setAttribute("language", $language);
                         $npages[$page->getAttribute("lid")][$page->getAttribute("pid")][] = $page;
                     }
@@ -165,6 +189,22 @@ class ModulesService
 
             $data = [
                 "pages" => $npages,
+                "languages" => $languages
+            ];
+        }
+
+        if($moduleid == "domains") {
+            $domainFiles = DomainsUtility::findAll();
+
+            $data = [
+                "domainFiles" => $domainFiles
+            ];
+        }
+
+        if($moduleid == "languages") {
+            $languages = Language::all();
+
+            $data = [
                 "languages" => $languages
             ];
         }
@@ -189,17 +229,49 @@ class ModulesService
 
             $nFiles = [];
             foreach($files as $file) {
-                $nFile = [
-                    "uid" => $file->uid,
-                    "name" => $file->name,
-                    "cropable" => $file->cropable,
-                    "path" => $_ENV["APP_URL"] . "/storage/Centauri/Filelist/" . $file->name,
-                    "URLpath" => $_ENV["APP_URL"] . "/storage/Centauri/Filelist/" . $file->name,
-                    "type" => $file->type,
-                    "size" => filesize(storage_path("Centauri\\Filelist\\" . $file->name))
-                ];
+                $path = storage_path("Centauri\\Filelist\\" . $file->name);
 
-                $nFiles[] = $nFile;
+                if(file_exists($path)) {
+                    $nFile = [
+                        "uid" => $file->uid,
+                        "name" => $file->name,
+                        "cropable" => $file->cropable,
+                        "path" => env("APP_URL") . "/storage/Centauri/Filelist/" . $file->name,
+                        "URLpath" => env("APP_URL") . "/storage/Centauri/Filelist/" . $file->name,
+                        "type" => $file->type,
+                        "size" => filesize($path)
+                    ];
+    
+                    $nFiles[] = $nFile;
+                } else {
+                    $notification = new Notification;
+
+                    $notification->severity = "ERROR";
+                    $notification->title = "File '" . $path . "' not found";
+                    $notification->text = "Please make sure this file exists either or delete it by using the Fix-Utility.";
+
+                    $notification->save();
+
+                    echo "<script id='_'>
+                        Centauri.Components.ModulesComponent({
+                            type: 'load',
+                            module: 'notifications',
+
+                            cb: function() {
+                                $('tr:first-child').css('border', '3px solid gold');
+                                $('tr:first-child').css('transition', '.3s');
+
+                                setTimeout(function() {
+                                    $('tr:first-child').css('border', '3px solid transparent');
+                                }, 300);
+                            }
+                        });
+                        
+                        setTimeout(function() {
+                            $('script#_').remove();
+                        }, 500);
+                    </script>";
+                }
             }
 
             $data = [
@@ -210,14 +282,6 @@ class ModulesService
         if($moduleid == "selectfilefromlist") {
             $data = [
 
-            ];
-        }
-
-        if($moduleid == "languages") {
-            $languages = Language::all();
-
-            $data = [
-                "languages" => $languages
             ];
         }
 
@@ -243,6 +307,12 @@ class ModulesService
 
             $data = [
                 "notifications" => $notifications
+            ];
+        }
+
+        if($moduleid == "sites") {
+            $data = [
+                "a" => "b"
             ];
         }
 

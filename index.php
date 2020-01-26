@@ -6,7 +6,6 @@
  * @package CentauriCMS
  * @author  Matiullah Sediqi <GMModded@centauricms.de>
  */
-
 require_once __DIR__ . "/CentauriCMS/Application/CentauriApplication.php";
 $Centauri = new \Centauri\CMS\Application\CentauriApplication();
 $Centauri = $Centauri->Centauri;

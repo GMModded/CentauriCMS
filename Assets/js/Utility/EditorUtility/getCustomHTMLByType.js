@@ -9,7 +9,7 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
         var options = "";
 
         var labelHTML = "<label class='mdb-main-label' for='" + inputObj.id + "'>" + data.label + "</label>";
-        html = "<select id='" + inputObj.id + "' class='mdb-select select2 colorful-select dropdown-primary md-form' searchable='" + Centauri.__trans.global.searchhere + "' required>|</select>";
+        html = "<select id='" + inputObj.id + "' class='mdb-select select2 colorful-select dropdown-primary md-form' searchable='" + Centauri.__trans.global.searchhere + "' " + (Centauri.isNotUndefined(data.required) ? (data.required ? "required" : "") : "required") + ">|</select>";
 
         if(Centauri.isNotUndefined(data.label)) {
             html.split("|").join("<option value='' disabled selected>" + data.label + "</option>|");
@@ -18,7 +18,15 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
 
         if(Centauri.isNotUndefined(data.options)) {
             $.each(data.options, function(index, optionObj) {
-                options += "<option value='" + optionObj.value + "'>" + optionObj.name;
+                if(Centauri.isNotUndefined(data.selectedOptionValue)) {
+                    if(data.selectedOptionValue == optionObj.value) {
+                        options += "<option value='" + optionObj.value + "' selected>" + optionObj.name;
+                    } else {
+                        options += "<option value='" + optionObj.value + "'>" + optionObj.name;
+                    }
+                } else {
+                    options += "<option value='" + optionObj.value + "'>" + optionObj.name;
+                }
             });
         }
 

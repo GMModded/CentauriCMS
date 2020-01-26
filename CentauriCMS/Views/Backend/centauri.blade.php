@@ -148,13 +148,17 @@
                         <form action="" method="POST"></form>
                     </div>
 
-                    <div class="row m-0 p-3">
-                        <button class="col btn btn-success waves-effect waves-light btn-floating" data-id="save" data-trigger="SaveEditorComponent" style="">
-                            <i class="fas fa-save" aria-hidden="true"></i>
+                    <div class="row m-0 p-3 w-100">
+                        <button class="col btn btn-success waves-effect waves-light px-2 py-3" data-id="save" data-trigger="SaveEditorComponent" style="">
+                            <i class="fas fa-save fa-lg mr-1" aria-hidden="true"></i>
+
+                            Save
                         </button>
 
-                        <button class="col btn btn-danger waves-effect waves-light btn-floating" data-id="cancel" data-trigger="CloseEditorComponent" style="">
-                            <i class="fas fa-times" aria-hidden="true"></i>
+                        <button class="col btn btn-danger waves-effect waves-light px-2 py-3" data-id="cancel" data-trigger="CloseEditorComponent" style="">
+                            <i class="fas fa-times fa-lg mr-1" aria-hidden="true"></i>
+
+                            Cancel
                         </button>
                     </div>
                 </div>

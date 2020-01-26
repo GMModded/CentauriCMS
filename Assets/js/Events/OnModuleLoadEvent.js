@@ -171,9 +171,9 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                                     id: "be_layout",
                                                                     type: "custom",
                                                                     custom: "select",
-                                                                    // extraAttr: "style='display: none!important;'",
 
                                                                     data: {
+                                                                        selectedOptionValue: "default",
                                                                         label: "Backend-Layout",
                                                                         options: beLayouts
                                                                     }
@@ -248,6 +248,90 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                         }
                                     }
                                 );
+                            }
+                        }
+                    );
+                }
+            });
+        });
+    }
+
+    else if(module == "domains") {
+        $("#domainsmodule_buttons button").each(function() {
+            $button = $(this);
+
+            $button.on("click", this, function() {
+                var btnType = $(this).data("button-type");
+
+                if(btnType == "create") {
+                    Centauri.fn.Ajax(
+                        "Domains",
+                        "showModal",
+
+                        {},
+
+                        {
+                            success: function(data) {
+                                Centauri.fn.Modal(
+                                    "New Domain",
+
+                                    data,
+
+                                    {
+                                        size: "xl",
+                                        closeOnSave: false,
+
+                                        close: {
+                                            label: Centauri.__trans.modals.btn_cancel
+                                        },
+
+                                        save: {
+                                            label: Centauri.__trans.modals.btn_create
+                                        }
+                                    },
+
+                                    {
+                                        save: function() {
+                                            Centauri.fn.Modal.close();
+
+                                            Centauri.fn.Ajax(
+                                                "Domains",
+                                                "create",
+
+                                                {
+                                                    id: $("#modal #id").val(),
+                                                    domain: $("#modal #domain").val(),
+                                                    rootpageuid: $("#modal #rootpageuid").val()
+                                                },
+
+                                                {
+                                                    success: function(data) {
+                                                        data = JSON.parse(data);
+                                                        Centauri.Notify(data.type, data.title, data.description);
+
+                                                        Centauri.Components.ModulesComponent({
+                                                            type: "load",
+                                                            module: Centauri.Module
+                                                        });
+                                                    },
+
+                                                    error: function(data) {
+                                                        console.error(data);
+                                                        $(".overlayer").addClass("hidden");
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    }
+                                );
+
+                                Centauri.Modal.ModelModal();
+
+                                Centauri.Service.CKEditorInitService();
+                            },
+
+                            error: function(data) {
+                                console.error(data);
                             }
                         }
                     );

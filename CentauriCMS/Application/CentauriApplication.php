@@ -1,6 +1,8 @@
 <?php
 namespace Centauri\CMS\Application;
 
+use Centauri\CMS\Utility\PathUtility;
+
 class CentauriApplication
 {
     public $Centauri;
@@ -25,7 +27,11 @@ class CentauriApplication
                 "VariablesHelper" => []
             ],
 
-            "Hooks" => []
+            "Hooks" => [],
+
+            "Paths" => [
+                "BaseURL" => ""
+            ]
         ];
 
         return $this->Centauri;

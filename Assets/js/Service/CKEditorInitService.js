@@ -7,47 +7,79 @@ Centauri.Service.CKEditorInitService = function() {
 
     for(var i = 0; i < textareas.length; i++) {
         if(!textareas[i].classList.contains("rte-initialized")) {
+            var html = textareas[i].getAttribute("data-html");
+            html = JSON.parse(html);
+
             textareas[i].classList.add("rte-initialized");
 
-            ClassicEditor.create(textareas[i], {
-                toolbar: [
-                    'heading',
+            DecoupledDocumentEditor.create(textareas[i], {
+                toolbar: {
+					items: [
+						'heading',
+						'|',
+						'fontSize',
+						'fontFamily',
+						'fontColor',
+						'fontBackgroundColor',
+						'|',
+						'bold',
+						'italic',
+						'underline',
+						'strikethrough',
+						'removeFormat',
+						'highlight',
+						'|',
+						'alignment',
+						'pageBreak',
+						'|',
+						'numberedList',
+						'bulletedList',
+						'|',
+						'indent',
+						'outdent',
+						'|',
+						'todoList',
+						'link',
+						'blockQuote',
+						'imageUpload',
+						'insertTable',
+						'mediaEmbed',
+						'|',
+						'undo',
+						'redo'
+					]
+				},
+				language: 'en',
+				image: {
+					toolbar: [
+						'imageTextAlternative',
+						'imageStyle:full',
+						'imageStyle:side'
+					]
+				},
+				table: {
+					contentToolbar: [
+						'tableColumn',
+						'tableRow',
+						'mergeTableCells'
+					]
+				},
+				licenseKey: ''
+            })
+            .then( editor => {
+                window.editor = editor;
 
-                    '|',
+                const content = html;
+                const viewFragment = editor.data.processor.toView( content );
+                const modelFragment = editor.data.toModel( viewFragment );
 
-                    'bold',
-                    'italic',
-                    'link',
+                editor.model.insertContent( modelFragment );
 
-                    'bulletedList',
-                    'numberedList',
-
-                    '|',
-
-                    'blockQuote',
-                    'imageUpload',
-                    'mediaEmbed',
-
-                    '|',
-
-                    'insertTable',
-
-                    '|',
-
-                    'undo',
-                    'redo'
-                ],
-
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' }
-                    ]
-                }
-            }).catch(error => {
+				// Set a custom container for the toolbar.
+				document.querySelector( '.document-editor__toolbar' ).appendChild( editor.ui.view.toolbar.element );
+				document.querySelector( '.ck-toolbar' ).classList.add( 'ck-reset_all' );
+			} )
+            .catch(error => {
                 console.error(error);
             });
         }

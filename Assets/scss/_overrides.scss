@@ -22,6 +22,7 @@ $tablebordercolor: #2b3447;
             th,
             td {
                 cursor: default;
+                // white-space: nowrap;
 
                 &::selection {
                     background: transparent;
@@ -100,6 +101,12 @@ $tablebordercolor: #2b3447;
 
 .ck-editor__editable_inline {
     min-height: 150px;
+}
+
+.ck-content {
+    strong {
+        font-weight: 900 !important;
+    }
 }
 
 .cropper-container {

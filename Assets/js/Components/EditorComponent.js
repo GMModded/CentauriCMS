@@ -21,9 +21,7 @@ Centauri.Components.EditorComponent = function(type, data) {
             $editor.attr("data-id", id);
 
             $("form", $editor).empty();
-            // if(Centauri.isUndefined(data.container)) {
-                $(".bottom > .container", $editor).remove();
-            // }
+            $(".bottom > .container", $editor).remove();
 
             if(Centauri.isNotUndefined(data.form)) {
                 Centauri.Components.EditorComponent.FormData = data.form;
@@ -132,6 +130,15 @@ Centauri.Components.EditorComponent = function(type, data) {
                     var formData = [];
 
                     $("form input", $editor).each(function() {
+                        var id = $(this).attr("id");
+
+                        if(Centauri.isNotUndefined(id)) {
+                            var value = $(this).val();
+                            formData[id] = value;
+                        }
+                    });
+
+                    $("form select", $editor).each(function() {
                         var id = $(this).attr("id");
 
                         if(Centauri.isNotUndefined(id)) {

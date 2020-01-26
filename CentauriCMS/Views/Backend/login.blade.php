@@ -201,7 +201,7 @@
                             </u>
                         </h4>
 
-                        <form action="centauri/login" method="post">
+                        <form action="{!! \Centauri\CMS\BladeHelper\URIBladeHelper::action("Backend", "login") !!}" method="post">
                             @csrf
 
                             <input class="form-control mb-3" type="text" name="username" id="username" placeholder="Username" />

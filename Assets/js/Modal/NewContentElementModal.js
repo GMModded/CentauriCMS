@@ -54,6 +54,9 @@ Centauri.Modal.NewContentElementModal = function() {
                                         return;
                                     }
 
+                                    let $modal = $("#modal");
+                                    $modal.hide();
+
                                     Centauri.fn.Modal.close();
                                     var datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
 
@@ -127,11 +130,11 @@ Centauri.Modal.NewContentElementModal = function() {
                             var $this = $(this);
                             var $element = $this.parent();
 
-                            $(Centauri.Helper.ModalHelper.Element).find(".bottom").slideUp();
+                            $(Centauri.Helper.ModalHelper.Element).find("> .bottom").slideUp();
 
                             if(!$(Centauri.Helper.ModalHelper.Element).is($element)) {
                                 Centauri.Helper.ModalHelper.Element = $element;
-                                $(".bottom", $element).slideToggle();
+                                $("> .bottom", $element).slideToggle();
 
                                 if(Centauri.isUndefined($element.attr("initialized"))) {
                                     $element.attr("initialized", "true");

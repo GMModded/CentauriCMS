@@ -8,14 +8,40 @@
     </head>
 
     <body>
-        <h1>Header</h1>
+        <section id="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="header-view p-2" style="background:black;padding:2rem;">
+                            <h1>
+                                <font color="#ffffff">
+                                    Header
+                                </font>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <hr>
+        <section id="content">
+            {!! $content !!}
+        </section>
 
-        {!! $content !!}
-
-        <hr>
-        
-        <h1>Footer</h1>
+        <section id="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="footer-view p-2" style="background:black;padding:2rem;">
+                            <h1>
+                                <font color="#ffffff">
+                                    Footer
+                                </font>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </body>
 </html>

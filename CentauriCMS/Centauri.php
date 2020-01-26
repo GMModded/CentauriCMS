@@ -3,6 +3,7 @@ namespace Centauri\CMS;
 
 use Centauri\CMS\Component\ExtensionsComponent;
 use Centauri\CMS\Service\ModulesService;
+use Centauri\CMS\Service\PathService;
 use Exception;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -29,9 +30,14 @@ class Centauri extends ServiceProvider
     protected static $centauriDir = __DIR__;
 
     /**
-     * Centauri Services
+     * Centauri Modules-Service
      */
     private $modulesService;
+
+    /**
+     * Centauri Path-Service
+     */
+    private $pathService;
 
     /**
      * Centauri Core
@@ -44,6 +50,7 @@ class Centauri extends ServiceProvider
 
         $this->extensionsComponent = Centauri::makeInstance(ExtensionsComponent::class);
         $this->modulesService = Centauri::makeInstance(ModulesService::class);
+        $this->pathService = Centauri::makeInstance(PathService::class);
 
         $this->initBE();
     }
@@ -68,7 +75,9 @@ class Centauri extends ServiceProvider
         \Illuminate\Support\Facades\App::setLocale(request()->session()->get("CENTAURI_LANGUAGE"));
 
         $this->extensionsComponent;
+
         $this->modulesService->init();
+        $this->pathService->init();
     }
 
     /**
@@ -78,7 +87,7 @@ class Centauri extends ServiceProvider
     {
         foreach($this->tables as $table) {
             if(!Schema::hasTable($table)) {
-                throw new Exception("Table: $table doesn't exists - please run a refresh of the migration for this table with Laravel Artisan.");
+                throw new Exception("Table: $table doesn't exists - please run a refresh of the migration for this table with Laravel Artisan or use Centauri FixUtility-Class.");
             }
         }
     }

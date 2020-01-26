@@ -3,7 +3,7 @@ table {
         tr {
             &.subpage {
                 td {
-                    &:not(:last-child) {
+                    &:first-child {
                         padding-left: 30px;
                     }
                 }

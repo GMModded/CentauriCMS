@@ -101,10 +101,10 @@ function Centauri_loadFunctions() {
         }
 
         if(ignoreCamelCase) {
-            return (~(string.toLowerCase()).indexOf(char.toLowerCase()));
+            return (~(string.toLowerCase()).indexOf(char.toLowerCase())) ? true : false;
         }
 
-        return (~string.indexOf(char));
+        return (~string.indexOf(char)) ? true : false;
     };
 
     /**

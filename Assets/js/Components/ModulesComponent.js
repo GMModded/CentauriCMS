@@ -103,13 +103,17 @@ Centauri.Components.ModulesComponent = function(data) {
             },
 
             {
-                success: function(data) {
+                success: function(sData) {
                     $(".overlayer").addClass("hidden");
-                    $("#content").html(data);
+                    $("#content").html(sData);
 
                     Centauri.Events.OnModuleLoadEvent(module);
 
                     Centauri.DAPLoader.historyPushState = true;
+
+                    if(Centauri.isNotUndefined(data.cb)) {
+                        data.cb();
+                    }
                 },
 
                 error: function(data) {

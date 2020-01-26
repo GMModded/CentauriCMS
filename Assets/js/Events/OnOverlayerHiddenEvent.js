@@ -5,7 +5,12 @@ Centauri.Events.OnOverlayerHiddenEvent = function(closer) {
         Centauri.Components.EditorComponent("hide");
     }
 
-    if(closer == "DashboardView") {
+    else if(closer == "DashboardView") {
         $("#dashboard, .hamburger").removeClass("active");
+    }
+
+    else if(closer == "FileSelectorComponent") {
+        $("#file-selector").addClass("inactive");
+        $(".overlayer").attr("data-closer", "EditorComponent");
     }
 };

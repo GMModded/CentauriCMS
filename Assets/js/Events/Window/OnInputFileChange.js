@@ -9,7 +9,8 @@ Centauri.Events.Window.OnInputFileChange = function(element) {
         Centauri.Helper.VariablesHelper.__CME__FIELDS[id] = Centauri.Service.ImageService("findBlobByID", id);
 
         if(Centauri.Events.Window.OnInputFileChange.ShowImagePreview) {
-            var imgData = Centauri.Service.ImageService("findBlobByID", id);
+            // var imgData = Centauri.Service.ImageService("findBlobByID", id);
+            var imgData = Centauri.Helper.VariablesHelper.__CME__FIELDS[id];
 
             $(element).parent().parent().append("<img src='" + imgData.blobURL + "' class='img-fluid' style='margin-top: 30px; margin-right: 30px;' />");
         }

@@ -4,6 +4,7 @@ namespace Centauri\CMS\Http;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Component\ElementComponent;
+use Centauri\CMS\Utility\DomainsUtility;
 use Centauri\CMS\Utility\FixerUtility;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
@@ -17,9 +18,30 @@ class Request
      * 
      * @return void
      */
-    public static function handle($nodes)
+    public static function handle($nodes, $host, $domainType = "default")
     {
         $Centauri = new Centauri();
+
+        $domainFiles = DomainsUtility::findAll();
+        $domain = null;
+
+        $hostUri = $host . request()->getRequestUri();
+
+        foreach($domainFiles as $domainFile) {
+            $domainValue = $domainFile->content->domain;
+
+            if(is_null($domain)) {
+                if($hostUri == $domainValue) {
+                    $domain = $domainFile;
+                } else if($host == $domainValue) {
+                    $domain = $domainFile;
+                }
+            }
+        }
+
+        if(is_null($domain)) {
+            dd("404 (Domain)");
+        }
 
         if($nodes == "centauri") {
             if(request()->session()->get("CENTAURI_BE_USER")) {
@@ -38,7 +60,7 @@ class Request
             return view("Centauri::Backend.login");
         }
 
-        if(Str::contains($nodes, "/")) {
+        if(!empty($nodes) && Str::contains($nodes, "/")) {
             $nnodes = explode("/", $nodes);
 
             if($nnodes[0] == "centauri") {
@@ -107,12 +129,31 @@ class Request
 
         $page = null;
 
-        if(Str::contains($nodes, "/") && $nodes != "/") {
+        if(!empty($nodes) && Str::contains($nodes, "/") && $nodes != "/") {
             $page = Page::where("slugs", $nodes)->orWhere("slugs", "/" . $nodes)->get()->first();
             $nodes = explode("/", $nodes);
         } else {
             $slugs = str_replace("/", "", $nodes);
-            $page = Page::where("slugs", $slugs)->orWhere("slugs", "/" . $slugs)->get()->first();
+
+            if(!is_null($domain)) {
+                if(!empty($nodes)) {
+                    $page = Page::where([
+                        "pid" => $domain->content->rootpageuid,
+                        "slugs" => "/" . $slugs
+                    ])->get()->first();
+
+                    if(is_null($page)) {
+                        $page = Page::where([
+                            "uid" => $domain->content->rootpageuid,
+                            "slugs" => "/" . $slugs
+                        ])->get()->first();
+                    }
+                } else {
+                    $page = Page::where("uid", $domain->content->rootpageuid)->get()->first();
+                }
+            } else {
+                $page = Page::where("slugs", $slugs)->orWhere("slugs", "/" . $slugs)->get()->first();
+            }
         }
 
         self::throwNotFound(false, $page);

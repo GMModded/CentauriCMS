@@ -172,11 +172,38 @@ class ContentElementsAjax implements AjaxInterface
             $element->ctype = $ctype;
             $element->sorting = $sorting;
 
+            $inlineRecords = [];
+
             foreach($datasArr as $dataObj) {
-                $id = $dataObj["id"];
+                $type = $dataObj["type"];
                 $value = $dataObj["value"];
 
-                $element->setAttribute($id, $value);
+                if($type == "NORMAL") {
+                    $id = $dataObj["id"];
+                    $element->setAttribute($id, $value);
+                }
+
+                if($type == "INLINE") {
+                    $dataType = $dataObj["dataType"];
+                    $uid = $value;
+
+                    if(!isset($inlineRecords[$dataType])) {
+                        $inlineRecords[$dataType] = "";
+                    }
+
+                    $inlineRecords[$dataType] .= $uid . ",";
+                }
+            }
+
+            // Removing in case every last "," inside $inlineRecords[x]'s string (uidString - comma separated)
+            foreach($inlineRecords as $dT => $uidStr) {
+                if(mb_substr($uidStr, -1) == ",") {
+                    $inlineRecords[$dT] = mb_substr($uidStr, 0, -1);
+                }
+            }
+
+            foreach($inlineRecords as $dataType => $uidString) {
+                $element->$dataType = $uidString;
             }
 
             $element->save();
@@ -305,8 +332,6 @@ class ContentElementsAjax implements AjaxInterface
                     ]);
                 }
             }
-
-            dd();
 
             if($ajaxName == "hideElementByUid") {
                 $state = ($element->hidden ? "hidden" : "visible");

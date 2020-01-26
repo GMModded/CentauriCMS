@@ -16,6 +16,7 @@ Centauri.Components.PagesComponent = function(module) {
             Centauri.Components.PagesComponent.uid = $(this).attr("data-uid");
             var action = $(this).attr("data-action");
 
+            var domain_id = $.trim($("td[data-type='domain_id']", $tr).text());
             var title = $.trim($("td[data-type='title']", $tr).text());
             var lid = $.trim($("td[data-type='lid']", $tr).attr("data-lid"));
             var flagsrc = $.trim($("td[data-type='lid'] img", $tr).attr("src"));
@@ -28,6 +29,24 @@ Centauri.Components.PagesComponent = function(module) {
             }
 
             if(action == "page-edit") {
+                let urlObject = {
+                    id: "url",
+                    label: "URL (Domain)",
+                    type: "text",
+                    value: url,
+                    extraAttr: "disabled"
+                };
+
+                if($tr.hasClass("subpage")) {
+                    urlObject = {
+                        id: "url",
+                        label: "URL",
+                        type: "text",
+                        value: url,
+                        required: true
+                    };
+                }
+
                 Centauri.Components.EditorComponent("show", {
                     id: "EditPage-" + Centauri.Components.PagesComponent.uid,
                     title: "Page-Editor - Edit",
@@ -60,13 +79,7 @@ Centauri.Components.PagesComponent = function(module) {
                             required: true
                         },
 
-                        {
-                            id: "url",
-                            label: "URL",
-                            type: "text",
-                            value: url,
-                            required: true
-                        },
+                        urlObject,
 
                         {
                             id: "created_at",
@@ -205,6 +218,7 @@ Centauri.Components.PagesComponent = function(module) {
                                 {
                                     success: function(data) {
                                         data = JSON.parse(data);
+
                                         if(Centauri.isNotUndefined(data.request)) {
                                             Centauri.Notify("error", "An error occurred!", "Please contact an administrator to handle this internal error.\nError: " + data.request, {
                                                 timeOut: -1
@@ -328,6 +342,161 @@ Centauri.Components.PagesComponent = function(module) {
         });
     }
 
+    else if(module == "domains") {
+        $action = $("table#domains .actions .action");
+
+        $action.on("click", function() {
+            $tr = $(this).parent().parent().parent().parent();
+
+            var action = $(this).attr("data-action");
+
+            if(action == "actions-trigger") {
+                $(this).toggleClass("active");
+            }
+
+            if(action == "domain-edit" || action == "domain-delete") {
+                $tr = $(this).parent().parent().parent();
+
+                var id = $(this).attr("data-id");
+                var rootpageuid = $(this).attr("data-rootpageuid");
+                var domain = $.trim($("[data-type='domain']", $tr).text());
+
+                if(action == "domain-edit") {
+                    Centauri.fn.Ajax(
+                        "Page",
+                        "getRootPages",
+
+                        {},
+
+                        {
+                            success: function(data) {
+                                data = JSON.parse(data);
+                                var rootpages = data;
+
+                                Centauri.Components.EditorComponent("show", {
+                                    id: "EditDomain-" + id,
+                                    title: "Domain-Editor",
+
+                                    form: [
+                                        {
+                                            id: "rootpageuid",
+                                            type: "custom",
+                                            custom: "select",
+
+                                            data: {
+                                                selectedOptionValue: rootpageuid,
+                                                label: "Rootpages",
+                                                options: rootpages,
+                                                required: true
+                                            }
+                                        },
+
+                                        {
+                                            id: "id",
+                                            label: "ID",
+                                            type: "text",
+                                            value: id,
+                                            extraAttr: "disabled"
+                                        },
+
+                                        {
+                                            id: "domain",
+                                            label: "Domain",
+                                            type: "text",
+                                            value: domain,
+                                            required: true
+                                        }
+                                    ],
+
+                                    callbacks: {
+                                        save: function(formData) {
+                                            Centauri.fn.Ajax(
+                                                "Domains",
+                                                "edit",
+
+                                                {
+                                                    id: id,
+                                                    rootpageuid: formData.rootpageuid,
+                                                    domain: formData.domain
+                                                },
+
+                                                {
+                                                    success: function(data) {
+                                                        data = JSON.parse(data);
+                                                        Centauri.Notify(data.type, data.title, data.description);
+
+                                                        Centauri.Components.EditorComponent("close");
+
+                                                        Centauri.Components.ModulesComponent({
+                                                            type: "load",
+                                                            module: "domains"
+                                                        });
+                                                    },
+
+                                                    error: function(data) {
+                                                        console.error(data);
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    );
+                }
+
+                if(action == "domain-delete") {
+                    Centauri.fn.Modal(
+                        Centauri.__trans.modals.areyousure,
+                        "Do you want to continue deleting this domain-record?",
+
+                        {
+                            close: {
+                                label: Centauri.__trans.modals.btn_cancel,
+                                class: "warning"
+                            },
+
+                            save: {
+                                label: Centauri.__trans.modals.btn_delete,
+                                class: "danger"
+                            }
+                        },
+
+                        {
+                            save() {
+                                Centauri.fn.Ajax(
+                                    "Domains",
+                                    "delete",
+
+                                    {
+                                        id: id
+                                    },
+
+                                    {
+                                        success: (data) => {
+                                            data = JSON.parse(data);
+                                            Centauri.Notify(data.type, data.title, data.description);
+
+                                            Centauri.Components.ModulesComponent({
+                                                type: "load",
+                                                module: "domains"
+                                            });
+                                        },
+
+                                        error: (data) => {
+                                            console.error(data);
+                                        }
+                                    }
+                                );
+                            }
+                        }
+                    );
+                }
+            }
+        });
+    }
+
     else if(module == "filelist") {
         $action = $("table#filelist .actions .action");
 
@@ -368,10 +537,11 @@ Centauri.Components.PagesComponent = function(module) {
                     {
                         save() {
                             Centauri.fn.Ajax(
-                                "Image",
+                                "File",
                                 "edit",
 
                                 {
+                                    uid: uid,
                                     oldName: name,
                                     name: $("#modal #file_name").val()
                                 },

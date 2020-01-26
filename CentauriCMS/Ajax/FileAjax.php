@@ -4,7 +4,7 @@ namespace Centauri\CMS\Ajax;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\File;
-use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class FileAjax implements AjaxInterface
@@ -34,7 +34,7 @@ class FileAjax implements AjaxInterface
 
             $fileModel->name = "$name.$fileExtension";
             $fileModel->type = $mimeType;
-            $fileModel->path = $_ENV["APP_URL"] . "/storage/Centauri/Filelist/$name.$fileExtension";
+            $fileModel->path = env("APP_URL") . "/storage/Centauri/Filelist/$name.$fileExtension";
             $fileModel->cropable = in_array($fileExtension, $this->cropableArray) ? 1 : 0;
 
             try {
@@ -45,9 +45,14 @@ class FileAjax implements AjaxInterface
         }
 
         if($ajaxName == "edit") {
+            $uid = $request->input("uid");
             $oldName = $request->input("oldName");
             $name = $request->input("name");
 
+            $file = File::where("uid", $uid)->get()->first();
+            $file->name = $name;
+
+            $file->save();
             rename(storage_path("Centauri\\Filelist\\$oldName"), storage_path("Centauri\\Filelist\\$name"));
 
             return json_encode([
@@ -74,7 +79,7 @@ class FileAjax implements AjaxInterface
 
             $fileModel->name = $name;
             $fileModel->type = $mimeType;
-            $fileModel->path = $_ENV["APP_URL"] . "/storage/Centauri/Filelist/" . $name;
+            $fileModel->path = env("APP_URL") . "/storage/Centauri/Filelist/" . $name;
             $fileModel->cropable = 1;
 
             $fileModel->save();
@@ -100,6 +105,29 @@ class FileAjax implements AjaxInterface
                 "title" => "Filelist - Deleted file",
                 "description" => "The file '" . $name . "' has been deleted"
             ]);
+        }
+
+        if($ajaxName == "list") {
+            $value = $request->input("value");
+            $type = $request->input("type");
+
+            $list = File::get()->all();
+
+            if($type == "images") {
+                $list = File::where("cropable", 1)->get()->all();
+            }
+
+            $uidArr = [];
+            if(Str::contains($value, ",")) {
+                $uidArr = explode(",", $value);
+            } else {
+                $uidArr = [$value];
+            }
+
+            return view("Centauri::Backend.Modals.filelist", [
+                "list" => $list,
+                "uidArr" => $uidArr
+            ])->render();
         }
     }
 }

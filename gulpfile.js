@@ -34,7 +34,7 @@ var gulp     = require('gulp');
 		"popperjs"            : "packages/popperjs/popper.min.js",
 		"mdbootstrap"         : "packages/mdb/js/mdb.min.js",
 
-		"ckeditor"            : "packages/ckeditor5/ckeditor.js",
+		"ckeditor"            : "packages/ckeditor5/build/ckeditor.js",
 
 		"cropperjs"           : "packages/cropperjs/dist/cropper.min.js",
 		"jquery-cropper"      : "packages/jquery-cropper/dist/jquery-cropper.js"

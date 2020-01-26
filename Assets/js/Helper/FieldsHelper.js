@@ -1,10 +1,11 @@
 Centauri.Helper.FieldsHelper = function(element, parentSelector) {
     var datas = [];
 
+    console.log(element, $(element));
     var elementUid = $(element).data("uid");
 
     $(parentSelector + " .md-form > input:not(.d-none):not([data-inlinerecord='true'])", $(element)).each(function() {
-        var id = $(this).attr("id");
+        var id = $(this).attr("data-id");
 
         if(Centauri.isNotUndefined(id)) {
             var val = $(this).val();
@@ -17,11 +18,11 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
         }
     });
 
-    $(parentSelector + " .md-form > div.ck-editor", $(element)).each(function() {
-        var id = $(this).parent().find("textarea").attr("id");
+    $(parentSelector + " .md-form > .md-textarea", $(element)).each(function() {
+        var id = $(this).attr("data-id");
 
         if(Centauri.isNotUndefined(id)) {
-            var val = $(".ck-content", $(this)).html();
+            var val = $(this).html();
 
             datas.push({
                 type: "NORMAL",
@@ -32,7 +33,7 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
     });
 
     $(parentSelector + " select", $(element)).each(function() {
-        var id = $(this).attr("id");
+        var id = $(this).attr("data-id");
 
         if(Centauri.isNotUndefined(id)) {
             var val = $(this).val();
@@ -46,29 +47,31 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
     });
 
     // Inline-Records "connection"
-    $(parentSelector + " .md-form > .accordions", $(element)).each(function() {
+    $(parentSelector + " .md-form > .accordions.inline-records", $(element)).each(function() {
         var dataType = $(this).data("type");
 
         $(".accordion", $(this)).each(function() {
             var $accordion = $(this);
             var uid = $accordion.data("uid");
 
-            $("input[data-inlinerecord='true']", $accordion).each(function() {
+            /*
+             * Code for Inline-Record related data (e.g. title, link of an inline-record etc)
+             * 
+
+             $("input[data-inlinerecord='true']", $accordion).each(function() {
                 var $inlineRecord = $(this);
-                var id = $inlineRecord.attr("id");
+                var id = $inlineRecord.attr("data-id");
 
                 if(Centauri.isNotUndefined(id)) {
                     var val = $inlineRecord.val();
-
-                    datas.push({
-                        type: "INLINE",
-                        dataType: dataType,
-                        id: id,
-                        value: val,
-                        elementUid: elementUid,
-                        inlineUid: uid
-                    });
                 }
+            });
+            */
+
+            datas.push({
+                type: "INLINE",
+                dataType: dataType,
+                value: uid
             });
         });
     });

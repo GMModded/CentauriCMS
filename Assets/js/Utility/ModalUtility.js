@@ -1,7 +1,6 @@
 Centauri.Utility.ModalUtility = function(title, description, options, callbacks) {
     Centauri.Utility.ModalUtility.close = function() {
         $("#modal").modal("hide");
-
     };
 
     var html = "";
@@ -43,11 +42,13 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
     html = addHTMLFn(html, "<span aria-hidden='true'>&times;</span>");
     html = addHTMLFn(html, "<div class='modal-body'>" + description + "</div>&&", "&&");
     html = addHTMLFn(html, "<div class='modal-footer'>|</div>", "&&");
-    html = addHTMLFn(html, "<button type='button' data-type='save' class='btn btn-" + saveclass + " btn-floating fa-lg waves-effect waves-light mr-3'>" + options.save.label + "</button>&&");
-    html = addHTMLFn(html, "<button type='button' data-type='close' class='btn btn-" + closeclass + " btn-floating fa-lg waves-effect waves-light'>" + options.close.label + "</button>", "&&");
+    html = addHTMLFn(html, "<button type='button' data-type='save' class='btn btn-" + saveclass + " waves-effect waves-light mr-3'>" + options.save.label + "</button>&&");
+    html = addHTMLFn(html, "<button type='button' data-type='close' class='btn btn-" + closeclass + " waves-effect waves-light'>" + options.close.label + "</button>", "&&");
 
     $("body").append(html);
     $("#modal").modal();
+
+    Centauri.Utility.ModalUtility.Validator($("#modal"));
 
     $("#modal select.mdb-select.md-form").materialSelect();
 

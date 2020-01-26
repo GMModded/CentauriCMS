@@ -19,6 +19,12 @@ return [
     "pages" => [
         "title" => "Pages"
     ],
+    "domains" => [
+        "title" => "Domains"
+    ],
+    "languages" => [
+        "title" => "Sprachen"
+    ],
     "models" => [
         "title" => "Models"
     ],

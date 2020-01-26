@@ -155,7 +155,9 @@ class PageAjax implements AjaxInterface
                     "name" => $language->title
                 ];
             }
-            
+
+            return json_encode($languages);
+
             $pages = Page::all();
             foreach($pages as $page) {
                 if(isset($languages[$page->lid])) {
@@ -193,7 +195,11 @@ class PageAjax implements AjaxInterface
 
     public function savePage($page)
     {
-        $existingPage = Page::where("slugs", $page->slugs)->first();
+        $existingPage = Page::where([
+            "slugs" => $page->slugs
+        ])->orWhere([
+            "slugs" => "/" . $page->slugs
+        ])->first();
 
         if(is_null($existingPage)) {
             $existingPage = Page::where("title", $page->title)->first();

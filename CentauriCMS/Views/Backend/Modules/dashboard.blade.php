@@ -20,17 +20,17 @@
 							<div class="card-body">
 								<div class="row">
 									<div class="col-xl-3 col-md-6 mb-4">
-										<a href="{{ url('./centauri/pages') }}" data-module="true" data-moduleid="pages">
+										<a href="{{ url('/centauri/domains') }}" data-module="true" data-moduleid="domains">
 											<div class="card border-left-success shadow h-100 py-2 waves-effect">
 												<div class="card-body">
 													<div class="row no-gutters align-items-center">
 														<div class="col mr-2">
 															<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-																Root Pages
+																Domains
 															</div>
 		
 															<div class="h5 mb-0 font-weight-bold text-gray-800">
-																{!! $data["rootpages"] !!}
+																{!! $data["domains"] !!}
 															</div>
 														</div>
 		
@@ -44,7 +44,7 @@
 									</div>
 
 									<div class="col-xl-3 col-md-6 mb-4">
-										<a href="{{ url('./centauri/pages') }}" data-module="true" data-moduleid="pages">
+										<a href="{{ url('/centauri/pages') }}" data-module="true" data-moduleid="pages">
 											<div class="card border-left-primary shadow h-100 py-2 waves-effect">
 												<div class="card-body">
 													<div class="row no-gutters align-items-center">
@@ -68,7 +68,7 @@
 									</div>
 
 									<div class="col-xl-3 col-md-6 mb-4">
-										<a href="{{ url('./centauri/languages') }}" data-module="true" data-moduleid="languages">
+										<a href="{{ url('/centauri/languages') }}" data-module="true" data-moduleid="languages">
 											<div class="card border-left-warning shadow h-100 py-2 waves-effect">
 												<div class="card-body">
 													<div class="row no-gutters align-items-center">
@@ -92,7 +92,7 @@
 									</div>
 
 									<div class="col-xl-3 col-md-6 mb-4">
-										<a href="{{ url('./centauri/notifications') }}" data-module="true" data-moduleid="notifications">
+										<a href="{{ url('/centauri/notifications') }}" data-module="true" data-moduleid="notifications">
 											<div class="card border-left-danger shadow h-100 py-2 waves-effect">
 												<div class="card-body">
 													<div class="row no-gutters align-items-center">

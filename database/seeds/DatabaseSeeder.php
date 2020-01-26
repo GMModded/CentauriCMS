@@ -5,6 +5,7 @@ use Centauri\CMS\Model\Page;
 use Centauri\CMS\Model\Language;
 use Centauri\CMS\Model\Element;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -44,8 +45,8 @@ class DatabaseSeeder extends Seeder
                 "pid" => 0,
                 "lid" => 1,
                 "hidden" => 1,
-                "backend_layout" => 1,
                 "is_rootpage" => 1,
+                "backend_layout" => "default",
                 "title" => "Home",
                 "slugs" => "/",
                 "created_at" => date("Y-m-d H:i:s"),

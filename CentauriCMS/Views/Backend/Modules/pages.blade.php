@@ -17,7 +17,7 @@
                                 </th>
 
                                 <th>
-                                    Language ID
+                                    Language
                                 </th>
 
                                 <th>
@@ -26,6 +26,10 @@
 
                                 <th>
                                     URL
+                                </th>
+
+                                <th>
+                                    Layout
                                 </th>
 
                                 <th>
@@ -62,6 +66,10 @@
 
                                                 <td data-type="url">
                                                     {{ $page->slugs }}
+                                                </td>
+
+                                                <td data-type="layout">
+                                                    {{ $page->backend_layout }}
                                                 </td>
 
                                                 <td data-type="created_at">

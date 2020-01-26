@@ -40,17 +40,17 @@ class IrFiles extends Migration
      */
     public function up()
     {
-        $tableExists = Schema::hasTable($this->table);
+        // $tableExists = Schema::hasTable($this->table);
 
-        if($tableExists) {
-            Schema::table($this->table, function(Blueprint $table) {
-                $this->cols($table);
-            });
-        } else {
-            Schema::create($this->table, function(Blueprint $table) {
-                $this->cols($table);
-            });
-        }
+        // if($tableExists) {
+        //     Schema::table($this->table, function(Blueprint $table) {
+        //         $this->cols($table);
+        //     });
+        // } else {
+        //     Schema::create($this->table, function(Blueprint $table) {
+        //         $this->cols($table);
+        //     });
+        // }
     }
 
     /**
@@ -60,6 +60,6 @@ class IrFiles extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists($this->table);
+        // Schema::dropIfExists($this->table);
     }
 }

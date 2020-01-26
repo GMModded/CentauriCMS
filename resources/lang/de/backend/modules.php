@@ -19,14 +19,17 @@ return [
     "pages" => [
         "title" => "Seiten"
     ],
+    "domains" => [
+        "title" => "Domains"
+    ],
+    "languages" => [
+        "title" => "Sprachen"
+    ],
     "models" => [
         "title" => "Models"
     ],
     "filelist" => [
         "title" => "Dateien"
-    ],
-    "languages" => [
-        "title" => "Sprachen"
     ],
     "extensions" => [
         "title" => "Erweiterungen"

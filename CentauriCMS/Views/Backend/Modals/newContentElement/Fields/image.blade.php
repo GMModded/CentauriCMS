@@ -9,17 +9,17 @@
         <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3" data-centauri-btn="uploadimage" data-required="{{ $config["required"] ?? '' }}" data-maxitems="{{ $config["maxItems"] ?? '' }}">
             <i class="fas fa-cloud-upload-alt mr-2"></i>
 
-            Upload file
+            Upload image
         </button>
     </div>
 
-    <input class="form-control d-none" type="text" id="{{ $id }}" value="{{ $value ?? '' }}" />
+    <input class="form-control d-none" type="text" data-id="{{ $id }}" value="{{ $value ?? '' }}" />
 
     <label for="{{ $id }}"{{ (isset($value) ? ' class=active' : '') }} style="margin-top: -25px;">
         {{ $label }}
     </label>
 
-    <div class="accordions mt-2" data-type="files">
+    <div class="accordions inline-records mt-2" data-type="image">
         @php
             if(isset($value) && ($value != "")) {
 

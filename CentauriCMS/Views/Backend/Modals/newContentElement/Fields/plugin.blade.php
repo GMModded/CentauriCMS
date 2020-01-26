@@ -1,4 +1,4 @@
-<select class="mdb-select md-form" id="plugin">
+<select class="mdb-select md-form" data-id="plugin">
     <option value="" selected disabled>Please select a plugin</option>
 
     @if(isset($additionalData))

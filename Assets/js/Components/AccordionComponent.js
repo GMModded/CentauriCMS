@@ -4,7 +4,7 @@ Centauri.Components.AccordionComponent = () => {
         $accordion.attr("initialized", "true");
 
         $(".top", $accordion).on("click", this, function() {
-            $(this).parent().find(".bottom").slideToggle();
+            $(this).parent().find("> .bottom").slideToggle();
         });
     });
 };
