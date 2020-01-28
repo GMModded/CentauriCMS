@@ -27,6 +27,7 @@ Centauri.Helper.PagesHelper = function($container) {
                             Centauri.View.ContentElementsView($contentelement);
 
                             $contentelement.append(data);
+
                             $(".fields select", $contentelement).materialSelect();
 
                             /**

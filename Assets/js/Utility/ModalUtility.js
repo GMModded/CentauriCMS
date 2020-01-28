@@ -52,6 +52,17 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
 
     $("#modal select.mdb-select.md-form").materialSelect();
 
+    var selectedValue = $("#modal select.mdb-select.md-form").val();
+    var selectedValueText = $.trim($("#modal select option[value='" + selectedValue + "']").text());
+
+    $("#modal select.mdb-select.md-form").parent().find("ul > li").each(function() {
+        var thisText = $.trim($("span", this).text());
+        if(thisText == selectedValueText) {
+            $(this).addClass("active selected");
+            return;
+        }
+    });
+
     $("#modal").on("hidden.bs.modal", function(e) {
         $("#modal").modal("dispose");
         $(this).remove();

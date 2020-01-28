@@ -1,23 +1,23 @@
 <div class="md-form">
-    <label for="{{ $id }}"{{ (isset($value) ? ' class=active' : '') }}>
+    <label for="{{ $id }}"{{ ((isset($value) || isset($config["default"]) || (!empty($config["items"]))) ? " class=active" : "") }}>
         {{ $label }}
     </label>
 
-    <select class="mdb-select md-form" data-id="{{ $id }}">
+    <select class="mdb-select md-form" data-id="{{ $id }}"{{ $config["required"] ? " required" : ""}}>
         @if(isset($config["default"]))
-            <option value="{{ $config["default"]["value"] }}" selected disabled>
-                {{ $config["default"]["label"] }}
+            <option value="{{ $config["default"][1] }}" selected disabled>
+                {{ $config["default"][0] }}
             </option>
         @endif
 
         @foreach($config["items"] as $item)
-            @if($item["value"] == $value)
-                <option value="{{ $item["value"] }}" selected>
-                    {{ $item["label"] }}
+            @if($item[0] == ($value ?? ""))
+                <option value="{{ $item[1] }}">
+                    {{ $item[0] }}
                 </option>
             @else
-                <option value="{{ $item["value"] }}">
-                    {{ $item["label"] }}
+                <option value="{{ $item[1] }}">
+                    {{ $item[0] }}
                 </option>
             @endif
         @endforeach

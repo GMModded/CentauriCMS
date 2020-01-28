@@ -24,26 +24,36 @@ return [
     "CCE" => [
         "fields" => [
             "htag" => [
-                "label" => "aaa",
+                "label" => "Select",
                 "type" => "select",
 
                 "config" => [
+                    "required" => 1,
+                    // "default" => [
+                    //     "defaultLabel",
+                    //     "defaultValue"
+                    // ],
+
                     "items" => [
                         [
-                            "label" => "labelellll",
-                            "value" => "valueueue"
+                            "Item 1", // Label
+                            "item_1" // Value
                         ],
 
                         [
-                            "label" => "2222",
-                            "value" => "2222"
+                            "Item 2",
+                            "item_2"
                         ]
                     ]
                 ]
             ],
             "header" => [
                 "label" => "Header",
-                "type" => "input"
+                "type" => "input",
+
+                "config" => [
+                    "required" => 1
+                ]
             ],
             "subheader" => [
                 "label" => "Subheader",
@@ -113,6 +123,14 @@ return [
                     "headerimage",
                     "headerdescription",
                     "plugin"
+                ]
+            ]
+        ],
+
+        "fieldConfiguration" => [
+            "headerdescription" => [
+                "select" => [
+                    "label" => "woooow"
                 ]
             ]
         ]

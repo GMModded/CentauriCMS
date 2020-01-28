@@ -96,13 +96,42 @@ class ContentElementsAjax implements AjaxInterface
             $CCE = $GLOBALS["Centauri"]["ContentElements"];
             $fields = $CCE["fields"];
 
-            foreach($fields as $ctype => $field) {
-                $type = $field["type"];
-                $label = $field["label"];
-                $additionalData = [];
-                $config = [];
+            $iterator = 0;
 
-                if(isset($field["config"])) $config = $field["config"];
+            foreach($fields as $ctype => $field) {
+                $label = $field["label"];
+                $type = $field["type"];
+
+                // Config stuff
+                $config = [];
+                $fieldConfiguration = $CCE["fieldConfiguration"][$ctype] ?? null;
+
+                if(isset($field["config"])) {
+                    foreach($field["config"] as $configKey => $configValue) {
+                        $config[$configKey] = $configValue;
+                    }
+                }
+
+                if(!is_null($fieldConfiguration)) {
+                    if(isset($fieldConfiguration["label"])) {
+                        $label = $fieldConfiguration["label"];
+                    }
+
+                    if(isset($fieldConfiguration["type"])) {
+                        $type = $fieldConfiguration["type"];
+                    }
+
+                    if(isset($fieldConfiguration["config"])) {
+                        if(!empty($fieldConfiguration["config"])) {
+                            foreach($fieldConfiguration["config"] as $fieldConfigurationConfigItemKey => $fieldConfigurationConfigItemValue) {
+                                $config[$fieldConfigurationConfigItemKey] = $fieldConfigurationConfigItemValue;
+                            }
+                        }
+                    }
+                }
+
+                // additionalData stuff for "special fields"
+                $additionalData = [];
 
                 if($type == "plugin") {
                     $additionalData["plugins"] = $GLOBALS["Centauri"]["Plugins"];
@@ -113,10 +142,13 @@ class ContentElementsAjax implements AjaxInterface
                     "label" => $label,
                     "additionalData" => $additionalData,
                     "config" => $config,
+                    "iterator" => $iterator,
                 ])->render();
 
                 $fields[$ctype]["_HTML"] = $html;
                 $CCE["fields"][$ctype]["_HTML"] = $html;
+
+                $iterator++;
             }
 
             return view("Centauri::Backend.Modals.newContentElement", [
