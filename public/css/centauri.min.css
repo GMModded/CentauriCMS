@@ -672,10 +672,8 @@ input:read-only:not(.select-dropdown) {
         transition: .125s; }
   #header .blocks {
     position: absolute;
-    top: -220px;
     right: 15px;
     width: 430px;
-    height: 200px;
     background: linear-gradient(180deg, #303a4f, #2a3345);
     padding: 15px;
     transition: 0.66s cubic-bezier(1, -0.5, 0.25, 1.42); }

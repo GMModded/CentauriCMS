@@ -2,6 +2,9 @@ Centauri.Init.HeaderInit = () => {
     let $header = $("#header");
     let $blocks = $(".blocks", $header);
 
+    let height = $blocks.height();
+    console.log(height);
+
     $(".tool", $header).each(function() {
         let $tool = $(this);
 

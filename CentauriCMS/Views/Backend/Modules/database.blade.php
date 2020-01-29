@@ -9,7 +9,7 @@
                 @section("headertitle") Database @endsection
 
                 <a href="#" role="button" class="btn btn-primary waves-effect waves-light" data-ajax="true" data-ajax-handler="Database" data-ajax-action="update">
-                    update database
+                    Update Database
                 </a>
             </div>
 

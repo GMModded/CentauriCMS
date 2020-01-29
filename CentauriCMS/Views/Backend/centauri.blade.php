@@ -165,30 +165,24 @@
                             </div>
                         </div>
 
-                        <div class="blocks z-depth-3">
+                        <div class="blocks z-depth-3" style="visibility:hidden;z-index:-10;opacity:0;">
                             <div class="block" data-type="cache" style="display: none;">
                                 <div class="item px-2 py-3">
-                                    <h6>
-                                        <b>
-                                            Flush Frontend Cache
-                                        </b>
-                                    </h6>
+                                    <a href="#" role="button" class="btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Database" data-ajax-action="update">
+                                        Flush Frontend Cache
+                                    </a>
                                 </div>
 
                                 <div class="item px-2 py-3">
-                                    <h6>
-                                        <b>
-                                            Flush Backend Cache
-                                        </b>
-                                    </h6>
+                                    <a href="#" role="button" class="btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Database" data-ajax-action="update">
+                                        Flush Backend Cache
+                                    </a>
                                 </div>
 
                                 <div class="item px-2 py-3">
-                                    <h6>
-                                        <b>
-                                            Flush Entire Cache
-                                        </b>
-                                    </h6>
+                                    <a href="#" role="button" class="btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Database" data-ajax-action="update">
+                                        Flush System (All) Cache
+                                    </a>
                                 </div>
                             </div>
                         </div>
