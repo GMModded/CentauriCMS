@@ -37,7 +37,7 @@ Centauri.Utility.ModalUtility.Validator = function($modal) {
         let $ul = $(this).prev();
 
         if(Centauri.isNotUndefined(required)) {
-            if($("li", $ul).hasClass("selected")) {
+            if($("li", $ul).hasClass("active")) {
                 $(this).parent().find("input").removeClass("error");
             }
         }
@@ -64,7 +64,7 @@ Centauri.Utility.ModalUtility.Validator = function($modal) {
             let $ul = $(this).prev();
 
             if(Centauri.isNotUndefined(required)) {
-                if(!$("li", $ul).hasClass("selected")) {
+                if(!$("li", $ul).hasClass("active")) {
                     hasError = true;
                     $(this).parent().find("input").addClass("error");
                 }

@@ -290,7 +290,7 @@ button.toast-close-button {
 .cropper-container {
   margin: 30px 0 !important; }
 
-#modal .cropper-container {
+#modal-new_contentelement .cropper-container {
   margin: 0 -1rem !important; }
 
 /*
@@ -792,15 +792,15 @@ table#pages tr.subpage td:first-child {
 /**
  * Modals
  */
-#modal .element .top {
+#modal-new_contentelement .element .top {
   color: #212529;
   cursor: pointer;
   padding: 15px; }
 
-#modal .element .bottom {
+#modal-new_contentelement .element .bottom {
   padding: 15px;
   border-top: 1px solid #dedede; }
-  #modal .element .bottom > div:first-child {
+  #modal-new_contentelement .element .bottom > div:first-child {
     margin-top: 0 !important; }
 
 /**

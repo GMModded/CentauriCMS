@@ -194,6 +194,8 @@ Centauri.Components.PagesComponent = function(module) {
                     Centauri.__trans.modals.deletePage_body,
 
                     {
+                        id: "areyousure_deletepage",
+
                         close: {
                             label: Centauri.__trans.modals.btn_cancel,
                             class: "warning"
@@ -452,6 +454,8 @@ Centauri.Components.PagesComponent = function(module) {
                         "Do you want to continue deleting this domain-record?",
 
                         {
+                            id: "areyousure_deletedomainrecord",
+    
                             close: {
                                 label: Centauri.__trans.modals.btn_cancel,
                                 class: "warning"
@@ -521,6 +525,7 @@ Centauri.Components.PagesComponent = function(module) {
                     "<div class='md-form'><input id='file_name' type='text' value='" + name + "' class='form-control' /><label class='active'>" + Centauri.__trans.global.label_title + "</label></div>",
 
                     {
+                        id: "NO_ID_MODAL",
                         size: "xl",
 
                         close: {
@@ -573,6 +578,7 @@ Centauri.Components.PagesComponent = function(module) {
                     "<div class='md-form'><input id='file_name' type='text' value='" + name + "' class='form-control' /><label class='active'>" + Centauri.__trans.global.label_title + "</label></div><img id='croppableimage' src='" + path + "' class='img-fluid' />",
 
                     {
+                        id: "NO_ID_MODAL",
                         size: "xl",
 
                         close: {
@@ -633,6 +639,8 @@ Centauri.Components.PagesComponent = function(module) {
                     "Do you want to continue deleting this file?",
 
                     {
+                        id: "areyousure_deletefile",
+
                         close: {
                             label: Centauri.__trans.modals.btn_cancel,
                             class: "warning"
@@ -788,9 +796,11 @@ Centauri.Components.PagesComponent = function(module) {
                     // "Delete " + title + " language",
                     // "Are you sure to continue deleting the language '" + title + "' with all its bounded content?",
                     Centauri.strReplace(Centauri.__trans.modals.deleteLanguage_title, "{title}", title),
-                    Centauri.strReplace(Centauri.__trans.modals.deleteLanguage_body, "{title}", title),
+                    Centauri.strReplace(Centauri.__trans.modals.deleteLanguage_body, "{body}", title),
 
                     {
+                        id: "areyousure_deletelanguage",
+
                         close: {
                             label: Centauri.__trans.modals.btn_cancel,
                             class: "warning"

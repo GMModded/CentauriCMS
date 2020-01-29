@@ -1,8 +1,6 @@
 <?php
 namespace Centauri\CMS\Application;
 
-use Centauri\CMS\Utility\PathUtility;
-
 class CentauriApplication
 {
     public $Centauri;
@@ -24,7 +22,9 @@ class CentauriApplication
             ],
 
             "Helper" => [
-                "VariablesHelper" => []
+                "VariablesHelper" => [
+                    "__ContentElementsAjax__IteratorForFields" => 0
+                ]
             ],
 
             "Hooks" => [],

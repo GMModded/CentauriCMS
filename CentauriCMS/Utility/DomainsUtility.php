@@ -10,7 +10,7 @@ class DomainsUtility
 {
     public static function findAll()
     {
-        $path = base_path("CentauriCMS\\Domains\\");
+        $path = base_path("CentauriCMS/Domains");
         $domainFiles = File::files($path);
 
         foreach($domainFiles as $domainFile) {

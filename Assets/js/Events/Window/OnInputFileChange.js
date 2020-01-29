@@ -21,6 +21,8 @@ Centauri.Events.Window.OnInputFileChange = function(element) {
                 "<div class='md-form'><input id='file_name' type='text' class='form-control' /><label>" + Centauri.__trans.global.label_title + "</label></div>",
 
                 {
+                    id: "new_filelistupload",
+
                     close: {
                         label: "",
                         class: "danger fas fa-times"

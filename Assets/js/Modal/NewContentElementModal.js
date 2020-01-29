@@ -27,123 +27,128 @@ Centauri.Modal.NewContentElementModal = function() {
 
                 {
                     success: function(data) {
-                        Centauri.fn.Modal(
-                            "New Content Element",
+                        if(!Centauri.elExists($("#modal-new_contentelement"))) {
+                            Centauri.fn.Modal(
+                                "New Content Element",
 
-                            data,
+                                data,
 
-                            {
-                                size: "xl",
-                                closeOnSave: false,
+                                {
+                                    id: "new_contentelement",
+                                    size: "xl",
+                                    closeOnSave: false,
 
-                                close: {
-                                    label: "",
-                                    class: "danger fas fa-times"
-                                },
-        
-                                save: {
-                                    label: "",
-                                    class: "success fas fa-save"
-                                }
-                            },
-
-                            {
-                                save: function() {
-                                    if(Centauri.isNull(Centauri.Helper.ModalHelper.Element)) {
-                                        toastr["error"]("Content Elements Error", "Please select any element in order to create one!");
-                                        return;
+                                    close: {
+                                        label: "",
+                                        class: "danger fas fa-times"
+                                    },
+            
+                                    save: {
+                                        label: "",
+                                        class: "success fas fa-save"
                                     }
+                                },
 
-                                    let $modal = $("#modal");
-                                    $modal.hide();
+                                {
+                                    save: function() {
+                                        if(Centauri.isNull(Centauri.Helper.ModalHelper.Element)) {
+                                            toastr["error"]("Content Elements Error", "Please select any element in order to create one!");
+                                            return;
+                                        }
 
-                                    Centauri.fn.Modal.close();
-                                    var datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
+                                        let $modal = $("#modal");
+                                        $modal.hide();
 
-                                    Centauri.fn.Ajax(
-                                        "ContentElements",
-                                        "newElement",
+                                        Centauri.fn.Modal.close();
+                                        var datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
 
-                                        {
-                                            pid: Centauri.Components.PagesComponent.uid,
-                                            ctype: Centauri.Helper.ModalHelper.Element.data("ctype"),
-                                            datas: JSON.stringify(datas),
+                                        Centauri.fn.Ajax(
+                                            "ContentElements",
+                                            "newElement",
 
-                                            rowPos: rowPos,
-                                            colPos: colPos,
-                                            insert: insert,
-                                            sorting: sorting
-                                        },
+                                            {
+                                                pid: Centauri.Components.PagesComponent.uid,
+                                                ctype: Centauri.Helper.ModalHelper.Element.data("ctype"),
+                                                datas: JSON.stringify(datas),
 
-                                        {
-                                            success: function(data) {
-                                                data = JSON.parse(data);
-                                                Centauri.Notify(data.type, data.title, data.description);
-
-                                                Centauri.fn.Ajax(
-                                                    "ContentElements",
-                                                    "findByPid",
-
-                                                    {
-                                                        pid: Centauri.Components.PagesComponent.uid
-                                                    },
-
-                                                    {
-                                                        success: function(data) {
-                                                            var $container = $("#editor > .bottom > .container");
-                                                            $container.html(data);
-
-                                                            /**
-                                                             * Initializing edit-button for elements
-                                                             */
-                                                            Centauri.Helper.PagesHelper($container);
-
-                                                            /**
-                                                             * Registering click-event for newCEButton
-                                                             */
-                                                            Centauri.Modal.NewContentElementModal();
-
-                                                            /**
-                                                             * Initializing CKEditor 5
-                                                             */
-                                                            Centauri.Service.CKEditorInitService();
-                                                        }
-                                                    }
-                                                );
+                                                rowPos: rowPos,
+                                                colPos: colPos,
+                                                insert: insert,
+                                                sorting: sorting
                                             },
 
-                                            error: function(data) {
-                                                console.error(data);
+                                            {
+                                                success: function(data) {
+                                                    data = JSON.parse(data);
+                                                    Centauri.Notify(data.type, data.title, data.description);
+
+                                                    Centauri.fn.Ajax(
+                                                        "ContentElements",
+                                                        "findByPid",
+
+                                                        {
+                                                            pid: Centauri.Components.PagesComponent.uid
+                                                        },
+
+                                                        {
+                                                            success: function(data) {
+                                                                var $container = $("#editor > .bottom > .container");
+                                                                $container.html(data);
+
+                                                                /**
+                                                                 * Initializing edit-button for elements
+                                                                 */
+                                                                Centauri.Helper.PagesHelper($container);
+
+                                                                /**
+                                                                 * Registering click-event for newCEButton
+                                                                 */
+                                                                Centauri.Modal.NewContentElementModal();
+
+                                                                /**
+                                                                 * Initializing CKEditor 5
+                                                                 */
+                                                                Centauri.Service.CKEditorInitService();
+                                                            }
+                                                        }
+                                                    );
+                                                },
+
+                                                error: function(data) {
+                                                    console.error(data);
+                                                }
                                             }
-                                        }
-                                    );
+                                        );
+                                    }
                                 }
-                            }
-                        );
+                            );
 
-                        /**
-                         * Initializing CKEditor 5
-                         */
-                        Centauri.Service.CKEditorInitService();
+                            /**
+                             * Initializing CKEditor 5
+                             */
+                            Centauri.Service.CKEditorInitService();
 
-                        $(".element .top").on("click", function() {
-                            var $this = $(this);
-                            var $element = $this.parent();
+                            $(".element .top").on("click", function() {
+                                var $this = $(this);
+                                var $element = $this.parent();
 
-                            $(Centauri.Helper.ModalHelper.Element).find("> .bottom").slideUp();
+                                $(Centauri.Helper.ModalHelper.Element).find("> .bottom").slideUp();
 
-                            if(!$(Centauri.Helper.ModalHelper.Element).is($element)) {
-                                Centauri.Helper.ModalHelper.Element = $element;
-                                $("> .bottom", $element).slideToggle();
+                                if(!$(Centauri.Helper.ModalHelper.Element).is($element)) {
+                                    Centauri.Helper.ModalHelper.Element = $element;
+                                    $("> .bottom", $element).slideToggle();
 
-                                if(Centauri.isUndefined($element.attr("initialized"))) {
-                                    $element.attr("initialized", "true");
-                                    Centauri.View.ContentElementsView($element);
+                                    if(Centauri.isUndefined($element.attr("initialized"))) {
+                                        $element.attr("initialized", "true");
+                                        Centauri.View.ContentElementsView($element);
+                                    }
+                                } else {
+                                    Centauri.Helper.ModalHelper.Element = null;
                                 }
-                            } else {
-                                Centauri.Helper.ModalHelper.Element = null;
-                            }
-                        });
+                            });
+                        } else {
+                            $("#modal-new_contentelement").modal("show");
+                        }
                     }
                 }
             );

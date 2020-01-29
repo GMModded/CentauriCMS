@@ -102,145 +102,156 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                             data = JSON.parse(data);
                                             var languages = data;
 
-                                            Centauri.fn.Ajax(
-                                                "BackendLayouts",
-                                                "findAll",
+                                            if(languages.length == 0) {
+                                                Centauri.Notify("primary", "No languages detected", "Please create a language in order to create (root)pages!", {
+                                                    timeOut: 10000
+                                                });
 
-                                                {},
+                                                Centauri.Components.ModulesComponent({
+                                                    type: "load",
+                                                    module: "languages"
+                                                });
+                                            } else {
+                                                Centauri.fn.Ajax(
+                                                    "BackendLayouts",
+                                                    "findAll",
 
-                                                {
-                                                    success: (data) => {
-                                                        data = JSON.parse(data);
-                                                        var beLayouts = data;
+                                                    {},
 
-                                                        Centauri.Components.EditorComponent("show", {
-                                                            id: "CreateNewPage",
-                                                            title: "Page-Editor - New",
+                                                    {
+                                                        success: (data) => {
+                                                            data = JSON.parse(data);
+                                                            var beLayouts = data;
 
-                                                            form: [
-                                                                {
-                                                                    id: "parent",
-                                                                    type: "custom",
-                                                                    custom: "select",
+                                                            Centauri.Components.EditorComponent("show", {
+                                                                id: "CreateNewPage",
+                                                                title: "Page-Editor - New",
 
-                                                                    data: {
-                                                                        label: Centauri.__trans.EditorComponent.label_rootpage,
-                                                                        options: rootpages
-                                                                    }
-                                                                },
+                                                                form: [
+                                                                    {
+                                                                        id: "parent",
+                                                                        type: "custom",
+                                                                        custom: "select",
 
-                                                                {
-                                                                    id: "language",
-                                                                    type: "custom",
-                                                                    custom: "select",
-                                                                    extraAttr: "style='display: none!important;'",
-
-                                                                    data: {
-                                                                        label: Centauri.__trans.global.label_languages,
-                                                                        options: languages
-                                                                    }
-                                                                },
-
-                                                                {
-                                                                    id: "title",
-                                                                    type: "text",
-                                                                    label: Centauri.__trans.global.label_title,
-                                                                    required: true
-                                                                },
-
-                                                                {
-                                                                    id: "url",
-                                                                    type: "text",
-                                                                    label: "URL",
-                                                                    required: true
-                                                                },
-
-                                                                {
-                                                                    id: "is_rootpage",
-                                                                    type: "custom",
-                                                                    custom: "switch",
-
-                                                                    data: {
-                                                                        label: Centauri.__trans.EditorComponent.label_rootpage + "?",
-                                                                        isChecked: false,
-                                                                        onClick: "Centauri.Events.EditorComponent.Checkbox.OnClick(this)"
-                                                                    }
-                                                                },
-
-                                                                {
-                                                                    id: "be_layout",
-                                                                    type: "custom",
-                                                                    custom: "select",
-
-                                                                    data: {
-                                                                        selectedOptionValue: "default",
-                                                                        label: "Backend-Layout",
-                                                                        options: beLayouts
-                                                                    }
-                                                                }
-                                                            ],
-
-                                                            callbacks: {
-                                                                loadModuleAfterSaved: "languages",
-
-                                                                beforeLoaded: function($editor) {
-                                                                    if(rootpages.length == 0) {
-                                                                        $("#is_rootpage", $editor).prop("checked", true);
-                                                                        $("#is_rootpage", $editor).attr("disabled", " ");
-                                                                        $("form .field #language", $editor).parent().parent().removeAttr("style");
-                                                                        $("form .field #parent", $editor).parent().parent().attr("style", "display: none!important;");
-                                                                    }
-                                                                },
-
-                                                                save: function() {
-                                                                    Centauri.fn.Ajax.Overlayer = false;
-
-                                                                    Centauri.fn.Ajax(
-                                                                        "Page",
-                                                                        "newPage",
-
-                                                                        {
-                                                                            parentuid: $("#parent", $editor).val(),
-                                                                            language: $("#language", $editor).val(),
-                                                                            isrootpage: $("#is_rootpage", $editor).prop("checked"),
-                                                                            title: $("#title", $editor).val(),
-                                                                            url: $("#url", $editor).val(),
-                                                                            belayout: $("#be_layout").val()
-                                                                        },
-
-                                                                        {
-                                                                            success: function(data) {
-                                                                                data = JSON.parse(data);
-                                                                                Centauri.Notify(data.type, data.title, data.description);
-
-                                                                                Centauri.Components.EditorComponent("clear");
-                                                                                Centauri.Components.EditorComponent("hide");
-
-                                                                                Centauri.Components.ModulesComponent({
-                                                                                    type: "load",
-                                                                                    module: "pages"
-                                                                                });
-                                                                            },
-
-                                                                            error: function(data) {
-                                                                                console.error(data);
-                                                                            },
-
-                                                                            complete: function() {
-                                                                                Centauri.fn.Ajax.Overlayer = true;
-                                                                            }
+                                                                        data: {
+                                                                            label: Centauri.__trans.EditorComponent.label_rootpage,
+                                                                            options: rootpages
                                                                         }
-                                                                    );
-                                                                }//,cancel: function() {}
-                                                            }
-                                                        });
-                                                    },
+                                                                    },
 
-                                                    error: (data) => {
-                                                        console.error(data);
+                                                                    {
+                                                                        id: "language",
+                                                                        type: "custom",
+                                                                        custom: "select",
+                                                                        extraAttr: "style='display: none!important;'",
+
+                                                                        data: {
+                                                                            label: Centauri.__trans.global.label_languages,
+                                                                            options: languages
+                                                                        }
+                                                                    },
+
+                                                                    {
+                                                                        id: "title",
+                                                                        type: "text",
+                                                                        label: Centauri.__trans.global.label_title,
+                                                                        required: true
+                                                                    },
+
+                                                                    {
+                                                                        id: "url",
+                                                                        type: "text",
+                                                                        label: "URL",
+                                                                        required: true
+                                                                    },
+
+                                                                    {
+                                                                        id: "is_rootpage",
+                                                                        type: "custom",
+                                                                        custom: "switch",
+
+                                                                        data: {
+                                                                            label: Centauri.__trans.EditorComponent.label_rootpage + "?",
+                                                                            isChecked: false,
+                                                                            onClick: "Centauri.Events.EditorComponent.Checkbox.OnClick(this)"
+                                                                        }
+                                                                    },
+
+                                                                    {
+                                                                        id: "be_layout",
+                                                                        type: "custom",
+                                                                        custom: "select",
+
+                                                                        data: {
+                                                                            selectedOptionValue: "default",
+                                                                            label: "Backend-Layout",
+                                                                            options: beLayouts
+                                                                        }
+                                                                    }
+                                                                ],
+
+                                                                callbacks: {
+                                                                    loadModuleAfterSaved: "languages",
+
+                                                                    beforeLoaded: function($editor) {
+                                                                        if(rootpages.length == 0) {
+                                                                            $("#is_rootpage", $editor).prop("checked", true);
+                                                                            $("#is_rootpage", $editor).attr("disabled", " ");
+                                                                            $("form .field #language", $editor).parent().parent().removeAttr("style");
+                                                                            $("form .field #parent", $editor).parent().parent().attr("style", "display: none!important;");
+                                                                        }
+                                                                    },
+
+                                                                    save: function() {
+                                                                        Centauri.fn.Ajax.Overlayer = false;
+
+                                                                        Centauri.fn.Ajax(
+                                                                            "Page",
+                                                                            "newPage",
+
+                                                                            {
+                                                                                parentuid: $("#parent", $editor).val(),
+                                                                                language: $("#language", $editor).val(),
+                                                                                isrootpage: $("#is_rootpage", $editor).prop("checked"),
+                                                                                title: $("#title", $editor).val(),
+                                                                                url: $("#url", $editor).val(),
+                                                                                belayout: $("#be_layout").val()
+                                                                            },
+
+                                                                            {
+                                                                                success: function(data) {
+                                                                                    data = JSON.parse(data);
+                                                                                    Centauri.Notify(data.type, data.title, data.description);
+
+                                                                                    Centauri.Components.EditorComponent("clear");
+                                                                                    Centauri.Components.EditorComponent("hide");
+
+                                                                                    Centauri.Components.ModulesComponent({
+                                                                                        type: "load",
+                                                                                        module: "pages"
+                                                                                    });
+                                                                                },
+
+                                                                                error: function(data) {
+                                                                                    console.error(data);
+                                                                                },
+
+                                                                                complete: function() {
+                                                                                    Centauri.fn.Ajax.Overlayer = true;
+                                                                                }
+                                                                            }
+                                                                        );
+                                                                    }//,cancel: function() {}
+                                                                }
+                                                            });
+                                                        },
+
+                                                        error: (data) => {
+                                                            console.error(data);
+                                                        }
                                                     }
-                                                }
-                                            )
+                                                );
+                                            }
                                         },
 
                                         error: function(data) {
@@ -278,6 +289,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                     data,
 
                                     {
+                                        id: "new_domain",                
                                         size: "xl",
                                         closeOnSave: false,
 
@@ -467,6 +479,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                     data,
 
                                     {
+                                        id: "new_model",
                                         size: "xl",
                                         closeOnSave: false,
 

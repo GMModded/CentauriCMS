@@ -12,7 +12,7 @@
 
         @foreach($config["items"] as $item)
             @if($item[0] == ($value ?? ""))
-                <option value="{{ $item[1] }}">
+                <option value="{{ $item[1] }}" selected>
                     {{ $item[0] }}
                 </option>
             @else

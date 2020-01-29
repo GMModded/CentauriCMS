@@ -95,6 +95,8 @@ Centauri.Helper.PagesHelper = function($container) {
                                         "Do you want to continue deleting this element?",
                 
                                         {
+                                            id: "areyousure_deleteelement",
+
                                             close: {
                                                 label: Centauri.__trans.modals.btn_cancel,
                                                 class: "warning"

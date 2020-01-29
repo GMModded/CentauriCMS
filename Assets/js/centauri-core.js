@@ -76,6 +76,12 @@ function Centauri_loadFunctions() {
      * @return {boolean}
      */
     Centauri.elExists = function(selector) {
+        if($(selector).hasClass("modal")) {
+            if($(selector).hasClass("show")) {
+                return true;
+            }
+        }
+
         return ($(selector).length === 1 ? true : false);
     };
 

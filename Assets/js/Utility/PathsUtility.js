@@ -1,5 +1,5 @@
 Centauri.Utility.PathsUtility = {
-    root: "/CentauriCMS/",
+    root: "/",
 
     centauri: "centauri/",
 

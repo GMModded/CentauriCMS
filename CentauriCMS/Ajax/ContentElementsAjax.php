@@ -6,6 +6,7 @@ use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Element;
 use Centauri\CMS\Model\File;
+use Centauri\CMS\Service\MinifyHTMLService;
 use Exception;
 use Illuminate\Support\Str;
 
@@ -96,8 +97,6 @@ class ContentElementsAjax implements AjaxInterface
             $CCE = $GLOBALS["Centauri"]["ContentElements"];
             $fields = $CCE["fields"];
 
-            $iterator = 0;
-
             foreach($fields as $ctype => $field) {
                 $label = $field["label"];
                 $type = $field["type"];
@@ -141,14 +140,11 @@ class ContentElementsAjax implements AjaxInterface
                     "id" => $ctype,
                     "label" => $label,
                     "additionalData" => $additionalData,
-                    "config" => $config,
-                    "iterator" => $iterator,
+                    "config" => $config
                 ])->render();
 
                 $fields[$ctype]["_HTML"] = $html;
                 $CCE["fields"][$ctype]["_HTML"] = $html;
-
-                $iterator++;
             }
 
             return view("Centauri::Backend.Modals.newContentElement", [

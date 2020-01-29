@@ -30,7 +30,7 @@ class DomainsAjax implements AjaxInterface
             $domain = $request->input("domain");
             $rootpageuid = $request->input("rootpageuid");
 
-            $path = base_path("CentauriCMS\\Domains\\$id.json");
+            $path = base_path("CentauriCMS/Domains/$id.json");
 
             if(file_exists($path)) {
                 return response("Domain with ID '" . $id . "' exists already!", 500);
@@ -64,7 +64,7 @@ class DomainsAjax implements AjaxInterface
             $domain = $request->input("domain");
             $rootpageuid = $request->input("rootpageuid");
 
-            $path = base_path("CentauriCMS\\Domains\\$id.json");
+            $path = base_path("CentauriCMS/Domains/$id.json");
             $content = json_decode(file_get_contents($path));
 
             $content->domain = $domain;
@@ -81,7 +81,7 @@ class DomainsAjax implements AjaxInterface
         if($ajaxName == "delete") {
             $id = $request->input("id");
 
-            $path = base_path("CentauriCMS\\Domains\\$id.json");
+            $path = base_path("CentauriCMS/Domains/$id.json");
             unlink($path);
 
             return json_encode([

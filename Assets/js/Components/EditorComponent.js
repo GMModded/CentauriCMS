@@ -264,7 +264,7 @@ Centauri.Components.EditorComponent.init = function() {
     });
 
     $(document).on("keyup", function(e) {
-        if(e.which == 27 && !Centauri.elExists($("#modal"))) {
+        if(e.which == 27 && !Centauri.elExists($("#modal-new_contentelement"))) {
             var closer = $(".overlayer").attr("data-closer");
 
             if(closer == "EditorComponent") {

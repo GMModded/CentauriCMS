@@ -12,6 +12,8 @@ Centauri.Components.ModulesComponent = function(data) {
                         Centauri.__trans.modals.editorcomponent_switch,
 
                         {
+                            id: "areyousure_switch_editorcomponent_to_dashboard",
+
                             close: {
                                 label: Centauri.__trans.modals.btn_cancel,
                                 class: "warning"

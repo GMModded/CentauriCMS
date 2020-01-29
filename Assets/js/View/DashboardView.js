@@ -23,6 +23,8 @@ Centauri.View.DashboardView = function() {
                 Centauri.__trans.EditorComponent.toggleHamburger,
 
                 {
+                    id: "areyousure_togglehamburger",
+
                     close: {
                         label: Centauri.__trans.modals.btn_cancel,
                         class: "warning"
@@ -37,11 +39,13 @@ Centauri.View.DashboardView = function() {
                 {
                     save() {
                         Centauri.View.DashboardView.fn__toggle(true);
+                        Centauri.fn.Modal.close("modal-areyousure_togglehamburger");
                     }
                 }
             );
         } else {
             Centauri.View.DashboardView.fn__toggle();
+            Centauri.fn.Modal.close("modal-areyousure_togglehamburger");
         }
     });
 
