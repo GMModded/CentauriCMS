@@ -99,3 +99,43 @@ input {
         bottom: 0;
     }
 }
+
+.text-gray-300 {
+	color: #dddfeb!important;
+}
+
+.text-gray-800 {
+	color: #5a5c69!important;
+}
+
+.text-xs {
+	font-size: .7rem;
+}
+
+.border-left-success {
+	border-left: .25rem solid #1cc88a!important;
+	border-top: unset !important;
+	border-right: unset !important;
+	border-bottom: unset !important;
+}
+
+.border-left-primary {
+	border-left: .25rem solid #4e73df!important;
+	border-top: unset !important;
+	border-right: unset !important;
+	border-bottom: unset !important;
+}
+
+.border-left-warning {
+	border-left: .25rem solid #f6c23e!important;
+	border-top: unset !important;
+	border-right: unset !important;
+	border-bottom: unset !important;
+}
+
+.border-left-danger {
+	border-left: .25rem solid #e74a3b!important;
+	border-top: unset !important;
+	border-right: unset !important;
+	border-bottom: unset !important;
+}

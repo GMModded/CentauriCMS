@@ -1,7 +1,7 @@
 Centauri.fn.__FormInputFix = () => {
     var i = 0;
 
-    $("input", $("#modal")).each(function() {
+    $("input", $("#modal-new_contentelement")).each(function() {
         let $input = $(this);
 
         $input.attr("id", $input.attr("id") + "-" + i);

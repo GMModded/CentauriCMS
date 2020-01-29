@@ -26,6 +26,8 @@ Centauri.defaultModule = "dashboard";
 /**
  * Centauri Core
  */
+Centauri.Init = {};
+
 Centauri.Service = {};
 Centauri.Utility = {};
 
@@ -52,6 +54,9 @@ Centauri.load = function() {
     if(Centauri.isNotUndefined(CentauriEnv)) {
         CentauriEnv();
     }
+
+    // Init stuff
+    Centauri.Init.HeaderInit();
 
     // Window related stuff (events etc.)
     Centauri.Events.Window.OnLoadResize();

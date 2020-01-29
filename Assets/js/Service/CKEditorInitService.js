@@ -88,8 +88,8 @@ Centauri.Service.CKEditorInitService = function() {
                 editor.model.insertContent(modelFragment);
 
 				// Set a custom container for the toolbar.
-				document.querySelector('.document-editor__toolbar').appendChild( editor.ui.view.toolbar.element );
-				document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
+                $(this).parent().find(".document-editor__toolbar").append(editor.ui.view.toolbar.element);
+                $(this).parent().find(".ck-toolbar").addClass("ck-reset_all");
 			})
             .catch(error => {
                 console.error(error);

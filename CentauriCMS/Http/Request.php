@@ -6,6 +6,7 @@ use Centauri\CMS\Model\Page;
 use Centauri\CMS\Component\ElementComponent;
 use Centauri\CMS\Utility\DomainsUtility;
 use Centauri\CMS\Utility\FixerUtility;
+use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
@@ -40,7 +41,7 @@ class Request
         }
 
         if(is_null($domain)) {
-            dd("404 (Domain)");
+            throw new Exception("The requested domain could not be resolved");
         }
 
         if($nodes == "centauri") {
@@ -181,7 +182,7 @@ class Request
         }
 
         if($throwNotFound) {
-            dd("404");
+            throw new Exception("The requested page could not be resolved");
         }
     }
 }

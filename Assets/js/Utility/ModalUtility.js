@@ -1,15 +1,4 @@
 Centauri.Utility.ModalUtility = function(title, description, options, callbacks) {
-    Centauri.Utility.ModalUtility.close = function(id) {
-        if(id != "") {
-            $("#modal-" + id).modal("dispose");
-            $("#modal-" + id).remove();
-        } else {
-            $(".modal").modal("hide");
-            $(".modal").modal("dispose");
-            $(".modal").remove();
-        }
-    };
-
     var html = "";
     var addHTMLFn = Centauri.Utility.ModalUtility.addHTML;
 
@@ -43,6 +32,11 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
                 saveclass = options.save.class;
             }
         }
+    }
+
+    if(Centauri.elExists($("#modal" + id))) {
+        $("#modal" + id).modal("show");
+        return false;
     }
 
     html = "<div class='modal fade' id='modal" + id + "' tabindex='-1' role='dialog' aria-labelledby='modal" + id + "-label' aria-hidden='true'>|</div>";
@@ -80,9 +74,11 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
      */
     Centauri.fn.__FormInputFix();
 
-    $("#modal" + id + "").on("hidden.bs.modal", function(e) {
-        // $("#modal").modal("dispose");
-        // $(this).remove();
+    $("#modal-" + id).on("hidden.bs.modal", function(e) {
+        if($(this).hasClass("destroy")) {
+            $(this).modal("dispose");
+            $(this).remove();
+        }
     });
 
     $("#modal" + id + " button").on("click", this, function() {
@@ -104,6 +100,8 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
             callbacks.save();
         }
     });
+
+    return true;
 };
 
 Centauri.Utility.ModalUtility.addHTML = function(crtHTML, html, split = "|") {
@@ -120,12 +118,16 @@ Centauri.fn.Modal = function(title, description, options, callbacks) {
     return Centauri.Utility.ModalUtility(title, description, options, callbacks);
 };
 
-Centauri.fn.Modal.close = function(id) {
-    var nID = "";
-
+Centauri.Utility.ModalUtility.close = function(id) {
     if(Centauri.isNotUndefined(id)) {
-        nID = id;
+        $("#modal-" + id).modal("dispose");
+        $("#modal-" + id).remove();
+    } else {
+        $(".modal").addClass("destroy");
+        $(".modal").modal("hide");
     }
+};
 
-    Centauri.Utility.ModalUtility.close(nID);
+Centauri.fn.Modal.close = function() {
+    Centauri.Utility.ModalUtility.close();
 };

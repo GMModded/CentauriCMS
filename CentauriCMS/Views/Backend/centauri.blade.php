@@ -135,6 +135,66 @@
                     </div>
                 </div>
 
+                <section id="header">
+                    <div class="container position-relative">
+                        <div class="row h-100 align-items-center">
+                            <div class="col col-md-8">
+                                <div class="row">
+                                    <div class="col">
+                                        
+                                    </div>
+
+                                    <div class="row mx-0 text-right">
+                                        <div class="tool" data-type="cache">
+                                            <div class="icon-view">
+                                                <i class="fas fa-bolt"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col col-md-4">
+                                <div class="mt-2 md-form">
+                                    <input id="global_search" class="form-control" type="text">
+
+                                    <label for="global_search">
+                                        Search
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blocks z-depth-3">
+                            <div class="block" data-type="cache" style="display: none;">
+                                <div class="item px-2 py-3">
+                                    <h6>
+                                        <b>
+                                            Flush Frontend Cache
+                                        </b>
+                                    </h6>
+                                </div>
+
+                                <div class="item px-2 py-3">
+                                    <h6>
+                                        <b>
+                                            Flush Backend Cache
+                                        </b>
+                                    </h6>
+                                </div>
+
+                                <div class="item px-2 py-3">
+                                    <h6>
+                                        <b>
+                                            Flush Entire Cache
+                                        </b>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <section id="content" class="h-100"></section>
             </section>
 

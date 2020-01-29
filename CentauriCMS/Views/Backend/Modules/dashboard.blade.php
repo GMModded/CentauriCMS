@@ -3,7 +3,7 @@
 @section("moduleid"){{"dashboard"}}@endsection
 
 @section("content")
-    <div class="container">
+    <div class="container mb-5">
         <div class="row">
             <div class="col-12">
                 @section("headertitle") @lang("backend/modules.dashboard.title") @endsection
@@ -28,12 +28,12 @@
 															<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
 																Domains
 															</div>
-		
+
 															<div class="h5 mb-0 font-weight-bold text-gray-800">
 																{!! $data["domains"] !!}
 															</div>
 														</div>
-		
+
 														<div class="col-auto">
 															<i class="fas fa-globe fa-2x text-gray-300"></i>
 														</div>
@@ -117,53 +117,31 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="card shadow mb-4 w-100">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">
+									Stats
+								</h6>
+							</div>
+
+							<div class="card-body">
+								<div class="row">
+									<div class="col-12 col-md-6 mb-4">
+										<div class="card border-left-primary shadow h-100 py-2">
+											<div class="card-body">
+												<div class="row no-gutters align-items-center">
+													<canvas id="lineChart_frontendcalls"></canvas>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 @endsection
-
-
-
-<style>
-.text-gray-300 {
-	color: #dddfeb!important;
-}
-
-.text-gray-800 {
-	color: #5a5c69!important;
-}
-
-.text-xs {
-	font-size: .7rem;
-}
-
-.border-left-success {
-	border-left: .25rem solid #1cc88a!important;
-	border-top: unset !important;
-	border-right: unset !important;
-	border-bottom: unset !important;
-}
-
-.border-left-primary {
-	border-left: .25rem solid #4e73df!important;
-	border-top: unset !important;
-	border-right: unset !important;
-	border-bottom: unset !important;
-}
-
-.border-left-warning {
-	border-left: .25rem solid #f6c23e!important;
-	border-top: unset !important;
-	border-right: unset !important;
-	border-bottom: unset !important;
-}
-
-.border-left-danger {
-	border-left: .25rem solid #e74a3b!important;
-	border-top: unset !important;
-	border-right: unset !important;
-	border-bottom: unset !important;
-}
-</style>
