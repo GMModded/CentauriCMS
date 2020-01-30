@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
@@ -397,5 +398,7 @@ class ContentElementsAjax implements AjaxInterface
             $element->$field = $stringUids;
             $element->save();
         }
+
+        return AjaxAbstract::default($request, $ajaxName);
     }
 }

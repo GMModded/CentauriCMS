@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\AjaxAbstract;
 use Centauri\CMS\AjaxInterface;
 use Illuminate\Http\Request;
 
@@ -112,7 +113,7 @@ class ModelsAjax implements AjaxInterface
                 ]);
             }
 
-            return response("Models - was not able to create a new $label model!", 500);
+            return AjaxAbstract::default($request, $ajaxName);
         }
     }
 }

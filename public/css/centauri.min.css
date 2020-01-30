@@ -665,20 +665,21 @@ input:read-only:not(.select-dropdown) {
     margin-right: 15px;
     font-size: 18px;
     transition: .3s; }
-    #header .tool:hover {
-      transform: scale(1.25); }
-      #header .tool:hover:active {
-        transform: scale(0.8);
-        transition: .125s; }
   #header .blocks {
     position: absolute;
+    top: -250px;
     right: 15px;
-    width: 430px;
+    width: 576px;
     background: linear-gradient(180deg, #303a4f, #2a3345);
-    padding: 15px;
+    padding: 15px 30px 30px 30px;
+    visibility: hidden;
     transition: 0.66s cubic-bezier(1, -0.5, 0.25, 1.42); }
     #header .blocks.active {
-      top: 70px; }
+      top: 70px !important;
+      visibility: visible; }
+    #header .blocks .block {
+      padding: 0 7.5px;
+      margin: 0 -15px; }
   #header #global_search.active,
   #header [for="global_search"].active {
     color: white !important; }

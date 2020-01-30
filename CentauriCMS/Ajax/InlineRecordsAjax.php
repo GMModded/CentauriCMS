@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\AjaxAbstract;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Model\File;
 use Illuminate\Support\Str;
@@ -33,5 +34,7 @@ class InlineRecordsAjax implements AjaxInterface
                 ]);
             }
         }
+
+        return AjaxAbstract::default($request, $ajaxName);
     }
 }

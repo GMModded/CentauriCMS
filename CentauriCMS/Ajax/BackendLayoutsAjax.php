@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\AjaxAbstract;
 use \Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
 
@@ -21,5 +22,7 @@ class BackendLayoutsAjax implements AjaxInterface
 
             return json_encode($layouts);
         }
+
+        return AjaxAbstract::default($request, $ajaxName);
     }
 }

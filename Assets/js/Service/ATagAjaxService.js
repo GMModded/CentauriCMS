@@ -2,9 +2,17 @@ Centauri.Service.ATagAjaxService = function() {
     $("a[data-ajax='true']").on("click", this, function(e) {
         e.preventDefault();
 
+        let handler = $(this).data("ajax-handler");
+        let action = $(this).data("ajax-action");
+
+        Centauri.Events.OnATagAjaxServiceBefore({
+            handler,
+            action
+        });
+
         Centauri.fn.Ajax(
-            $(this).data("ajax-handler"),
-            $(this).data("ajax-action"),
+            handler,
+            action,
 
             {},
 
@@ -13,10 +21,21 @@ Centauri.Service.ATagAjaxService = function() {
                     try {
                         data = JSON.parse(data);
                         Centauri.Notify(data.type, data.title, data.description);
-                    } catch(SyntaxError) {}
+
+                        Centauri.Events.OnATagAjaxServiceAfter("success", {
+                            handler: handler,
+                            action: action
+                        });
+                    } catch(SyntaxError) {
+                        Centauri.Events.OnATagAjaxServiceAfter("error", {
+                            handler: handler,
+                            action: action,
+                            error: SyntaxError
+                        });
+                    }
                 }
             }
-        )
+        );
     });
 
     $("a[data-module='true']").on("click", this, function(e) {

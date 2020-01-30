@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
 use Exception;
@@ -43,5 +44,7 @@ class DatabaseAjax implements AjaxInterface
                 "description" => "All SQL queries has been successfully executed!"
             ]);
         }
+
+        return AjaxAbstract::default($request, $ajaxName);
     }
 }

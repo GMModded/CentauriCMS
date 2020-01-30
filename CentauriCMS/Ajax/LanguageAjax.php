@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Model\Language;
@@ -77,6 +78,6 @@ class LanguageAjax implements AjaxInterface
             ]);
         }
 
-        return response("LanguageAjax - the action '" . $ajaxName . "' doesn't exists!", 500);
+        return AjaxAbstract::default($request, $ajaxName);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Model\Language;
@@ -90,5 +91,7 @@ class DomainsAjax implements AjaxInterface
                 "description" => "Deleted Domain-Record with ID '" . $id . "'"
             ]);
         }
+
+        return AjaxAbstract::default($request, $ajaxName);
     }
 }

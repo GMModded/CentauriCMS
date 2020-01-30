@@ -145,7 +145,7 @@
                                     </div>
 
                                     <div class="row mx-0 text-right">
-                                        <div class="tool" data-type="cache">
+                                        <div class="tool waves-effect waves-light" data-type="cache">
                                             <div class="icon-view">
                                                 <i class="fas fa-bolt"></i>
                                             </div>
@@ -165,23 +165,33 @@
                             </div>
                         </div>
 
-                        <div class="blocks z-depth-3" style="visibility:hidden;z-index:-10;opacity:0;">
-                            <div class="block" data-type="cache" style="display: none;">
-                                <div class="item px-2 py-3">
-                                    <a href="#" role="button" class="btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Database" data-ajax-action="update">
-                                        Flush Frontend Cache
-                                    </a>
+                        <div class="blocks z-depth-3">
+                            <div class="block" data-type="cache">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5 class="m-0">
+                                            Caching
+                                        </h5>
+                                    </div>
                                 </div>
 
-                                <div class="item px-2 py-3">
-                                    <a href="#" role="button" class="btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Database" data-ajax-action="update">
-                                        Flush Backend Cache
-                                    </a>
+                                <div class="row">
+                                    <div class="col item py-3">
+                                        <a href="#" role="button" class="m-0 w-100 btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Cache" data-ajax-action="flushFrontend">
+                                            Flush Frontend Cache
+                                        </a>
+                                    </div>
+
+                                    <div class="col item py-3">
+                                        <a href="#" role="button" class="m-0 w-100 btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Cache" data-ajax-action="flushBackend">
+                                            Flush Backend Cache
+                                        </a>
+                                    </div>
                                 </div>
 
-                                <div class="item px-2 py-3">
-                                    <a href="#" role="button" class="btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Database" data-ajax-action="update">
-                                        Flush System (All) Cache
+                                <div class="col item px-0">
+                                    <a href="#" role="button" class="m-0 w-100 btn btn-danger waves-effect waves-light" data-ajax="true" data-ajax-handler="Cache" data-ajax-action="flushAll">
+                                        Flush All (System) Cache
                                     </a>
                                 </div>
                             </div>

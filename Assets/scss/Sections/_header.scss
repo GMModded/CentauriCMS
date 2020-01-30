@@ -20,27 +20,26 @@
         margin-right: 15px;
         font-size: 18px;
         transition: .3s;
-
-        &:hover {
-            transform: scale(1.25);
-
-            &:active {
-                transform: scale(.8);
-                transition: .125s;
-            }
-        }
     }
 
     .blocks {
         position: absolute;
+        top: -250px;
         right: 15px;
-        width: 430px;
+        width: 576px;
         background: linear-gradient(180deg, #303a4f, #2a3345);
-        padding: 15px;
+        padding: 15px 30px 30px 30px;
+        visibility: hidden;
         transition: .66s cubic-bezier(1, -0.5, 0.25, 1.42);
 
         &.active {
-            top: 70px;
+            top: 70px !important;
+            visibility: visible;
+        }
+
+        .block {
+            padding: 0 7.5px;
+            margin: 0 -15px;
         }
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\AjaxAbstract;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\File;
@@ -129,5 +130,7 @@ class FileAjax implements AjaxInterface
                 "uidArr" => $uidArr
             ])->render();
         }
+
+        return AjaxAbstract::default($request, $ajaxName);
     }
 }

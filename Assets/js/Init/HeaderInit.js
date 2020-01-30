@@ -1,26 +1,64 @@
 Centauri.Init.HeaderInit = () => {
-    let $header = $("#header");
-    let $blocks = $(".blocks", $header);
+    if(!Centauri.Init.HeaderInit.Initialized) {
+        Centauri.Init.HeaderInit.Initialized = true;
 
-    let height = $blocks.height();
-    console.log(height);
+        let $header = $("#header");
+        let $blocks = $(".blocks", $header);
 
-    $(".tool", $header).each(function() {
-        let $tool = $(this);
+        let height = $blocks.height();
+        $blocks.css("top", "-" + height + "px");
 
-        $tool.click(() => {
-            let type = $(this).data("type");
-            let $block = $(".block[data-type='" + type + "']", $blocks);
+        $(".tool", $header).each(function() {
+            let $tool = $(this);
 
-            if($blocks.hasClass("active")) {
-                setTimeout(() => {
-                    $block.hide();
-                }, 660);
-            } else {
-                $block.show();
-            }
+            $tool.dblclick(() => {
+                Centauri.fn.Ajax(
+                    "Cache",
+                    "flushAll",
+        
+                    {},
+        
+                    {
+                        success: function(data) {
+                            try {
+                                data = JSON.parse(data);
+                                Centauri.Notify(data.type, data.title, data.description);
+        
+                                Centauri.Events.OnATagAjaxServiceAfter("success", {
+                                    handler: handler,
+                                    action: action
+                                });
+                            } catch(SyntaxError) {
+                                Centauri.Events.OnATagAjaxServiceAfter("error", {
+                                    handler: handler,
+                                    action: action,
+                                    error: SyntaxError
+                                });
+                            }
+                        }
+                    }
+                )
+            });
 
-            $blocks.toggleClass("active");
+            $tool.click(() => {
+                let type = $(this).data("type");
+                let $block = $(".block[data-type='" + type + "']", $blocks);
+
+                $(".overlayer").toggleClass("hidden");
+                $blocks.toggleClass("active");
+            });
         });
-    });
+
+        $(document).click((e) => {
+            if(
+                !$(e.target).is($(".tool"))
+            &&
+                $blocks.hasClass("active")
+            ) {
+                $blocks.removeClass("active");
+            }
+        });
+    }
 };
+
+Centauri.Init.HeaderInit.Initialized = false;
