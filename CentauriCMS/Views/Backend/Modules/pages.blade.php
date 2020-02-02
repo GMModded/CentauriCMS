@@ -68,7 +68,7 @@
                                                     {{ $page->slugs }}
                                                 </td>
 
-                                                <td data-type="layout">
+                                                <td data-type="be_layout">
                                                     {{ $page->backend_layout }}
                                                 </td>
 

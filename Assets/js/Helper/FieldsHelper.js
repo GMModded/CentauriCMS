@@ -1,20 +1,29 @@
 Centauri.Helper.FieldsHelper = function(element, parentSelector) {
     var datas = [];
 
-    console.log(element, $(element));
-    var elementUid = $(element).data("uid");
-
-    $(parentSelector + " .md-form > input:not(.d-none):not([data-inlinerecord='true'])", $(element)).each(function() {
+    $(parentSelector + " .md-form > input", $(element)).each(function() {
         var id = $(this).attr("data-id");
 
         if(Centauri.isNotUndefined(id)) {
             var val = $(this).val();
 
-            datas.push({
-                type: "NORMAL",
-                id: id,
-                value: val
-            });
+            if($(this).hasClass("image-input")) {
+                datas.push({
+                    type: "NORMAL",
+                    id: id,
+                    value: parseInt(val),
+                    inline: $(this).parent().parent().parent().parent().data("type"),
+                    uid: $(this).parent().parent().parent().data("uid")
+                });
+            } else {
+                datas.push({
+                    type: "NORMAL",
+                    id: id,
+                    value: val,
+                    inline: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().parent().data("type") : false),
+                    uid: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().data("uid") : $(this).parent().parent().parent().parent().data("uid"))
+                });
+            }
         }
     });
 
@@ -27,7 +36,9 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
             datas.push({
                 type: "NORMAL",
                 id: id,
-                value: val
+                value: val,
+                inline: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().parent().data("type") : false),
+                uid: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().data("uid") : $(this).parent().parent().parent().parent().data("uid"))
             });
         }
     });
@@ -41,38 +52,23 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
             datas.push({
                 type: "NORMAL",
                 id: id,
-                value: val
+                value: val,
+                inline: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().parent().data("type") : false),
+                uid: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().data("uid") : $(this).parent().parent().parent().parent().data("uid"))
             });
         }
     });
 
+    /**
+     * @todo
+     * 
+     * !!! Image selector and push to datas-variable for saving into DB !!!
+     */
+
     // Inline-Records "connection"
-    $(parentSelector + " .md-form > .accordions.inline-records", $(element)).each(function() {
-        var dataType = $(this).data("type");
-
-        $(".accordion", $(this)).each(function() {
-            var $accordion = $(this);
-            var uid = $accordion.data("uid");
-
-            /*
-             * Code for Inline-Record related data (e.g. title, link of an inline-record etc)
-             * 
-
-             $("input[data-inlinerecord='true']", $accordion).each(function() {
-                var $inlineRecord = $(this);
-                var id = $inlineRecord.attr("data-id");
-
-                if(Centauri.isNotUndefined(id)) {
-                    var val = $inlineRecord.val();
-                }
-            });
-            */
-
-            datas.push({
-                type: "INLINE",
-                dataType: dataType,
-                value: uid
-            });
+    $(parentSelector + " .md-form > .accordions.inline-records", $(element)).each(function(aindex, parentAccordion) {
+        $(".accordion", $(parentAccordion)).each(function(bindex, accordion) {
+            Centauri.Helper.FieldsHelper($(accordion), ".bottom");
         });
     });
 

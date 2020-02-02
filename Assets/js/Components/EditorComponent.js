@@ -21,7 +21,7 @@ Centauri.Components.EditorComponent = function(type, data) {
             $editor.attr("data-id", id);
 
             $("form", $editor).empty();
-            $(".bottom > .container", $editor).remove();
+            $(".bottom > .container:not([data-content])", $editor).remove();
 
             if(Centauri.isNotUndefined(data.form)) {
                 Centauri.Components.EditorComponent.FormData = data.form;

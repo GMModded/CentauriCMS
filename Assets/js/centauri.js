@@ -55,9 +55,6 @@ Centauri.load = function() {
         CentauriEnv();
     }
 
-    // Init stuff
-    Centauri.Init.HeaderInit();
-
     // Window related stuff (events etc.)
     Centauri.Events.Window.OnLoadResize();
 
@@ -85,4 +82,7 @@ Centauri.load = function() {
  */
 $(document).ready(function() {
     Centauri.load();
+
+    // Init stuff
+    Centauri.Init.HeaderInit();
 });

@@ -32,6 +32,8 @@ Centauri.Modal.NewContentElementModal = function() {
 
                 {
                     success: function(data) {
+                        $(".overlayer").removeClass("hidden");
+
                         Centauri.fn.Modal(
                             "New Content Element",
 
@@ -54,6 +56,10 @@ Centauri.Modal.NewContentElementModal = function() {
                             },
 
                             {
+                                ready: () => {
+                                    Centauri.Components.CreateNewInlineComponent();
+                                },
+
                                 save: function() {
                                     if(Centauri.isNull(Centauri.Helper.ModalHelper.Element)) {
                                         toastr["error"]("Content Elements Error", "Please select any element in order to create one!");

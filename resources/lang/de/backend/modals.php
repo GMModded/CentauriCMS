@@ -42,7 +42,8 @@ return [
 
         "Elements" => [
             "plugin" => "Plugin",
-            "headerdescription" => "Titel mit (RTE-)Text"
+            "headerdescription" => "Titel mit (RTE-)Text",
+            "headerimage" => "Fullsize Bild mit Überschriften"
         ]
     ],
 

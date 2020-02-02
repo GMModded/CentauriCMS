@@ -15,6 +15,7 @@ class ContentElementsAjax implements AjaxInterface
 {
     public $excludedFields = [
         "uid",
+        "parent_uid",
         "pid",
         "lid",
 
@@ -24,7 +25,8 @@ class ContentElementsAjax implements AjaxInterface
         "ctype",
 
         "created_at",
-        "updated_at"
+        "updated_at",
+        "deleted_at"
     ];
 
     public function request(Request $request, String $ajaxName)
@@ -103,7 +105,7 @@ class ContentElementsAjax implements AjaxInterface
                 $type = $field["type"];
 
                 // Config stuff
-                $config = [];
+                $config = $field["config"] ?? [];
                 $fieldConfiguration = $CCE["fieldConfiguration"][$ctype] ?? null;
 
                 if(isset($field["config"])) {
@@ -137,12 +139,45 @@ class ContentElementsAjax implements AjaxInterface
                     $additionalData["plugins"] = $GLOBALS["Centauri"]["Plugins"];
                 }
 
-                $html = view("Centauri::Backend.Modals.newContentElement.Fields." . $type, [
-                    "id" => $ctype,
-                    "label" => $label,
-                    "additionalData" => $additionalData,
-                    "config" => $config
-                ])->render();
+                // Model (Inline) Stuff
+                if($type == "model") {
+                    $modelFields = $config["fields"];
+
+                    $modelWrapper = view("Centauri::Backend.Modals.newContentElement.Fields.model", [
+                        "modelName" => $field["label"],
+                        "modelIdName" => $ctype,
+                        "view" => "new"
+                    ])->render();
+
+                    foreach($modelFields as $modelFieldName => $modelField) {
+                        $modelLabel = $modelField["label"];
+                        $modelType = $modelField["type"];
+
+                        // Config stuff
+                        $modelConfig = $modelField["config"] ?? [];
+
+                        if($modelType == "plugin") {
+                            throw new Exception("The Model-Type '" . $modelType . "' is not allowed here!");
+                        }
+
+                        $_html = view("Centauri::Backend.Modals.newContentElement.Fields." . $modelType, [
+                            "id" => $modelFieldName,
+                            "label" => $modelLabel,
+                            "additionalData" => [],
+                            "config" => $modelConfig
+                        ])->render();
+
+                        $modelWrapper = str_replace("###MODEL_CONTENT###", $_html, $modelWrapper);
+                        $html = $modelWrapper;
+                    }
+                } else {
+                    $html = view("Centauri::Backend.Modals.newContentElement.Fields." . $type, [
+                        "id" => $ctype,
+                        "label" => $label,
+                        "additionalData" => $additionalData,
+                        "config" => $config
+                    ])->render();
+                }
 
                 $fields[$ctype]["_HTML"] = $html;
                 $CCE["fields"][$ctype]["_HTML"] = $html;
@@ -195,43 +230,74 @@ class ContentElementsAjax implements AjaxInterface
 
             $element = new Element;
             $element->pid = $pid;
-            $element->lid = 0;
+            $element->lid = $lid;
             $element->rowPos = $rowPos;
             $element->colPos = $colPos;
             $element->ctype = $ctype;
             $element->sorting = $sorting;
 
+            $inlineFileRecords = [];
             $inlineRecords = [];
 
             foreach($datasArr as $dataObj) {
                 $type = $dataObj["type"];
                 $value = $dataObj["value"];
 
-                if($type == "NORMAL") {
-                    $id = $dataObj["id"];
-                    $element->setAttribute($id, $value);
-                }
+                $inline = $dataObj["inline"] ?? "";
 
-                if($type == "INLINE") {
-                    $dataType = $dataObj["dataType"];
-                    $uid = $value;
-
-                    if(!isset($inlineRecords[$dataType])) {
-                        $inlineRecords[$dataType] = "";
+                if($inline && $inline != "" && gettype($inline) == "string") {
+                    $inlineParent = $inline;
+                    
+                    if(!isset($inlineRecords[$inlineParent])) {
+                        $inlineRecords[$inlineParent] = [$dataObj];
+                    } else {
+                        $inlineRecords[$inlineParent][] = $dataObj;
+                    }
+                } else {
+                    if($type == "NORMAL") {
+                        $id = $dataObj["id"];
+                        $element->setAttribute($id, $value);
                     }
 
-                    $inlineRecords[$dataType] .= $uid . ",";
+                    if($type == "INLINE") {
+                        $dataType = $dataObj["dataType"];
+                        $uid = $value;
+    
+                        if(!isset($inlineFileRecords[$dataType])) {
+                            $inlineFileRecords[$dataType] = "";
+                        }
+    
+                        $inlineFileRecords[$dataType] .= $uid . ",";
+                    }
                 }
             }
 
-            // Removing in case every last "," inside $inlineRecords[x]'s string (uidString - comma separated)
-            foreach($inlineRecords as $dT => $uidStr) {
+            $CCEfields = config("centauri")["CCE"]["fields"];
+
+            foreach($inlineRecords as $inline => $inlineFields) {
+                $CCEfield = $CCEfields[$inline];
+
+                $modelClass = $CCEfield["config"]["model"];
+                $model = new $modelClass;
+
+                foreach($inlineFields as $inlineField) {
+                    $id = $inlineField["id"];
+                    $value = $inlineField["value"];
+
+                    $model->setAttribute($id, $value);
+                }
+
+                $model->save();
+            }
+
+            // Removing in case every last "," inside $inlineFileRecords[x]'s string (uidString - comma separated)
+            foreach($inlineFileRecords as $dT => $uidStr) {
                 if(mb_substr($uidStr, -1) == ",") {
-                    $inlineRecords[$dT] = mb_substr($uidStr, 0, -1);
+                    $inlineFileRecords[$dT] = mb_substr($uidStr, 0, -1);
                 }
             }
 
-            foreach($inlineRecords as $dataType => $uidString) {
+            foreach($inlineFileRecords as $dataType => $uidString) {
                 $element->$dataType = $uidString;
             }
 
@@ -246,6 +312,7 @@ class ContentElementsAjax implements AjaxInterface
 
         if($ajaxName == "findFieldsByUid") {
             $uid = $request->input("uid");
+
             $element = Element::where("uid", $uid)->get()->first();
             $ctype = $element->ctype;
 
@@ -257,6 +324,7 @@ class ContentElementsAjax implements AjaxInterface
             $__html = "";
             foreach($elementShowsFields as $field) {
                 $_html = "";
+                $renderHtmlByView = true;
 
                 if(Str::contains($field, ";")) {
                     $splittedFields = explode(";", $field);
@@ -295,19 +363,99 @@ class ContentElementsAjax implements AjaxInterface
 
                     if(isset($fieldConfiguration["config"])) $config = $fieldConfiguration["config"];
 
+                    $extraArr = [];
+
                     if($fieldType == "plugin") {
                         $pluginConfig = Centauri::makeInstance($fieldConfiguration["config"]["class"]);
                         $additionalData["plugin"] = $pluginConfig;
                     }
 
-                    $html = "<div class='col'>" . view("Centauri::Backend.Modals.newContentElement.Fields.$fieldType", [
+                    if($fieldType == "model") {
+                        $renderHtmlByView = false;
+
+                        $extraArr["modelIdName"] = $field;
+                        $extraArr["modelName"] = $fieldConfiguration["newItemLabel"];
+
+                        $modelFields = $fieldConfiguration["config"]["fields"];
+                        $modelClass = $fieldConfiguration["config"]["model"];
+
+                        $model = new $modelClass;
+                        $models = $model::where("parent_uid", $uid)->get()->all();
+
+                        $extraArr["models"] = $models;
+                        $extraArr["uid"] = null;
+
+                        $modelsHtmlWrapper = view("Centauri::Backend.Modals.newContentElement.Fields.model_control", [
+                            "modelType" => $field,
+                            "modelLabel" => $fieldConfiguration["label"],
+                            // "modelCreateNewButtonName" => $fieldConfiguration["newItemLabel"],
+                            "modelFieldKeyName" => $field,
+                            "fieldConfiguration" => $fieldConfiguration
+                        ])->render();
+
+                        $modelsHtml = "";
+                        $html = "";
+
+                        foreach($models as $model) {
+                            $modelsHtml .= view("Centauri::Backend.Modals.newContentElement.Fields.model_singleitem", [
+                                "uid" => $model->uid
+                            ])->render();
+
+                            $attributes = $model->getAttributes();
+                            $_bottom = "";
+
+                            foreach($attributes as $attrName => $attrVal) {
+                                if(!in_array($attrName, $this->excludedFields)) {
+                                    $modelFieldConfig = $fieldConfiguration["config"]["fields"][$attrName] ?? null;
+
+                                    if(is_null($modelFieldConfig)) {
+                                        throw new Exception("Field $attrName can't be null!");
+                                    }
+
+                                    $_bottom .= view("Centauri::Backend.Modals.newContentElement.Fields." . $modelFieldConfig["type"], [
+                                        "id" => $attrName . "-" . $model->uid,
+                                        "label" => $modelFieldConfig["label"],
+                                        "config" => $modelFieldConfig,
+                                        "isInlineRecord" => 1,
+                                        "value" => $attrVal
+                                    ])->render();
+                                }
+                            }
+
+                            if(Str::contains($fieldConfiguration["existingItemLabel"], "{") && Str::contains($fieldConfiguration["existingItemLabel"], "}")) {
+                                $modelDynLabel = $fieldConfiguration["existingItemLabel"];
+                                $modelDynLabel = str_replace("{", "", $modelDynLabel);
+                                $modelDynLabel = str_replace("}", "", $modelDynLabel);
+
+                                $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", ($model->$modelDynLabel == "" ? "<i>" . $fieldConfiguration["newItemLabel"] . "</i>" : $model->$modelDynLabel), $modelsHtml);
+                            } else {
+                                $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", $fieldConfiguration["existingItemLabel"], $modelsHtml);
+                            }
+
+                            $modelsHtml = str_replace("###MODEL_CONTENT_BOTTOM###", $_bottom, $modelsHtml);
+                        }
+
+                        $modelsHtml .= "</div>";
+                        $modelsHtmlWrapper = str_replace("###MODEL_CONTENT###", $modelsHtml, $modelsHtmlWrapper);
+
+                        $html .= $modelsHtmlWrapper;
+                    }
+
+                    $dataArr = [
                         "id" => $field,
                         "label" => $fieldConfiguration["label"],
                         "value" => $value,
                         "additionalData" => $additionalData,
                         "config" => $config
-                    ])->render() . "</div>";
+                    ];
 
+                    if(!empty($extraArr)) {
+                        foreach($extraArr as $exKey => $exVal) {
+                            $dataArr[$exKey] = $exVal;
+                        }
+                    }
+
+                    $html = ($renderHtmlByView ? view("Centauri::Backend.Modals.newContentElement.Fields.$fieldType", $dataArr)->render() : $html);
                     $_html .= $html;
                 }
 
@@ -337,29 +485,89 @@ class ContentElementsAjax implements AjaxInterface
                 $datas = $request->input("datas");
                 $datasArr = json_decode($datas, true);
 
+                $inlineFileRecords = [];
+                $inlineRecords = [];
+
                 foreach($datasArr as $dataObj) {
+                    $uid = $dataObj["uid"] ?? dd($dataObj);
+                    $element = Element::where("uid", $uid)->get()->first();
+
                     $type = $dataObj["type"];
+                    $value = $dataObj["value"];
 
-                    if($type == "INLINE") {
-                        $dataType = $dataObj["dataType"];
-                        dd($dataObj);
-                    }
+                    $inline = $dataObj["inline"] ?? "";
 
-                    if($type == "NORMAL") {
-                        $id = $dataObj["id"];
-                        $value = $dataObj["value"];
+                    if($inline && $inline != "" && gettype($inline) == "string") {
+                        $inlineParent = $inline;
+                        $inlineRecords[$inlineParent][] = $dataObj;
+                    } else {
+                        if($type == "NORMAL") {
+                            $id = explode("-", $dataObj["id"])[0];
+                            $element->setAttribute($id, $value);
+                        }
 
-                        $element->setAttribute($id, $value);
+                        if($type == "INLINE") {
+                            $dataType = $dataObj["dataType"];
+                            $uid = $value;
+
+                            if(!isset($inlineFileRecords[$dataType])) {
+                                $inlineFileRecords[$dataType] = "";
+                            }
+
+                            $inlineFileRecords[$dataType] .= $uid . ",";
+                        }
                     }
                 }
 
-                if($element->save()) {
+                $CCEfields = config("centauri")["CCE"]["fields"];
+
+                foreach($inlineRecords as $inline => $inlineFields) {
+                    $CCEfield = $CCEfields[$inline];
+                    $modelClass = $CCEfield["config"]["model"] ?? null;
+
+                    foreach($inlineFields as $inlineField) {
+                        $uid = $inlineField["uid"];
+                        $model = null;
+
+                        if(!is_null($modelClass)) {
+                            $model = $modelClass::where("uid", $uid)->get()->first();
+                        }
+
+                        if(is_null($model)) {
+                            $attributes = [];
+
+                            $attributes["parent_uid"] = $element->uid ?? $inlineField["uid"];
+    
+                            foreach($inlineFields as $inlineField) {
+                                $id = explode("-", $inlineField["id"])[0];
+                                $value = $inlineField["value"];
+    
+                                $attributes[$id] = $value;
+                            }
+    
+                            if(!is_null($modelClass)) {
+                                $model = $modelClass::create($attributes);
+                            }
+                        } else {
+                            $id = explode("-", $inlineField["id"])[0];
+                            $value = $inlineField["value"];
+
+                            $model->$id = $value;
+                            $model->save();
+                        }
+                    }
+
+                    // $size = count($inlineRecords[$inline]);
+                    // $element->setAttribute($inline, $size);
+                }
+
+                // if($element->save()) {
                     return json_encode([
                         "type" => "success",
                         "title" => "Element saved",
                         "description" => "This element has been saved"
                     ]);
-                }
+                // }
             }
 
             if($ajaxName == "hideElementByUid") {

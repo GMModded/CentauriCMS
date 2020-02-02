@@ -1,6 +1,6 @@
-<h1>
+<{{ $element->htag }}>
     {{ $element->header }}
-</h1>
+</{{ $element->htag }}>
 
 <h3>
     {{ $element->subheader }}

@@ -42,7 +42,8 @@ return [
 
         "Elements" => [
             "plugin" => "Plugin",
-            "headerdescription" => "Header and Description"
+            "headerdescription" => "Header and Description",
+            "headerimage" => "Fullsize Image with Headers"
         ]
     ],
 

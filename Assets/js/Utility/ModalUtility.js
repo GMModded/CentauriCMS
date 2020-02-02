@@ -54,6 +54,12 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
     $("body").append(html);
     $("#modal" + id).modal();
 
+    if(Centauri.isNotUndefined(callbacks)) {
+        if(Centauri.isNotUndefined(callbacks.ready)) {
+            callbacks.ready();
+        }
+    }
+
     Centauri.Utility.ModalUtility.Validator($("#modal"));
 
     $("#modal" + id + " select.mdb-select.md-form").materialSelect();

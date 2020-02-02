@@ -1,14 +1,15 @@
 <?php
 
 /**
- * CentauriCMS - A ContentManagementSystem depending on Laravel 6.x
+ * CentauriCMS - Content Management System depending on Laravel 6.x
  * 
  * @package CentauriCMS
- * @author  Matiullah Sediqi <GMModded@centauricms.de>
+ * @author  M.S. <GMModded@centauricms.de>
  */
 require_once __DIR__ . "/CentauriCMS/Application/CentauriApplication.php";
 $Centauri = new \Centauri\CMS\Application\CentauriApplication();
 $Centauri = $Centauri->Centauri;
+
 
 /**
  * Laravel - A PHP Framework For Web Artisans

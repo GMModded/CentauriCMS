@@ -21,6 +21,7 @@ Centauri.Components.PagesComponent = function(module) {
             var lid = $.trim($("td[data-type='lid']", $tr).attr("data-lid"));
             var flagsrc = $.trim($("td[data-type='lid'] img", $tr).attr("src"));
             var url = $.trim($("td[data-type='url']", $tr).text());
+            var be_layout = $.trim($("td[data-type='be_layout']", $tr).text());
             var created_at = $.trim($("td[data-type='created_at']", $tr).text());
             var updated_at = $.trim($("td[data-type='updated_at']", $tr).text());
 
@@ -47,90 +48,116 @@ Centauri.Components.PagesComponent = function(module) {
                     };
                 }
 
-                Centauri.Components.EditorComponent("show", {
-                    id: "EditPage-" + Centauri.Components.PagesComponent.uid,
-                    title: "Page-Editor - Edit",
+                Centauri.fn.Ajax(
+                    "BackendLayouts",
+                    "findAll",
 
-                    form: [
-                        {
-                            id: "uid",
-                            label: "UID",
-                            type: "text",
-                            value: Centauri.Components.PagesComponent.uid,
-                            extraAttr: "disabled"
-                        },
+                    {},
 
-                        {
-                            id: "language",
-                            type: "custom",
-                            custom: "image",
+                    {
+                        success: (data) => {
+                            data = JSON.parse(data);
+                            var beLayouts = data;
 
-                            data: {
-                                label: Centauri.__trans.global.label_language,
-                                src: flagsrc
-                            }
-                        },
+                            Centauri.Components.EditorComponent("show", {
+                                id: "EditPage-" + Centauri.Components.PagesComponent.uid,
+                                title: "Page-Editor - Edit",
 
-                        {
-                            id: "title",
-                            label: Centauri.__trans.global.label_language,
-                            type: "text",
-                            value: title,
-                            required: true
-                        },
-
-                        urlObject,
-
-                        {
-                            id: "created_at",
-                            label: Centauri.__trans.global.label_createdat,
-                            type: "text",
-                            value: created_at,
-                            extraAttr: "disabled"
-                        },
-
-                        {
-                            id: "updated_at",
-                            label: Centauri.__trans.global.label_modifiedat,
-                            type: "text",
-                            value: updated_at,
-                            extraAttr: "disabled"
-                        }
-                    ],
-
-                    callbacks: {
-                        save: function(formData) {
-                            Centauri.fn.Ajax(
-                                "Page",
-                                "editPage",
-
-                                {
-                                    uid: Centauri.Components.PagesComponent.uid,
-                                    title: formData.title,
-                                    url: formData.url
-                                },
-
-                                {
-                                    success: function(data) {
-                                        data = JSON.parse(data);
-                                        Centauri.Notify(data.type, data.title, data.description);
-
-                                        Centauri.Components.EditorComponent("close");
-
-                                        Centauri.Components.ModulesComponent({
-                                            type: "load",
-                                            module: "pages"
-                                        });
+                                form: [
+                                    {
+                                        id: "uid",
+                                        label: "UID",
+                                        type: "text",
+                                        value: Centauri.Components.PagesComponent.uid,
+                                        extraAttr: "disabled"
                                     },
 
-                                    error: function(data) {
-                                        console.error(data);
+                                    {
+                                        id: "language",
+                                        type: "custom",
+                                        custom: "image",
+
+                                        data: {
+                                            label: Centauri.__trans.global.label_language,
+                                            src: flagsrc
+                                        }
+                                    },
+
+                                    {
+                                        id: "title",
+                                        label: Centauri.__trans.global.label_title,
+                                        type: "text",
+                                        value: title,
+                                        required: true
+                                    },
+
+                                    urlObject,
+
+                                    {
+                                        id: "be_layout",
+                                        type: "custom",
+                                        custom: "select",
+
+                                        data: {
+                                            selectedOptionValue: be_layout,
+                                            label: "Backend-Layout",
+                                            options: beLayouts
+                                        }
+                                    },
+
+                                    {
+                                        id: "created_at",
+                                        label: Centauri.__trans.global.label_createdat,
+                                        type: "text",
+                                        value: created_at,
+                                        extraAttr: "disabled"
+                                    },
+
+                                    {
+                                        id: "updated_at",
+                                        label: Centauri.__trans.global.label_modifiedat,
+                                        type: "text",
+                                        value: updated_at,
+                                        extraAttr: "disabled"
+                                    }
+                                ],
+
+                                callbacks: {
+                                    save: function(formData) {
+                                        Centauri.fn.Ajax(
+                                            "Page",
+                                            "editPage",
+
+                                            {
+                                                uid: Centauri.Components.PagesComponent.uid,
+                                                title: formData.title,
+                                                url: formData.url
+                                            },
+
+                                            {
+                                                success: function(data) {
+                                                    data = JSON.parse(data);
+                                                    Centauri.Notify(data.type, data.title, data.description);
+
+                                                    Centauri.Components.EditorComponent("close");
+
+                                                    Centauri.Components.ModulesComponent({
+                                                        type: "load",
+                                                        module: "pages"
+                                                    });
+                                                },
+
+                                                error: function(data) {
+                                                    console.error(data);
+                                                }
+                                            }
+                                        );
                                     }
                                 }
-                            );
+                            });
                         }
                     }
-                });
+                );
             }
 
             if(action == "page-contentelement-edit") {
@@ -138,7 +165,7 @@ Centauri.Components.PagesComponent = function(module) {
 
                 Centauri.Components.EditorComponent("show", {
                     id: "EditPageContentElement-" + lid + "-" + Centauri.Components.PagesComponent.uid,
-                    title: "<img src='" + flagsrc + "' class='img-fluid' style='width: 40px; margin-right: 10px;' /> Page: " + title + " - Content-Element Editor",
+                    title: "<img src='" + flagsrc + "' class='img-fluid' style='width: 40px; margin-right: 10px;' />Content-Element Editor - " + title,
 
                     size: "fluid",
                     container: container,
@@ -548,7 +575,7 @@ Centauri.Components.PagesComponent = function(module) {
                                 {
                                     uid: uid,
                                     oldName: name,
-                                    name: $("#modal #file_name").val()
+                                    name: $("#modal-new_filelistupload #file_name").val()
                                 },
 
                                 {
@@ -599,7 +626,7 @@ Centauri.Components.PagesComponent = function(module) {
                             var formData = new FormData();
                             formData.append("_method", "HEAD");
                             formData.append("image", fileData.blob);
-                            formData.append("name", $("#modal #file_name").val());
+                            formData.append("name", $("#modal-new_filelistupload #file_name").val());
 
                             $.ajax({
                                 type: "POST",

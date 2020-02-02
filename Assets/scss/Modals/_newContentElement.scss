@@ -13,6 +13,18 @@
             & > div:first-child {
                 margin-top: 0 !important;
             }
+
+            a {
+                &.create-new-inline {
+                    margin-left: 5px;
+                }
+            }
+
+            .accordion {
+                margin-top: 5px;
+                margin-left: 5px;
+                width: calc(100% - 10px);
+            }
         }
     }
 }

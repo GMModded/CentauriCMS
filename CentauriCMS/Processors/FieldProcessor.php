@@ -1,6 +1,8 @@
 <?php
 namespace Centauri\CMS\Processor;
 
+use Centauri\CMS\Processor;
+
 class FieldProcessor
 {
     public static function process($element, $data)
@@ -12,14 +14,25 @@ class FieldProcessor
         foreach($elFields as $elField) {
             if(isset($fields[$elField])) {
                 $field = $fields[$elField];
+                $value = $element->$elField;
 
-                if($field["type"] == "image") {
-                    $value = $element->$elField;
+                $fieldType = $field["type"];
 
-                    $element->$elField = \Centauri\CMS\Processor\ImageProcessor::process([
-                        "element" => $element,
-                        "value" => $value
-                    ]);
+                $data = [
+                    "element" => $element,
+                    "value" => $value
+                ];
+
+                if($fieldType == "image") {
+                    $element->$elField = ImageProcessor::process($data);
+                }
+
+                if($fieldType == "RTE") {
+                    $element->$elField = RTEProcessor::process($data);
+                }
+
+                if($fieldType == "model") {
+                    $element->$elField = InlineProcessor::findByRelation($element->uid, $elField);
                 }
             }
         }

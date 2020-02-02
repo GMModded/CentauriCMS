@@ -60,9 +60,9 @@ class ModulesService
                 "icon" => "fas fa-bell"
             ],
 
-            "database" => [
-                "title" => trans("backend/modules.database.title"),
-                "icon" => "fas fa-database"
+            "system" => [
+                "title" => trans("backend/modules.system.title"),
+                "icon" => "fas fa-server"
             ],
         ];
 

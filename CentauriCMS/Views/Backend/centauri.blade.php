@@ -124,15 +124,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="d-none">
-                        <div class="loader hidden">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </div>
                 </div>
 
                 <section id="header">
@@ -203,27 +194,33 @@
             </section>
 
             <div id="editor">
-                <div class="top p-3 peach-gradient">
+                <div class="top p-3">
                     <p></p>
                 </div>
-            
+
                 <div class="bottom">
                     <div class="p-2">
                         <form action="" method="POST"></form>
                     </div>
 
-                    <div class="row m-0 p-3 w-100">
-                        <button class="col btn btn-success waves-effect waves-light px-2 py-3" data-id="save" data-trigger="SaveEditorComponent" style="">
-                            <i class="fas fa-save fa-lg mr-1" aria-hidden="true"></i>
+                    <div class="row"></div>
+                </div>
 
-                            Save
-                        </button>
+                <div class="footer z-depth-1">
+                    <div class="container">
+                        <div class="d-flex float-right">
+                            <button class="btn btn-success waves-effect waves-light" data-id="save" data-trigger="SaveEditorComponent" style="">
+                                <i class="fas fa-save fa-lg mr-1" aria-hidden="true"></i>
 
-                        <button class="col btn btn-danger waves-effect waves-light px-2 py-3" data-id="cancel" data-trigger="CloseEditorComponent" style="">
-                            <i class="fas fa-times fa-lg mr-1" aria-hidden="true"></i>
+                                Save
+                            </button>
 
-                            Cancel
-                        </button>
+                            <button class="btn btn-danger waves-effect waves-light" data-id="cancel" data-trigger="CloseEditorComponent" style="">
+                                <i class="fas fa-times fa-lg mr-1" aria-hidden="true"></i>
+
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

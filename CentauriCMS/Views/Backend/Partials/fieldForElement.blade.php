@@ -11,7 +11,7 @@
                 <i class="fas fa-{{ $element->hidden ? 'eye-slash' : 'eye' }}" aria-hidden="true"></i>
             </button>
 
-            <button class="btn btn-danger waves-effect waves-light btn-floating mx-0" data-id="save" data-trigger="deleteElementByUid">
+            <button class="btn btn-danger waves-effect waves-light btn-floating mx-0 mr-2" data-id="save" data-trigger="deleteElementByUid">
                 <i class="fas fa-trash" aria-hidden="true"></i>
             </button>
         </div>

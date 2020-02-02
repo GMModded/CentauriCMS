@@ -1,6 +1,6 @@
 Centauri.Components.FileSelectorComponent = (type, cb = null) => {
     if(type == "show") {
-        let $modal = $("#modal");
+        let $modal = $("#modal-new_contentelement");
         $modal.hide();
 
         let $fileselector = $("#file-selector");

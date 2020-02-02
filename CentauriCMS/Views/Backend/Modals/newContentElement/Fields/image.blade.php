@@ -13,9 +13,9 @@
         </button>
     </div>
 
-    <input class="form-control d-none" type="text" data-id="{{ $id }}" value="{{ $value ?? '' }}" />
+    <input class="form-control d-none image-input" type="text" id="{{ $id }}" data-id="{{ $id }}" value="{{ $value ?? '' }}" data-inline-record="1" />
 
-    <label for="{{ $id }}"{{ (isset($value) ? ' class=active' : '') }} style="margin-top: -25px;">
+    <label for="{{ $id }}" style="margin-top: -25px;">
         {{ $label }}
     </label>
 
@@ -35,7 +35,7 @@
 
         @if(isset($splittedUids))
             @foreach($splittedUids as $imgUid)
-                <div class="accordion p-3 z-depth-1 mb-2">
+                <div class="accordion z-depth-1 mb-2">
                     <div class="top">
                         {{ ImageBladeHelper::get($imgUid)->name ?? "" }}
                     </div>

@@ -1,4 +1,6 @@
 Centauri.Service.ATagAjaxService = function() {
+    $("a[data-ajax='true']").off("click");
+
     $("a[data-ajax='true']").on("click", this, function(e) {
         e.preventDefault();
 

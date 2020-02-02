@@ -5,10 +5,6 @@ class AjaxAbstract
 {
     public static function default($request, $ajaxName)
     {
-        return json_encode([
-            "type" => "error",
-            "title" => "Internal Server Error (AJAX)",
-            "description" => "There's no handling for the action <b><u>" . $ajaxName . "</u></b>"
-        ]);
+        return response("There's no AJAX-handling for the action <b><u>" . $ajaxName . "</u></b>", 500);
     }
 }

@@ -36,7 +36,7 @@ Centauri.Events.Window.OnInputFileChange = function(element) {
 
                 {
                     save() {
-                        var name = $("#modal #file_name").val();
+                        var name = $("#modal-new_filelistupload #file_name").val();
 
                         var formData = new FormData();
                         formData.append("_method", "HEAD");

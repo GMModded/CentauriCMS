@@ -37,8 +37,8 @@ return [
     "notifications" => [
         "title" => "Benachrichtigungen"
     ],
-    "database" => [
-        "title" => "Datenbank"
+    "system" => [
+        "title" => "System"
     ],
 
 ];

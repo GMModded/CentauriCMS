@@ -11,7 +11,8 @@ Centauri.Helper.findByPidHelper = (pid, $contentelement=null) => {
 
         {
             success: function(data) {
-                Centauri.fn.Ajax.Overlayer = true;
+                // Centauri.fn.Ajax.Overlayer = true;
+                $(".overlayer").removeClass("hidden");
 
                 var $container = $("#editor > .bottom > .container");
                 $container.html(data);

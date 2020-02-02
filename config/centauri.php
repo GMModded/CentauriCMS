@@ -24,25 +24,45 @@ return [
     "CCE" => [
         "fields" => [
             "htag" => [
-                "label" => "Select",
+                "label" => "H-Tag",
                 "type" => "select",
 
                 "config" => [
-                    "required" => 1,
                     // "default" => [
-                    //     "defaultLabel",
-                    //     "defaultValue"
+                    //     "H1",
+                    //     "h1"
                     // ],
+                    "required" => 1,
 
                     "items" => [
                         [
-                            "Item 1", // Label
-                            "item_1" // Value
+                            "H1",
+                            "h1"
                         ],
 
                         [
-                            "Item 2",
-                            "item_2"
+                            "H2",
+                            "h2"
+                        ],
+
+                        [
+                            "H3",
+                            "h3"
+                        ],
+
+                        [
+                            "H4",
+                            "h4"
+                        ],
+
+                        [
+                            "H5",
+                            "h5"
+                        ],
+
+                        [
+                            "H6",
+                            "h6"
                         ]
                     ]
                 ]
@@ -61,7 +81,7 @@ return [
             ],
             "rte" => [
                 "label" => "RTE",
-                "type" => "RTE"
+                "type" => "rte"
             ],
             "plugin" => [
                 "label" => "Plugin",
@@ -75,7 +95,7 @@ return [
                     "required" => 1,
                     "minItems" => 1,
                     "maxItems" => 1,
-                ],
+                ]
             ],
             "file" => [
                 "label" => "File",
@@ -86,8 +106,8 @@ return [
                     "required" => 1,
                     "maxItems" => 1
                 ]
-            ]/*,
-            "image" => [
+            ],
+            /*"image" => [
                 "label" => "Image",
                 "type" => "image",
 
@@ -97,6 +117,47 @@ return [
                     "maxItems" => 1
                 ]
             ]*/
+            "slideritems" => [
+                "label" => "Slider-Items",
+                "newItemLabel" => "Slider-Item",
+                "existingItemLabel" => "{title}",
+                "type" => "model",
+
+                "config" => [
+                    "model" => "\Centauri\CMS\Model\SliderItemModel",
+
+                    "fields" => [
+                        "image" => [
+                            "label" => "Image",
+                            "type" => "image",
+
+                            "config" => [
+                                "required" => 1,
+                                "minItems" => 1,
+                                "maxItems" => 1,
+                            ]
+                        ],
+
+                        "title" => [
+                            "label" => "Title",
+                            "type" => "input",
+
+                            "config" => [
+                                "required" => 1
+                            ]
+                        ],
+
+                        "teasertext" => [
+                            "label" => "Teaser-Text",
+                            "type" => "input",
+
+                            "config" => [
+                                "required" => 1
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         ],
 
         "elements" => [
@@ -111,6 +172,10 @@ return [
                 "rte"
             ],
 
+            "slider" => [
+                "slideritems"
+            ],
+
             "plugin" => [
                 "header;plugin"
             ]
@@ -119,10 +184,28 @@ return [
         "tabs" => [
             "general" => [
                 "label" => "backend/modals.newContentElement.Tabs.general",
+
                 "elements" => [
                     "headerimage",
-                    "headerdescription",
+                    "slider",
+                    "headerdescription"
+                ]
+            ],
+            
+            "special" => [
+                "label" => "SPECIAL",
+
+                "elements" => [
                     "plugin"
+                ]
+            ],
+
+            "grids" => [
+                "label" => "Grids",
+
+                "elements" => [
+                    // "grid-container-full",
+                    // "grid-container"
                 ]
             ]
         ],

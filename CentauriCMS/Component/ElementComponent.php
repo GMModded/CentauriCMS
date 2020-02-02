@@ -15,7 +15,11 @@ class ElementComponent
      */
     public function render($view, $pageUid, $lid = 0)
     {
-        if($view == "frontend" || $view == "FE") {
+        if(
+            $view == "frontend"
+        ||
+            $view == "FE"
+        ) {
             $elements = \Centauri\CMS\Model\Element::where([
                 "pid" => $pageUid,
                 "lid" => $lid,

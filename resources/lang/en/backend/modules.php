@@ -40,8 +40,8 @@ return [
     "notifications" => [
         "title" => "Notifications"
     ],
-    "database" => [
-        "title" => "Database"
+    "system" => [
+        "title" => "System"
     ],
 
 ];

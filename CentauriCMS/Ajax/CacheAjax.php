@@ -35,8 +35,8 @@ class CacheAjax extends AjaxAbstract implements AjaxInterface
         if($ajaxName == "flushAll") {
             \Artisan::call("cache:clear");
             \Artisan::call("config:clear");
-            \Artisan::call("config:cache");
             \Artisan::call("view:clear");
+            \Artisan::call("config:cache");
 
             return json_encode([
                 "type" => "success",

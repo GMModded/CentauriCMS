@@ -4,6 +4,8 @@ Centauri.View.ContentElementsView = ($contentelement) => {
      */
     Centauri.Components.AccordionComponent();
 
+    $("[data-centauri-btn]").off("click");
+
     $("[data-centauri-btn]").on("click", function(e) {
         e.preventDefault();
 
@@ -22,7 +24,7 @@ Centauri.View.ContentElementsView = ($contentelement) => {
 
             var value = $input.val();
 
-            // Needed for validation
+            // For validation
             var required = $(this).data("required");
             var minItems = $(this).data("minitems");
             var maxItems = $(this).data("maxitems");
@@ -66,6 +68,8 @@ Centauri.View.ContentElementsView = ($contentelement) => {
                         Centauri.Components.FileSelectorComponent("show", (data) => {
                             let selectedFiles = data.selectedFiles,
                                 selectedUids = data.selectedUids;
+
+                            $input.val(selectedUids);
 
                             Centauri.fn.Ajax(
                                 "InlineRecords",

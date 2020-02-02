@@ -1,5 +1,6 @@
 Centauri.Helper.PagesHelper = function($container) {
     var $tops = $(".top", $container);
+
     $tops.each(function() {
         var $top = $(this);
 
@@ -24,9 +25,12 @@ Centauri.Helper.PagesHelper = function($container) {
                         success: function(data) {
                             $(".overlayer").removeClass("hidden");
 
+                            $contentelement.append(data);
+
                             Centauri.View.ContentElementsView($contentelement);
 
-                            $contentelement.append(data);
+                            Centauri.Components.CreateNewInlineComponent();
+                            Centauri.Components.AccordionComponent();
 
                             $(".fields select", $contentelement).materialSelect();
 
@@ -35,13 +39,13 @@ Centauri.Helper.PagesHelper = function($container) {
                              */
                             Centauri.Service.CKEditorInitService();
 
-                            $(".fields button").on("click", function() {
+                            $("> .row button", $contentelement).on("click", function() {
                                 var uid = $(this).parent().parent().parent().parent().data("uid");
                                 var trigger = $(this).data("trigger");
 
                                 if(trigger == "saveElementByUid") {
                                     var datas = Centauri.Helper.FieldsHelper($(".content-element.active"), ".fields");
-                                    
+
                                     Centauri.fn.Ajax(
                                         "ContentElements",
                                         "saveElementByUid",
@@ -152,6 +156,7 @@ Centauri.Helper.PagesHelper = function($container) {
                 );
             } else {
                 $fields = $contentelement.find(".fields");
+
                 $fields.slideToggle(function() {
                     $this.toggleClass("btn-primary btn-info");
                 });
