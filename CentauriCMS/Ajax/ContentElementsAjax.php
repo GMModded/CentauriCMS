@@ -8,8 +8,11 @@ use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Element;
 use Centauri\CMS\Model\File;
 use Centauri\CMS\Service\MinifyHTMLService;
+use Closure;
 use Exception;
 use Illuminate\Support\Str;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 
 class ContentElementsAjax implements AjaxInterface
 {
@@ -28,6 +31,90 @@ class ContentElementsAjax implements AjaxInterface
         "updated_at",
         "deleted_at"
     ];
+
+    public function handleType($type, $field, $fieldConfiguration, $uid)
+    {
+        $html = "";
+
+        if($type == "model") {
+            $extraArr["modelIdName"] = $field;
+            $extraArr["modelName"] = $fieldConfiguration["newItemLabel"];
+
+            $modelFields = $fieldConfiguration["config"]["fields"];
+            $modelClass = $fieldConfiguration["config"]["model"];
+
+            $model = new $modelClass;
+            $models = $model::where("parent_uid", $uid)->get()->all();
+
+            $extraArr["models"] = $models;
+            $extraArr["uid"] = null;
+
+            $modelsHtmlWrapper = view("Centauri::Backend.Modals.newContentElement.Fields.model_control", [
+                "modelType" => $field,
+                "modelLabel" => $fieldConfiguration["label"],
+                // "modelCreateNewButtonName" => $fieldConfiguration["newItemLabel"],
+                "modelFieldKeyName" => $field,
+                "fieldConfiguration" => $fieldConfiguration
+            ])->render();
+
+            $modelsHtml = "";
+            $html = "";
+
+            foreach($models as $model) {
+                $modelsHtml .= view("Centauri::Backend.Modals.newContentElement.Fields.model_singleitem", [
+                    "uid" => $model->uid
+                ])->render();
+
+                $attributes = $model->getAttributes();
+                $_bottom = "";
+
+                foreach($attributes as $attrName => $attrVal) {
+                    if(!in_array($attrName, $this->excludedFields)) {
+                        $modelFieldConfig = $fieldConfiguration["config"]["fields"][$attrName] ?? null;
+
+                        if(is_null($modelFieldConfig)) {
+                            throw new Exception("Field $attrName can't be null!");
+                        }
+
+                        $_bottomVal = "";
+
+                        if($modelFieldConfig["type"] == "model") {
+                            $_bottomVal = $this->handleType("model", $field, $fieldConfiguration, $uid);
+                        } else {
+                            $_bottomVal = view("Centauri::Backend.Modals.newContentElement.Fields." . $modelFieldConfig["type"], [
+                                "id" => $attrName . "-" . $model->uid,
+                                "label" => $modelFieldConfig["label"],
+                                "config" => $modelFieldConfig,
+                                "isInlineRecord" => 1,
+                                "value" => $attrVal
+                            ])->render();
+                        }
+
+                        $_bottom .= $_bottomVal;
+                    }
+                }
+
+                if(Str::contains($fieldConfiguration["existingItemLabel"], "{") && Str::contains($fieldConfiguration["existingItemLabel"], "}")) {
+                    $modelDynLabel = $fieldConfiguration["existingItemLabel"];
+                    $modelDynLabel = str_replace("{", "", $modelDynLabel);
+                    $modelDynLabel = str_replace("}", "", $modelDynLabel);
+
+                    $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", ($model->$modelDynLabel == "" ? "<i>" . $fieldConfiguration["newItemLabel"] . "</i>" : $model->$modelDynLabel), $modelsHtml);
+                } else {
+                    $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", $fieldConfiguration["existingItemLabel"], $modelsHtml);
+                }
+
+                $modelsHtml = str_replace("###MODEL_CONTENT_BOTTOM###", $_bottom, $modelsHtml);
+            }
+
+            $modelsHtml .= "</div>";
+            $modelsHtmlWrapper = str_replace("###MODEL_CONTENT###", $modelsHtml, $modelsHtmlWrapper);
+        }
+
+        dd($html);
+
+        return $html;
+    }
 
     public function request(Request $request, String $ajaxName)
     {
@@ -318,7 +405,6 @@ class ContentElementsAjax implements AjaxInterface
 
             $CCE = config("centauri")["CCE"];
             $elements = $CCE["elements"];
-
             $elementShowsFields = $elements[$ctype];
 
             $__html = "";
@@ -372,73 +458,7 @@ class ContentElementsAjax implements AjaxInterface
 
                     if($fieldType == "model") {
                         $renderHtmlByView = false;
-
-                        $extraArr["modelIdName"] = $field;
-                        $extraArr["modelName"] = $fieldConfiguration["newItemLabel"];
-
-                        $modelFields = $fieldConfiguration["config"]["fields"];
-                        $modelClass = $fieldConfiguration["config"]["model"];
-
-                        $model = new $modelClass;
-                        $models = $model::where("parent_uid", $uid)->get()->all();
-
-                        $extraArr["models"] = $models;
-                        $extraArr["uid"] = null;
-
-                        $modelsHtmlWrapper = view("Centauri::Backend.Modals.newContentElement.Fields.model_control", [
-                            "modelType" => $field,
-                            "modelLabel" => $fieldConfiguration["label"],
-                            // "modelCreateNewButtonName" => $fieldConfiguration["newItemLabel"],
-                            "modelFieldKeyName" => $field,
-                            "fieldConfiguration" => $fieldConfiguration
-                        ])->render();
-
-                        $modelsHtml = "";
-                        $html = "";
-
-                        foreach($models as $model) {
-                            $modelsHtml .= view("Centauri::Backend.Modals.newContentElement.Fields.model_singleitem", [
-                                "uid" => $model->uid
-                            ])->render();
-
-                            $attributes = $model->getAttributes();
-                            $_bottom = "";
-
-                            foreach($attributes as $attrName => $attrVal) {
-                                if(!in_array($attrName, $this->excludedFields)) {
-                                    $modelFieldConfig = $fieldConfiguration["config"]["fields"][$attrName] ?? null;
-
-                                    if(is_null($modelFieldConfig)) {
-                                        throw new Exception("Field $attrName can't be null!");
-                                    }
-
-                                    $_bottom .= view("Centauri::Backend.Modals.newContentElement.Fields." . $modelFieldConfig["type"], [
-                                        "id" => $attrName . "-" . $model->uid,
-                                        "label" => $modelFieldConfig["label"],
-                                        "config" => $modelFieldConfig,
-                                        "isInlineRecord" => 1,
-                                        "value" => $attrVal
-                                    ])->render();
-                                }
-                            }
-
-                            if(Str::contains($fieldConfiguration["existingItemLabel"], "{") && Str::contains($fieldConfiguration["existingItemLabel"], "}")) {
-                                $modelDynLabel = $fieldConfiguration["existingItemLabel"];
-                                $modelDynLabel = str_replace("{", "", $modelDynLabel);
-                                $modelDynLabel = str_replace("}", "", $modelDynLabel);
-
-                                $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", ($model->$modelDynLabel == "" ? "<i>" . $fieldConfiguration["newItemLabel"] . "</i>" : $model->$modelDynLabel), $modelsHtml);
-                            } else {
-                                $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", $fieldConfiguration["existingItemLabel"], $modelsHtml);
-                            }
-
-                            $modelsHtml = str_replace("###MODEL_CONTENT_BOTTOM###", $_bottom, $modelsHtml);
-                        }
-
-                        $modelsHtml .= "</div>";
-                        $modelsHtmlWrapper = str_replace("###MODEL_CONTENT###", $modelsHtml, $modelsHtmlWrapper);
-
-                        $html .= $modelsHtmlWrapper;
+                        $html .= $this->handleType("model", $field, $fieldConfiguration, $uid);
                     }
 
                     $dataArr = [

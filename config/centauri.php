@@ -154,6 +154,29 @@ return [
                             "config" => [
                                 "required" => 1
                             ]
+                        ],
+
+                        "buttons" => [
+                            "label" => "Buttons",
+                            "newItemLabel" => "Button",
+                            "existingItemLabel" => "{label}",
+                            "type" => "model",
+
+                            "config" => [
+                                "model" => "\Centauri\CMS\Model\SliderButtonItemModel",
+
+                                "fields" => [
+                                    "label" => [
+                                        "label" => "Label",
+                                        "type" => "input"
+                                    ],
+
+                                    "bgcolor" => [
+                                        "label" => "Background-Color",
+                                        "type" => "input"
+                                    ]
+                                ]
+                            ]
                         ]
                     ]
                 ]
@@ -173,7 +196,11 @@ return [
             ],
 
             "slider" => [
-                "slideritems"
+                "slideritems" => [
+                    "buttons" => [
+                        "gallery"
+                    ]
+                ]
             ],
 
             "plugin" => [
