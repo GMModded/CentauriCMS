@@ -10,8 +10,14 @@
  */
 const Centauri = {};
 
+Centauri.Utility = {};
+
+Centauri.Utility.ContentElementUtility = (ceName) => {
+    return $("[data-contentelement='" + ceName + "']");
+};
+
 (function() {
-    $.ContentElement("slider").slick({
+    Centauri.Utility.ContentElementUtility("slider").slick({
         dots: true,
         infinite: false,
         speed: 750,

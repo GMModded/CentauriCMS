@@ -10,6 +10,23 @@
     </head>
 
     <body>
+        <style>
+            @media (max-width: 767px) {
+                #header {
+                    position: unset !important;
+                }
+
+                #content .item .text-view h4 {
+                    font-size: 30px;
+                    white-space: nowrap;
+                }
+
+                .button-view {
+                    white-space: nowrap;
+                }
+            }
+        </style>
+
         <section id="header" style="position:absolute;z-index:1;">
             <div class="container-fluid" style="position:fixed;top:0;left:0;width:100%;padding:2rem;border-bottom:1px solid #fff;">
                 <div class="container">

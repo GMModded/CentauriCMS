@@ -25,7 +25,7 @@
                                 @foreach($slideritem->buttons() as $button)
                                     @if($button->link && $button->label)
                                         <a href="{{ $button->link }}" target="_blank">
-                                            <button class="btn btn-primary{{ ($button->bgcolor == '') || $button->bgcolor == "transparent" ? " transparent" : "" }}" style="background: {{ $button->bgcolor }};">
+                                            <button class="waves-effect btn btn-primary{{ ($button->bgcolor == '') || $button->bgcolor == "transparent" ? " transparent" : "" }}" style="background: {{ $button->bgcolor }};">
                                                 {{ $button->label }}
                                             </button>
                                         </a>
