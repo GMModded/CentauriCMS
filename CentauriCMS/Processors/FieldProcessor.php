@@ -1,20 +1,29 @@
 <?php
 namespace Centauri\CMS\Processor;
 
+use Centauri\CMS\Centauri;
 use Centauri\CMS\Processor;
 
 class FieldProcessor
 {
-    public static function process($element, $data)
+    public static function process($element, $data, $paramElFields = null)
     {
         $CCE = config("centauri")["CCE"];
         $fields = $CCE["fields"];
-        $elFields = $CCE["elements"][$element->ctype];
+        $elFields = (is_null($paramElFields) ? $CCE["elements"][$element->ctype] : dd($paramElFields));
 
-        foreach($elFields as $elField) {
-            if(isset($fields[$elField])) {
-                $field = $fields[$elField];
-                $value = $element->$elField;
+        foreach($elFields as $key => $elField) {
+            $_ = null;
+
+            if(is_array($elField)) {
+                $_ = $key;
+            } else {
+                $_ = $elField;
+            }
+
+            if(isset($fields[$_])) {
+                $field = $fields[$_];
+                $value = $element->$_;
 
                 $fieldType = $field["type"];
 
@@ -24,15 +33,15 @@ class FieldProcessor
                 ];
 
                 if($fieldType == "image") {
-                    $element->$elField = ImageProcessor::process($data);
+                    $element->$_ = ImageProcessor::process($data);
                 }
 
                 if($fieldType == "RTE") {
-                    $element->$elField = RTEProcessor::process($data);
+                    $element->$_ = RTEProcessor::process($data);
                 }
 
                 if($fieldType == "model") {
-                    $element->$elField = InlineProcessor::findByRelation($element->uid, $elField);
+                    $element->$_ = InlineProcessor::findByRelation($element->uid, $_, $field["config"]["model"]);
                 }
             }
         }

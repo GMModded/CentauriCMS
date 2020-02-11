@@ -3,7 +3,10 @@ namespace Centauri\CMS\Ajax;
 
 use Centauri\CMS\AjaxAbstract;
 use Centauri\CMS\AjaxInterface;
+use Centauri\CMS\Centauri;
+use Centauri\CMS\Exception\InlineRecordException;
 use Centauri\CMS\Model\File;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -37,25 +40,50 @@ class InlineRecordsAjax implements AjaxInterface
         }
 
         if($ajaxName == "create") {
+            $parentuid = $request->input("parentuid");
+            $parentmodelid = $request->input("parentname");
             $modelid = $request->input("name");
 
-            $CCE = config("centauri")["CCE"];
-            $modelField = $CCE["fields"][$modelid];
+            if(!$modelid || $modelid == "") {
+                throw new InlineRecordException("CCE - InlineRecord - The 'modelid' (name-parameter) can't be empty/not setted!");
+            }
 
-            $model = new $modelField["config"]["model"];
-            $model->setAttribute("parent_uid", 5);
+            $CCE = config("centauri")["CCE"];
+
+            // if(!isset($CCE["fields"][$modelid]) || empty($CCE["fields"][$modelid])) {
+            //     throw new InlineRecordException("CCE - InlineRecord - There are no models defined in 'fields => $modelid' for this model!");
+            // }
+
+            $elements = $CCE["elements"];
+            $elementFields = $elements;
+
+            $modelData = null;
+
+            if($parentmodelid == $modelid) {
+                $modelData = $CCE["fields"][$modelid];
+            } else {
+                $modelData = $CCE["fields"][$parentmodelid]["config"]["fields"][$modelid];
+            }
+
+            $model = new $modelData["config"]["model"];
+            $model->setAttribute("parent_uid", $parentuid);
             $model->setAttribute("sorting", 1);
             $model->save();
 
             $html = view("Centauri::Backend.Modals.newContentElement.Fields.model_listWrapper", [
-                "modelName" => $modelid,
+                "modelIdName" => $modelid,
+                "modelName" => "BLAAA",
                 "uid" => $model->uid
             ])->render();
 
-            $_top = $modelField["newItemLabel"];
+            $_top = $modelData["newItemLabel"];
             $_bottom = "";
 
-            $fields = $modelField["config"]["fields"];
+            if(!isset($modelData["config"]["fields"])) {
+                throw new InlineRecordException("CCE - InlineRecord - The fields-configuration for model '$modelid' is missing the property 'config => fields'");
+            }
+
+            $fields = $modelData["config"]["fields"];
 
             foreach($fields as $fieldType => $field) {
                 $modelLabel = $field["label"];
@@ -63,13 +91,28 @@ class InlineRecordsAjax implements AjaxInterface
 
                 $modelConfig = $field["config"] ?? [];
 
-                $_bottom .= view("Centauri::Backend.Modals.newContentElement.Fields." . $modelType, [
-                    "id" => $fieldType,
-                    "label" => $modelLabel,
-                    "additionalData" => [],
-                    "config" => $modelConfig,
-                    "isInlineRecord" => true
-                ])->render();
+                if($modelType == "model") {
+                    $modelsHtmlWrapper = view("Centauri::Backend.Modals.newContentElement.Fields.model_control", [
+                        "modelType" => $fieldType,
+                        "modelTypeParent" => $modelid,
+                        "modelLabel" => $modelLabel,
+                        "modelCreateNewButtonName" => $field["newItemLabel"] ?? null,
+                        "modelFieldKeyName" => $fieldType,
+                        "fieldConfiguration" => $field["config"]
+                    ])->render();
+
+                    $modelsHtmlWrapper = str_replace("###MODEL_CONTENT###", "", $modelsHtmlWrapper);
+
+                    $_bottom .= $modelsHtmlWrapper;
+                } else {
+                    $_bottom .= view("Centauri::Backend.Modals.newContentElement.Fields." . $modelType, [
+                        "id" => $fieldType,
+                        "label" => $modelLabel,
+                        "additionalData" => [],
+                        "config" => $modelConfig,
+                        "isInlineRecord" => true
+                    ])->render();
+                }
             }
 
             $html = str_replace("###MODEL_CONTENT_TOP###", $_top, $html);

@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Centauri CMS » {{ $title ?? "" }}</title>
-        <link rel="stylesheet" href="{{ asset('public/css/centauri.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('public/backend/css/centauri.min.css') }}">
     </head>
 
     <body>
@@ -209,7 +209,7 @@
                 <div class="footer z-depth-1">
                     <div class="container">
                         <div class="d-flex float-right">
-                            <button class="btn btn-success waves-effect waves-light" data-id="save" data-trigger="SaveEditorComponent" style="">
+                            <button style="left: -7.5px;" class="btn btn-success waves-effect waves-light" data-id="save" data-trigger="SaveEditorComponent" style="">
                                 <i class="fas fa-save fa-lg mr-1" aria-hidden="true"></i>
 
                                 Save
@@ -226,7 +226,7 @@
             </div>
         </div>
 
-        <script src="{{ asset('public/js/centauri.min.js') }}"></script>
+        <script src="{{ asset('public/backend/js/centauri.min.js') }}"></script>
         <script src="{{ asset('resources/js/centauri-env.js') }}"></script>
 
         <script>

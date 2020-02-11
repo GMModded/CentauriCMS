@@ -11,3 +11,8 @@ $SQLService->createColumn($table, "image", "integer", [
 
 $SQLService->createColumn($table, "title", "string");
 $SQLService->createColumn($table, "teasertext", "text");
+
+$SQLService->createColumn($table, "buttons", "integer", [
+    "nullable" => false,
+    "default" => 0
+]);

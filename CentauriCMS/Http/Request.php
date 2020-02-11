@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Http;
 
+use Centauri\CMS\Cache\StaticFileCache;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Component\ElementComponent;
@@ -43,7 +44,7 @@ class Request
         if(is_null($domain)) {
             throw new Exception("The requested domain could not be resolved");
         }
-
+        
         if($nodes == "centauri") {
             if(request()->session()->get("CENTAURI_BE_USER")) {
                 $Centauri->initBE();
@@ -59,6 +60,13 @@ class Request
             }
 
             return view("Centauri::Backend.login");
+        }
+
+        $uniqid = preg_replace("/[^a-zA-Z0-9]+/", "", $host) . (!empty($nodes) ? "-" . preg_replace("/[^a-zA-Z0-9]+/", "", $nodes) : "");
+        $renderedHTML = null;
+
+        if(StaticFileCache::hasCache($uniqid)) {
+            $renderedHTML = StaticFileCache::getCache($uniqid);
         }
 
         if(!empty($nodes) && Str::contains($nodes, "/")) {
@@ -162,8 +170,17 @@ class Request
         $page = Page::find($page->uid);
         $uid = $page->getAttribute("uid");
 
-        $ElementComponent = Centauri::makeInstance(ElementComponent::class);
-        $renderedHTML = $ElementComponent->render("FE", $uid);
+        if(is_null($renderedHTML)) {
+            $ElementComponent = Centauri::makeInstance(ElementComponent::class);
+            $renderedHTML = $ElementComponent->render("FE", $uid);
+        }
+
+        if(!StaticFileCache::hasCache($uniqid)) {
+            $renderedHTML = str_replace("  ", "", $renderedHTML);
+            $renderedHTML = str_replace("\r\n", "", $renderedHTML);
+
+            StaticFileCache::setCache($uniqid, trim($renderedHTML));
+        }
 
         return view("Centauri::Frontend", [
             "page" => $page,

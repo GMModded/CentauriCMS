@@ -1,10 +1,10 @@
 <div class="container-fluid">
     <div class="row">
-        <div data-contentelement="slider">
+        <div data-contentelement="slider" style="max-height: 750px; overflow: hidden;">
             @foreach($element->slideritems as $slideritem)
                 <div class="item">
                     <div class="overlayer"></div>
-                
+
                     <div class="image-view">
                         @if($slideritem->image)
                             <img src="{!! ImageBladeHelper::getPath($slideritem->image) !!}" class="img-fluid w-100" />
@@ -19,6 +19,20 @@
                         <p>
                             {{ $slideritem->teasertext }}
                         </p>
+
+                        @if($slideritem->buttons())
+                            <div class="button-view mt-5">
+                                @foreach($slideritem->buttons() as $button)
+                                    @if($button->link && $button->label)
+                                        <a href="{{ $button->link }}" target="_blank">
+                                            <button class="btn btn-primary{{ ($button->bgcolor == '') || $button->bgcolor == "transparent" ? " transparent" : "" }}" style="background: {{ $button->bgcolor }};">
+                                                {{ $button->label }}
+                                            </button>
+                                        </a>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endforeach

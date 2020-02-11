@@ -8,11 +8,8 @@ use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Element;
 use Centauri\CMS\Model\File;
 use Centauri\CMS\Service\MinifyHTMLService;
-use Closure;
 use Exception;
 use Illuminate\Support\Str;
-use RecursiveArrayIterator;
-use RecursiveIteratorIterator;
 
 class ContentElementsAjax implements AjaxInterface
 {
@@ -32,86 +29,158 @@ class ContentElementsAjax implements AjaxInterface
         "deleted_at"
     ];
 
-    public function handleType($type, $field, $fieldConfiguration, $uid)
+    public function renderField($field, $element, $parent = null, $parentuid = null)
     {
+        $CCE = config("centauri")["CCE"];
+        $elements = $CCE["elements"];
+
         $html = "";
+        $_html = "";
 
-        if($type == "model") {
-            $extraArr["modelIdName"] = $field;
-            $extraArr["modelName"] = $fieldConfiguration["newItemLabel"];
+        $renderHtmlByView = false;
 
-            $modelFields = $fieldConfiguration["config"]["fields"];
-            $modelClass = $fieldConfiguration["config"]["model"];
+        if(Str::contains($field, ";")) {
+            $splittedFields = explode(";", $field);
 
-            $model = new $modelClass;
-            $models = $model::where("parent_uid", $uid)->get()->all();
+            foreach($splittedFields as $splittedField) {
+                $fieldConfiguration = $CCE["fields"][$splittedField];
+                $fieldType = $fieldConfiguration["type"];
+                $value = $element->$splittedField;
+                $additionalData = [];
+                $config = [];
 
-            $extraArr["models"] = $models;
-            $extraArr["uid"] = null;
+                if(isset($fieldConfiguration["config"])) $config = $fieldConfiguration["config"];
 
-            $modelsHtmlWrapper = view("Centauri::Backend.Modals.newContentElement.Fields.model_control", [
-                "modelType" => $field,
-                "modelLabel" => $fieldConfiguration["label"],
-                // "modelCreateNewButtonName" => $fieldConfiguration["newItemLabel"],
-                "modelFieldKeyName" => $field,
-                "fieldConfiguration" => $fieldConfiguration
-            ])->render();
-
-            $modelsHtml = "";
-            $html = "";
-
-            foreach($models as $model) {
-                $modelsHtml .= view("Centauri::Backend.Modals.newContentElement.Fields.model_singleitem", [
-                    "uid" => $model->uid
-                ])->render();
-
-                $attributes = $model->getAttributes();
-                $_bottom = "";
-
-                foreach($attributes as $attrName => $attrVal) {
-                    if(!in_array($attrName, $this->excludedFields)) {
-                        $modelFieldConfig = $fieldConfiguration["config"]["fields"][$attrName] ?? null;
-
-                        if(is_null($modelFieldConfig)) {
-                            throw new Exception("Field $attrName can't be null!");
-                        }
-
-                        $_bottomVal = "";
-
-                        if($modelFieldConfig["type"] == "model") {
-                            $_bottomVal = $this->handleType("model", $field, $fieldConfiguration, $uid);
-                        } else {
-                            $_bottomVal = view("Centauri::Backend.Modals.newContentElement.Fields." . $modelFieldConfig["type"], [
-                                "id" => $attrName . "-" . $model->uid,
-                                "label" => $modelFieldConfig["label"],
-                                "config" => $modelFieldConfig,
-                                "isInlineRecord" => 1,
-                                "value" => $attrVal
-                            ])->render();
-                        }
-
-                        $_bottom .= $_bottomVal;
-                    }
+                if($fieldType == "plugin") {
+                    $additionalData["plugins"] = $GLOBALS["Centauri"]["Plugins"];
                 }
 
-                if(Str::contains($fieldConfiguration["existingItemLabel"], "{") && Str::contains($fieldConfiguration["existingItemLabel"], "}")) {
-                    $modelDynLabel = $fieldConfiguration["existingItemLabel"];
-                    $modelDynLabel = str_replace("{", "", $modelDynLabel);
-                    $modelDynLabel = str_replace("}", "", $modelDynLabel);
+                $html = "<div class='col'>" . view("Centauri::Backend.Modals.newContentElement.Fields.$fieldType", [
+                    "id" => $splittedField,
+                    "label" => $fieldConfiguration["label"],
+                    "value" => $value,
+                    "additionalData" => $additionalData,
+                    "config" => $config
+                ])->render() . "</div>";
 
-                    $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", ($model->$modelDynLabel == "" ? "<i>" . $fieldConfiguration["newItemLabel"] . "</i>" : $model->$modelDynLabel), $modelsHtml);
-                } else {
-                    $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", $fieldConfiguration["existingItemLabel"], $modelsHtml);
-                }
-
-                $modelsHtml = str_replace("###MODEL_CONTENT_BOTTOM###", $_bottom, $modelsHtml);
+                $_html .= $html;
             }
 
-            $modelsHtml .= "</div>";
-            $modelsHtmlWrapper = str_replace("###MODEL_CONTENT###", $modelsHtml, $modelsHtmlWrapper);
-        }
+            $_html = "<div class='d-flex'>" . $_html . "</div>";
+        } else {
+            $fieldConfiguration = (is_null($parent) ? $CCE["fields"][$field] : $CCE["fields"][$parent]["config"]["fields"][$field]);
 
-        dd($html);
+            $fieldType = $fieldConfiguration["type"];
+            $value = $element->$field;
+            $additionalData = [];
+            $config = [];
+
+            if(isset($fieldConfiguration["config"])) $config = $fieldConfiguration["config"];
+
+            $extraArr = [];
+
+            if($fieldType == "plugin") {
+                $pluginConfig = Centauri::makeInstance($fieldConfiguration["config"]["class"]);
+                $additionalData["plugin"] = $pluginConfig;
+            }
+
+            if($fieldType == "model") {
+                $modelClass = $fieldConfiguration["config"]["model"];
+
+                $model = new $modelClass;
+                $models = null;
+
+                if(!is_null($parent)) {
+                    $models = $model::where("parent_uid", $parentuid)->get()->all();
+                } else {
+                    $models = $model::where("parent_uid", $element->uid)->get()->all();
+                }
+
+                $modelsHtmlWrapper = view("Centauri::Backend.Modals.newContentElement.Fields.model_control", [
+                    "modelType" => $field,
+                    "modelTypeParent" => $parent ?? $field,
+                    "modelLabel" => $fieldConfiguration["label"],
+                    // "modelCreateNewButtonName" => $fieldConfiguration["newItemLabel"],
+                    "modelFieldKeyNameParent" => (is_null($parent) ? $field : $parent),
+                    "modelFieldKeyName" => $field,
+                    "fieldConfiguration" => $fieldConfiguration,
+                    "parentuid" => (is_null($parent) ? $element->uid : $parentuid)
+                ])->render();
+
+                $modelsHtml = "";
+
+                foreach($models as $model) {
+                    $modelsHtml .= view("Centauri::Backend.Modals.newContentElement.Fields.model_singleitem", [
+                        "uid" => $model->uid
+                    ])->render();
+
+                    $attributes = $model->getAttributes();
+                    $_bottom = "";
+
+                    foreach($attributes as $attrName => $attrVal) {
+                        if(!in_array($attrName, $this->excludedFields)) {
+                            $modelFieldConfig = $fieldConfiguration["config"]["fields"][$attrName] ?? null;
+
+                            if(is_null($modelFieldConfig)) {
+                                throw new Exception("Field $attrName can't be null! Looks like it has not been setted yet");
+                            }
+
+                            if($modelFieldConfig["type"] != "model") {
+                                $_bottom .= view("Centauri::Backend.Modals.newContentElement.Fields." . $modelFieldConfig["type"], [
+                                    "id" => $attrName . "-" . $model->uid,
+                                    "label" => $modelFieldConfig["label"],
+                                    "config" => $modelFieldConfig,
+                                    "isInlineRecord" => 1,
+                                    "value" => $attrVal ?? null
+                                ])->render();
+                            } else {
+                                $_bottom .= $this->renderField($attrName, $element, $field, $attributes["uid"]);
+                            }
+                        }
+                    }
+
+                    if(Str::contains($fieldConfiguration["existingItemLabel"], "{") && Str::contains($fieldConfiguration["existingItemLabel"], "}")) {
+                        $modelDynLabel = $fieldConfiguration["existingItemLabel"];
+                        $modelDynLabel = str_replace("{", "", $modelDynLabel);
+                        $modelDynLabel = str_replace("}", "", $modelDynLabel);
+
+                        $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", ($model->$modelDynLabel == "" ? "<i>" . $fieldConfiguration["newItemLabel"] . "</i>" : $model->$modelDynLabel), $modelsHtml);
+                    } else {
+                        $modelsHtml = str_replace("###MODEL_CONTENT_TOP###", $fieldConfiguration["existingItemLabel"], $modelsHtml);
+                    }
+
+                    $modelsHtml = str_replace("###MODEL_CONTENT_BOTTOM###", $_bottom, $modelsHtml);
+                }
+
+                
+                $modelsHtmlWrapper = str_replace("###MODEL_CONTENT###", $modelsHtml, $modelsHtmlWrapper);
+                $html .= $modelsHtmlWrapper;
+            }
+
+            $dataArr = [
+                "id" => $field,
+                "label" => $fieldConfiguration["label"],
+                "value" => $value,
+                "additionalData" => $additionalData,
+                "config" => $config
+            ];
+
+            if(!empty($extraArr)) {
+                foreach($extraArr as $exKey => $exVal) {
+                    $dataArr[$exKey] = $exVal;
+                }
+            }
+
+            $html = (
+                $renderHtmlByView
+            ?
+                view("Centauri::Backend.Modals.newContentElement.Fields.$fieldType", $dataArr)->render()
+            :
+                $html
+            );
+
+            $_html .= $html;
+        }
 
         return $html;
     }
@@ -405,78 +474,17 @@ class ContentElementsAjax implements AjaxInterface
 
             $CCE = config("centauri")["CCE"];
             $elements = $CCE["elements"];
+
             $elementShowsFields = $elements[$ctype];
 
             $__html = "";
-            foreach($elementShowsFields as $field) {
-                $_html = "";
-                $renderHtmlByView = true;
+            $_html = "";
 
-                if(Str::contains($field, ";")) {
-                    $splittedFields = explode(";", $field);
-
-                    foreach($splittedFields as $splittedField) {
-                        $fieldConfiguration = $CCE["fields"][$splittedField];
-                        $fieldType = $fieldConfiguration["type"];
-                        $value = $element->$splittedField;
-                        $additionalData = [];
-                        $config = [];
-
-                        if(isset($fieldConfiguration["config"])) $config = $fieldConfiguration["config"];
-
-                        if($fieldType == "plugin") {
-                            $additionalData["plugins"] = $GLOBALS["Centauri"]["Plugins"];
-                        }
-
-                        $html = "<div class='col'>" . view("Centauri::Backend.Modals.newContentElement.Fields.$fieldType", [
-                            "id" => $splittedField,
-                            "label" => $fieldConfiguration["label"],
-                            "value" => $value,
-                            "additionalData" => $additionalData,
-                            "config" => $config
-                        ])->render() . "</div>";
-
-                        $_html .= $html;
-                    }
-
-                    $_html = "<div class='d-flex'>" . $_html . "</div>";
+            foreach($elementShowsFields as $fieldKey => $field) {
+                if(is_array($field)) {
+                    $_html .= $this->renderField($fieldKey, $element);
                 } else {
-                    $fieldConfiguration = $CCE["fields"][$field];
-                    $fieldType = $fieldConfiguration["type"];
-                    $value = $element->$field;
-                    $additionalData = [];
-                    $config = [];
-
-                    if(isset($fieldConfiguration["config"])) $config = $fieldConfiguration["config"];
-
-                    $extraArr = [];
-
-                    if($fieldType == "plugin") {
-                        $pluginConfig = Centauri::makeInstance($fieldConfiguration["config"]["class"]);
-                        $additionalData["plugin"] = $pluginConfig;
-                    }
-
-                    if($fieldType == "model") {
-                        $renderHtmlByView = false;
-                        $html .= $this->handleType("model", $field, $fieldConfiguration, $uid);
-                    }
-
-                    $dataArr = [
-                        "id" => $field,
-                        "label" => $fieldConfiguration["label"],
-                        "value" => $value,
-                        "additionalData" => $additionalData,
-                        "config" => $config
-                    ];
-
-                    if(!empty($extraArr)) {
-                        foreach($extraArr as $exKey => $exVal) {
-                            $dataArr[$exKey] = $exVal;
-                        }
-                    }
-
-                    $html = ($renderHtmlByView ? view("Centauri::Backend.Modals.newContentElement.Fields.$fieldType", $dataArr)->render() : $html);
-                    $_html .= $html;
+                    $_html .= $this->renderField($field, $element);
                 }
 
                 $__html .= $_html;
@@ -516,10 +524,10 @@ class ContentElementsAjax implements AjaxInterface
                     $value = $dataObj["value"];
 
                     $inline = $dataObj["inline"] ?? "";
+                    $inlineparent = $dataObj["inlineparent"] ?? "";
 
                     if($inline && $inline != "" && gettype($inline) == "string") {
-                        $inlineParent = $inline;
-                        $inlineRecords[$inlineParent][] = $dataObj;
+                        $inlineRecords[] = $dataObj;
                     } else {
                         if($type == "NORMAL") {
                             $id = explode("-", $dataObj["id"])[0];
@@ -541,44 +549,33 @@ class ContentElementsAjax implements AjaxInterface
 
                 $CCEfields = config("centauri")["CCE"]["fields"];
 
-                foreach($inlineRecords as $inline => $inlineFields) {
-                    $CCEfield = $CCEfields[$inline];
-                    $modelClass = $CCEfield["config"]["model"] ?? null;
+                // dd($inlineRecords);
 
-                    foreach($inlineFields as $inlineField) {
-                        $uid = $inlineField["uid"];
-                        $model = null;
+                foreach($inlineRecords as $inlineRecord) {
+                    $inline = $inlineRecord["inline"];
+                    $inlineparent = $inlineRecord["inlineparent"];
 
-                        if(!is_null($modelClass)) {
-                            $model = $modelClass::where("uid", $uid)->get()->first();
-                        }
+                    $uid = $inlineRecord["uid"];
+                    $id = explode("-", $inlineRecord["id"])[0];
+                    $value = $inlineRecord["value"];
 
-                        if(is_null($model)) {
-                            $attributes = [];
+                    if($inline == $inlineparent) {
+                        $CCEfield = $CCEfields[$inline];
 
-                            $attributes["parent_uid"] = $element->uid ?? $inlineField["uid"];
-    
-                            foreach($inlineFields as $inlineField) {
-                                $id = explode("-", $inlineField["id"])[0];
-                                $value = $inlineField["value"];
-    
-                                $attributes[$id] = $value;
-                            }
-    
-                            if(!is_null($modelClass)) {
-                                $model = $modelClass::create($attributes);
-                            }
-                        } else {
-                            $id = explode("-", $inlineField["id"])[0];
-                            $value = $inlineField["value"];
+                        $modelClass = $CCEfield["config"]["model"];
+                        $model = $modelClass::where("uid", $uid)->get()->first();
 
-                            $model->$id = $value;
-                            $model->save();
-                        }
+                        $model->$id = $value;
+                        $model->save();
+                    } else {
+                        $CCEfield = $CCEfields[$inlineparent]["config"]["fields"][$inline];
+
+                        $modelClass = $CCEfield["config"]["model"];
+                        $model = $modelClass::where("uid", $uid)->get()->first();
+
+                        $model->$id = $value;
+                        $model->save();
                     }
-
-                    // $size = count($inlineRecords[$inline]);
-                    // $element->setAttribute($inline, $size);
                 }
 
                 // if($element->save()) {
@@ -628,5 +625,10 @@ class ContentElementsAjax implements AjaxInterface
         }
 
         return AjaxAbstract::default($request, $ajaxName);
+    }
+
+    public function saveElementByField($field, $uid, $attribute, $value)
+    {
+        dd($field, $uid, $attribute, $value);
     }
 }

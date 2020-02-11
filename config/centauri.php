@@ -163,11 +163,16 @@ return [
                             "type" => "model",
 
                             "config" => [
-                                "model" => "\Centauri\CMS\Model\SliderButtonItemModel",
+                                "model" => "\Centauri\CMS\Model\SliderItemButtonModel",
 
                                 "fields" => [
                                     "label" => [
                                         "label" => "Label",
+                                        "type" => "input"
+                                    ],
+
+                                    "link" => [
+                                        "label" => "Link",
                                         "type" => "input"
                                     ],
 
@@ -180,7 +185,37 @@ return [
                         ]
                     ]
                 ]
-            ]
+            ],
+            // "buttons" => [
+            //     "label" => "Buttons",
+            //     "existingItemLabel" => "{label}",
+            //     "newItemLabel" => "Create a new Button",
+            //     "type" => "model",
+
+            //     "config" => [
+            //         "model" => "\Centauri\CMS\Model\SliderItemButtonModel",
+
+            //         "fields" => [
+            //             "label" => [
+            //                 "label" => "Label",
+            //                 "type" => "input",
+
+            //                 "config" => [
+            //                     "required" => 1
+            //                 ]
+            //             ],
+
+            //             "link" => [
+            //                 "label" => "Link",
+            //                 "type" => "input",
+
+            //                 "config" => [
+            //                     "required" => 1
+            //                 ]
+            //             ]
+            //         ]
+            //     ]
+            // ]
         ],
 
         "elements" => [
@@ -196,11 +231,7 @@ return [
             ],
 
             "slider" => [
-                "slideritems" => [
-                    "buttons" => [
-                        "gallery"
-                    ]
-                ]
+                "slideritems"=>["buttons"]
             ],
 
             "plugin" => [

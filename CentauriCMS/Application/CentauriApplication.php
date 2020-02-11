@@ -21,6 +21,14 @@ class CentauriApplication
                 "__after" => []
             ],
 
+            "Handlers" => [
+                "pageNotFound" => [
+                    "config" => [
+                        "__DEFAULT__" => \Centauri\CMS\Http\PageNotFound::class
+                    ]
+                ]
+            ],
+
             "Helper" => [
                 "VariablesHelper" => [
                     "__ContentElementsAjax__IteratorForFields" => 0

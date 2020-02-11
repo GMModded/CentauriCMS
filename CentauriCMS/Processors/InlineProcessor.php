@@ -5,8 +5,34 @@ use Illuminate\Support\Facades\DB;
 
 class InlineProcessor
 {
-    public static function findByRelation($parent_uid, $tablename)
+    public static $excludedFields = [
+        "uid",
+        "parent_uid",
+        "pid",
+        "lid",
+
+        "rowPos",
+        "colPos",
+        "sorting",
+        "ctype",
+
+        "created_at",
+        "updated_at",
+        "deleted_at"
+    ];
+
+    public static function findByRelation($parent_uid, $tablename, $model)
     {
-        return DB::table($tablename)->where("parent_uid", $parent_uid)->get()->all();
+        $relations = $model::where("parent_uid", $parent_uid)->get()->all();
+
+        // foreach($relations as $relation) {
+        //     foreach($relation->getAttributes() as $attrKey => $attrVal) {
+        //         if(!in_array($attrKey, self::$excludedFields) && is_int($attrVal) && method_exists($model, $attrKey)) {
+        //             $relation->$attrKey = $relation->$attrKey();
+        //         }
+        //     }
+        // }
+
+        return $relations;
     }
 }

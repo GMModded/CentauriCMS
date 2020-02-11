@@ -38,7 +38,7 @@ class ElementComponent
 
                 $element = \Centauri\CMS\Processor\FieldProcessor::process($element, $data);
 
-                $renderedHTML .= view("Centauri::Frontend.Elements." . $element->getAttribute("ctype"), [
+                $renderedHTML .= view("Centauri::Frontend.Elements." . $element->ctype, [
                     "element" => $element,
                     "data" => $data
                 ])->render();
@@ -47,6 +47,6 @@ class ElementComponent
             return $renderedHTML;
         }
 
-        return;
+        return null;
     }
 }

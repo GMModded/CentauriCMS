@@ -42,7 +42,8 @@ class SliderItemModel extends Model
         "sorting",
         "image",
         "title",
-        "teasertext"
+        "teasertext",
+        "buttons"
     ];
 
     /**
@@ -64,4 +65,12 @@ class SliderItemModel extends Model
         "title" => "",
         "teasertext" => "",
     ];
+
+    /**
+     * Getter for of the buttons of this slider item.
+     */
+    public function buttons()
+    {
+        return $this->hasMany(\Centauri\CMS\Model\SliderItemButtonModel::class, "parent_uid", "uid")->get()->all();
+    }
 }
