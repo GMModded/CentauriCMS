@@ -1,7 +1,22 @@
-<div class="md-form">
-    <input class="form-control" type="text" id="{{ $id }}" data-id="{{ $id }}" value="{{ $value ?? '' }}" data-inline-record="{{ isset($isInlineRecord) ? 1 : 0 }}"{{ (isset($config["required"]) ?? $config["required"] ? " required" : "") }} />
+@if(isset($fieldConfig["renderAs"]))
+    @php
+        $renderAs = $fieldConfig["renderAs"];
+    @endphp
+@endif
 
-    <label for="{{ $id }}"{{ (isset($value) ? ' class=active' : '') }}>
-        {{ $label }}
+<div class="md-form{{ isset($renderAs) ? ' has-renderas' : '' }}">
+    @if(isset($fieldConfig["renderAs"]))
+        @switch($fieldConfig["renderAs"])
+            @case("colorpicker")
+                <div class="color-picker" class="position-absolute" style="margin-top: 10px;"></div>
+                @break
+            @default
+        @endswitch
+    @endif
+
+    <input class="form-control" type="text" id="{{ $fieldConfig['id'] }}" data-id="{{ $fieldConfig['id'] }}" value="{{ $fieldConfig['value'] ?? '' }}" data-inline-record="{{ isset($fieldConfig['isInlineRecord']) ? 1 : 0 }}"{{ (isset($fieldConfig["config"]["required"]) ?? $config["required"] ? " required" : "") }} />
+
+    <label for="{{ $fieldConfig['id'] }}"{{ (isset($fieldConfig['value']) ? ' class=active' : '') }}>
+        {{ $fieldConfig["label"] }}
     </label>
 </div>

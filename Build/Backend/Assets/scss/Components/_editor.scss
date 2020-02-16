@@ -17,10 +17,13 @@
         &.active {
             height: calc(100% - 70px);
             width: calc(100% - 300px);
+
+            @include media-breakpoint-down(md) {
+                width: 100% !important;
+            }
         }
 
         @include media-breakpoint-down(md) {
-            top: 0;
             right: -100%;
             height: 100%;
             width: 100%;
@@ -126,12 +129,33 @@
                     display: inline-block;
                     padding: 15px;
                 }
+
+                button {
+                    i {
+                        transition: .66s cubic-bezier(1, -0.09, 0, 1.16);
+                    }
+
+                    &.edit {
+                        &.btn-info {
+                            i {
+                                transform: rotate(-45deg);
+                            }
+                        }
+                    }
+
+                    &.sort {
+                        cursor: move;
+
+                        &.btn-primary {
+                            transform: rotate(90deg);
+                        }
+                    }
+                }
             }
 
             .fields {
                 width: 100%;
                 padding: 0 15px 15px;
-                margin-top: -15px;
 
                 label {
                     margin-bottom: 0;

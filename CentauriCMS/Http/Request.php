@@ -65,9 +65,11 @@ class Request
         $uniqid = preg_replace("/[^a-zA-Z0-9]+/", "", $host) . (!empty($nodes) ? "-" . preg_replace("/[^a-zA-Z0-9]+/", "", $nodes) : "");
         $renderedHTML = null;
 
+        /*
         if(StaticFileCache::hasCache($uniqid)) {
             $renderedHTML = StaticFileCache::getCache($uniqid);
         }
+        */
 
         if(!empty($nodes) && Str::contains($nodes, "/")) {
             $nnodes = explode("/", $nodes);
@@ -175,12 +177,14 @@ class Request
             $renderedHTML = $ElementComponent->render("FE", $uid);
         }
 
+        /*
         if(!StaticFileCache::hasCache($uniqid)) {
             $renderedHTML = str_replace("  ", "", $renderedHTML);
             $renderedHTML = str_replace("\r\n", "", $renderedHTML);
 
             StaticFileCache::setCache($uniqid, trim($renderedHTML));
         }
+        */
 
         return view("Centauri::Frontend", [
             "page" => $page,

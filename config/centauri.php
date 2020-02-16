@@ -15,6 +15,17 @@ return [
                             "label" => "backend/be_layout.layouts.default.cols.content"
                         ]
                     ]
+                ],
+
+                1 => [
+                    "cols" => [
+                        2 => [
+                            "label" => "AHHHH1"
+                        ],
+                        3 => [
+                            "label" => "AHHHH2"
+                        ]
+                    ]
                 ]
             ]
         ]
@@ -107,16 +118,6 @@ return [
                     "maxItems" => 1
                 ]
             ],
-            /*"image" => [
-                "label" => "Image",
-                "type" => "image",
-
-                "config" => [
-                    "type" => "image",
-                    "required" => 1,
-                    "maxItems" => 1
-                ]
-            ]*/
             "slideritems" => [
                 "label" => "Slider-Items",
                 "newItemLabel" => "Slider-Item",
@@ -156,7 +157,7 @@ return [
                             ]
                         ],
 
-                        "buttons" => [
+                        "slideritems_buttons" => [
                             "label" => "Buttons",
                             "newItemLabel" => "Button",
                             "existingItemLabel" => "{label}",
@@ -164,58 +165,39 @@ return [
 
                             "config" => [
                                 "model" => "\Centauri\CMS\Model\SliderItemButtonModel",
+                                "parent_uid" => "parent_uid",
 
                                 "fields" => [
-                                    "label" => [
-                                        "label" => "Label",
-                                        "type" => "input"
-                                    ],
-
-                                    "link" => [
-                                        "label" => "Link",
-                                        "type" => "input"
-                                    ],
-
-                                    "bgcolor" => [
-                                        "label" => "Background-Color",
-                                        "type" => "input"
-                                    ]
+                                    "label",
+                                    "link",
+                                    "bgcolor",
                                 ]
                             ]
-                        ]
+                        ],
                     ]
                 ]
             ],
-            // "buttons" => [
-            //     "label" => "Buttons",
-            //     "existingItemLabel" => "{label}",
-            //     "newItemLabel" => "Create a new Button",
-            //     "type" => "model",
+            "slideritems_buttons" => [
+                "config" => [
+                    "fields" => [
+                        "label" => [
+                            "label" => "Label",
+                            "type" => "input"
+                        ],
 
-            //     "config" => [
-            //         "model" => "\Centauri\CMS\Model\SliderItemButtonModel",
+                        "link" => [
+                            "label" => "Link",
+                            "type" => "input"
+                        ],
 
-            //         "fields" => [
-            //             "label" => [
-            //                 "label" => "Label",
-            //                 "type" => "input",
-
-            //                 "config" => [
-            //                     "required" => 1
-            //                 ]
-            //             ],
-
-            //             "link" => [
-            //                 "label" => "Link",
-            //                 "type" => "input",
-
-            //                 "config" => [
-            //                     "required" => 1
-            //                 ]
-            //             ]
-            //         ]
-            //     ]
-            // ]
+                        "bgcolor" => [
+                            "label" => "Background-Color",
+                            "type" => "input",
+                            "renderAs" => "colorpicker"
+                        ],
+                    ]
+                ]
+            ],
         ],
 
         "elements" => [
@@ -231,7 +213,7 @@ return [
             ],
 
             "slider" => [
-                "slideritems"=>["buttons"]
+                "slideritems"
             ],
 
             "plugin" => [

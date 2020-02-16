@@ -32,7 +32,9 @@ var gulp     = require('gulp');
 
 		"bootstrap"           : "../../packages/bootstrap/dist/js/bootstrap.min.js",
 		"popperjs"            : "../../packages/popperjs/popper.min.js",
+
 		"mdbootstrap"         : "../../packages/mdb/js/mdb.min.js",
+		"mdb_colorpicker"     : "../../packages/mdb_colorpicker/pickr.min.js",
 
 		"ckeditor"            : "../../packages/ckeditor5/build/ckeditor.js",
 
@@ -71,6 +73,7 @@ gulp.task('js:build', function() {
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],
+		modules["mdb_colorpicker"],
 		modules["ckeditor"],
 
 		inputSrc + "js/**/*.js"
@@ -89,6 +92,7 @@ gulp.task('js:deploy', function() {
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],
+		modules["mdb_colorpicker"],
 		modules["ckeditor"],
 
 		inputSrc + "js/**/*.js"

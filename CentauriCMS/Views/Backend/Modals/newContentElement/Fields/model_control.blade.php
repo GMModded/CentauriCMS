@@ -1,15 +1,15 @@
-<div class="accordions inline-records mt-2" data-type-parent="{{ $modelTypeParent }}" data-type="{{ $modelType }}">
+<div class="accordions inline-records mt-2" data-type="{{ $modelType }}" data-type-parent="{{ $modelTypeParent }}">
     <label>
         {{ $modelLabel }}
     </label>
 
-    <a href="#" role="button" class="btn btn-default waves-effect waves-light create-new-inline" data-parentuid="{{ $parentuid }}" data-parentname="{{ $modelFieldKeyNameParent }}" data-name="{{ $modelFieldKeyName }}">
+    <a href="#" role="button" class="btn btn-default waves-effect waves-light create-new-inline px-4" data-name="{{ $modelType }}" data-parentuid="{{ $modelParentUid }}">
         <i class="fas fa-plus mr-1"></i>
-        
-        @if(isset($modelCreateNewButtonName))
+
+        @if(isset($modelCreateNewButtonName) && !is_null($modelCreateNewButtonName))
             {{ $modelCreateNewButtonName }}
         @else
-            {{ $fieldConfiguration["newItemLabel"] ? $fieldConfiguration["newItemLabel"] : "Create new record" }}
+            Create
         @endif
     </a>
 

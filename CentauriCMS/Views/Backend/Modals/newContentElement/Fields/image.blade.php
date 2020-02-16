@@ -13,23 +13,23 @@
         </button>
     </div>
 
-    <input class="form-control d-none image-input" type="text" id="{{ $id }}" data-id="{{ $id }}" value="{{ $value ?? '' }}" data-inline-record="1" />
+    <input class="form-control d-none image-input" type="text" id="{{ $fieldConfig['id'] }}" data-id="{{ $fieldConfig['id'] }}" value="{{ $fieldConfig['value'] ?? '' }}" data-inline-record="1" />
 
-    <label for="{{ $id }}" style="margin-top: -25px;">
-        {{ $label }}
+    <label for="{{ $fieldConfig['id'] }}" style="margin-top: -25px;">
+        {{ $fieldConfig['label'] }}
     </label>
 
     <div class="accordions inline-records mt-2" data-type="image">
         @php
-            if(isset($value) && ($value != "")) {
+            if(isset($fieldConfig["value"]) && ($fieldConfig["value"] != "")) {
 
-                if(Str::contains($value, ",")) {
-                    $value = explode(",", $value);
+                if(Str::contains($fieldConfig["value"], ",")) {
+                    $fieldConfig["value"] = explode(",", $fieldConfig["value"]);
                 } else {
-                    $value = [$value];
+                    $fieldConfig["value"] = [$fieldConfig["value"]];
                 }
 
-                $splittedUids = $value;
+                $splittedUids = $fieldConfig["value"];
             }
         @endphp
 

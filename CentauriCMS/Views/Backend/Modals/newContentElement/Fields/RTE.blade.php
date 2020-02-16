@@ -1,11 +1,11 @@
 <div class="md-form mt-5">
     <div class="document-editor__toolbar"></div>
 
-    @php $dataHTML = json_encode($value ?? ""); @endphp
+    @php $dataHTML = json_encode($fieldConfig["value"] ?? ""); @endphp
 
-    <div data-id="{{ $id }}" class="md-textarea form-control" data-html="{{ $dataHTML }}"></div>
+    <div data-id="{{ $fieldConfig["id"] }}" class="md-textarea form-control" data-html="{{ $dataHTML }}"></div>
 
-    <label for="{{ $id }}"{{ (isset($value) ? ' class=active' : '') }}>
-        {{ $label }}
+    <label for="{{ $fieldConfig["id"] }}"{{ (isset($fieldConfig["value"]) ? ' class=active' : '') }}>
+        {{ $fieldConfig["label"] }}
     </label>
 </div>

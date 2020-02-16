@@ -1,16 +1,16 @@
 <div class="md-form">
-    <label for="{{ $id }}"{{ ((isset($value) || isset($config["default"]) || (!empty($config["items"]))) ? " class=active" : "") }}>
-        {{ $label }}
+    <label for="{{ $fieldConfig['id'] }}"{{ ((isset($fieldConfig["value"]) || isset($fieldConfig["config"]["default"]) || (!empty($fieldConfig["config"]["items"]))) ? " class=active" : "") }}>
+        {{ $fieldConfig["label"] }}
     </label>
 
-    <select class="mdb-select md-form" data-id="{{ $id }}"{{ $config["required"] ? " required" : ""}}>
-        @if(isset($config["default"]))
-            <option value="{{ $config["default"][1] }}" selected disabled>
-                {{ $config["default"][0] }}
+    <select class="mdb-select md-form" data-id="{{ $fieldConfig['id'] }}"{{ $fieldConfig["config"]["required"] ? " required" : ""}}>
+        @if(isset($fieldConfig["config"]["default"]))
+            <option value="{{ $fieldConfig["config"]["default"][1] }}" selected disabled>
+                {{ $fieldConfig["config"]["default"][0] }}
             </option>
         @endif
 
-        @foreach($config["items"] as $item)
+        @foreach($fieldConfig["config"]["items"] as $item)
             @if($item[0] == ($value ?? ""))
                 <option value="{{ $item[1] }}" selected>
                     {{ $item[0] }}

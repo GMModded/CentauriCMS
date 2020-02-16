@@ -21,8 +21,68 @@
         .accordion {
             cursor: pointer;
 
+            &:hover,
+            &.active {
+                & > .top {
+                    .buttons-center {
+                        margin-top: 0;
+                    }
+
+                    .buttons-right {
+                        margin-right: 0;
+                    }
+                }
+            }
+
+            &:not(.active) {
+                & > .top {
+                    overflow: hidden;
+                }
+            }
+
             & > .top {
+                position: relative;
                 padding: 1rem;
+
+                .buttons-center,
+                .buttons-right {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    height: 100%;
+                    align-items: center;
+                    display: flex;
+                    transition: .66s cubic-bezier(1, -0.09, 0, 1.16);
+
+                    button {
+                        &.btn-floating {
+                            border-radius: 5px;
+                            width: 40px;
+                            height: 40px;
+
+                            &[data-trigger="sortInlineElementBySorting"] {
+                                cursor: move;
+                            }
+
+                            i {
+                                width: 100%;
+                                line-height: inherit;
+                            }
+                        }
+                    }
+                }
+
+                .buttons-center {
+                    margin-top: -60px;
+                    right: 50px;
+                    justify-content: center;
+                }
+
+                .buttons-right {
+                    margin-right: -60px;
+                    right: 0;
+                    justify-content: flex-end;
+                }
             }
 
             & > .bottom {

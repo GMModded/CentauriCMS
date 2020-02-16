@@ -39,6 +39,38 @@ Centauri.Helper.PagesHelper = function($container) {
                              */
                             Centauri.Service.CKEditorInitService();
 
+                            /**
+                             * Initializing ColorPickers
+                             */
+                            $(".color-picker", $contentelement).each(function() {
+                                let $_this = $(this);
+
+                                new Pickr({
+                                    el: ".color-picker",
+                                    default: "rgba(0, 0, 0, 1)",
+
+                                    components: {
+                                        preview: true,
+                                        opacity: true,
+                                        hue: true,
+
+                                        interaction: {
+                                            hex: true,
+                                            rgba: true,
+                                            hsla: true,
+                                            input: true,
+                                            clear: true,
+                                            save: true
+                                        }
+                                    },
+
+                                    onSave: (hsva, instance) => {
+                                        $(instance._root.root).parent().find("> input").val(hsva.toRGBA().toString());
+                                    }
+                                });
+                            });
+
+
                             $(".row button", $contentelement).on("click", function() {
                                 var uid = $(this).parent().parent().parent().parent().data("uid");
                                 var trigger = $(this).data("trigger");
