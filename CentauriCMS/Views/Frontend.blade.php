@@ -41,6 +41,10 @@
                                     Header
                                 </font>
                             </h1>
+
+                            <ul class="list-unstyled d-flex">
+                                {{ dd(\Centauri\CMS\BladeHelper\MenuBladeHelper::buildTreeByParentId(1)) }}
+                            </ul>
                         </div>
                     </div>
                 </div>
