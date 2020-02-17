@@ -36,15 +36,29 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
-                            <h1>
-                                <font color="#ffffff">
-                                    Header
-                                </font>
-                            </h1>
+                            <div class="row">
+                                <div class="col-8">
+                                    <h1>
+                                        <a href="/" style="border: 1px solid white;" class="px-2 pb-2">
+                                            <font color="#ffffff">
+                                                Logo
+                                            </font>
+                                        </a>
+                                    </h1>
+                                </div>
 
-                            <ul class="list-unstyled d-flex">
-                                {{ dd(\Centauri\CMS\BladeHelper\MenuBladeHelper::buildTreeByParentId(1)) }}
-                            </ul>
+                                <div class="col">
+                                    <ul class="list-unstyled d-flex align-items-center h-100">
+                                        @foreach(BuildBladeHelper::treeByPid(1) as $page)
+                                            <li class="px-2">
+                                                <a href="{{ BuildBladeHelper::linkByUid($page->uid) }}" style="font-size: 20px; color: #fff;">
+                                                    {{ $page->title }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -98,6 +98,10 @@ return [
                 "label" => "Plugin",
                 "type" => "plugin"
             ],
+            "grid-container-full" => [
+                "label" => "Container (Full)",
+                "type" => "grid"
+            ],
             "image" => [
                 "label" => "Image",
                 "type" => "image",
@@ -244,8 +248,8 @@ return [
                 "label" => "Grids",
 
                 "elements" => [
-                    // "grid-container-full",
-                    // "grid-container"
+                    "grid-container-full",
+                    "grid-container"
                 ]
             ]
         ],

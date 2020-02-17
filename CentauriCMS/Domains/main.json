@@ -1,5 +1,6 @@
 {
     "id": "Main",
+    "ssl": true,
     "domain": "centauricms.localhost",
     "rootpageuid": "1"
 }

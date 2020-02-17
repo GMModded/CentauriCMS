@@ -218,8 +218,9 @@ class ContentElementsAjax implements AjaxInterface
             $fields = $CCE["fields"];
 
             foreach($fields as $ctype => $field) {
-                $label = $field["label"];
-                $type = $field["type"];
+                $isModel = false;
+
+                $type = $field["type"] ?? (isset($field["config"]["fields"]) ?? $isModel = true);
 
                 // Config stuff
                 $config = $field["config"] ?? [];
@@ -231,7 +232,7 @@ class ContentElementsAjax implements AjaxInterface
                     }
                 }
 
-                if(!is_null($fieldConfiguration)) {
+                if(!is_null($fieldConfiguration) && !$isModel) {
                     if(isset($fieldConfiguration["label"])) {
                         $label = $fieldConfiguration["label"];
                     }
@@ -252,48 +253,57 @@ class ContentElementsAjax implements AjaxInterface
                 // additionalData stuff for "special fields"
                 $additionalData = [];
 
-                if($type == "plugin") {
-                    $additionalData["plugins"] = $GLOBALS["Centauri"]["Plugins"];
-                }
+                if(!$isModel) {
+                    if($type == "plugin") {
+                        $additionalData["plugins"] = $GLOBALS["Centauri"]["Plugins"];
+                    }
 
-                // Model (Inline) Stuff
-                if($type == "model") {
-                    $modelFields = $config["fields"];
+                    // Model (Inline) Stuff
+                    if($type == "model") {
+                        /*
+                        $modelFields = $config["fields"];
 
-                    $modelWrapper = view("Centauri::Backend.Modals.NewContentElement.Fields.model", [
-                        "modelName" => $field["label"],
-                        "modelIdName" => $ctype,
-                        "view" => "new"
-                    ])->render();
-
-                    foreach($modelFields as $modelFieldName => $modelField) {
-                        $modelLabel = $modelField["label"];
-                        $modelType = $modelField["type"];
-
-                        // Config stuff
-                        $modelConfig = $modelField["config"] ?? [];
-
-                        if($modelType == "plugin") {
-                            throw new Exception("The Model-Type '" . $modelType . "' is not allowed here!");
-                        }
-
-                        $_html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $modelType, [
-                            "id" => $modelFieldName,
-                            "label" => $modelLabel,
-                            "additionalData" => [],
-                            "config" => $modelConfig
+                        $modelWrapper = view("Centauri::Backend.Modals.NewContentElement.Fields.model", [
+                            "modelName" => $field["label"],
+                            "modelIdName" => $ctype,
+                            "view" => "new"
                         ])->render();
 
-                        $modelWrapper = str_replace("###MODEL_CONTENT###", $_html, $modelWrapper);
-                        $html = $modelWrapper;
+                        foreach($modelFields as $modelFieldName => $modelField) {
+                            $modelLabel = $modelField["label"];
+                            $modelType = $modelField["type"];
+
+                            // Config stuff
+                            $modelConfig = $modelField["config"] ?? [];
+
+                            if($modelType == "plugin") {
+                                throw new Exception("The Model-Type '" . $modelType . "' is not allowed here!");
+                            }
+
+                            $_html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $modelType, [
+                                "id" => $modelFieldName,
+                                "label" => $modelLabel,
+                                "additionalData" => [],
+                                "config" => $modelConfig
+                            ])->render();
+
+                            $modelWrapper = str_replace("###MODEL_CONTENT###", $_html, $modelWrapper);
+                            $html = $modelWrapper;
+                        }
+                        */
+                    } else {
+                        // $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $type, [
+                        //     "id" => $ctype,
+                        //     "label" => $label,
+                        //     "additionalData" => $additionalData,
+                        //     "config" => $config
+                        // ])->render();
+
+                        $html = $this->renderHtmlByField($field, [
+                            "id" => $ctype,
+                            "uid" => ""
+                        ], "");
                     }
-                } else {
-                    $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $type, [
-                        "id" => $ctype,
-                        "label" => $label,
-                        "additionalData" => $additionalData,
-                        "config" => $config
-                    ])->render();
                 }
 
                 $fields[$ctype]["_HTML"] = $html;

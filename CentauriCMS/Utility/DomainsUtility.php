@@ -29,4 +29,29 @@ class DomainsUtility
 
         return $domainFiles;
     }
+
+    public static function getDomainFileByHost($host)
+    {
+        $domainFiles = self::findAll();
+        $domain = null;
+
+        foreach($domainFiles as $domainFile) {
+            $domainValue = $domainFile->content->domain;
+
+            if(is_null($domain)) {
+                if($host == $domainValue) {
+                    $domain = $domainFile;
+                } else if($host == $domainValue) {
+                    $domain = $domainFile;
+                }
+            }
+        }
+
+        return $domain;
+    }
+
+    public static function getConfigByDomainFile($domainFile, $json = false)
+    {
+        return json_decode(file_get_contents($domainFile), $json);
+    }
 }
