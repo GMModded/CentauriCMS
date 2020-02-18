@@ -64,8 +64,10 @@ class Request
 
         $uniqid = preg_replace("/[^a-zA-Z0-9]+/", "", $host) . (!empty($nodes) ? "-" . preg_replace("/[^a-zA-Z0-9]+/", "", $nodes) : "");
 
-        if(\Cache::has($uniqid)) {
-            return \Cache::get($uniqid);
+        if(isset(config("centauri")["config"]["Caching"]) && (config("centauri")["config"]["Caching"])) {
+            if(\Cache::has($uniqid)) {
+                return \Cache::get($uniqid);
+            }
         }
 
         if(!empty($nodes) && Str::contains($nodes, "/")) {
@@ -182,10 +184,13 @@ class Request
 
         $frontendHtml = str_replace("  ", "", $frontendHtml);
         $frontendHtml = str_replace("\r\n", "", $frontendHtml);
-        $frontendHtml .= "\r\n<!-- End Cached Content -->";
 
-        // Caching before returning the outputted frontend html for 24 hours (86400 seconds)
-        \Cache::put($uniqid, $frontendHtml, 86400);
+        // Caching only if it's set in Centauri's config array (which gets by default cached from Laravel)
+        if(isset(config("centauri")["config"]["Caching"]) && (config("centauri")["config"]["Caching"])) {
+            $frontendHtml .= "\r\n<!-- End Cached Content -->";
+            // Caching before returning the outputted frontend html for 24 hours (86400 seconds)
+            \Cache::put($uniqid, $frontendHtml, 86400);
+        }
 
         return $frontendHtml;
     }

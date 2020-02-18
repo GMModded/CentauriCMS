@@ -12,6 +12,7 @@ function Centauri_loadFunctions() {
     Centauri.isDev = function() {
         return (Centauri.Env == "Dev" || Centauri.Env == "Development");
     };
+
     /**
      * @function isDevelopment - Handles if the environment is on Development
      * @return {boolean}
@@ -27,6 +28,7 @@ function Centauri_loadFunctions() {
     Centauri.isProd = function() {
         return (Centauri.Env == "Prod" || Centauri.Env == "Production");
     };
+
     /**
      * @function isProduction - Handles if the environment is on Production
      * @return {boolean}
@@ -44,6 +46,7 @@ function Centauri_loadFunctions() {
     Centauri.isUndefined = function(variable) {
         return (typeof variable == undefined || typeof variable == "undefined");
     };
+
     /**
      * @function isNotUndefined - Handles conditions for variable if it's not undefined
      * @param {mixin} variable - the variable of this function
@@ -61,6 +64,7 @@ function Centauri_loadFunctions() {
     Centauri.isNull = function(variable) {
         return (variable === null);
     };
+
     /**
      * @function isNotNull - Handles conditions for variable if it's not null
      * @param {mixin} variable - the variable of this function

@@ -2,7 +2,7 @@
 
 return [
     "config" => [
-        "StaticFileCache" => true
+        "cache" => true
     ],
 
     "beLayouts" => [

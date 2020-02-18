@@ -5,9 +5,9 @@
                 <div class="item">
                     <div class="overlayer"></div>
 
-                    <div class="image-view">
+                    <div class="image-view" style="min-height: 750px;">
                         @if($slideritem->image)
-                            <img src="{!! ImageBladeHelper::getPath($slideritem->image) !!}" class="img-fluid w-100" />
+                            <img data-src="{!! ImageBladeHelper::getPath($slideritem->image) !!}" class="img-fluid w-100 d-none" />
                         @endif
                     </div>
 
