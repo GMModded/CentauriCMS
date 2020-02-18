@@ -11,6 +11,13 @@ class CentauriApplication
             "Modules" => [],
 
             "ContentElements" => [],
+            "AdditionalDataFuncs" => [
+                "ContentElements" => [
+                    "plugin" => \Centauri\CMS\AdditionalDatas\PluginAdditionalDatas::class,
+                    // "grid" => \Centauri\CMS\AdditionalDatas\GridAdditionalDatas::class
+                ]
+            ],
+
             "Extensions" => [],
 
             "Models" => [],

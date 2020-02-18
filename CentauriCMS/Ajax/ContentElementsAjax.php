@@ -5,6 +5,7 @@ use Exception;
 use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
+use Centauri\CMS\Centauri;
 use Centauri\CMS\Helper\ContentElementBEHelper;
 use Centauri\CMS\Model\Element;
 use Illuminate\Support\Str;
@@ -232,9 +233,14 @@ class ContentElementsAjax implements AjaxInterface
                     }
                 }
 
+                /**
+                 * Overwrites of $field by $fieldConfiguration
+                 * 
+                 * @todo ?
+                 */
                 if(!is_null($fieldConfiguration) && !$isModel) {
                     if(isset($fieldConfiguration["label"])) {
-                        $label = $fieldConfiguration["label"];
+                        $field["label"] = $fieldConfiguration["label"];
                     }
 
                     if(isset($fieldConfiguration["type"])) {
@@ -244,22 +250,31 @@ class ContentElementsAjax implements AjaxInterface
                     if(isset($fieldConfiguration["config"])) {
                         if(!empty($fieldConfiguration["config"])) {
                             foreach($fieldConfiguration["config"] as $fieldConfigurationConfigItemKey => $fieldConfigurationConfigItemValue) {
-                                $config[$fieldConfigurationConfigItemKey] = $fieldConfigurationConfigItemValue;
+                                $field["config"][$fieldConfigurationConfigItemKey] = $fieldConfigurationConfigItemValue;
                             }
                         }
                     }
                 }
 
-                // additionalData stuff for "special fields"
+                // additionalData stuff for "special/custom fields"
                 $additionalData = [];
 
-                if(!$isModel) {
-                    if($type == "plugin") {
-                        $additionalData["plugins"] = $GLOBALS["Centauri"]["Plugins"];
+                if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type])) {
+                    $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type];
+                    $additionalDataClass = Centauri::makeInstance($additionalDataClassName);
+
+                    if(!method_exists($additionalDataClass, "fetch")) {
+                        throw new Exception("Could not find 'fetch'-method in AdditionalData class of '" . $additionalDataClassName . "'!");
                     }
 
+                    $additionalData = $additionalDataClass->fetch();
+                }
+
+                if(!$isModel) {
                     // Model (Inline) Stuff
                     if($type == "model") {
+                        $html = "";
+
                         /*
                         $modelFields = $config["fields"];
 
@@ -301,7 +316,8 @@ class ContentElementsAjax implements AjaxInterface
 
                         $html = $this->renderHtmlByField($field, [
                             "id" => $ctype,
-                            "uid" => ""
+                            "uid" => "",
+                            "additionalData" => $additionalData
                         ], "");
                     }
                 }

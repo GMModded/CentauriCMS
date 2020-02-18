@@ -1,6 +1,6 @@
 {
     "id": "Main",
-    "ssl": true,
-    "domain": "centauricms.localhost",
+    "ssl": false,
+    "domain": "centauri.msediqi.lan",
     "rootpageuid": "1"
 }

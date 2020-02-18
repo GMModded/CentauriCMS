@@ -519,6 +519,10 @@ button.toast-close-button {
 #modal-new_contentelement .cropper-container {
   margin: 0 -1rem !important; }
 
+.pcr-app {
+  top: 45px !important;
+  left: -12px !important; }
+
 /*
  * Fonts
  */

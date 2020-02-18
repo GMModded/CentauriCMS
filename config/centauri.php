@@ -222,6 +222,10 @@ return [
 
             "plugin" => [
                 "header;plugin"
+            ],
+
+            "grids" => [
+                "grid-container-full"
             ]
         ],
 
@@ -248,8 +252,7 @@ return [
                 "label" => "Grids",
 
                 "elements" => [
-                    "grid-container-full",
-                    "grid-container"
+                    "grids"
                 ]
             ]
         ],

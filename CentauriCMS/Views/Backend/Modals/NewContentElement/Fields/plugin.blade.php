@@ -3,8 +3,8 @@
         Select a plugin
     </option>
 
-    @if(isset($additionalData))
-        @foreach($additionalData["plugins"] as $pluginId => $pluginArr)
+    @if(isset($fieldConfig["additionalData"]))
+        @foreach($fieldConfig["additionalData"]["plugins"] as $pluginId => $pluginArr)
             @foreach($pluginArr as $pluginLabel => $pluginValue)
                 @if($value ?? "" == $pluginValue)
                     <option value="{{ $pluginValue }}" selected>
