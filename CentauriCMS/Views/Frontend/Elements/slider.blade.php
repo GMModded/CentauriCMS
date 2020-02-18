@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row">
-        <div data-contentelement="slider" style="max-height: 550px; overflow: hidden;">
+        <div data-contentelement="slider" style="max-height: 550px; overflow: hidden; margin-bottom: 0 !important;">
             @foreach($element->slideritems as $slideritem)
                 <div class="item">
                     <div class="overlayer"></div>

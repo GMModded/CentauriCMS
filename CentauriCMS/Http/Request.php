@@ -182,7 +182,7 @@ class Request
 
         $frontendHtml = str_replace("  ", "", $frontendHtml);
         $frontendHtml = str_replace("\r\n", "", $frontendHtml);
-        $frontendHtml . "\r\n<!-- End Cached Content -->";
+        $frontendHtml .= "\r\n<!-- End Cached Content -->";
 
         // Caching before returning the outputted frontend html for 24 hours (86400 seconds)
         \Cache::put($uniqid, $frontendHtml, 86400);
