@@ -65,11 +65,21 @@ class Request
         $uniqid = preg_replace("/[^a-zA-Z0-9]+/", "", $host) . (!empty($nodes) ? "-" . preg_replace("/[^a-zA-Z0-9]+/", "", $nodes) : "");
         $renderedHTML = null;
 
-        /*
-        if(StaticFileCache::hasCache($uniqid)) {
-            $renderedHTML = StaticFileCache::getCache($uniqid);
+        if(
+            isset(config("centauri")["config"])
+        &&
+            isset(config("centauri")["config"]["StaticFileCache"])
+        ) {
+            if(config("centauri")["config"]["StaticFileCache"]) {
+                if(\Cache::has($uniqid)) {
+                    $renderedHTML = \Cache::get($uniqid, null);
+                }
+
+                // if(StaticFileCache::hasCache($uniqid)) {
+                //     $renderedHTML = StaticFileCache::getCache($uniqid);
+                // }
+            }
         }
-        */
 
         if(!empty($nodes) && Str::contains($nodes, "/")) {
             $nnodes = explode("/", $nodes);
@@ -177,14 +187,29 @@ class Request
             $renderedHTML = $ElementComponent->render("FE", $uid);
         }
 
-        /*
-        if(!StaticFileCache::hasCache($uniqid)) {
-            $renderedHTML = str_replace("  ", "", $renderedHTML);
-            $renderedHTML = str_replace("\r\n", "", $renderedHTML);
+        if(
+            isset(config("centauri")["config"])
+        &&
+            isset(config("centauri")["config"]["StaticFileCache"])
+        ) {
+            if(config("centauri")["config"]["StaticFileCache"]) {
+                if(!\Cache::has($uniqid)) {
+                    $renderedHTML = str_replace("  ", "", $renderedHTML);
+                    $renderedHTML = str_replace("\r\n", "", $renderedHTML);
 
-            StaticFileCache::setCache($uniqid, trim($renderedHTML));
+                    $renderedHTML = "<!-- Start Cached Content -->\r\n" . $renderedHTML . "\r\n<!-- End Cached Content -->";
+
+                    \Cache::put($uniqid, $renderedHTML, 86400);
+                }
+
+                // if(!StaticFileCache::hasCache($uniqid)) {
+                //     $renderedHTML = str_replace("  ", "", $renderedHTML);
+                //     $renderedHTML = str_replace("\r\n", "", $renderedHTML);
+
+                //     StaticFileCache::setCache($uniqid, trim($renderedHTML));
+                // }
+            }
         }
-        */
 
         return view("Centauri::Frontend", [
             "page" => $page,

@@ -224,9 +224,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        // 'CentauriBladeHelper' => Centauri\CMS\BladeHelper\LoadBladeHelpers::class,
-        'ImageBladeHelper' => Centauri\CMS\BladeHelper\ImageBladeHelper::class,
-        'BuildBladeHelper' => Centauri\CMS\BladeHelper\BuildBladeHelper::class
+        // "CentauriBladeHelper" => Centauri\CMS\BladeHelper\LoadBladeHelpers::class,
+        "ImageBladeHelper" => Centauri\CMS\BladeHelper\ImageBladeHelper::class,
+        "BuildBladeHelper" => Centauri\CMS\BladeHelper\BuildBladeHelper::class
     ],
 
 ];

@@ -1,6 +1,10 @@
 <?php
 
 return [
+    "config" => [
+        "StaticFileCache" => true
+    ],
+
     "beLayouts" => [
         "default" => [
             "label" => "backend/be_layout.layouts.default.label",

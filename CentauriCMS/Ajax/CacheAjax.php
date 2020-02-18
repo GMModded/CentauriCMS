@@ -38,6 +38,8 @@ class CacheAjax extends AjaxAbstract implements AjaxInterface
             \Artisan::call("view:clear");
             \Artisan::call("config:cache");
 
+            \Cache::flush();
+
             return json_encode([
                 "type" => "success",
                 "title" => "Cache - System",

@@ -27,9 +27,7 @@
             }
         </style>
 
-        <script async>
-            document.querySelectorAll("[data-contentelement]")[0].style.maxHeight = window.innerHeight + "px";
-        </script>
+        <script async>window.onload=()=>{document.querySelectorAll("[data-contentelement]")[0].style.maxHeight="550px";};</script>
 
         <section id="header" style="position:absolute;z-index:1;">
             <div class="container-fluid" style="position:fixed;top:0;left:0;width:100%;padding:2rem;border-bottom:1px solid #fff;">
