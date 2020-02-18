@@ -63,22 +63,9 @@ class Request
         }
 
         $uniqid = preg_replace("/[^a-zA-Z0-9]+/", "", $host) . (!empty($nodes) ? "-" . preg_replace("/[^a-zA-Z0-9]+/", "", $nodes) : "");
-        $renderedHTML = null;
 
-        if(
-            isset(config("centauri")["config"])
-        &&
-            isset(config("centauri")["config"]["StaticFileCache"])
-        ) {
-            if(config("centauri")["config"]["StaticFileCache"]) {
-                if(\Cache::has($uniqid)) {
-                    $renderedHTML = \Cache::get($uniqid, null);
-                }
-
-                // if(StaticFileCache::hasCache($uniqid)) {
-                //     $renderedHTML = StaticFileCache::getCache($uniqid);
-                // }
-            }
+        if(\Cache::has($uniqid)) {
+            return \Cache::get($uniqid);
         }
 
         if(!empty($nodes) && Str::contains($nodes, "/")) {
@@ -182,39 +169,25 @@ class Request
         $page = Page::find($page->uid);
         $uid = $page->getAttribute("uid");
 
-        if(is_null($renderedHTML)) {
-            $ElementComponent = Centauri::makeInstance(ElementComponent::class);
-            $renderedHTML = $ElementComponent->render("FE", $uid);
-        }
+        // Calling ElementComponent which renders by "FE" type the content elements by the given page-uid ($uid)
+        $ElementComponent = Centauri::makeInstance(ElementComponent::class);
+        $renderedHTML = $ElementComponent->render("FE", $uid);
+        $renderedHTML = str_replace("  ", "", $renderedHTML);
+        $renderedHTML = str_replace("\r\n", "", $renderedHTML);
 
-        if(
-            isset(config("centauri")["config"])
-        &&
-            isset(config("centauri")["config"]["StaticFileCache"])
-        ) {
-            if(config("centauri")["config"]["StaticFileCache"]) {
-                if(!\Cache::has($uniqid)) {
-                    $renderedHTML = str_replace("  ", "", $renderedHTML);
-                    $renderedHTML = str_replace("\r\n", "", $renderedHTML);
-
-                    $renderedHTML = "<!-- Start Cached Content -->\r\n" . $renderedHTML . "\r\n<!-- End Cached Content -->";
-
-                    \Cache::put($uniqid, $renderedHTML, 86400);
-                }
-
-                // if(!StaticFileCache::hasCache($uniqid)) {
-                //     $renderedHTML = str_replace("  ", "", $renderedHTML);
-                //     $renderedHTML = str_replace("\r\n", "", $renderedHTML);
-
-                //     StaticFileCache::setCache($uniqid, trim($renderedHTML));
-                // }
-            }
-        }
-
-        return view("Centauri::Frontend", [
+        $frontendHtml = view("Centauri::Frontend", [
             "page" => $page,
             "content" => $renderedHTML
         ])->render();
+
+        $frontendHtml = str_replace("  ", "", $frontendHtml);
+        $frontendHtml = str_replace("\r\n", "", $frontendHtml);
+        $frontendHtml . "\r\n<!-- End Cached Content -->";
+
+        // Caching before returning the outputted frontend html for 24 hours (86400 seconds)
+        \Cache::put($uniqid, $frontendHtml, 86400);
+
+        return $frontendHtml;
     }
 
     public static function throwNotFound($force = false, $page = null)
