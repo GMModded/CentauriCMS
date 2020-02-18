@@ -7,7 +7,7 @@ Centauri.Components.CreateNewInlineComponent = () => {
         let $this = $(this);
 
         let parentuid = $this.data("parentuid");
-        let parentname = $this.data("parentname");
+        let parentname = $this.parent().data("type-parent");
         let name = $this.data("name");
 
         Centauri.fn.Ajax(
