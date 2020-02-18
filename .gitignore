@@ -13,6 +13,7 @@ npm-debug.log
 yarn-error.log
 
 # Centauri
+CentauriCMS/Domains/main.json
 /resources/js/centauri-env.js
 
 # IDEA
