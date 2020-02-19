@@ -1,5 +1,5 @@
 Centauri.Service.LazyService = () => {
-    Centauri.Service.LazyService.Slider("init");
+    // Centauri.Service.LazyService.Slider("init");
 };
 
 Centauri.Service.LazyService.Slider = (type) => {
