@@ -7,7 +7,7 @@
 
                     <div class="image-view" style="min-height: 750px;">
                         @if($slideritem->image)
-                            <img data-src="{!! ImageBladeHelper::getPath($slideritem->image) !!}" class="img-fluid w-100 d-none" />
+                            <img src="{!! ImageBladeHelper::getPath($slideritem->image) !!}" class="img-fluid w-100 d-none" />
                         @endif
                     </div>
 
