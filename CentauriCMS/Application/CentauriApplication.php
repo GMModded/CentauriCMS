@@ -14,7 +14,7 @@ class CentauriApplication
             "AdditionalDataFuncs" => [
                 "ContentElements" => [
                     "plugin" => \Centauri\CMS\AdditionalDatas\PluginAdditionalDatas::class,
-                    // "grid" => \Centauri\CMS\AdditionalDatas\GridAdditionalDatas::class
+                    "grid" => \Centauri\CMS\AdditionalDatas\GridAdditionalDatas::class
                 ]
             ],
 

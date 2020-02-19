@@ -104,7 +104,8 @@ return [
             ],
             "grid-container-full" => [
                 "label" => "Container (Full)",
-                "type" => "grid"
+                "type" => "grid",
+                "additionalType" => "grid"
             ],
             "image" => [
                 "label" => "Image",

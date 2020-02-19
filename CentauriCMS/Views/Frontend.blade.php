@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Centauri CMS » {{ $page->title }}</title>
 
-        <link rel="stylesheet" href="{{ asset('public/frontend/css/centauri.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('public/frontend/css/centauri.min.css') }}" media="print" onload="this.media='all'">
     </head>
 
     <body>

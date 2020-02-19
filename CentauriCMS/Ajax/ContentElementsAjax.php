@@ -73,9 +73,17 @@ class ContentElementsAjax implements AjaxInterface
 
             $html = str_replace("###MODEL_CONTENT###", $modelsHtml, $modelWrapper);
         } else {
-            $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $fieldConfig["type"], [
-                "fieldConfig" => $fieldConfig
-            ])->render();
+            if(isset($fieldConfig["additionalType"])) {
+                $additionalType = $fieldConfig["additionalType"];
+
+                $html = view("Centauri::Backend.Modals.NewContentElement.Fields.AdditionalTypes." . $additionalType, [
+                    "fieldConfig" => $fieldConfig
+                ])->render();
+            } else {
+                $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $fieldConfig["type"], [
+                    "fieldConfig" => $fieldConfig
+                ])->render();
+            }
         }
 
         return $html;
@@ -465,7 +473,6 @@ class ContentElementsAjax implements AjaxInterface
             $elementShowsFields = $elements[$ctype];
 
             $__html = "";
-            $_html = "";
 
             foreach($elementShowsFields as $fieldKey => $field) {
                 if(is_array($field)) {
