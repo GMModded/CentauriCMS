@@ -1,12 +1,18 @@
 /**
- * Centauri Core
+ * CentauriCoreFunctions
  * 
- * Function which will be called when Centauri.load() has been called.
+ * Function which will be called when Centauri.load() has been called
  * Registers core functions e.g. Env, Versions etc.
+ * This function can be used in extensions such as in the centauri-env.js file.
+ * 
+ * @function CentauriCoreFunctions
+ * @return {void}
  */
-function Centauri_loadFunctions() {
+function CentauriCoreFunctions() {
     /**
-     * @function isDev - Handles if the environment is on Development
+     * Handles if the environment is on Development
+     * 
+     * @function isDev
      * @return {boolean}
      */
     Centauri.isDev = function() {
@@ -14,7 +20,9 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function isDevelopment - Handles if the environment is on Development
+     * Handles if the environment is on Development
+     * 
+     * @function isDevelopment
      * @return {boolean}
      */
     Centauri.isDevelopment = function() {
@@ -22,7 +30,9 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function isProd - Handles if the environment is on Production
+     * Handles if the environment is on Production
+     * 
+     * @function isProd
      * @return {boolean}
      */
     Centauri.isProd = function() {
@@ -30,7 +40,9 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function isProduction - Handles if the environment is on Production
+     * Handles if the environment is on Production
+     * 
+     * @function isProduction
      * @return {boolean}
      */
     Centauri.isProduction = function() {
@@ -39,8 +51,10 @@ function Centauri_loadFunctions() {
 
 
     /**
-     * @function isUndefined - Handles conditions for variable if it's undefined
-     * @param {mixin} variable - the variable of this function
+     * Handles conditions for variable if it's undefined
+     * 
+     * @function isUndefined
+     * @param {mixin} variable The variable of this function
      * @return {boolean}
      */
     Centauri.isUndefined = function(variable) {
@@ -48,8 +62,10 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function isNotUndefined - Handles conditions for variable if it's not undefined
-     * @param {mixin} variable - the variable of this function
+     * Handles conditions for variable if it's not undefined
+     * 
+     * @function isNotUndefined
+     * @param {mixin} variable The variable of this function
      * @return {boolean}
      */
     Centauri.isNotUndefined = function(variable) {
@@ -57,8 +73,10 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function isNull - Handles conditions for variable if it's null
-     * @param {mixin} variable - the variable of this function
+     * Handles conditions for variable if it's null
+     * 
+     * @function isNull
+     * @param {mixin} variable The variable of this function
      * @return {boolean}
      */
     Centauri.isNull = function(variable) {
@@ -66,8 +84,10 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function isNotNull - Handles conditions for variable if it's not null
-     * @param {mixin} variable - the variable of this function
+     * Handles conditions for variable if it's not null
+     * 
+     * @function isNotNull
+     * @param {mixin} variable The variable of this function
      * @return {boolean}
      */
     Centauri.isNotNull = function(variable) {
@@ -75,8 +95,10 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function elExists - Checks if a given element (by selector) exists or not
-     * @param {element} selector - the selector for this function
+     * Checks if a given element (by selector) exists or not
+     * 
+     * @function elExists
+     * @param {element} selector The selector for this function
      * @return {boolean}
      */
     Centauri.elExists = function(selector) {
@@ -90,7 +112,9 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function strContains - Checks if a string contains a specific (given) char
+     * Checks if a string contains a specific (given) char
+     * 
+     * @function strContains
      * @param {string} string
      * @param {string} char
      * @return {boolean}
@@ -118,7 +142,9 @@ function Centauri_loadFunctions() {
     };
 
     /**
-     * @function strReplace - Replaces a specific part of a string with a given value
+     * Replaces a specific part of a string with a given value
+     * 
+     * @function strReplace
      * @param {string} string
      * @param {string} replace
      * @return {string}

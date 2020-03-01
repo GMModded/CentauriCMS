@@ -9,6 +9,7 @@ use Centauri\CMS\Centauri;
 use Centauri\CMS\Helper\ContentElementBEHelper;
 use Centauri\CMS\Model\Element;
 use Illuminate\Support\Str;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class ContentElementsAjax implements AjaxInterface
 {
@@ -467,6 +468,18 @@ class ContentElementsAjax implements AjaxInterface
             $element = Element::where("uid", $uid)->get()->first();
             $ctype = $element->ctype;
 
+            // additionalData stuff for "special/custom fields"
+            $additionalData = [];
+
+            if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype])) {
+                $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype];
+                $additionalDataClass = Centauri::makeInstance($additionalDataClassName);
+
+                if(method_exists($additionalDataClass, "onEditListener")) {
+                    $additionalDataClass->onEditListener($element);
+                }
+            }
+
             $CCE = config("centauri")["CCE"];
             $elements = $CCE["elements"];
 
@@ -572,13 +585,15 @@ class ContentElementsAjax implements AjaxInterface
                     }
                 }
 
-                // if($element->save()) {
-                    return json_encode([
-                        "type" => "success",
-                        "title" => "Element saved",
-                        "description" => "This element has been saved"
-                    ]);
-                // }
+                if(empty($inlineRecords)) {
+                    $element->save();
+                }
+
+                return json_encode([
+                    "type" => "success",
+                    "title" => "Element saved",
+                    "description" => "This element has been saved"
+                ]);
             }
 
             if($ajaxName == "hideElementByUid") {
@@ -620,7 +635,9 @@ class ContentElementsAjax implements AjaxInterface
 
         if($ajaxName == "sortElement") {
             $data = $request->input("data");
-            
+
+            $parent = $data["parent"];
+
             $rowPos = $data["rowpos"];
             $colPos = $data["colpos"];
 

@@ -1,6 +1,9 @@
 Centauri.Listener.OverlayerListener = function() {
-    $(".overlayer").on("click", function() {
-        var closer = $(this).attr("data-closer");
-        Centauri.Events.OnOverlayerHiddenEvent(closer);
+    $(".overlayer").on("click", this, function() {
+        let closer = $(this).attr("data-closer");
+
+        if(closer != "BE_LOADING") {
+            Centauri.Events.OnOverlayerHiddenEvent(closer);
+        }
     });
 };

@@ -10,7 +10,6 @@
  */
 const Centauri = {};
 
-
 /**
  * Centauri Environment
  */
@@ -47,42 +46,72 @@ Centauri.View = {};
 
 /**
  * Centauri Core registrations
+ * 
+ * @function Centauri.load
+ * @returns {void}
  */
 Centauri.load = function() {
-    Centauri_loadFunctions();
+    /**
+     * This function is 
+     */
+    CentauriCoreFunctions();
 
+    /**
+     * Condition whether CentauriEnv is defined - since it's for each environment maybe necessary, maybe not - therefor this condition
+     * to handle it properly in case CentauriEnv does not exists.
+     */
     if(Centauri.isNotUndefined(CentauriEnv)) {
         CentauriEnv();
     }
 
-    // Window related stuff (events etc.)
+    /**
+     * Window related stuff (events etc.)
+     */
     Centauri.Events.Window.OnLoadResize();
 
-    // Utilities
+    /**
+     * Utilities
+     */
     Centauri.Utility.Ajax();
 
-    // DynamicAjaxPushLoader - DAP
+    /**
+     * DAP - DynamicAjaxPushLoader
+     */
     Centauri.DAPLoader();
 
-    // Views
+    /**
+     * Views
+     */
     Centauri.View.LoginView();
     Centauri.View.DashboardView();
 
-    // Initialization of Components
+    /**
+     * Initialization of Components
+     */
     Centauri.Components.ModulesComponent({type: "init"});
     Centauri.Components.EditorComponent.init();
 
-    // Listeners which register events mainly
+    /**
+     * Listeners which register events mainly
+     */
     Centauri.Listener.OverlayerListener();
 };
 
 
 /**
- * DOM ready - loading Centauri
+ * DOM ready - Initializing Centauri
+ * 
+ * @param {function} function - Self calling function by jQuery
+ * @returns {void}
  */
 $(document).ready(function() {
+    /**
+     * Initializing Centauri Core Functions by this such as Centauri Core itself.
+     */
     Centauri.load();
 
-    // Init stuff
+    /**
+     * Initializations - mainly for functions which should happen after Centauri.load() has been called (async).
+     */
     Centauri.Init.HeaderInit();
 });

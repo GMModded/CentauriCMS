@@ -22,7 +22,7 @@ class News
         ];
 
         // Backend News Model
-        $GLOBALS["Centauri"]["Models"]["Centauri\Extension\Model\News"] = [
+        $GLOBALS["Centauri"]["Models"]["\Centauri\Extension\Model\News"] = [
             "namespace" => "centauri_news",
             "tab" => "general",
             "label" => "Centauri - News",

@@ -177,9 +177,17 @@ class Request
         $renderedHTML = str_replace("  ", "", $renderedHTML);
         $renderedHTML = str_replace("\r\n", "", $renderedHTML);
 
+        $additionalHeadTagContent = "";
+
+        foreach($GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Head"] as $headClass) {
+            $instance = Centauri::makeInstance($headClass);
+            $additionalHeadTagContent .= $instance->fetch();
+        }
+
         $frontendHtml = view("Centauri::Frontend", [
             "page" => $page,
-            "content" => $renderedHTML
+            "content" => $renderedHTML,
+            "additionalHeadTagContent" => $additionalHeadTagContent
         ])->render();
 
         $frontendHtml = str_replace("  ", "", $frontendHtml);

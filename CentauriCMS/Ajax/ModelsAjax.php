@@ -22,9 +22,11 @@ class ModelsAjax implements AjaxInterface
                     $fieldType = $field["type"];
                     $fieldLabel = $field["label"];
 
-                    $_HTML .= view("Centauri::Backend.Modals.newContentElement.Fields.$fieldType", [
-                        "id" => $fieldKey,
-                        "label" => $fieldLabel
+                    $_HTML .= view("Centauri::Backend.Modals.NewContentElement.Fields.$fieldType", [
+                        "fieldConfig" => [
+                            "id" => $fieldKey,
+                            "label" => $fieldLabel
+                        ]
                     ])->render();
                 }
 
@@ -47,9 +49,11 @@ class ModelsAjax implements AjaxInterface
                     $fieldType = $field["type"];
                     $fieldLabel = $field["label"];
 
-                    $_HTML .= view("Centauri::Backend.Modals.newContentElement.Fields.$fieldType", [
-                        "id" => $fieldKey,
-                        "label" => $fieldLabel
+                    $_HTML .= view("Centauri::Backend.Modals.NewContentElement.Fields.$fieldType", [
+                        "fieldConfig" => [
+                            "id" => $fieldKey,
+                            "label" => $fieldLabel
+                        ]
                     ])->render();
                 }
 
@@ -92,9 +96,11 @@ class ModelsAjax implements AjaxInterface
                     $fieldType = $field["type"];
                     $fieldLabel = $field["label"];
 
-                    $_HTML .= view("Centauri::Backend.Modals.newContentElement.Fields.$fieldType", [
-                        "id" => $fieldKey,
-                        "label" => $fieldLabel
+                    $_HTML .= view("Centauri::Backend.Modals.NewContentElement.Fields.$fieldType", [
+                        "fieldConfig" => [
+                            "id" => $fieldKey,
+                            "label" => $fieldLabel
+                        ]
                     ])->render();
                 }
 

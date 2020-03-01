@@ -20,6 +20,8 @@ Centauri.View.LoginView = function() {
                         $(document.body).load(window.location.href, function() {
                             Centauri.Notify(data.type, data.title, data.description);
                             Centauri.Events.OnBackendEvent();
+
+                            location.reload();
                         });
                     }
                 },

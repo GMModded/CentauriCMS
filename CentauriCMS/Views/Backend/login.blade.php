@@ -18,15 +18,11 @@
             }
         </style>
 
-        <script src="https://kit.fontawesome.com/20ea993ef1.js" crossorigin="anonymous"></script>
-
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ asset('public/backend/css/mdb.min.css') }}">
         <link rel="stylesheet" href="{{ asset('public/backend/css/centauri.min.css') }}">
     </head>
 
     <body>
-        <div class="overlayer hidden"></div>
+        <div class="overlayer hidden" data-closer="BE_LOADING"></div>
 
         <div id="login" class="container-fluid h-100">
             <div class="row h-100">
@@ -74,7 +70,7 @@
             </div>
         </div>
 
-        <script src="{{ asset('public/backend/js/centauri.min.js') }}"></script>
-        <script src="{{ asset('resources/js/centauri-env.js') }}"></script>
+        <script async src="{{ asset('resources/js/centauri-env.js') }}"></script>
+        <script async src="{{ asset('public/backend/js/centauri.min.js') }}"></script>
     </body>
 </html>

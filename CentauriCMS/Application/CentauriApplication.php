@@ -12,9 +12,17 @@ class CentauriApplication
 
             "ContentElements" => [],
             "AdditionalDataFuncs" => [
+                "Frontend" => [
+                    "Tags" => [
+                        "Head" => [
+                            \Centauri\CMS\AdditionalDatas\HeadTagAdditionalDatas::class
+                        ]
+                    ]
+                ],
+
                 "ContentElements" => [
                     "plugin" => \Centauri\CMS\AdditionalDatas\PluginAdditionalDatas::class,
-                    "grid" => \Centauri\CMS\AdditionalDatas\GridAdditionalDatas::class
+                    "grids" => \Centauri\CMS\AdditionalDatas\GridAdditionalDatas::class
                 ]
             ],
 

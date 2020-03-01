@@ -44,6 +44,14 @@ body,
         height: calc(100% - 128px);
         z-index: 3;
     }
+
+    &.findByPid {
+        z-index: 10;
+
+        & > .loader {
+            margin-top: -30px;
+        }
+    }
 }
 
 input {

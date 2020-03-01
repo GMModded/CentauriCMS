@@ -23,7 +23,7 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
                     value: val,
                     inlineparent: $(this).parent().parent().parent().parent().data("type-parent"),
                     inline: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().parent().data("type") : false),
-                    uid: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().data("uid") : $(this).parent().parent().parent().parent().data("uid"))
+                    uid: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().data("uid") : $(this).parent().parent().parent().parent().parent().data("uid"))
                 });
             }
         }
@@ -41,7 +41,7 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
                 value: val,
                 inlineparent: $(this).parent().parent().parent().parent().data("type-parent"),
                 inline: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().parent().data("type") : false),
-                uid: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().data("uid") : $(this).parent().parent().parent().parent().data("uid"))
+                uid: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().data("uid") : $(this).parent().parent().parent().data("uid"))
             });
         }
     });
@@ -58,7 +58,7 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
                 value: val,
                 inlineparent: $(this).parent().parent().parent().parent().data("type-parent"),
                 inline: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().parent().data("type") : false),
-                uid: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().data("uid") : $(this).parent().parent().parent().parent().data("uid"))
+                uid: ($(this).data("inline-record") == 1 ? $(this).parent().parent().parent().data("uid") : $(this).parent().parent().parent().parent().parent().data("uid"))
             });
         }
     });

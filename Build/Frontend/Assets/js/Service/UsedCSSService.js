@@ -40,7 +40,7 @@ Centauri.Service.UsedCSSService = () => {
         return s;
     };
 
-    let CSS = "";
+    let _endCss = "";
 
     $("body *").each(function(index, obj) {
         let type = $(this).get(0).tagName;
@@ -50,7 +50,7 @@ Centauri.Service.UsedCSSService = () => {
 
             if(typeof obj == "object") {
                 if(type != "script" && type != "style") {
-                    console.log(self._getCSS($(obj)));
+                    let css = self._getCSS($(obj));
                 }
             }
         }

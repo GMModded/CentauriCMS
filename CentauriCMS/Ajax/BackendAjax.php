@@ -22,7 +22,7 @@ class BackendAjax implements AjaxInterface
                     "description" => "Enjoy your session!",
 
                     "headtags" => [
-                        ["title", "Centauri"]
+                        ["title", "CentauriCMS"]
                     ]
                 ]);
             }

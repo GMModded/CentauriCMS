@@ -1,6 +1,9 @@
 // Centauri.Helper.findByPidHelper(Centauri.Components.PagesComponent.uid);
 
-Centauri.Helper.findByPidHelper = (pid, $contentelement=null) => {
+Centauri.Helper.findByPidHelper = (pid, $contentelement = null) => {
+    $(".overlayer").addClass("findByPid").removeClass("hidden");
+    $(".loader").removeClass("hidden");
+
     Centauri.fn.Ajax(
         "ContentElements",
         "findByPid",
@@ -12,7 +15,8 @@ Centauri.Helper.findByPidHelper = (pid, $contentelement=null) => {
         {
             success: function(data) {
                 // Centauri.fn.Ajax.Overlayer = true;
-                $(".overlayer").removeClass("hidden");
+                $(".overlayer").addClass("hidden").removeClass("findByPid");
+                $(".loader").addClass("hidden");
 
                 var $container = $("#editor > .bottom > .container");
                 $container.html(data);

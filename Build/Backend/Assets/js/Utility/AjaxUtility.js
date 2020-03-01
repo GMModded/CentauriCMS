@@ -1,5 +1,6 @@
 Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
-    var url = Centauri.Utility.PathsUtility.root + Centauri.Utility.PathsUtility.centauri + Centauri.Utility.PathsUtility.ajax + ajax + "/" + method;
+    // let url = Centauri.Utility.PathsUtility.root + Centauri.Utility.PathsUtility.centauri + Centauri.Utility.PathsUtility.ajax + ajax + "/" + method;
+    let url = Centauri.Helper.AjaxHelper.buildAjaxURL(Centauri.Utility.PathsUtility, ajax, method);
 
     if(Centauri.fn.Ajax.Overlayer) {
         $("#maincontent .overlayer").removeClass("hidden");
@@ -80,7 +81,7 @@ window.onload = function() {
             location.href = "action/Backend/logout";
         }
 
-        // General AJAX errors - some of Internal Server Errors are custom and some by Laravel default
+        // General AJAX errors - some of Internal Server Errors are custom and some by Laravel default (a json-error-object returns sometimes - reason: unknown yet.)
         if(thrownError == "Internal Server Error") {
             Centauri.Notify("error", thrownError, jqxhr.responseText);
             console.error(jqxhr);

@@ -14,27 +14,31 @@
 
                     <div class="sortable-elements">
                         @foreach($data["elements"] as $element)
-                            @if($element->colPos == $colPos)
-                                <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="before">
-                                    <i class="fas fa-plus"></i>
-                                    Content
-                                </button>
+                            @if(is_null($element->grids_sorting))
+                                @if($element->colPos == $colPos)
+                                    <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="before">
+                                        <i class="fas fa-plus"></i>
+                                        Content
+                                    </button>
 
-                                <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}">
-                                    <div class="top">
-                                        <span class="title">
-                                            {{ $element->ctype }}
-                                        </span>
+                                    <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}">
+                                        <div class="top">
+                                            <span class="title">
+                                                {{ $element->ctype }}
+                                            </span>
 
-                                        <button class="sort btn btn-primary waves-effect waves-light float-right btn-floating my-2">
-                                            <i class="fas fa-sort"></i>
-                                        </button>
+                                            <div class="button-view float-right">
+                                                <button class="edit btn btn-primary waves-effect waves-light btn-floating my-2 mx-1">
+                                                    <i class="fas fa-pen"></i>
+                                                </button>
 
-                                        <button class="edit btn btn-primary waves-effect waves-light float-right btn-floating my-2 mr-0">
-                                            <i class="fas fa-pen"></i>
-                                        </button>
+                                                <button class="sort btn btn-primary waves-effect waves-light btn-floating my-2 mx-1">
+                                                    <i class="fas fa-sort"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             @endif
                         @endforeach
 
@@ -50,7 +54,7 @@
 @endforeach
 
 <style>
-    .element-sort-field { height: 60px; line-height: 1.2em; display: block; cursor: pointer; }
+    .element-sort-field { height: 0px; transition: .3s; line-height: 1.2em; display: block; cursor: pointer; }
 
     .element-sort-field:hover {
         background: #fff85d;
@@ -95,7 +99,14 @@
 
             if($contentelement.hasClass("sorting")) {
                 $contentelement.removeClass("sorting");
-                $("#editor .bottom .element-sort-field").remove();
+
+                $("#editor .bottom .element-sort-field").css("height", "0px");
+                $("#editor .bottom .element-sort-field").css("border", "unset");
+
+                setTimeout(function() {
+                    $("#editor .bottom .element-sort-field").remove();
+                }, 290);
+
                 $("#editor .bottom .content-element.__sorting-has-beforeafter-fields").removeClass("__sorting-has-beforeafter-fields");
             } else {
                 $contentelement.addClass("sorting");
@@ -108,8 +119,8 @@
                     $(this).addClass("__sorting-has-beforeafter-fields");
 
                     if((ceIndex >= 0 && i >= 1) || ceIndex == 1) {
-                        $("<div class='mt-3 element-sort-field before' data-index='" + i + "' data-sorting='" + $(this).data("sorting") + "'></div>").insertBefore($(this));
-                        $("<div class='mb-3 element-sort-field after' data-index='" + i + "' data-sorting='" + $(this).data("sorting") + "'></div>").insertAfter($(this));
+                        $("<div class='mt-3 element-sort-field before waves-effect' data-index='" + i + "' data-sorting='" + $(this).data("sorting") + "'></div>").insertBefore($(this));
+                        $("<div class='mb-3 element-sort-field after waves-effect' data-index='" + i + "' data-sorting='" + $(this).data("sorting") + "'></div>").insertAfter($(this));
                     }
 
                     i++;
@@ -117,22 +128,38 @@
  
                 $(".sortable-elements").each(function() {
                     if($("> div", $(this)).length == 0) {
-                        $(this).append("<div class='my-2 element-sort-field insert' data-index='" + i + "' data-sorting='increment'></div>");
+                        let parent = $(this).data("parent");
+                        $(this).append("<div class='my-2 element-sort-field insert waves-effect' data-parent='" + parent + "' data-index='" + i + "' data-sorting='increment'></div>");
+
                         i++;
                     }
                 });
+
+                setTimeout(function() {
+                    $(".element-sort-field").css("height", "60px");
+                }, 1);
 
                 $(".element-sort-field").on("click", this, function() {
                     let currentSorting = sortingElement.data("sorting");
                     let currentElementUid = sortingElement.data("uid");
                     let sortto = $(this).data("sorting");
 
+                    let $rowparent = $(this).parent().parent().parent();
+                    let $colparent = $(this).parent().parent();
+                    let parent = $(this).attr("data-parent");
+
+                    if(parent == "grid") {
+                        $rowparent = $(this).parent().parent().parent().parent().parent().parent();
+                        $colparent = $(this).parent().parent().parent().parent().parent();
+                    }
+
                     let position = "";
                     let targetuid = -1;
 
                     let data = {
-                        rowpos: $(this).parent().parent().parent().data("rowpos"),
-                        colpos: $(this).parent().parent().data("colpos"),
+                        parent: parent,
+                        rowpos: $rowparent.data("rowpos"),
+                        colpos: $colparent.data("colpos"),
                         currentElementUid: currentElementUid,
                         currentSorting: currentSorting,
                         sortto: sortto,
@@ -153,6 +180,7 @@
 
                     data.direction = position;
                     data.targetuid = targetuid;
+                    data.parent = parent;
 
                     Centauri.fn.Ajax(
                         "ContentElements",

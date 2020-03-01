@@ -571,6 +571,10 @@ body,
     top: 128px;
     height: calc(100% - 128px);
     z-index: 3; }
+  .overlayer.findByPid {
+    z-index: 10; }
+    .overlayer.findByPid > .loader {
+      margin-top: -30px; }
 
 input:read-only:not(.select-dropdown) {
   cursor: not-allowed !important; }
