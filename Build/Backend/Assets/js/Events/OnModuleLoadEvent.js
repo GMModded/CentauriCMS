@@ -541,6 +541,10 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                     },
 
                                     {
+                                        ready: () => {
+                                            Centauri.View.ContentElementsView();
+                                        },
+
                                         save: function() {
                                             if(Centauri.isNull(Centauri.Helper.ModalHelper.Element)) {
                                                 toastr["error"]("Models Error", "Please select any model in order to create one!");

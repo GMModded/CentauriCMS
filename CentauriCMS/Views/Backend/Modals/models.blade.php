@@ -14,12 +14,14 @@
             @foreach($tabArr["models"] as $model => $modelArr)
                 @if ($tabKey == $modelArr["tab"])
                     <div class="element z-depth-1 mb-3" data-model="{{ $model }}">
-                        <div class="top waves-effect">
+                        <div class="top waves-effect p-3">
                             @lang($modelArr['_NAMESPACE'] . "::backend/modals.models.$model")
                         </div>
 
                         <div class="bottom" style="display: none;">
-                            {!! $modelArr["_HTML"] ?? "" !!}
+                            <div class="px-3 pb-1">
+                                {!! $modelArr["_HTML"] ?? "" !!}
+                            </div>
                         </div>
                     </div>
                 @endif

@@ -73,8 +73,6 @@ class ModelsAjax implements AjaxInterface
             $modelClassName = $request->input("model");
             $datas = json_decode($request->input("datas"), true);
 
-            dd($datas);
-
             $model = new $modelClassName();
             $model->lid = 0;
 

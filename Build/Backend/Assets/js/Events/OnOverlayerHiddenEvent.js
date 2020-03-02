@@ -1,5 +1,11 @@
 Centauri.Events.OnOverlayerHiddenEvent = function(closer) {
-    $(".overlayer").addClass("hidden");
+    let $overlayer = $(".overlayer");
+
+    $overlayer.addClass("hidden");
+
+    if($overlayer.hasClass("overlay-modal")) {
+        $overlayer.removeClass("overlay-modal");
+    }
 
     if(closer == "EditorComponent") {
         Centauri.Components.EditorComponent("hide");
@@ -11,6 +17,6 @@ Centauri.Events.OnOverlayerHiddenEvent = function(closer) {
 
     else if(closer == "FileSelectorComponent") {
         $("#file-selector").addClass("inactive");
-        $(".overlayer").attr("data-closer", "EditorComponent");
+        $overlayer.attr("data-closer", "EditorComponent");
     }
 };

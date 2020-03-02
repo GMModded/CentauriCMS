@@ -4,6 +4,7 @@ Centauri.Components.FileSelectorComponent = (type, cb = null) => {
         $modal.hide();
 
         let $fileselector = $("#file-selector");
+        $(".item", $fileselector).off("click");
 
         $(".item", $fileselector).each(function() {
             let $item = $(this);
@@ -74,9 +75,7 @@ Centauri.Components.FileSelectorComponent = (type, cb = null) => {
         setTimeout(() => {
             $("#file-selector").remove();
         }, 660);
-    }
-
-    else {
+    } else {
         console.warn("Centauri.Components.FileSelectorComponent: Type: " + type + " does not exists!");
     }
 };

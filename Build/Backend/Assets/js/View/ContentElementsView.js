@@ -47,6 +47,8 @@ Centauri.View.ContentElementsView = ($contentelement) => {
 
                         setTimeout(() => {
                             $("#file-selector").removeClass("inactive");
+                            $(".overlayer").toggleClass("hidden overlay-modal");
+                            $(".overlayer").attr("data-closer", "FileSelectorComponent");
 
                             setTimeout(() => {
                                 if($(".accordion", $accordions).length != 0) {
