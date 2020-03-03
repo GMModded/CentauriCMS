@@ -9,7 +9,7 @@
                 @section("headertitle") @lang("backend/modules.models.title") @endsection
 
                 <div class="table-wrapper">
-                    <table id="extensions" class="table table-dark table-hover z-depth-1-half">
+                    <table id="models" class="table table-dark table-hover z-depth-1-half">
                         <thead class="thead-dark">
                             <tr>
                                 <th title="Label">
@@ -23,26 +23,52 @@
                                 <th title="Loaded">
                                     Loaded
                                 </th>
+
+                                <th title="Items">
+                                    Items
+                                </th>
+
+                                <th title="Actions">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
 
                         <tbody>
                             @foreach($data["models"] as $namespace => $model)
                                 <tr>
-                                    <td>
+                                    <td data-type="label">
                                         {{ $model["label"] }}
                                     </td>
 
-                                    <td>
+                                    <td data-type="namespace">
                                         {{ $namespace }}
                                     </td>
 
-                                    <td>
+                                    <td data-type="loaded" data-value="{{ $model["loaded"] }}">
                                         @if($model["loaded"])
                                             <i class="fas fa-check"></i>
                                         @else
                                             <i class="fas fa-times"></i>
                                         @endif
+                                    </td>
+
+                                    <td data-type="items">
+                                        {{ count($data["models"]) }}
+                                    </td>
+
+                                    <td>
+                                        <div class="actions">
+                                            <div class="d-block d-lg-none action p-2 waves-effect waves-light" data-action="actions-trigger">
+                                                <i class="fas fa-ellipsis-h"></i>
+                                            </div>
+
+                                            <div class="d-none d-lg-flex">
+                                                <div class="action mr-3 p-2 waves-effect waves-light" data-action="models-list" data-uid="1">
+                                                    <i class="fas fa-pen fa-lg"></i>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

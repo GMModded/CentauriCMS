@@ -23,67 +23,72 @@ Centauri.Components.EditorComponent = function(type, data) {
             $("form", $editor).empty();
             $(".bottom > .container:not([data-content])", $editor).remove();
 
-            if(Centauri.isNotUndefined(data.form)) {
-                Centauri.Components.EditorComponent.FormData = data.form;
+            if(Centauri.isNotUndefined(data.html)) {
+                $("form", $editor).remove();
+                $(".bottom", $editor).empty().addClass("px-3").append(data.html);
+            } else {
+                if(Centauri.isNotUndefined(data.form)) {
+                    Centauri.Components.EditorComponent.FormData = data.form;
 
-                if(Centauri.isNotUndefined(data.callbacks.afterFormInitialized)) {
-                    data.callbacks.afterFormInitialized($editor);
-                }
-
-                $.each(Centauri.Components.EditorComponent.FormData, function(index, inputObj) {
-                    if(Centauri.isNotUndefined(inputObj)) {
-                        var type = "text";
-                        var placeholder = "";
-                        var value = "";
-                        var extraAttr = "";
-                        var required = "";
-                        var label = "";
-
-                        if(Centauri.isNotUndefined(inputObj.type)) {
-                            type = inputObj.type;
-                        }
-
-                        if(Centauri.isNotUndefined(inputObj.placeholder)) {
-                            placeholder = inputObj.placeholder;
-                        }
-
-                        if(Centauri.isNotUndefined(inputObj.value)) {
-                            value = inputObj.value;
-                        }
-
-                        if(Centauri.isNotUndefined(inputObj.extraAttr)) {
-                            extraAttr = " " + inputObj.extraAttr;
-                        }
-
-                        if(Centauri.isNotUndefined(inputObj.required)) {
-                            if(inputObj.required) {
-                                required = " required";
-                            }
-                        }
-
-                        if(Centauri.isNotUndefined(inputObj.label)) {
-                            var activeClass = "";
-
-                            if(value.length != 0) {
-                                activeClass = " class='active'";
-                            }
-
-                            label = "<label for='" + inputObj.id + "'" + activeClass + ">" + inputObj.label + "</label>";
-                        }
-
-                        var html = "<div class='md-form'><input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + inputObj.id + "'" + extraAttr + required + " />" + label + "</div>";
-
-                        if(type == "custom") {
-                            html = Centauri.Utility.EditorUtility.getCustomHTMLByType(inputObj);
-                        }
-
-                        $("form", $editor).append(html);
+                    if(Centauri.isNotUndefined(data.callbacks.afterFormInitialized)) {
+                        data.callbacks.afterFormInitialized($editor);
                     }
-                });
 
-                $("form .mdb-select", $editor).materialSelect();
-                Centauri.Utility.EditorUtility.Validator();
-                Centauri.Listener.EditorListener();
+                    $.each(Centauri.Components.EditorComponent.FormData, function(index, inputObj) {
+                        if(Centauri.isNotUndefined(inputObj)) {
+                            var type = "text";
+                            var placeholder = "";
+                            var value = "";
+                            var extraAttr = "";
+                            var required = "";
+                            var label = "";
+
+                            if(Centauri.isNotUndefined(inputObj.type)) {
+                                type = inputObj.type;
+                            }
+
+                            if(Centauri.isNotUndefined(inputObj.placeholder)) {
+                                placeholder = inputObj.placeholder;
+                            }
+
+                            if(Centauri.isNotUndefined(inputObj.value)) {
+                                value = inputObj.value;
+                            }
+
+                            if(Centauri.isNotUndefined(inputObj.extraAttr)) {
+                                extraAttr = " " + inputObj.extraAttr;
+                            }
+
+                            if(Centauri.isNotUndefined(inputObj.required)) {
+                                if(inputObj.required) {
+                                    required = " required";
+                                }
+                            }
+
+                            if(Centauri.isNotUndefined(inputObj.label)) {
+                                var activeClass = "";
+
+                                if(value.length != 0) {
+                                    activeClass = " class='active'";
+                                }
+
+                                label = "<label for='" + inputObj.id + "'" + activeClass + ">" + inputObj.label + "</label>";
+                            }
+
+                            var html = "<div class='md-form'><input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + inputObj.id + "'" + extraAttr + required + " />" + label + "</div>";
+
+                            if(type == "custom") {
+                                html = Centauri.Utility.EditorUtility.getCustomHTMLByType(inputObj);
+                            }
+
+                            $("form", $editor).append(html);
+                        }
+                    });
+
+                    $("form .mdb-select", $editor).materialSelect();
+                    Centauri.Utility.EditorUtility.Validator();
+                    Centauri.Listener.EditorListener();
+                }
             }
         }
 

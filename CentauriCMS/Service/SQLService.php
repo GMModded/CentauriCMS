@@ -16,6 +16,7 @@ class SQLService
             $table->timestamps();
             $table->softDeletes();
             $table->increments("uid");
+            $table->integer("lid");
             $table->integer("parent_uid");
             $table->integer("sorting");
         });

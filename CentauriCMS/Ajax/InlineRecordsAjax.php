@@ -6,8 +6,6 @@ use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Exception\InlineRecordException;
 use Centauri\CMS\Model\File;
-use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class InlineRecordsAjax implements AjaxInterface
@@ -36,6 +34,11 @@ class InlineRecordsAjax implements AjaxInterface
                     "type" => $type,
                     "files" => $files
                 ]);
+            }
+
+            if($type == "models") {
+                $namespace = $request->input("namespace");
+                dd($namespace);
             }
         }
 

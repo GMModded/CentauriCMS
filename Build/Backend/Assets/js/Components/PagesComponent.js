@@ -528,6 +528,222 @@ Centauri.Components.PagesComponent = function(module) {
         });
     }
 
+    else if(module == "languages") {
+        $action = $("table#languages .actions .action");
+
+        $action.on("click", function() {
+            $tr = $(this).parent().parent().parent();
+
+            Centauri.Components.PagesComponent.uid = $(this).attr("data-uid");
+            var action = $(this).attr("data-action");
+
+            var title = $.trim($("td[data-type='title']", $tr).text());
+            var langcode = $.trim($("td[data-type='lang_code']", $tr).text());
+            var url = $.trim($("td[data-type='url']", $tr).text());
+            var created_at = $.trim($("td[data-type='created_at']", $tr).text());
+            var modified_at = $.trim($("td[data-type='updated_at']", $tr).text());
+
+            if(action == "language-edit") {
+                Centauri.Components.EditorComponent("show", {
+                    id: "EditLanguage-" + Centauri.Components.PagesComponent.uid,
+                    title: "Language-Editor - Edit",
+
+                    form: [
+                        {
+                            id: "uid",
+                            label: "UID",
+                            type: "text",
+                            value: Centauri.Components.PagesComponent.uid,
+                            extraAttr: "disabled"
+                        },
+
+                        {
+                            id: "title",
+                            label: Centauri.__trans.global.label_title,
+                            type: "text",
+                            value: title,
+                            required: true
+                        },
+
+                        {
+                            id: "langcode",
+                            label: "Lang-Code",
+                            type: "text",
+                            value: langcode,
+                            required: true
+                        },
+
+                        {
+                            id: "url",
+                            label: "Slug",
+                            type: "text",
+                            value: url,
+                            required: true
+                        },
+
+                        {
+                            id: "created_at",
+                            label: Centauri.__trans.global.label_createdat,
+                            type: "text",
+                            value: created_at,
+                            extraAttr: "disabled"
+                        },
+
+                        {
+                            id: "modified_at",
+                            label: Centauri.__trans.global.label_modifiedat,
+                            type: "text",
+                            value: modified_at,
+                            extraAttr: "disabled"
+                        }
+                    ],
+
+                    callbacks: {
+                        save: function(formData) {
+                            Centauri.fn.Ajax(
+                                "Language",
+                                "editLanguage",
+
+                                {
+                                    uid: Centauri.Components.PagesComponent.uid,
+                                    title: formData.title,
+                                    slug: formData.url,
+                                    langcode: formData.langcode
+                                },
+
+                                {
+                                    success: function(data) {
+                                        data = JSON.parse(data);
+                                        Centauri.Notify(data.type, data.title, data.description);
+
+                                        Centauri.Components.EditorComponent("close");
+
+                                        Centauri.Components.ModulesComponent({
+                                            type: "load",
+                                            module: "languages"
+                                        });
+                                    },
+
+                                    error: function(data) {
+                                        console.error(data);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                });
+            }
+
+            if(action == "language-delete") {
+                Centauri.fn.Modal(
+                    // "Delete " + title + " language",
+                    // "Are you sure to continue deleting the language '" + title + "' with all its bounded content?",
+                    Centauri.strReplace(Centauri.__trans.modals.deleteLanguage_title, "{title}", title),
+                    Centauri.strReplace(Centauri.__trans.modals.deleteLanguage_body, "{body}", title),
+
+                    {
+                        id: "areyousure_deletelanguage",
+
+                        close: {
+                            label: Centauri.__trans.modals.btn_cancel,
+                            class: "warning"
+                        },
+
+                        save: {
+                            label: Centauri.__trans.modals.btn_delete,
+                            class: "danger"
+                        }
+                    },
+
+                    {
+                        save() {
+                            Centauri.fn.Ajax(
+                                "Language",
+                                "deleteLanguage",
+
+                                {
+                                    uid: Centauri.Components.PagesComponent.uid
+                                },
+
+                                {
+                                    success: function(data) {
+                                        data = JSON.parse(data);
+                                        Centauri.Notify(data.type, data.title, data.description);
+
+                                        Centauri.Components.ModulesComponent({
+                                            type: "load",
+                                            module: "languages"
+                                        });
+                                    },
+
+                                    error: function(data) {
+                                        console.error(data);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+        });
+    }
+
+    else if(module == "models") {
+        $action = $("table#models .actions .action");
+
+        $action.on("click", function() {
+            $tr = $(this).parent().parent().parent().parent();
+
+            Centauri.Components.PagesComponent.uid = $(this).attr("data-uid");
+            let action = $(this).attr("data-action");
+
+            if(action == "actions-trigger") {
+                $(this).toggleClass("active");
+            }
+
+            if(action == "models-list") {
+                let modelNamespace = $.trim($("td[data-type='namespace']", $tr).text());
+                let modelLabel = $.trim($("td[data-type='label']", $tr).text());
+
+                Centauri.fn.Ajax(
+                    "InlineRecords",
+                    "list",
+
+                    {
+                        type: "models",
+                        namespace: modelNamespace
+                    },
+
+                    {
+                        success: (data) => {
+                            /**
+                             * @todo
+                             * Proper AJAX request which handles a View (template) of all models (found by the given namespace)
+                             * with a styled list (if possible showing preview image (if configured to true etc. - also take care
+                             * when performance option via JS is enabled to avoid image etc))
+                             */
+
+                            console.log(data);
+
+                            Centauri.Components.EditorComponent("show", {
+                                id: "ListModels",
+                                title: modelLabel,
+
+                                html: "<h1>3aaa4</h1>",
+
+                                callbacks: {
+                                    save: function(formData) {
+                                        console.log(formData);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                );
+            }
+        });
+    }
+
     else if(module == "filelist") {
         $action = $("table#filelist .actions .action");
 
@@ -701,166 +917,6 @@ Centauri.Components.PagesComponent = function(module) {
                                     },
 
                                     error: (data) => {
-                                        console.error(data);
-                                    }
-                                }
-                            );
-                        }
-                    }
-                );
-            }
-        });
-    }
-
-    else if(module == "languages") {
-        $action = $("table#languages .actions .action");
-
-        $action.on("click", function() {
-            $tr = $(this).parent().parent().parent();
-
-            Centauri.Components.PagesComponent.uid = $(this).attr("data-uid");
-            var action = $(this).attr("data-action");
-
-            var title = $.trim($("td[data-type='title']", $tr).text());
-            var langcode = $.trim($("td[data-type='lang_code']", $tr).text());
-            var url = $.trim($("td[data-type='url']", $tr).text());
-            var created_at = $.trim($("td[data-type='created_at']", $tr).text());
-            var modified_at = $.trim($("td[data-type='updated_at']", $tr).text());
-
-            if(action == "language-edit") {
-                Centauri.Components.EditorComponent("show", {
-                    id: "EditLanguage-" + Centauri.Components.PagesComponent.uid,
-                    title: "Language-Editor - Edit",
-
-                    form: [
-                        {
-                            id: "uid",
-                            label: "UID",
-                            type: "text",
-                            value: Centauri.Components.PagesComponent.uid,
-                            extraAttr: "disabled"
-                        },
-
-                        {
-                            id: "title",
-                            label: Centauri.__trans.global.label_title,
-                            type: "text",
-                            value: title,
-                            required: true
-                        },
-
-                        {
-                            id: "langcode",
-                            label: "Lang-Code",
-                            type: "text",
-                            value: langcode,
-                            required: true
-                        },
-
-                        {
-                            id: "url",
-                            label: "Slug",
-                            type: "text",
-                            value: url,
-                            required: true
-                        },
-
-                        {
-                            id: "created_at",
-                            label: Centauri.__trans.global.label_createdat,
-                            type: "text",
-                            value: created_at,
-                            extraAttr: "disabled"
-                        },
-
-                        {
-                            id: "modified_at",
-                            label: Centauri.__trans.global.label_modifiedat,
-                            type: "text",
-                            value: modified_at,
-                            extraAttr: "disabled"
-                        }
-                    ],
-
-                    callbacks: {
-                        save: function(formData) {
-                            Centauri.fn.Ajax(
-                                "Language",
-                                "editLanguage",
-
-                                {
-                                    uid: Centauri.Components.PagesComponent.uid,
-                                    title: formData.title,
-                                    slug: formData.url,
-                                    langcode: formData.langcode
-                                },
-
-                                {
-                                    success: function(data) {
-                                        data = JSON.parse(data);
-                                        Centauri.Notify(data.type, data.title, data.description);
-
-                                        Centauri.Components.EditorComponent("close");
-
-                                        Centauri.Components.ModulesComponent({
-                                            type: "load",
-                                            module: "languages"
-                                        });
-                                    },
-
-                                    error: function(data) {
-                                        console.error(data);
-                                    }
-                                }
-                            );
-                        }
-                    }
-                });
-            }
-
-            if(action == "language-delete") {
-                Centauri.fn.Modal(
-                    // "Delete " + title + " language",
-                    // "Are you sure to continue deleting the language '" + title + "' with all its bounded content?",
-                    Centauri.strReplace(Centauri.__trans.modals.deleteLanguage_title, "{title}", title),
-                    Centauri.strReplace(Centauri.__trans.modals.deleteLanguage_body, "{body}", title),
-
-                    {
-                        id: "areyousure_deletelanguage",
-
-                        close: {
-                            label: Centauri.__trans.modals.btn_cancel,
-                            class: "warning"
-                        },
-
-                        save: {
-                            label: Centauri.__trans.modals.btn_delete,
-                            class: "danger"
-                        }
-                    },
-
-                    {
-                        save() {
-                            Centauri.fn.Ajax(
-                                "Language",
-                                "deleteLanguage",
-
-                                {
-                                    uid: Centauri.Components.PagesComponent.uid
-                                },
-
-                                {
-                                    success: function(data) {
-                                        data = JSON.parse(data);
-                                        Centauri.Notify(data.type, data.title, data.description);
-
-                                        Centauri.Components.ModulesComponent({
-                                            type: "load",
-                                            module: "languages"
-                                        });
-                                    },
-
-                                    error: function(data) {
                                         console.error(data);
                                     }
                                 }

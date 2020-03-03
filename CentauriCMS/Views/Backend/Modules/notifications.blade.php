@@ -63,12 +63,12 @@
 
                                     <td class="text-center">
                                         <div class="actions">
-                                            <div class="d-block d-lg-none action p-2 waves-effect" data-action="actions-trigger">
+                                            <div class="d-block d-lg-none action p-2 waves-effect waves-light" data-action="actions-trigger">
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </div>
 
                                             <div class="d-none d-lg-flex">
-                                                <div class="action mr-3 p-2 waves-effect" data-action="notification-delete" data-uid="{{ $notification->uid }}">
+                                                <div class="action mr-3 p-2 waves-effect waves-light" data-action="notification-delete" data-uid="{{ $notification->uid }}">
                                                     <i class="fas fa-trash fa-lg"></i>
                                                 </div>
                                             </div>

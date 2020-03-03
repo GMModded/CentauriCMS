@@ -51,11 +51,11 @@
 
                                     <td>
                                         <div class="actions">
-                                            <div class="action mr-3 p-2 waves-effect" data-action="domain-edit" data-id="{{ $domainFile->content->id }}" data-rootpageuid="{{ $domainFile->content->rootpageuid ?? '' }}">
+                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="domain-edit" data-id="{{ $domainFile->content->id }}" data-rootpageuid="{{ $domainFile->content->rootpageuid ?? '' }}">
                                                 <i class="fas fa-pen fa-lg"></i>
                                             </div>
 
-                                            <div class="action p-2 waves-effect" data-action="domain-delete" data-id="{{ $domainFile->content->id }}" data-rootpageuid="{{ $domainFile->content->rootpageuid ?? '' }}">
+                                            <div class="action p-2 waves-effect waves-light" data-action="domain-delete" data-id="{{ $domainFile->content->id }}" data-rootpageuid="{{ $domainFile->content->rootpageuid ?? '' }}">
                                                 <i class="fas fa-trash fa-lg"></i>
                                             </div>
                                         </div>

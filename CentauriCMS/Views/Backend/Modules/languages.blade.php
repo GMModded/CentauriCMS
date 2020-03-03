@@ -83,11 +83,11 @@
 
                                     <td>
                                         <div class="actions">
-                                            <div class="action mr-3 p-2 waves-effect" data-action="language-edit" data-uid="{{ $language->uid }}">
+                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="language-edit" data-uid="{{ $language->uid }}">
                                                 <i class="fas fa-pen fa-lg"></i>
                                             </div>
 
-                                            <div class="action p-2 waves-effect" data-action="language-delete" data-uid="{{ $language->uid }}">
+                                            <div class="action p-2 waves-effect waves-light" data-action="language-delete" data-uid="{{ $language->uid }}">
                                                 <i class="fas fa-trash fa-lg"></i>
                                             </div>
                                         </div>

@@ -1,9 +1,5 @@
 <?php
 
-// $SQLService = \Centauri\CMS\Centauri::makeInstance(\Centauri\CMS\Service\SQLService::class);
-
-// $table = "elements";
-
 // $SQLService->createColumn($table, "htag", "string");
 
 $SQLService = \Centauri\CMS\Centauri::makeInstance(\Centauri\CMS\Service\SQLService::class);

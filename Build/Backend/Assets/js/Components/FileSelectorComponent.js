@@ -67,6 +67,8 @@ Centauri.Components.FileSelectorComponent = (type, cb = null) => {
                 }
             });
         });
+
+        return;
     }
 
     if(type == "close") {
@@ -75,9 +77,9 @@ Centauri.Components.FileSelectorComponent = (type, cb = null) => {
         setTimeout(() => {
             $("#file-selector").remove();
         }, 660);
-    } else {
-        console.warn("Centauri.Components.FileSelectorComponent: Type: " + type + " does not exists!");
     }
+
+    return console.warn("Centauri.Components.FileSelectorComponent: Type: " + type + " does not exists!");
 };
 
 Centauri.Components.FileSelectorComponent.AnimatedSelectedFiles = true;

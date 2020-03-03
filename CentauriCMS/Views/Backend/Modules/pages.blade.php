@@ -82,28 +82,28 @@
 
                                                 <td>
                                                     <div class="actions">
-                                                        <div class="d-block d-lg-none action p-2 waves-effect" data-action="actions-trigger">
+                                                        <div class="d-block d-lg-none action p-2 waves-effect waves-light" data-action="actions-trigger">
                                                             <i class="fas fa-ellipsis-h"></i>
                                                         </div>
 
                                                         <div class="d-none d-lg-flex">
-                                                            <div class="action mr-3 p-2 waves-effect" data-action="page-edit" data-uid="{{ $page->uid }}">
+                                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="page-edit" data-uid="{{ $page->uid }}">
                                                                 <i class="fas fa-pen fa-lg"></i>
                                                             </div>
 
-                                                            <div class="action mr-3 p-2 waves-effect" data-action="page-contentelement-edit" data-uid="{{ $page->uid }}">
+                                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="page-contentelement-edit" data-uid="{{ $page->uid }}">
                                                                 <i class="fab fa-elementor fa-lg"></i>
                                                             </div>
 
-                                                            <div class="action mr-3 p-2 waves-effect" data-action="page-show" data-uid="{{ $page->uid }}">
+                                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="page-show" data-uid="{{ $page->uid }}">
                                                                 <i class="fas fa-eye fa-lg"></i>
                                                             </div>
 
-                                                            <div class="action mr-3 p-2 waves-effect" data-action="page-translations" data-uid="{{ $page->uid }}">
+                                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="page-translations" data-uid="{{ $page->uid }}">
                                                                 <i class="fas fa-language fa-lg"></i>
                                                             </div>
 
-                                                            <div class="action p-2 waves-effect" data-action="page-delete" data-uid="{{ $page->uid }}">
+                                                            <div class="action p-2 waves-effect waves-light" data-action="page-delete" data-uid="{{ $page->uid }}">
                                                                 <i class="fas fa-trash fa-lg"></i>
                                                             </div>
                                                         </div>
