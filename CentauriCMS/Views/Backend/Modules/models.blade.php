@@ -54,7 +54,7 @@
                                     </td>
 
                                     <td data-type="items">
-                                        {{ count($data["models"]) }}
+                                        {{ count($data["models"][$namespace]) }}
                                     </td>
 
                                     <td>

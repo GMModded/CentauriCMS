@@ -25,7 +25,8 @@ class News
         $GLOBALS["Centauri"]["Models"]["\Centauri\Extension\Model\News"] = [
             "namespace" => "centauri_news",
             "tab" => "general",
-            "label" => "Centauri - News",
+            "label" => "Centauri » News",
+            "listLabel" => "{title} by <b>{author}</b>",
 
             "fields" => [
                 "title" => [

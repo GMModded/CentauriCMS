@@ -5,7 +5,9 @@ use Centauri\CMS\AjaxAbstract;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Exception\InlineRecordException;
+use Centauri\CMS\Helper\ModelsHelper;
 use Centauri\CMS\Model\File;
+use Exception;
 use Illuminate\Support\Str;
 
 class InlineRecordsAjax implements AjaxInterface
@@ -38,7 +40,21 @@ class InlineRecordsAjax implements AjaxInterface
 
             if($type == "models") {
                 $namespace = $request->input("namespace");
-                dd($namespace);
+
+                $modelInstance = new $namespace;
+                $models = $modelInstance::orderBy("sorting", "asc")->get()->all();
+
+                $CMEs = ModelsHelper::getAllCMEs();
+                $modelConfig = $CMEs["models"][$namespace] ?? null;
+
+                if(is_null($modelConfig)) {
+                    throw new Exception("Hm, looks like the model with the namespace '" . $namespace . "' has not been registered yet!");
+                }
+
+                return view("Centauri::Backend.Partials.InlineRecords.listModels", [
+                    "models" => $models,
+                    "config" => $modelConfig
+                ])->render();
             }
         }
 

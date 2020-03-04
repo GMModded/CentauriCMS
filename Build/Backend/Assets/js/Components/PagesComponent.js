@@ -716,20 +716,13 @@ Centauri.Components.PagesComponent = function(module) {
 
                     {
                         success: (data) => {
-                            /**
-                             * @todo
-                             * Proper AJAX request which handles a View (template) of all models (found by the given namespace)
-                             * with a styled list (if possible showing preview image (if configured to true etc. - also take care
-                             * when performance option via JS is enabled to avoid image etc))
-                             */
-
-                            console.log(data);
-
                             Centauri.Components.EditorComponent("show", {
                                 id: "ListModels",
-                                title: modelLabel,
+                                title: "Models-Editor",
 
-                                html: "<h1>3aaa4</h1>",
+                                size: "fluid",
+                                container: "container",
+                                html: data,
 
                                 callbacks: {
                                     save: function(formData) {
