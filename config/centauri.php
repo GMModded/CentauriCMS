@@ -2,7 +2,7 @@
 
 return [
     "config" => [
-        "cache" => true
+        "Caching" => true
     ],
 
     "beLayouts" => [
