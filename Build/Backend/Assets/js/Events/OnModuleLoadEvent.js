@@ -11,15 +11,21 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
     var title = splittedTitle[0] + "» " + moduleName
     $("title", document.head).text(title);
 
-    // Initialize a-tags turning into AJAX-calls
+    /**
+     * Initialize a-tags turning into AJAX-calls
+     */
     Centauri.Service.ATagAjaxService();
 
-    // DAPLoader
+    /**
+     * DAPLoader
+     */
     if(Centauri.DAPLoader.historyPushState) {
         history.pushState({page: 1}, module, Centauri.Utility.PathsUtility.root + "centauri/" + module);
     }
 
-    // Hamburger toggler
+    /**
+     * Hamburger-Toggler
+     */
     if(
         (
             Centauri.Helper.VariablesHelper.__BreakpointView == "sm"
@@ -35,18 +41,20 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
         Centauri.Events.OnOverlayerHiddenEvent($(".overlayer").attr("data-closer"));
     }
 
-    // Table Search-Filter
+    /**
+     * Table Search-Filter
+     */
     $("#content input#filter").on("keyup", function(e) {
         var value = $(this).val();
-    
+
         if(value != "") {
             $("table tbody tr").css("display", "none");
-    
+
             $("table tbody td").each(function() {
                 var $td = $(this);
-    
+
                 var text = $.trim($td.text());
-    
+
                 if(Centauri.strContains(text, value)) {
                     $td.parent().css("display", "table-row");
                 }
@@ -56,7 +64,9 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
         }
     });
 
-    // Refresh Button
+    /**
+     * Refresh Button
+     */
     $("#content > section button[data-button-type='refresh']").on("click", function() {
         Centauri.Components.ModulesComponent({
             type: "load",
@@ -64,7 +74,9 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
         });
     });
 
-    // Modules
+    /**
+     * Modules
+     */
     if(module == "dashboard") {
         let ctxL = document.getElementById("lineChart_frontendcalls").getContext('2d');
         let myLineChart = new Chart(ctxL, {
@@ -125,7 +137,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
             $button = $(this);
 
             $button.on("click", this, function() {
-                var btnType = $(this).data("button-type");
+                let btnType = $(this).data("button-type");
 
                 if(btnType == "create") {
                     Centauri.fn.Ajax(
@@ -137,7 +149,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                         {
                             success: function(data) {
                                 data = JSON.parse(data);
-                                var rootpages = data;
+                                let rootpages = data;
 
                                 Centauri.fn.Ajax(
                                     "Page",
@@ -148,7 +160,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                     {
                                         success: function(data) {
                                             data = JSON.parse(data);
-                                            var languages = data;
+                                            let languages = data;
 
                                             if(languages.length == 0) {
                                                 Centauri.Notify("primary", "No languages detected", "Please create a language in order to create (root)pages!", {
@@ -169,7 +181,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                     {
                                                         success: (data) => {
                                                             data = JSON.parse(data);
-                                                            var beLayouts = data;
+                                                            let beLayouts = data;
 
                                                             Centauri.Components.EditorComponent("show", {
                                                                 id: "CreateNewPage",
@@ -212,7 +224,33 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                                         label: "URL",
                                                                         required: true
                                                                     },
+/*
+                                                                    {
+                                                                        id: "page_type",
+                                                                        type: "custom",
+                                                                        custom: "radio",
+                                                                        additionalFieldClasses: "newpage-pagetype",
 
+                                                                        data: {
+                                                                            callbacks: {
+                                                                                onChange: "Centauri.Events.EditorComponent.Radio.OnClick(this)"
+                                                                            },
+
+                                                                            items: [
+                                                                                {
+                                                                                    id: "rootpage",
+                                                                                    isChecked: true,
+                                                                                    label: Centauri.__trans.EditorComponent.label_rootpage + "?"
+                                                                                },
+
+                                                                                {
+                                                                                    id: "subpage",
+                                                                                    label: Centauri.__trans.EditorComponent.label_subpage + "?"
+                                                                                }
+                                                                            ],
+                                                                        }
+                                                                    },
+*/
                                                                     {
                                                                         id: "is_rootpage",
                                                                         type: "custom",

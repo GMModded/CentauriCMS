@@ -25,7 +25,16 @@ Centauri.Components.EditorComponent = function(type, data) {
 
             if(Centauri.isNotUndefined(data.html)) {
                 $("form", $editor).remove();
-                $(".bottom", $editor).empty().addClass("px-3").append(data.html);
+
+                if(Centauri.isNotUndefined(data.container)) {
+                    $(".bottom", $editor).empty().addClass("px-3").append("<div class='" + data.container + "'>" + data.html + "</div>");
+                } else {
+                    $(".bottom", $editor).empty().addClass("px-3").append(data.html);
+                }
+
+                if(Centauri.isNotUndefined(data.callbacks.htmlAppended)) {
+                    data.callbacks.htmlAppended();
+                }
             } else {
                 if(Centauri.isNotUndefined(data.form)) {
                     Centauri.Components.EditorComponent.FormData = data.form;
@@ -92,7 +101,7 @@ Centauri.Components.EditorComponent = function(type, data) {
             }
         }
 
-        if(Centauri.isNotUndefined(data.container)) {
+        if(Centauri.isNotUndefined(data.container) && Centauri.isUndefined(data.html)) {
             Centauri.Components.EditorComponent.Container = data.container;
 
             if(Centauri.isNotUndefined(data.cols)) {

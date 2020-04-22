@@ -725,6 +725,81 @@ Centauri.Components.PagesComponent = function(module) {
                                 html: data,
 
                                 callbacks: {
+                                    htmlAppended: ($editor) => {
+                                        /**
+                                         * Models Search-Filter
+                                         */
+                                        $("input#filter_modelitems", $editor).on("keyup", function(e) {
+                                            let value = $(this).val();
+
+                                            if(value != "") {
+                                                $(".model", $editor).css("display", "none");
+
+                                                $(".model", $editor).each(function() {
+                                                    let $item = $(this);
+                                                    let text = $.trim($item.text());
+
+                                                    if(Centauri.strContains(text, value)) {
+                                                        $item.css("display", "block");
+                                                    }
+                                                });
+                                            } else {
+                                                $(".model", $editor).css("display", "block");
+                                            }
+                                        });
+
+                                        /**
+                                         * Model Edit Function
+                                         */
+                                        $(".model", $editor).each(function() {
+                                            let $model = $(this);
+
+                                            $(".top .edit", $model).on("click", this, function() {
+                                                let $this = $(this);
+                                                let $originModelEl = $this.parent().parent().parent();
+
+                                                if(!Centauri.elExists($("> .bottom", $originModelEl))) {
+                                                    let namespace = $originModelEl.parent().parent().data("namespace");
+                                                    let uid = $originModelEl.data("uid");
+
+                                                    $(".top .button-view .edit i", $originModelEl).addClass("d-none disabled");
+                                                    $(".top .button-view .edit", $originModelEl).append("<span class='spinner-grow spinner-grow-sm' role='status' aria-hidden='true'></span>");
+
+                                                    Centauri.fn.Ajax(
+                                                        "InlineRecords",
+                                                        "edit",
+
+                                                        {
+                                                            namespace: namespace,
+                                                            uid: uid
+                                                        },
+
+                                                        {
+                                                            success: (data) => {
+                                                                $(".top .button-view .edit i", $originModelEl).removeClass("d-none");
+                                                                $(".top .button-view .edit .spinner-grow", $originModelEl).remove();
+
+                                                                $originModelEl.append(data);
+                                                                Centauri.View.ContentElementsView();
+                                                                Centauri.Service.CKEditorInitService(); 
+
+                                                                setTimeout(() => {
+                                                                    $("> .bottom", $originModelEl).slideDown(function() {
+                                                                        $this.toggleClass("btn-primary btn-info");
+                                                                    });
+                                                                }, 100);
+                                                            }
+                                                        }
+                                                    );
+                                                } else {
+                                                    $("> .bottom", $originModelEl).slideToggle(function() {
+                                                        $this.toggleClass("btn-primary btn-info");
+                                                    });
+                                                }
+                                            });
+                                        });
+                                    },
+
                                     save: function(formData) {
                                         console.log(formData);
                                     }

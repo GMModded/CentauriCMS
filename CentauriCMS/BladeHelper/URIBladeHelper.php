@@ -2,13 +2,17 @@
 namespace Centauri\CMS\BladeHelper;
 
 use Centauri\CMS\Centauri;
-use Centauri\CMS\Model\File;
-use Centauri\CMS\Utility\PathUtility;
+use Centauri\CMS\Model\Page;
+use Centauri\Extension\Controller\NewsController;
+use Exception;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Usage:
- * <a href="{!! URIBladeHelper::action("") !!}">My link</a>
- * <form action="{!! URIBladeHelper::action("") !!}">...</form>
+ * <a href="{!! URIBladeHelper::action("Controller", "action") !!}">My link</a>
+ * 
+ * Example:
+ * <form action="{!! URIBladeHelper::action("Backend", "login") !!}">...</form>
  * 
  * 
  */
@@ -21,5 +25,26 @@ class URIBladeHelper
         $url = $backendURL . "action/" . $controller . "/" . $action;
 
         return $url;
+    }
+
+    public static function linkAction($class, $action, $parameters, $pid = "CURRENT_PAGE")
+    {
+        $instance = new $class;
+        $action .= "Action";
+
+        if(!method_exists($instance, $action)) {
+            throw new Exception("The method '" . $action . "' in the class '" . $class . "' doesn't exists!");
+        }
+
+        $slug = isset($parameters["slug"]) ? urlencode($parameters["slug"]) : "";
+        $slug = str_replace("+", "-", $slug);
+        $url = strtolower(url(url()->current() . "/$slug"));
+
+        return $url;
+
+        return call_user_func([
+            $instance,
+            $action
+        ], $parameters);
     }
 }

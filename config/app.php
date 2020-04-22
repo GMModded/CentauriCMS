@@ -226,7 +226,8 @@ return [
 
         // "CentauriBladeHelper" => Centauri\CMS\BladeHelper\LoadBladeHelpers::class,
         "ImageBladeHelper" => Centauri\CMS\BladeHelper\ImageBladeHelper::class,
-        "BuildBladeHelper" => Centauri\CMS\BladeHelper\BuildBladeHelper::class
+        "BuildBladeHelper" => Centauri\CMS\BladeHelper\BuildBladeHelper::class,
+        "URIBladeHelper" => \Centauri\CMS\BladeHelper\URIBladeHelper::class
     ],
 
 ];

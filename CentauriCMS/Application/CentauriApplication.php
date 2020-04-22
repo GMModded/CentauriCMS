@@ -21,8 +21,14 @@ class CentauriApplication
                 ],
 
                 "ContentElements" => [
-                    "plugin" => \Centauri\CMS\AdditionalDatas\PluginAdditionalDatas::class,
-                    "grids" => \Centauri\CMS\AdditionalDatas\GridAdditionalDatas::class
+                    "plugin" => [
+                        "class" => \Centauri\CMS\AdditionalDatas\PluginAdditionalDatas::class
+                    ],
+
+                    "grids" => [
+                        "class" => \Centauri\CMS\AdditionalDatas\GridAdditionalDatas::class,
+                        "return_statement" => 1
+                    ]
                 ]
             ],
 
@@ -41,7 +47,9 @@ class CentauriApplication
                     "config" => [
                         "__DEFAULT__" => \Centauri\CMS\Http\PageNotFound::class
                     ]
-                ]
+                ],
+
+                "routes" => []
             ],
 
             "Helper" => [

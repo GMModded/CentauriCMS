@@ -1,5 +1,8 @@
 Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
-    // let url = Centauri.Utility.PathsUtility.root + Centauri.Utility.PathsUtility.centauri + Centauri.Utility.PathsUtility.ajax + ajax + "/" + method;
+    if(Centauri.isUndefined(callbacks.success)) {
+        return console.warn("Centauri.fn.Ajax: Can't call an AJAX without a callback-handler for the success-scope!");
+    }
+
     let url = Centauri.Helper.AjaxHelper.buildAjaxURL(Centauri.Utility.PathsUtility, ajax, method);
 
     if(Centauri.fn.Ajax.Overlayer) {

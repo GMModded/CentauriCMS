@@ -160,7 +160,7 @@ class ContentElementsAjax implements AjaxInterface
     {
         if($ajaxName == "findByPid") {
             $uid = $request->input("pid");
-            $lid = 0; // $request->input("lid");
+            $lid = $request->input("lid") ?? 0;
 
             $elements = Element::where([
                 "pid" => $uid,
@@ -472,10 +472,20 @@ class ContentElementsAjax implements AjaxInterface
             $additionalData = [];
 
             if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype])) {
-                $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype];
+                if(!isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype]["class"])) {
+                    throw new Exception("AdditionalDataFuncs for CType '$ctype' has no specified class value!");
+                }
+
+                $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype]["class"];
                 $additionalDataClass = Centauri::makeInstance($additionalDataClassName);
 
                 if(method_exists($additionalDataClass, "onEditListener")) {
+                    $returns = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype]["return_statement"] ?? 0;
+
+                    if($returns) {
+                        return $additionalDataClass->onEditListener($element);
+                    }
+
                     $additionalDataClass->onEditListener($element);
                 }
             }
@@ -604,7 +614,7 @@ class ContentElementsAjax implements AjaxInterface
                 if($element->save()) {
                     return json_encode([
                         "type" => "primary",
-                        "title" => "Element updated",
+                        "title" => "Element Visibility",
                         "description" => "This element is now " . $state
                     ]);
                 }
@@ -658,6 +668,10 @@ class ContentElementsAjax implements AjaxInterface
 
             $crtElement->rowPos = $rowPos;
             $crtElement->colPos = $colPos;
+
+            if($parent == "grid") {
+                $parentUid = $data["parentUid"];
+            }
 
             $crtElement->save();
 

@@ -112,6 +112,10 @@
                 $contentelement.addClass("sorting");
                 sortingElement = $contentelement;
 
+                if(sortingElement.hasClass("top")) {
+                    sortingElement = sortingElement.parent();
+                }
+
                 let index = $contentelement.attr("data-index");
                 let i = 0;
 
@@ -148,9 +152,13 @@
                     let $colparent = $(this).parent().parent();
                     let parent = $(this).attr("data-parent");
 
+                    let parentUid = -1;
+
                     if(parent == "grid") {
                         $rowparent = $(this).parent().parent().parent().parent().parent().parent();
                         $colparent = $(this).parent().parent().parent().parent().parent();
+
+                        parentUid = $(this).parent().parent().parent().data("uid");
                     }
 
                     let position = "";
@@ -181,6 +189,7 @@
                     data.direction = position;
                     data.targetuid = targetuid;
                     data.parent = parent;
+                    data.parentUid = parentUid;
 
                     Centauri.fn.Ajax(
                         "ContentElements",

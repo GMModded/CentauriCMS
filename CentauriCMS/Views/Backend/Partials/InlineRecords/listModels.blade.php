@@ -1,4 +1,4 @@
-<div class="models p-3">
+<div class="models p-3" data-namespace="{{ $namespace }}">
     <div class="row mb-3">
         <div class="col align-items-center d-flex">
             <h5 id="headers">
@@ -12,9 +12,9 @@
 
         <div class="col col-md-4">
             <div class="md-form">
-                <input id="filter" class="form-control" type="text" />
+                <input id="filter_modelitems" class="form-control" type="text" />
 
-                <label for="filter">
+                <label for="filter_modelitems">
                     Search
                 </label>
             </div>
@@ -55,8 +55,22 @@
                 }
             @endphp
 
-            <div class="model z-depth-1 col-12 waves-effect py-4 mb-3">
-                {!! $label !!}
+            <div class="model z-depth-1 col-12 py-2 mb-3" data-uid="{{ $model->uid }}">
+                <div class="top">
+                    <span class="title mt-1 pt-2 d-inline-block">
+                        {!! $label !!}
+                    </span>
+
+                    <div class="button-view float-right">
+                        <button class="edit btn btn-primary waves-effect waves-light btn-floating my-0 mx-1">
+                            <i class="fas fa-pen"></i>
+                        </button>
+
+                        <button class="sort btn btn-primary waves-effect waves-light btn-floating my-0 mx-1">
+                            <i class="fas fa-sort"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         @endforeach
     </div>

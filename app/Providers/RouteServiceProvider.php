@@ -35,6 +35,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
+        $this->mapCentauriRoutes();
+
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
@@ -77,5 +79,15 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * Define custom routes outside the routes/web.php file dynamically by Centauri.
+     * 
+     * @return void
+     */
+    protected function mapCentauriRoutes()
+    {
+        Route::namespace($this->namespace)->group(base_path("CentauriCMS/Http/Routes.php"));
     }
 }

@@ -38,7 +38,7 @@
                             </h2>
                         </div>
 
-                        <form class="col-12" action="{!! \Centauri\CMS\BladeHelper\URIBladeHelper::action("Backend", "login") !!}" method="post">
+                        <form class="col-12" action="{!! URIBladeHelper::action("Backend", "login") !!}" method="post">
                             @csrf
 
                             <div class="md-form">

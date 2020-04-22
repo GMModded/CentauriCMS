@@ -65,7 +65,7 @@
 
                                             <div class="d-none d-lg-flex">
                                                 <div class="action mr-3 p-2 waves-effect waves-light" data-action="models-list" data-uid="1">
-                                                    <i class="fas fa-pen fa-lg"></i>
+                                                    <i class="fas fa-list fa-lg"></i>
                                                 </div>
                                             </div>
                                         </div>

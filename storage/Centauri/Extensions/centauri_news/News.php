@@ -2,9 +2,13 @@
 namespace Centauri\Extension;
 
 use Centauri\CMS\Centauri;
+use Centauri\CMS\Http\FrontendRenderingHandler;
+use Centauri\CMS\Http\Request;
+use Centauri\CMS\Model\Page;
 use Centauri\CMS\Resolver\ViewResolver;
 use Centauri\Extension\Modules\NewsModule;
 use Centauri\Extension\Elements\TestElement;
+use Centauri\Extension\Model\News as ModelNews;
 
 class News
 {
@@ -29,18 +33,62 @@ class News
             "listLabel" => "{title} by <b>{author}</b>",
 
             "fields" => [
-                "title" => [
-                    "label" => trans("centauri_news::backend/global.label.title"),
-                    "type" => "input"
+                "slug" => [
+                    "type" => "input",
+                    "label" => trans("centauri_news::backend/global.label.slug"),
+
+                    "config" => [
+                        "required" => 1
+                    ]
                 ],
+
+                "title" => [
+                    "type" => "input",
+                    "label" => trans("centauri_news::backend/global.label.title")
+                ],
+
                 "headerimage" => [
-                    "label" => "HEADERIMAGE BRO",
-                    "type" => "image"
+                    "type" => "image",
+                    "label" => "Headerimage"
+                ],
+
+                "description" => [
+                    "type" => "rte",
+                    "label" => "Description"
                 ]
             ]
         ];
 
+        // Views registration through ViewResolver class
         $ViewResolver = Centauri::makeInstance(ViewResolver::class);
         $ViewResolver->register("centauri_news", "EXT:centauri_news/Views");
+
+        // NewsRoutesHook-Registration for Show-Action
+        $GLOBALS["Centauri"]["Hooks"]["RoutesHooks"]["NewsRoutesHook"] = \Centauri\Extension\Hook\NewsRoutesHook::class;
+
+        $GLOBALS["Centauri"]["Handlers"]["routes"]["centauri_news"][] = [
+            function() {
+                \Illuminate\Support\Facades\Route::any("/news/{title}", function($title = "") {
+                    $page = Page::where("slugs", "/news")->get()->first();
+                    $newsItem = ModelNews::where("slug", $title)->get()->first();
+
+                    $newsHtml = view("centauri_news::Frontend/show", [
+                        "newsItem" => $newsItem
+                    ])->render();
+
+                    return FrontendRenderingHandler::renderFrontendWithContent($page, $newsHtml);
+                });
+            }
+        ];
+    }
+
+    public function showAction($parameters)
+    {
+        $uid = $parameters["uid"];
+        $newsItem = ModelNews::where("uid", $uid)->get()->first();
+
+        return view("centauri_news::Frontend/show", [
+            "newsItem" => $newsItem
+        ])->render();
     }
 }

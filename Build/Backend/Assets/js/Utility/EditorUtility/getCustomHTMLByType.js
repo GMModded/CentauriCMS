@@ -1,14 +1,14 @@
 Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
-    var html = "";
-    var type = inputObj.custom;
-    var data = inputObj.data;
+    let html = "";
+    let type = inputObj.custom;
+    let data = inputObj.data;
 
-    var additionalFieldClasses = "";
+    let additionalFieldClasses = "";
 
     if(type == "select") {
-        var options = "";
+        let options = "";
 
-        var labelHTML = "<label class='mdb-main-label' for='" + inputObj.id + "'>" + data.label + "</label>";
+        let labelHTML = "<label class='mdb-main-label' for='" + inputObj.id + "'>" + data.label + "</label>";
         html = "<select id='" + inputObj.id + "' class='mdb-select select2 colorful-select dropdown-primary md-form' searchable='" + Centauri.__trans.global.searchhere + "' " + (Centauri.isNotUndefined(data.required) ? (data.required ? "required" : "") : "required") + ">|</select>";
 
         if(Centauri.isNotUndefined(data.label)) {
@@ -38,7 +38,7 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
     }
 
     if(type == "checkbox") {
-        var checked = "";
+        let checked = "";
 
         if(Centauri.isNotUndefined(data.isChecked)) {
             if(data.isChecked) {
@@ -51,8 +51,8 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
     }
 
     if(type == "switch") {
-        var checked = "";
-        var onClick = "";
+        let checked = "";
+        let onClick = "";
 
         if(Centauri.isNotUndefined(data.isChecked)) {
             if(data.isChecked) {
@@ -61,11 +61,25 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
         }
 
         if(Centauri.isNotUndefined(data.onClick)) {
-            var onClick = " onclick='" + data.onClick + "'";
+            let onClick = " onclick='" + data.onClick + "'";
         }
 
         additionalFieldClasses = " switch";
         html = "<label><input type='checkbox'" + checked + " id='" + inputObj.id + "'" + onClick + " /><span class='ml-1 lever'></span>" + data.label + "</label>";
+    }
+
+    if(type == "radio") {
+        let items = data.items;
+
+        additionalFieldClasses = " radio";
+
+        if(Centauri.isNotUndefined(inputObj.additionalFieldClasses)) {
+            additionalFieldClasses += " " + inputObj.additionalFieldClasses;
+        }
+
+        items.forEach(item => {
+            html += "<div class='form-check'><input type='radio' class='form-check-input' name='" + inputObj.id + "' id='" + item.id + "'" + (item.isChecked ? " checked" : "") + "><label class='form-check-label' for='" + item.id + "'>" + item.label + "</label></div>";
+        });
     }
 
     return "<div class='field" + additionalFieldClasses + "'" + (Centauri.isNotUndefined(inputObj.extraAttr) ? " " + inputObj.extraAttr : "") + ">" + html + "</div>";

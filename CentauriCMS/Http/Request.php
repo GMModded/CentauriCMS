@@ -177,21 +177,16 @@ class Request
         $renderedHTML = str_replace("  ", "", $renderedHTML);
         $renderedHTML = str_replace("\r\n", "", $renderedHTML);
 
-        $additionalHeadTagContent = "";
+        $additionalHeadTagContent = FrontendRenderingHandler::getAdditonalHeadTagContent();
 
-        foreach($GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Head"] as $headClass) {
-            $instance = Centauri::makeInstance($headClass);
-            $additionalHeadTagContent .= $instance->fetch();
-        }
+        // $additionalHeadTagContent = "";
 
-        $frontendHtml = view("Centauri::Frontend", [
-            "page" => $page,
-            "content" => $renderedHTML,
-            "additionalHeadTagContent" => $additionalHeadTagContent
-        ])->render();
+        // foreach($GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Head"] as $headClass) {
+        //     $instance = Centauri::makeInstance($headClass);
+        //     $additionalHeadTagContent .= $instance->fetch();
+        // }
 
-        $frontendHtml = str_replace("  ", "", $frontendHtml);
-        $frontendHtml = str_replace("\r\n", "", $frontendHtml);
+        $frontendHtml = FrontendRenderingHandler::getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent);
 
         // Caching only if it's set in Centauri's config array (which gets by default cached from Laravel)
         if(isset(config("centauri")["config"]["Caching"]) && (config("centauri")["config"]["Caching"])) {

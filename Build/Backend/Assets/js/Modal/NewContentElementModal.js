@@ -1,4 +1,6 @@
 Centauri.Modal.NewContentElementModal = function() {
+    // $("button", $editor).off("click");
+
     $("button", $editor).on("click", this, function() {
         var action = $(this).data("action");
 

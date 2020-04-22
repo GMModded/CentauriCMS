@@ -646,6 +646,20 @@ input:read-only:not(.select-dropdown) {
   border-right: unset !important;
   border-bottom: unset !important; }
 
+button i {
+  transition: 0.66s cubic-bezier(1, -0.09, 0, 1.16); }
+
+button.edit.btn-info i {
+  transform: rotate(-45deg); }
+
+button.sort {
+  cursor: move; }
+  button.sort.btn-primary {
+    transform: rotate(90deg); }
+
+div > .bottom {
+  width: 100% !important; }
+
 /**
  * Sections
  */
@@ -1064,14 +1078,6 @@ section#header {
         font-size: 20px;
         display: inline-block;
         padding: 15px; }
-      #editor > .bottom .content-element .top button i {
-        transition: 0.66s cubic-bezier(1, -0.09, 0, 1.16); }
-      #editor > .bottom .content-element .top button.edit.btn-info i {
-        transform: rotate(-45deg); }
-      #editor > .bottom .content-element .top button.sort {
-        cursor: move; }
-        #editor > .bottom .content-element .top button.sort.btn-primary {
-          transform: rotate(90deg); }
       #editor > .bottom .content-element .fields {
         width: 100%;
         padding: 0 15px 15px; }
@@ -1088,6 +1094,13 @@ section#header {
     left: 0px;
     padding: 15px 0;
     background: white; }
+
+#editor .field.radio.newpage-pagetype {
+  display: flex;
+  margin-bottom: 35px; }
+  #editor .field.radio.newpage-pagetype > .form-check {
+    padding-left: 0;
+    margin-right: 15px; }
 
 #file-selector {
   position: fixed;

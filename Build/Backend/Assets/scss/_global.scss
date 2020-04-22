@@ -157,3 +157,31 @@ input {
 	border-right: unset !important;
 	border-bottom: unset !important;
 }
+
+button {
+    i {
+        transition: .66s cubic-bezier(1, -0.09, 0, 1.16);
+    }
+
+    &.edit {
+        &.btn-info {
+            i {
+                transform: rotate(-45deg);
+            }
+        }
+    }
+
+    &.sort {
+        cursor: move;
+
+        &.btn-primary {
+            transform: rotate(90deg);
+        }
+    }
+}
+
+div {
+    & > .bottom {
+        width: 100% !important;
+    }
+}

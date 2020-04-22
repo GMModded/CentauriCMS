@@ -53,7 +53,8 @@ class InlineRecordsAjax implements AjaxInterface
 
                 return view("Centauri::Backend.Partials.InlineRecords.listModels", [
                     "models" => $models,
-                    "config" => $modelConfig
+                    "config" => $modelConfig,
+                    "namespace" => $namespace
                 ])->render();
             }
         }
@@ -102,6 +103,63 @@ class InlineRecordsAjax implements AjaxInterface
 
             $html = str_replace("###MODEL_CONTENT###", "", $modelHtml);
             return $html;
+        }
+
+        if($ajaxName == "edit") {
+            $uid = $request->input("uid");
+            $namespace = $request->input("namespace");
+
+            $modelInstance = new $namespace;
+            $model = $modelInstance::where("uid", $uid)->get()->first();
+
+            if(is_null($model)) {
+                return response("Looks like this Inline-Record does not exists anymore... Does it has been deleted by a previous action (may from another user)?", 500);
+            }
+
+            $CMEs = ModelsHelper::getAllCMEs();
+            $modelConfig = $CMEs["models"][$namespace] ?? null;
+
+            if(is_null($modelConfig)) {
+                return response("Hm, looks like the model with the namespace '" . $namespace . "' (uid " . $uid . ") has not been registered yet?", 500);
+            }
+
+            $fields = $modelConfig["fields"];
+
+            $ContentElementAjax = Centauri::makeInstance(ContentElementsAjax::class);
+            $html = "";
+
+            foreach($fields as $id => $field) {
+                $html .= $ContentElementAjax->renderHtmlByField($field, [
+                    "id" => $id,
+                    "value" => $model->$id ?? "",
+                    "uid" => $model->uid
+                ], "");
+            }
+
+            return view("Centauri::Backend.Partials.InlineRecords.editModel", [
+                "renderedHtmlFields" => $html,
+                "model" => $model
+            ])->render();
+
+            $CCE = config("centauri")["CCE"];
+            $CCEfields = $CCE["fields"];
+
+            $modelConfig = $CCEfields[$parentmodelid]["config"]["fields"][$modelid];
+
+            $modelNamespace = $modelConfig["config"]["model"];
+            $parentUidName = $modelConfig["config"]["parent_uid"] ?? "parent_uid";
+
+            $modelHtml = view("Centauri::Backend.Modals.NewContentElement.Fields.model_singleitem", [
+                "uid" => $model->uid,
+                "sorting" => 0
+            ])->render();
+
+            $modelHtml = str_replace("###MODEL_CONTENT_TOP###", ($modelConfig["newItemLabel"] ?? "Item"), $modelHtml);
+
+            $bottom = "";
+            foreach($modelConfig["config"]["fields"] as $_key => $_field) {
+                $bottom .= $ContentElementAjax->renderField((is_int($_key) ? $_field : $_key), $model, $modelid);
+            }
         }
 
         return AjaxAbstract::default($request, $ajaxName);
