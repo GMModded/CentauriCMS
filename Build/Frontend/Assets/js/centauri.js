@@ -31,7 +31,7 @@ Centauri.Utility.ContentElementUtility = (ceName) => {
 })();
 
 window.onload = () => {
-    Centauri.Service.UsedCSSService();
+    // Centauri.Service.UsedCSSService();
 
     document.addEventListener("DOMContentLoaded", () => {
         Centauri.Service.LazyLoadService();
