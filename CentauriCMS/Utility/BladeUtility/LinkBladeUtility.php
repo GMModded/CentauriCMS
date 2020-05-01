@@ -18,8 +18,6 @@ class LinkBladeUtility
             if(!$domain->ssl) {
                 $ssl = "http://";
             }
-        } else {
-            $ssl = "http://";
         }
 
         return $ssl . $domain . $page->slugs;
