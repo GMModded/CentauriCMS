@@ -2,15 +2,24 @@ Centauri.Modal.NewContentElementModal = function() {
     // $("button", $editor).off("click");
 
     $("button", $editor).on("click", this, function() {
-        var action = $(this).data("action");
+        let $btn = $(this);
+        let action = $(this).data("action");
 
         if(action == "newContentElement") {
+            $btn.css("cursor", "wait");
+
             var rowPos = $(this).parent().parent().attr("data-rowpos");
             var colPos = $(this).parent().attr("data-colpos");
             var sorting = $(this).attr("data-sorting");
 
             var sorting, $element;
             var insert = $(this).attr("data-insert");
+            var type = (Centauri.isNotUndefined($(this).attr("data-type")) ? $(this).attr("data-type") : "");
+            var gridsorting = null;
+
+            if(type == "ingrid") {
+                gridsorting = $(this).attr("data-gridsorting");
+            }
 
             if(insert == "before") {
                 $element = $(this).next();
@@ -23,6 +32,7 @@ Centauri.Modal.NewContentElementModal = function() {
 
             if(Centauri.elExists("#modal-new_contentelement")) {
                 $("#modal-new_contentelement").modal("show");
+                $btn.css("cursor", "pointer");
                 return;
             }
 
@@ -48,17 +58,18 @@ Centauri.Modal.NewContentElementModal = function() {
 
                                 close: {
                                     label: "",
-                                    class: "danger fas fa-times"
+                                    class: "danger fas fa-times btn-floating"
                                 },
         
                                 save: {
                                     label: "",
-                                    class: "success fas fa-save"
+                                    class: "primary fas fa-plus btn-floating mr-2"
                                 }
                             },
 
                             {
                                 ready: () => {
+                                    $btn.css("cursor", "pointer");
                                     Centauri.Components.CreateNewInlineComponent();
                                 },
 
@@ -72,7 +83,15 @@ Centauri.Modal.NewContentElementModal = function() {
                                     $modal.hide();
 
                                     Centauri.fn.Modal.close();
-                                    var datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
+                                    let datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
+
+                                    let tempArr = [];
+
+                                    Object.keys(datas).forEach((data) => {
+                                        tempArr.push(datas[data]);
+                                    });
+
+                                    let jsonDatas = JSON.stringify(tempArr);
 
                                     Centauri.fn.Ajax(
                                         "ContentElements",
@@ -81,12 +100,14 @@ Centauri.Modal.NewContentElementModal = function() {
                                         {
                                             pid: Centauri.Components.PagesComponent.uid,
                                             ctype: Centauri.Helper.ModalHelper.Element.data("ctype"),
-                                            datas: JSON.stringify(datas),
+                                            datas: jsonDatas,
 
                                             rowPos: rowPos,
                                             colPos: colPos,
                                             insert: insert,
-                                            sorting: sorting
+                                            sorting: sorting,
+                                            type: type,
+                                            gridsorting: gridsorting
                                         },
 
                                         {

@@ -1,8 +1,7 @@
 <?php
 namespace Centauri\CMS\Processor;
 
-use Centauri\CMS\Centauri;
-use Centauri\CMS\Processor;
+use Illuminate\Support\Str;
 
 class FieldProcessor
 {
@@ -42,6 +41,10 @@ class FieldProcessor
 
                 if($fieldType == "model") {
                     $element->$_ = InlineProcessor::findByRelation($element->uid, $_, $field["config"]["model"]);
+                }
+
+                if(Str::contains($_, "grid-")) {
+                    $element->$_ = GridsProcessor::process($data);
                 }
             }
         }

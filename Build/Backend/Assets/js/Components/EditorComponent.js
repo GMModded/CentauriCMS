@@ -277,8 +277,20 @@ Centauri.Components.EditorComponent.init = function() {
         }
     });
 
-    $(document).on("keyup", function(e) {
-        if(e.which == 27 && !Centauri.elExists($("#modal-new_contentelement"))) {
+    $(document).on("keyup", this, function(e) {
+        let canClose = false;
+
+        if(e.which == 27) {
+            if(!Centauri.elExists($("#modal-new_contentelement"))) {
+                canClose = true;
+            } else {
+                if($("#modal-new_contentelement").css("display") == "none") {
+                    canClose = true;
+                }
+            }
+        }
+
+        if(canClose) {
             var closer = $(".overlayer").attr("data-closer");
 
             if(closer == "EditorComponent") {

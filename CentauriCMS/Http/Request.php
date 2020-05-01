@@ -171,20 +171,13 @@ class Request
         $page = Page::find($page->uid);
         $uid = $page->getAttribute("uid");
 
-        // Calling ElementComponent which renders by "FE" type the content elements by the given page-uid ($uid)
+        // Calling ElementComponent which renders the content elements by the given page-uid ($uid)
         $ElementComponent = Centauri::makeInstance(ElementComponent::class);
-        $renderedHTML = $ElementComponent->render("FE", $uid);
+        $renderedHTML = $ElementComponent->render($uid);
         $renderedHTML = str_replace("  ", "", $renderedHTML);
         $renderedHTML = str_replace("\r\n", "", $renderedHTML);
 
         $additionalHeadTagContent = FrontendRenderingHandler::getAdditonalHeadTagContent();
-
-        // $additionalHeadTagContent = "";
-
-        // foreach($GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Head"] as $headClass) {
-        //     $instance = Centauri::makeInstance($headClass);
-        //     $additionalHeadTagContent .= $instance->fetch();
-        // }
 
         $frontendHtml = FrontendRenderingHandler::getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent);
 

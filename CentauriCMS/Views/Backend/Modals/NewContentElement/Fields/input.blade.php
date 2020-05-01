@@ -14,7 +14,7 @@
         @endswitch
     @endif
 
-    <input class="form-control" type="text" id="{{ $fieldConfig['id'] }}" data-id="{{ $fieldConfig['id'] }}" value="{{ $fieldConfig['value'] ?? '' }}" data-inline-record="{{ isset($fieldConfig['isInlineRecord']) ? 1 : 0 }}"{{ (isset($fieldConfig["config"]["required"]) ?? $config["required"] ? " required" : "") }} />
+    <input class="form-control" type="text" id="{{ $fieldConfig['id'] }}" data-id="{{ $fieldConfig['id'] }}" value="{{ $fieldConfig['value'] ?? '' }}" data-inline-record="{{ isset($fieldConfig['isInlineRecord']) ? 1 : 0 }}"{{ (isset($fieldConfig["config"]["required"]) ?? $config["required"] ? " required" : "") }} data-uid="{{ $fieldConfig['uid'] }}" />
 
     <label for="{{ $fieldConfig['id'] }}"{{ (isset($fieldConfig['value']) ? ' class=active' : '') }}>
         {{ $fieldConfig["label"] }}

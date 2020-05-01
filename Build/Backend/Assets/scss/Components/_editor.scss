@@ -108,7 +108,10 @@
                 &:not(:last-child) {
                     padding-bottom: 30px;
                     margin-bottom: 30px;
-                    border-bottom: 1px solid #cecece;
+
+                    &:not(:first-child) {
+                        border-bottom: 1px solid #cecece;
+                    }
                 }
             }
         }

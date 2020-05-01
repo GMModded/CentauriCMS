@@ -21,10 +21,14 @@
                                         Content
                                     </button>
 
-                                    <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}">
+                                <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}" data-ctype="{{ $element->ctype }}">
                                         <div class="top">
                                             <span class="title">
-                                                {{ $element->ctype }}
+                                                @if(isset($element->customTitle))
+                                                    {{ $element->customTitle }}
+                                                @else
+                                                    {{ $element->ctype }}
+                                                @endif
                                             </span>
 
                                             <div class="button-view float-right">

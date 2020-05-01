@@ -17,6 +17,6 @@ class GridHelper
         return Element::where([
             "grids_sorting" => $uid,
             "lid" => $lid
-        ])->get()->all();
+        ])->orderBy("sorting", "asc")->get()->all();
     }
 }

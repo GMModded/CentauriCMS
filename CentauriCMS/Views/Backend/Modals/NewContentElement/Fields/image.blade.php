@@ -1,3 +1,13 @@
+@php
+    $isInlineRecord = "0";
+
+    if(isset($fieldConfig["isInlineRecord"])) {
+        if($fieldConfig["isInlineRecord"]) {
+            $isInlineRecord = "1";
+        }
+    }
+@endphp
+
 <div class="md-form">
     <div class="image-field d-flex mt-2">
         <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3 mr-2" data-centauri-btn="addimage" data-required="{{ $config["required"] ?? '' }}" data-maxitems="{{ $config["maxItems"] ?? '' }}">
@@ -13,7 +23,7 @@
         </button>
     </div>
 
-    <input class="form-control d-none image-input" type="text" id="{{ $fieldConfig['id'] }}" data-id="{{ $fieldConfig['id'] }}" value="{{ $fieldConfig['value'] ?? '' }}" data-inline-record="1" />
+    <input class="form-control d-none image-input" type="text" id="{{ $fieldConfig['id'] }}" data-id="{{ $fieldConfig['id'] }}" value="{{ $fieldConfig['value'] ?? '' }}" data-inline-record="{{ $isInlineRecord }}" data-uid="{{ $fieldConfig['uid'] }}" />
 
     <label for="{{ $fieldConfig['id'] }}" style="margin-top: -25px;">
         {{ $fieldConfig['label'] }}

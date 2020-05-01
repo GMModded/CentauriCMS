@@ -37,13 +37,16 @@ return [
 
     "newContentElement" => [
         "Tabs" => [
-            "general" => "General"
+            "general" => "General",
+            "special" => "Special",
         ],
 
         "Elements" => [
             "plugin" => "Plugin",
             "headerdescription" => "Header and Description",
-            "headerimage" => "Fullsize Image with Headers"
+            "headerimage" => "Fullsize Image with Headers",
+            "grids" => "Grid",
+            "slider" => "Slider",
         ]
     ],
 

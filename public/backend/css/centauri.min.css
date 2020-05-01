@@ -1065,8 +1065,9 @@ section#header {
         left: 0; }
     #editor > .bottom .container .row[data-rowPos]:not(:last-child) {
       padding-bottom: 30px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid #cecece; }
+      margin-bottom: 30px; }
+      #editor > .bottom .container .row[data-rowPos]:not(:last-child):not(:first-child) {
+        border-bottom: 1px solid #cecece; }
     #editor > .bottom .content-element {
       background-color: white;
       margin-top: 15px; }

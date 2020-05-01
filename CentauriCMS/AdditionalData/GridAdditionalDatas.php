@@ -26,28 +26,30 @@ class GridAdditionalDatas implements \Centauri\CMS\AdditionalDataInterface
         $GridHelper = Centauri::makeInstance(GridHelper::class);
         $elements = $GridHelper->findElementsByGridUid($gridUid);
 
-        $gridLayout = null;
+        $gridConfig = null;
 
         if(!is_null($gridelement->grid)) {
-            $gridLayout = config("centauri")["gridLayouts"][$gridelement->grid] ?? null;
+            $gridConfig = config("centauri")["gridLayouts"][$gridelement->grid] ?? null;
+        } else {
+            return response("Grid-Layout '" . $gridelement->grid . "' not found for Grid with ID: " . $gridUid . " in Grid-Layouts configuration", 500);
         }
 
-        return response("Grid-Layout '" . $gridelement->grid . "' not found for Grid with ID: " . $gridUid . " in Grid-Layouts configuration", 500);
-
-        return view("Centauri::Backend.Partials.elementsInGrid", [
+        $data = [
             "data" => [
-                "gridLayout" => $gridLayout,
+                "gridConfig" => $gridConfig,
                 "gridelement" => $gridelement,
                 "elements" => $elements
             ]
-        ])->render();
+        ];
 
-        if(
-            is_null($gridelement->grids_rowpos)
-        ||
-            is_null($gridelement->grids_colpos)
-        ) {
-            return;
-        }
+        return view("Centauri::Backend.Partials.elementsInGrid", $data)->render();
+
+        // if(
+        //     is_null($gridelement->grids_rowpos)
+        // ||
+        //     is_null($gridelement->grids_colpos)
+        // ) {
+        //     return;
+        // }
     }
 }

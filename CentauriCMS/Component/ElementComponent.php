@@ -8,7 +8,6 @@ class ElementComponent
     /**
      * Function to render content elements either by frontend or backend and optional given lid (LanguageID)
      * 
-     * @param string $view Can be only "frontend" or "FE"
      * @param string|int $pageUid Uid of the page to render
      * @param string|int $lid Elements from specific language
      * @param int $rowPos The rowPos configurable by beLayout
@@ -16,42 +15,45 @@ class ElementComponent
      * 
      * @return void
      */
-    public function render($view, $pageUid, $lid = 0, $rowPos = 0, $colPos = 0)
+    public function render($pageUid, $lid = 0, $rowPos = 0, $colPos = 0)
     {
-        if(
-            $view == "frontend"
-        ||
-            $view == "FE"
-        ) {
-            $elements = \Centauri\CMS\Model\Element::where([
-                "pid" => $pageUid,
-                "lid" => $lid,
-                "hidden" => 0,
-                "rowPos" => $rowPos,
-                "colPos" => $colPos
-            ])->orderBy("sorting", "asc")->get();
+        $elements = \Centauri\CMS\Model\Element::where([
+            "pid" => $pageUid,
+            "lid" => $lid,
+            "hidden" => 0,
+            "rowPos" => $rowPos,
+            "colPos" => $colPos,
+            "grids_sorting" => null
+        ])->orderBy("sorting", "asc")->get();
 
-            $renderedHTML = "";
+        return $this->getRenderedHtmlByElements($elements);
+    }
 
-            foreach($elements as $element) {
-                $data = [];
+    public function renderElements($elements)
+    {
+        return $this->getRenderedHtmlByElements($elements);
+    }
 
-                if($element->ctype == "plugin") {
-                    $className = $element->plugin;
-                    $data = Centauri::makeInstance($className, $element);
-                }
+    public function getRenderedHtmlByElements($elements)
+    {
+        $renderedHTML = "";
 
-                $element = \Centauri\CMS\Processor\FieldProcessor::process($element, $data);
+        foreach($elements as $element) {
+            $data = [];
 
-                $renderedHTML .= view("Centauri::Frontend.Elements." . $element->ctype, [
-                    "element" => $element,
-                    "data" => $data
-                ])->render();
+            if($element->ctype == "plugin") {
+                $className = $element->plugin;
+                $data = Centauri::makeInstance($className, $element);
             }
 
-            return $renderedHTML;
+            $element = \Centauri\CMS\Processor\FieldProcessor::process($element, $data);
+
+            $renderedHTML .= view("Centauri::Frontend.Elements." . $element->ctype, [
+                "element" => $element,
+                "data" => $data
+            ])->render();
         }
 
-        return null;
+        return $renderedHTML;
     }
 }

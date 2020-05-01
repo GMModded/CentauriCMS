@@ -3,7 +3,7 @@
 
     @php $dataHTML = json_encode($fieldConfig["value"] ?? ""); @endphp
 
-    <div data-id="{{ $fieldConfig["id"] }}" class="md-textarea form-control" data-html="{{ $dataHTML }}"></div>
+    <div data-id="{{ $fieldConfig["id"] }}" class="md-textarea form-control" data-html="{{ $dataHTML }}" data-uid="{{ $fieldConfig['uid'] }}"></div>
 
     <label for="{{ $fieldConfig["id"] }}"{{ (isset($fieldConfig["value"]) ? ' class=active' : '') }}>
         {{ $fieldConfig["label"] }}

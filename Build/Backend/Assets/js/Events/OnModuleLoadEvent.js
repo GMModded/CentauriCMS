@@ -590,7 +590,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                             }
 
                                             Centauri.fn.Modal.close();
-                                            var datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
+                                            let datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
 
                                             Centauri.fn.Ajax(
                                                 "Models",

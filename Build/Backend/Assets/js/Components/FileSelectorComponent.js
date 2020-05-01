@@ -20,8 +20,13 @@ Centauri.Components.FileSelectorComponent = (type, cb = null) => {
             $btn.click(e => {
                 if($(this).hasClass("save")) {
                     let selectedFiles = $(".item.selected", $fileselector);
+                    let filesWord = "file";
 
-                    Centauri.Notify("success", "File-Selector", selectedFiles.length + " file(s) has been selected.");
+                    if(selectedFiles > 1) {
+                        filesWord += "s";
+                    }
+
+                    Centauri.Notify("primary", "File-Selector", selectedFiles.length + " " + filesWord + " has been selected.");
 
                     if(Centauri.isNotNull(cb)) {
                         let selectedUids = "";
@@ -74,7 +79,7 @@ Centauri.Components.FileSelectorComponent = (type, cb = null) => {
     if(type == "close") {
         $("#file-selector").addClass("inactive");
 
-        setTimeout(() => {
+        return setTimeout(() => {
             $("#file-selector").remove();
         }, 660);
     }

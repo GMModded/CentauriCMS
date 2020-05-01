@@ -2,7 +2,7 @@
 
 return [
     "config" => [
-        "Caching" => true
+        "Caching" => false
     ],
 
     "beLayouts" => [
@@ -21,13 +21,34 @@ return [
                     ]
                 ],
 
+                /*
                 1 => [
                     "cols" => [
                         2 => [
-                            "label" => "AHHHH1"
+                            "label" => "ColPos with value 2 & rowPos 1"
                         ],
                         3 => [
-                            "label" => "AHHHH2"
+                            "label" => "ColPos with value 3 & rowPos 1"
+                        ]
+                    ]
+                ]
+                */
+            ]
+        ]
+    ],
+
+    "gridLayouts" => [
+        "onecol" => [
+            "label" => " » One Column Container",
+
+            "config" => [
+                // rowPos - will be saved into the DB as key
+                0 => [
+                    // "cols" => Array
+                    "cols" => [
+                        // colPositions - will be saved into the DB as key
+                        0 => [
+                            "label" => "backend/be_layout.layouts.default.cols.content"
                         ]
                     ]
                 ]
@@ -105,6 +126,11 @@ return [
             "grid-container-full" => [
                 "label" => "Container (Full)",
                 "type" => "grid",
+                "additionalType" => "grid"
+            ],
+            "grid-space-top" => [
+                "label" => "Grid Space Top",
+                "type" => "input",
                 "additionalType" => "grid"
             ],
             "image" => [
@@ -188,6 +214,8 @@ return [
             ],
             "slideritems_buttons" => [
                 "config" => [
+                    "model" => "\Centauri\CMS\Model\SliderItemButtonModel",
+
                     "fields" => [
                         "label" => [
                             "label" => "Label",
@@ -230,7 +258,8 @@ return [
             ],
 
             "grids" => [
-                "grid-container-full"
+                "grid-container-full",
+                "grid-space-top"
             ]
         ],
 
@@ -246,7 +275,7 @@ return [
             ],
             
             "special" => [
-                "label" => "SPECIAL",
+                "label" => "backend/modals.newContentElement.Tabs.special",
 
                 "elements" => [
                     "plugin"

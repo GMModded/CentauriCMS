@@ -164,8 +164,9 @@ class ContentElementsAjax implements AjaxInterface
 
             $elements = Element::where([
                 "pid" => $uid,
-                "lid" => $lid
-            ])->orderBy("sorting", "asc")->get();
+                "lid" => $lid,
+                "hidden" => 0
+            ])->orderBy("sorting", "asc")->get()->all();
 
             $CCE = config("centauri")["CCE"];
             $fields = $CCE["fields"];
@@ -177,10 +178,20 @@ class ContentElementsAjax implements AjaxInterface
                 return response("Backend-Layout '" . $page->getAttribute("backend_layout") . "' not found for page with ID: " . $page->getAttribute("uid"), 500);
             }
 
+            foreach($elements as $element) {
+                if($element->ctype == "grids") {
+                    $gridConfig = config("centauri")["gridLayouts"][$element->grid] ?? null;
+
+                    if(!is_null($gridConfig)) {
+                        $element->customTitle = $element->ctype . $gridConfig["label"];
+                    }
+                }
+            }
+
             return view("Centauri::Backend.Partials.elements", [
                 "data" => [
                     "beLayout" => $backendLayout,
-                    "elements" => $elements->all(),
+                    "elements" => $elements,
                     "fields" => $fields
                 ]
             ])->render();
@@ -269,7 +280,7 @@ class ContentElementsAjax implements AjaxInterface
                 $additionalData = [];
 
                 if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type])) {
-                    $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type];
+                    $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type]["class"];
                     $additionalDataClass = Centauri::makeInstance($additionalDataClassName);
 
                     if(!method_exists($additionalDataClass, "fetch")) {
@@ -284,7 +295,6 @@ class ContentElementsAjax implements AjaxInterface
                     if($type == "model") {
                         $html = "";
 
-                        /*
                         $modelFields = $config["fields"];
 
                         $modelWrapper = view("Centauri::Backend.Modals.NewContentElement.Fields.model", [
@@ -314,7 +324,6 @@ class ContentElementsAjax implements AjaxInterface
                             $modelWrapper = str_replace("###MODEL_CONTENT###", $_html, $modelWrapper);
                             $html = $modelWrapper;
                         }
-                        */
                     } else {
                         // $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $type, [
                         //     "id" => $ctype,
@@ -335,6 +344,8 @@ class ContentElementsAjax implements AjaxInterface
                 $CCE["fields"][$ctype]["_HTML"] = $html;
             }
 
+            dd($CCE);
+
             return view("Centauri::Backend.Modals.newContentElement", [
                 "CCE" => $CCE
             ])->render();
@@ -342,11 +353,12 @@ class ContentElementsAjax implements AjaxInterface
 
         if($ajaxName == "newElement") {
             $pid = $request->input("pid");
-            $lid = 0; // $request->input("lid");
+            $lid = $request->input("lid") ?? 0;
             $rowPos = $request->input("rowPos") ?? 0;
             $colPos = $request->input("colPos") ?? 0;
             $ctype = $request->input("ctype");
             $insert = $request->input("insert");
+            $type = $request->input("type");
 
             $element = null;
             $sorting = 0;
@@ -377,9 +389,6 @@ class ContentElementsAjax implements AjaxInterface
                 }
             }
 
-            $datas = $request->input("datas");
-            $datasArr = json_decode($datas, true);
-
             $element = new Element;
             $element->pid = $pid;
             $element->lid = $lid;
@@ -388,70 +397,41 @@ class ContentElementsAjax implements AjaxInterface
             $element->ctype = $ctype;
             $element->sorting = $sorting;
 
-            $inlineFileRecords = [];
-            $inlineRecords = [];
+            if($type == "ingrid") {
+                $gridsorting = $request->input("gridsorting");
+                $element->grids_sorting = $gridsorting;
+            }
 
-            foreach($datasArr as $dataObj) {
-                $type = $dataObj["type"];
-                $value = $dataObj["value"];
+            $datas = $request->input("datas");
+            $datasArr = json_decode($datas, true);
+            $tableInfo = $request->input("tableInfo");
 
-                $inline = $dataObj["inline"] ?? "";
+            foreach($datasArr as $key => $arr) {
+                $key = $tableInfo[$key];
 
-                if($inline && $inline != "" && gettype($inline) == "string") {
-                    $inlineParent = $inline;
-                    
-                    if(!isset($inlineRecords[$inlineParent])) {
-                        $inlineRecords[$inlineParent] = [$dataObj];
-                    } else {
-                        $inlineRecords[$inlineParent][] = $dataObj;
-                    }
-                } else {
-                    if($type == "NORMAL") {
-                        $id = $dataObj["id"];
-                        $element->setAttribute($id, $value);
-                    }
+                foreach($arr as $uid => $fieldsValues) {
+                    if($key == "elements") {
+                        $element = Element::where("uid", $uid)->get()->first();
 
-                    if($type == "INLINE") {
-                        $dataType = $dataObj["dataType"];
-                        $uid = $value;
-    
-                        if(!isset($inlineFileRecords[$dataType])) {
-                            $inlineFileRecords[$dataType] = "";
+                        foreach($fieldsValues as $field => $value) {
+                            $element->setAttribute($field, $value);
                         }
-    
-                        $inlineFileRecords[$dataType] .= $uid . ",";
+
+                        $element->save();
+                    } else {
+                        $modelClass = $CCEfields[$key]["config"]["model"];
+                        $model = $modelClass::where("uid", $uid)->get()->first();
+
+                        foreach($fieldsValues as $field => $value) {
+                            $model->setAttribute($field, $value);
+                        }
+
+                        $model->save();
                     }
                 }
             }
 
-            $CCEfields = config("centauri")["CCE"]["fields"];
-
-            foreach($inlineRecords as $inline => $inlineFields) {
-                $CCEfield = $CCEfields[$inline];
-
-                $modelClass = $CCEfield["config"]["model"];
-                $model = new $modelClass;
-
-                foreach($inlineFields as $inlineField) {
-                    $id = $inlineField["id"];
-                    $value = $inlineField["value"];
-
-                    $model->setAttribute($id, $value);
-                }
-
-                $model->save();
-            }
-
-            // Removing in case every last "," inside $inlineFileRecords[x]'s string (uidString - comma separated)
-            foreach($inlineFileRecords as $dT => $uidStr) {
-                if(mb_substr($uidStr, -1) == ",") {
-                    $inlineFileRecords[$dT] = mb_substr($uidStr, 0, -1);
-                }
-            }
-
-            foreach($inlineFileRecords as $dataType => $uidString) {
-                $element->$dataType = $uidString;
-            }
+            dd($element);
 
             $element->save();
 
@@ -527,76 +507,33 @@ class ContentElementsAjax implements AjaxInterface
             if($ajaxName == "saveElementByUid") {
                 $datas = $request->input("datas");
                 $datasArr = json_decode($datas, true);
-
-                $inlineFileRecords = [];
-                $inlineRecords = [];
-
-                foreach($datasArr as $dataObj) {
-                    $uid = $dataObj["uid"] ?? dd($dataObj);
-                    $element = Element::where("uid", $uid)->get()->first();
-
-                    $type = $dataObj["type"];
-                    $value = $dataObj["value"];
-
-                    $inline = $dataObj["inline"] ?? "";
-                    $inlineparent = $dataObj["inlineparent"] ?? "";
-
-                    if($inline && $inline != "" && gettype($inline) == "string") {
-                        $inlineRecords[] = $dataObj;
-                    } else {
-                        if($type == "NORMAL" && !is_null($element)) {
-                            $id = explode("-", $dataObj["id"])[0];
-                            $element->setAttribute($id, $value);
-                        }
-
-                        if($type == "INLINE") {
-                            $dataType = $dataObj["dataType"];
-                            $uid = $value;
-
-                            if(!isset($inlineFileRecords[$dataType])) {
-                                $inlineFileRecords[$dataType] = "";
-                            }
-
-                            $inlineFileRecords[$dataType] .= $uid . ",";
-                        }
-                    }
-                }
+                $tableInfo = $request->input("tableInfo");
 
                 $CCEfields = config("centauri")["CCE"]["fields"];
 
-                // dd($inlineRecords);
+                foreach($datasArr as $key => $arr) {
+                    $key = $tableInfo[$key];
 
-                foreach($inlineRecords as $inlineRecord) {
-                    $inline = $inlineRecord["inline"];
-                    $inlineparent = $inlineRecord["inlineparent"];
+                    foreach($arr as $uid => $fieldsValues) {
+                        if($key == "elements") {
+                            $element = Element::where("uid", $uid)->get()->first();
 
-                    $uid = $inlineRecord["uid"];
-                    $id = explode("-", $inlineRecord["id"])[0];
-                    $value = $inlineRecord["value"];
+                            foreach($fieldsValues as $field => $value) {
+                                $element->setAttribute($field, $value);
+                            }
 
-                    if($inline == $inlineparent) {
-                        $CCEfield = $CCEfields[$inline];
+                            $element->save();
+                        } else {
+                            $modelClass = $CCEfields[$key]["config"]["model"];
+                            $model = $modelClass::where("uid", $uid)->get()->first();
 
-                        $modelClass = $CCEfield["config"]["model"];
-                        $model = $modelClass::where("uid", $uid)->get()->first();
+                            foreach($fieldsValues as $field => $value) {
+                                $model->setAttribute($field, $value);
+                            }
 
-                        // if(!is_null($id) && !is_null($value) && isset($model->$id)) {
-                            $model->$id = $value;
                             $model->save();
-                        // }
-                    } else {
-                        $CCEfield = $CCEfields[$inlineparent]["config"]["fields"][$inline];
-
-                        $modelClass = $CCEfield["config"]["model"];
-                        $model = $modelClass::where("uid", $uid)->get()->first();
-
-                        $model->$id = $value;
-                        $model->save();
+                        }
                     }
-                }
-
-                if(empty($inlineRecords)) {
-                    $element->save();
                 }
 
                 return json_encode([
