@@ -27,6 +27,8 @@ class Request
         $domainFiles = DomainsUtility::findAll();
         $domain = null;
 
+        $host = str_replace("www.", "", $host);
+
         $hostUri = $host . request()->getRequestUri();
 
         foreach($domainFiles as $domainFile) {
