@@ -34,7 +34,7 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
     }
 
     if(type == "image") {
-        html = "<label class='d-block m-0'>" + data.label + "</label><img src='" + data.src + "' class='img-fluid' style='width: 30px;' />";
+        html = "<label class='d-block' style='font-size: 1rem; transform: translateY(-14px) scale(.8); margin-left: -22.5px !important; margin-top: 25px !important; margin-bottom: -15px !important;'>" + data.label + "</label><img src='" + data.src + "' class='img-fluid' style='width: 30px;' />";
     }
 
     if(type == "checkbox") {
@@ -80,6 +80,10 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
         items.forEach(item => {
             html += "<div class='form-check'><input type='radio' class='form-check-input' name='" + inputObj.id + "' id='" + item.id + "'" + (item.isChecked ? " checked" : "") + "><label class='form-check-label' for='" + item.id + "'>" + item.label + "</label></div>";
         });
+    }
+
+    if(type == "textarea") {
+        html += "<div class='md-form'><textarea" + (Centauri.isNotUndefined(data.required) ? (data.required ? " required" : "") : "") + " id='" + inputObj.id + "' class='md-textarea form-control' rows='3'>" + (Centauri.isNotUndefined(data.value) ? data.value : "") + "</textarea><label" + (Centauri.isNotUndefined(data.value) ? " class='active'" : "") + " for='" + inputObj.id + "'>" + data.label + "</label></div>";
     }
 
     return "<div class='field" + additionalFieldClasses + "'" + (Centauri.isNotUndefined(inputObj.extraAttr) ? " " + inputObj.extraAttr : "") + ">" + html + "</div>";

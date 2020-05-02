@@ -37,13 +37,16 @@ return [
 
     "newContentElement" => [
         "Tabs" => [
-            "general" => "Allgemein"
+            "general" => "Allgemein",
+            "special" => "Spezial",
         ],
 
         "Elements" => [
             "plugin" => "Plugin",
             "headerdescription" => "Titel mit (RTE-)Text",
-            "headerimage" => "Fullsize Bild mit Überschriften"
+            "headerimage" => "Fullsize Bild mit Überschriften",
+            "grids" => "Spalter",
+            "slider" => "Slider",
         ]
     ],
 

@@ -1,4 +1,4 @@
-Centauri.Helper.FieldsHelper = function(element, parentSelector, calledBy = "") {
+Centauri.Helper.FieldsHelper = function(element, parentSelector) {
     let datas = [];
 
     if($(element).is(Centauri.Helper.ModalHelper.Element)) {
@@ -6,22 +6,12 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector, calledBy = "") 
             $(parentSelector + " .md-form > input", $(element)),
             $(parentSelector + " .md-form > .md-textarea", $(element))
         ]);
-    } else{
+    } else {
         datas = Centauri.Helper.FieldsHelper.findDatasBySelectors([
             $(parentSelector + " .md-form > input"),
             $(parentSelector + " .md-form > .md-textarea")
         ]);
     }
-
-    /**
-     * Inline-Records "connection"
-     * Inline type
-     */
-    // if(!calledByIR) {
-    //     $(parentSelector + " .accordion", $(element)).each(function(aindex, accordion) {
-    //         datas.push(Centauri.Helper.FieldsHelper($(accordion), ".bottom", true));
-    //     });
-    // }
 
     if(Centauri.isDebugging) {
         console.table(datas);

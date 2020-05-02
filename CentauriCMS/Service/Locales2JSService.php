@@ -6,14 +6,7 @@ class Locales2JSService
     public static function getLocalizedArray()
     {
         $locallizedArr = [
-            "global" => [
-                "label_language" => trans("backend/global.label_language"),
-                "label_title" => trans("backend/global.label_title"),
-                "label_createdat" => trans("backend/global.label_createdat"),
-                "label_modifiedat" => trans("backend/global.label_modifiedat"),
-
-                "searchhere" => trans("backend/global.searchhere")
-            ],
+            "global" => trans("backend/global"),
 
             "modals" => [
                 "areyousure" => trans("backend/modals.global.areyousure"),
@@ -29,12 +22,14 @@ class Locales2JSService
                 "btn_switch" => trans("backend/modals.global.btn_switch"),
                 "btn_toggle" => trans("backend/modals.global.btn_toggle"),
                 "btn_create" => trans("backend/modals.global.btn_create"),
-                "btn_delete" => trans("backend/modals.global.btn_delete"),
+                "btn_delete" => trans("backend/modals.global.btn_delete")
             ],
 
             "EditorComponent" => [
                 "label_rootpage" => trans("backend/others.label_rootpage"),
                 "toggleHamburger" => trans("backend/others.EditorComponent.toggleHamburger"),
+
+                "SEO" => trans("backend/others.EditorComponent.SEO")
             ],
 
             "modules" => [
@@ -45,8 +40,8 @@ class Locales2JSService
                 "languages" => trans("backend/modules.languages.title"),
                 "extensions" => trans("backend/modules.extensions.title"),
                 "notifications" => trans("backend/modules.notifications.title"),
-                "system" => trans("backend/modules.system.title"),
-            ],
+                "system" => trans("backend/modules.system.title")
+            ]
         ];
 
         return json_encode($locallizedArr);

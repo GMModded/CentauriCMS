@@ -6,7 +6,8 @@ use Centauri\CMS\Resolver\ViewResolver;
 
 class FrontendRenderingHandler
 {
-    public static function getAdditonalHeadTagContent() {
+    public static function getAdditonalHeadTagContent()
+    {
         $additionalHeadTagContent = "";
 
         foreach($GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Head"] as $headClass) {
@@ -17,10 +18,27 @@ class FrontendRenderingHandler
         return $additionalHeadTagContent;
     }
 
+    public static function getSEOHeadTags($page, $additionalHeadTagContent)
+    {
+        $seoHeadTags = "";
+
+        if($page->seo_keywords != "") {
+            $seoHeadTags .= "<meta name='keywords' content='" . $page->seo_keywords . "' />";
+        }
+        if($page->seo_description != "") {
+            $seoHeadTags .= "<meta name='description' content='" . $page->seo_description . "' />";
+        }
+
+        $additionalHeadTagContent .= $seoHeadTags;
+        return $additionalHeadTagContent;
+    }
+
     public static function getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent)
     {
         $ViewResolver = Centauri::makeInstance(ViewResolver::class);
         $ViewResolver->register("Centauri", "CentauriCMS/Views");
+
+        $additionalHeadTagContent = self::getSEOHeadTags($page, $additionalHeadTagContent);
 
         $frontendHtml = view("Centauri::Frontend", [
             "page" => $page,

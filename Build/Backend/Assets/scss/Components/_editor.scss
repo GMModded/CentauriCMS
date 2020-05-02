@@ -10,7 +10,16 @@
     transition: .66s cubic-bezier(1, -0.09, 0, 1.16);
 
     &.active {
+        min-width: 320px;
         right: 0 !important;
+
+        &.fluid-lg {
+            min-width: 450px !important;
+
+            @media (min-width: 992px) {
+                width: calc(41.67% - 300px) !important;
+            }
+        }
     }
 
     &.fluid {
@@ -36,6 +45,7 @@
             overflow-y: auto;
             height: calc(100% - 115px);
             box-shadow: 0 0 15px #cecece;
+            width: calc(100% - 30px) !important;
 
             & > .row {
                 
@@ -60,10 +70,39 @@
     }
 
     > .bottom {
-        height: calc(100% - 170px);
+        height: calc(100% - 172.5px);
         margin-top: 30px;
         box-shadow: 10px 0 15px #bbb;
         padding-top: 10px;
+        overflow-y: scroll;
+
+        #editorcomponent-tabs {
+            background: linear-gradient(180deg, #303a4f, #2a3345) !important;
+
+            .nav-item {
+                .nav-link {
+                    &.active {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+
+        .md-textarea {
+            padding-top: 10px !important;
+        }
+
+        label {
+            input[type="checkbox"]:checked + span {
+                &.lever {
+                    background-color: #ffc66d;
+
+                    &:after {
+                        background-color: #ffd46f;
+                    }
+                }
+            }
+        }
 
         form {
             input {
@@ -76,18 +115,6 @@
                         background: -webkit-linear-gradient(50deg,#FFD86F,#FC6262)!important;
                         background: -o-linear-gradient(50deg,#FFD86F,#FC6262)!important;
                         background: linear-gradient(40deg,#FFD86F,#FC6262)!important;
-                    }
-                }
-            }
-
-            label {
-                input[type="checkbox"]:checked + span {
-                    &.lever {
-                        background-color: #ffc66d;
-
-                        &:after {
-                            background-color: #ffd46f;
-                        }
                     }
                 }
             }

@@ -1,13 +1,15 @@
 Centauri.Events.EditorComponent.Input.OnKeyDown = function(input, e) {
-    var dataID = $editor.attr("data-id");
-    var id = $(input).attr("id");
+    let dataID = $editor.attr("data-id");
+    let id = $(input).attr("id");
 
-    var value = $("form #" + id, $editor).val();
+    let value = $("form #" + id, $editor).val();
+
+    console.log(dataID);
 
     if(dataID == "CreateNewPage") {
         if(id == "title") {
             if(e.which == 9 && value.length >= 2) {
-                var slugs = value.toLowerCase();
+                let slugs = value.toLowerCase();
                     slugs = slugs[0] + slugs[1];
 
                 $("form #langcode", $editor).focus();
@@ -22,7 +24,7 @@ Centauri.Events.EditorComponent.Input.OnKeyDown = function(input, e) {
 
         if(id == "langcode") {
             if(e.which == 9 && value.length >= 2) {
-                var slugs = $("form #langcode", $editor).val().split("-")[0].toLowerCase();
+                let slugs = $("form #langcode", $editor).val().split("-")[0].toLowerCase();
 
                 $("form #slug", $editor).focus();
                 $("form #slug", $editor).val(slugs);

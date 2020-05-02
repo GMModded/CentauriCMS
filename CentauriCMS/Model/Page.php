@@ -52,6 +52,9 @@ class Page extends Model
         "lid" => 0,
         "hidden" => 0,
         "is_rootpage" => 0,
-        "backend_layout" => 0
+        "backend_layout" => 0,
+
+        "seo_keywords" => "",
+        "seo_description" => ""
     ];
 }

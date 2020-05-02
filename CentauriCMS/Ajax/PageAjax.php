@@ -58,6 +58,40 @@ class PageAjax implements AjaxInterface
             return $this->savePage($page);
         }
 
+        if($ajaxName == "updatePage") {
+            $uid = $params["uid"];
+            $dataArr = json_decode($params["data"], true);
+
+            $excludedArr = [
+                "uid",
+                "pid",
+                "lid",
+                "created_at",
+                "updated_at",
+                "deleted_at"
+            ];
+
+            $page = Page::where("uid", $uid)->get()->first();
+
+            foreach($dataArr as $id => $value) {
+                $page->setAttribute($id, $value);
+            }
+
+            if($page->save()) {
+                return json_encode([
+                    "type" => "success",
+                    "title" => "Page '" . $page->title . "' saved",
+                    "description" => "Successfully updated '" . $page->title . "'"
+                ]);
+            }
+
+            return json_encode([
+                "type" => "error",
+                "title" => "Updating Page failed",
+                "description" => "An error occured while updating '" . $page->title . "'"
+            ]);
+        }
+
         if($ajaxName == "editPage") {
             $uid = $params["uid"];
 
@@ -190,6 +224,13 @@ class PageAjax implements AjaxInterface
             }
 
             return json_encode($languages);
+        }
+
+        if($ajaxName == "findByUid") {
+            $uid = $params["uid"];
+            $page = Page::where("uid", $uid)->get()->first();
+
+            return json_encode($page);
         }
     }
 
