@@ -30,17 +30,10 @@ class FrontendRenderingHandler
             $seoHeadTags .= "<meta name='keywords' content='" . $page->seo_keywords . "' />";
         }
 
-        if($page->seo_robots_indexpage) {
-            $seoHeadTags .= "<meta name='robots' content='index'>";
-        } else {
-            $seoHeadTags .= "<meta name='robots' content='noindex'>";
-        }
+        $seo_robots_index = ($page->seo_robots_indexpage ? "index" : "noindex");
+        $seo_robots_follow = ($page->seo_robots_followpage ? "follow" : "nofollow");
 
-        if($page->seo_robots_followpage) {
-            $seoHeadTags .= "<meta name='robots' content='follow'>";
-        } else {
-            $seoHeadTags .= "<meta name='robots' content='nofollow'>";
-        }
+        $seoHeadTags .= "<meta name='robots' content='" . $seo_robots_index . "," . $seo_robots_follow . "'>";
 
         $additionalHeadTagContent .= $seoHeadTags;
         return $additionalHeadTagContent;
