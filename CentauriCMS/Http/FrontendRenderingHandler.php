@@ -22,11 +22,24 @@ class FrontendRenderingHandler
     {
         $seoHeadTags = "";
 
+        if($page->seo_description != "") {
+            $seoHeadTags .= "<meta name='description' content='" . $page->seo_description . "' />";
+        }
+
         if($page->seo_keywords != "") {
             $seoHeadTags .= "<meta name='keywords' content='" . $page->seo_keywords . "' />";
         }
-        if($page->seo_description != "") {
-            $seoHeadTags .= "<meta name='description' content='" . $page->seo_description . "' />";
+
+        if($page->seo_robots_indexpage) {
+            $seoHeadTags .= "<meta name='robots' content='index'>";
+        } else {
+            $seoHeadTags .= "<meta name='robots' content='noindex'>";
+        }
+
+        if($page->seo_robots_followpage) {
+            $seoHeadTags .= "<meta name='robots' content='follow'>";
+        } else {
+            $seoHeadTags .= "<meta name='robots' content='nofollow'>";
         }
 
         $additionalHeadTagContent .= $seoHeadTags;
