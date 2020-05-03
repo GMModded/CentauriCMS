@@ -89,6 +89,17 @@ Centauri.Components.PagesComponent = function(module) {
                                                                 label: "Backend-Layout",
                                                                 options: beLayouts
                                                             }
+                                                        },
+
+                                                        {
+                                                            id: "hidden_inpagetree",
+                                                            type: "custom",
+                                                            custom: "switch",
+
+                                                            data: {
+                                                                label: Centauri.__trans.others.EditorComponent.hidden_inpagetree,
+                                                                isChecked: page.hidden_inpagetree
+                                                            }
                                                         }
                                                     ]
                                                 },

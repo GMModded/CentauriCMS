@@ -35,7 +35,7 @@
             "App\\": "app/",
 
             "Centauri\\CMS\\": "CentauriCMS/",
-            "Centauri\\Extension\\": "storage/Centauri/Extensions/centauri_news/"
+            "Centauri\\Extension\\": "storage/Centauri/Extensions/"
         },
         "classmap": [
             "database/seeds",

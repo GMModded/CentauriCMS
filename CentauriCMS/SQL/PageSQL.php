@@ -17,3 +17,5 @@ $SQLService->createColumn($table, "seo_keywords", "string", ["default" => ""]);
 $SQLService->createColumn($table, "seo_description", "string", ["default" => ""]);
 $SQLService->createColumn($table, "seo_robots_indexpage", "boolean", ["default" => true]);
 $SQLService->createColumn($table, "seo_robots_followpage", "boolean", ["default" => true]);
+
+$SQLService->createColumn($table, "hidden_inpagetree", "boolean", ["default" => false]);

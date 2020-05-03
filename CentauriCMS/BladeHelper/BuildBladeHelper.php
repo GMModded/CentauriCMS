@@ -1,7 +1,6 @@
 <?php
 namespace Centauri\CMS\BladeHelper;
 
-use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Page;
 
 class BuildBladeHelper
@@ -24,7 +23,11 @@ class BuildBladeHelper
     {
         self::initClasses("page");
 
-        $pages = Page::where("pid", $pid)->get()->all();
+        $pages = Page::where([
+            "pid" => $pid,
+            "hidden_inpagetree" => 0
+        ])->get()->all();
+
         $pages = self::$pageBladeUtility::getSubpagesByPages($pages);
 
         return $pages;

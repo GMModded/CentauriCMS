@@ -1,6 +1,8 @@
 Centauri.Events.EditorComponent.Select.OnChange = function(select) {
     let dataID = $editor.attr("data-id");
+
     let id = $(select).attr("id");
+    let selDataID = $(select).data("id");
 
     let required = $(select).attr("required");
     let value = $(select).val();
@@ -61,6 +63,68 @@ Centauri.Events.EditorComponent.Select.OnChange = function(select) {
                 // }
             }
         }
+    }
+
+    if(selDataID == "grid") {
+        Centauri.fn.Modal(
+            "Refresh required",
+            "Changing the type of this Grid requires to update the element",
+
+            {
+                id: "refreshrequired_gridselect",
+
+                close: {
+                    label: Centauri.__trans.modals.btn_cancel,
+                    class: "warning"
+                },
+
+                save: {
+                    label: "Refresh",
+                    class: "info"
+                }
+            },
+
+            {
+                cancel() {
+                    $(select).val($("option[selected]:not(:disabled)", select).attr("value"));
+                },
+
+                save() {
+                    let datas = Centauri.Helper.FieldsHelper($(".data"), ".content-element.active");
+
+                    let tempArr = [];
+                    let tableInfo = {};
+                    let i = 0;
+
+                    Object.keys(datas).forEach((data) => {
+                        tempArr.push(datas[data]);
+                        tableInfo[i] = data;
+                        i++;
+                    });
+
+                    let jsonDatas = JSON.stringify(tempArr);
+
+                    Centauri.fn.Ajax(
+                        "ContentElements",
+                        "saveElementByUid",
+
+                        {
+                            uid: $contentelement.data("uid"),
+                            datas: jsonDatas,
+                            tableInfo: tableInfo
+                        },
+
+                        {
+                            success: (data) => {
+                                Centauri.Notify("primary", "Element updated", "This element has been updated");
+                            }
+                        }
+                    );
+
+                    Centauri.Helper.FindFieldsByUidHelper($contentelement, $(".edit", $contentelement));
+                }
+            }
+        );
     }
 };
 

@@ -6,6 +6,7 @@ return [
 
     "EditorComponent" => [
         "toggleHamburger" => "Toggling the dashboard will clear your Editor-Content.",
+        "hidden_inpagetree" => "Hidden in Menus",
 
         "SEO" => [
             "keywords" => "Keywords",

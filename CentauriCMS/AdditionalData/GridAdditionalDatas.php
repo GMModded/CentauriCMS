@@ -1,7 +1,6 @@
 <?php
 namespace Centauri\CMS\AdditionalDatas;
 
-use Centauri\CMS\Ajax\ContentElementsAjax;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Helper\GridHelper;
 
@@ -24,7 +23,7 @@ class GridAdditionalDatas implements \Centauri\CMS\AdditionalDataInterface
         $gridUid = $gridelement->uid;
 
         $GridHelper = Centauri::makeInstance(GridHelper::class);
-        $elements = $GridHelper->findElementsByGridUid($gridUid);
+        $elements = $GridHelper->findElementsByGridUid($gridUid, 1);
 
         $gridConfig = null;
 
@@ -43,13 +42,5 @@ class GridAdditionalDatas implements \Centauri\CMS\AdditionalDataInterface
         ];
 
         return view("Centauri::Backend.Partials.elementsInGrid", $data)->render();
-
-        // if(
-        //     is_null($gridelement->grids_rowpos)
-        // ||
-        //     is_null($gridelement->grids_colpos)
-        // ) {
-        //     return;
-        // }
     }
 }

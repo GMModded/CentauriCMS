@@ -1,17 +1,23 @@
-<select class="mdb-select md-form" data-id="plugin" required>
+<select class="mdb-select md-form" data-id="plugin" data-uid="{{ $fieldConfig['uid'] }}" required>
     <option value="" selected disabled>
         Select a plugin
     </option>
 
-    @if(isset($fieldConfig["additionalData"]))
-        @foreach($fieldConfig["additionalData"]["plugins"] as $pluginId => $pluginArr)
-            @foreach($pluginArr as $pluginLabel => $pluginValue)
-                @if($value ?? "" == $pluginValue)
-                    <option value="{{ $pluginValue }}" selected>
+    @if(!is_null($additionalData))
+        @foreach($additionalData["plugins"] as $pluginId => $pluginArr)
+            @foreach($pluginArr as $pluginLabel => $pluginNamespace)
+                @if(!isset($additionalData["plugins"][$fieldConfig["value"]]))
+                    <option value="null" selected>
+                        >> Plugin '{{ $fieldConfig["value"] }}' not found!
+                    </option>
+                @endif
+
+                @if($fieldConfig["value"] == $pluginId)
+                    <option value="{{ $pluginId }}" selected>
                         {{ $pluginLabel }}
                     </option>
                 @else
-                    <option value="{{ $pluginValue }}">
+                    <option value="{{ $pluginId }}">
                         {{ $pluginLabel }}
                     </option>
                 @endif

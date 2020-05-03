@@ -10,13 +10,13 @@
 
 <div class="md-form">
     <div class="image-field d-flex mt-2">
-        <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3 mr-2" data-centauri-btn="addimage" data-required="{{ $config["required"] ?? '' }}" data-maxitems="{{ $config["maxItems"] ?? '' }}">
+        <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3 mr-2" data-centauri-btn="addimage" data-required="{{ $fieldConfig['required'] ?? '' }}" data-maxitems="{{ $fieldConfig['maxItems'] ?? '' }}" data-minitems="{{ $fieldConfig['minItems'] ?? '' }}">
             <i class="fas fa-images mr-2"></i>
 
             Add image
         </button>
 
-        <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3" data-centauri-btn="uploadimage" data-required="{{ $config["required"] ?? '' }}" data-maxitems="{{ $config["maxItems"] ?? '' }}">
+        <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3" data-centauri-btn="uploadimage" data-required="{{ $fieldConfig['required'] ?? '' }}" data-maxitems="{{ $fieldConfig['maxItems'] ?? '' }}" data-minitems="{{ $fieldConfig['minItems'] ?? '' }}>
             <i class="fas fa-cloud-upload-alt mr-2"></i>
 
             Upload image

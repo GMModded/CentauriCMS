@@ -5,6 +5,7 @@ use Centauri\CMS\Centauri;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Prophecy\Exception\Doubler\ClassNotFoundException;
 
 class ExtensionsComponent
 {
@@ -26,7 +27,9 @@ class ExtensionsComponent
                     $config = include $extConfigFilePath;
 
                     if(gettype($config) == "array") {
-                        $extClass = Centauri::makeInstance($config["mainclass"]);
+                        $mainclass = $config["mainclass"];
+
+                        Centauri::makeInstance($mainclass);
                         $GLOBALS["Centauri"]["Extensions"][$extName] = $config;
                     }
                 }

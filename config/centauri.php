@@ -33,7 +33,9 @@ return [
                     ]
                 ]
                 */
-            ]
+            ],
+
+            "rendering" => \Centauri\Extension\Frontend::class
         ]
     ],
 
@@ -49,6 +51,24 @@ return [
                         // colPositions - will be saved into the DB as key
                         0 => [
                             "label" => "backend/be_layout.layouts.default.cols.content"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+
+        "twocol" => [
+            "label" => " » Two Column Container",
+
+            "config" => [
+                0 => [
+                    "cols" => [
+                        0 => [
+                            "label" => "Left"
+                        ],
+
+                        1 => [
+                            "label" => "Right"
                         ]
                     ]
                 ]
@@ -123,15 +143,11 @@ return [
                 "label" => "Plugin",
                 "type" => "plugin"
             ],
-            "grid-container-full" => [
+            "grid" => [
                 "label" => "Container (Full)",
                 "type" => "grid",
-                "additionalType" => "grid"
-            ],
-            "grid-space-top" => [
-                "label" => "Grid Space Top",
-                "type" => "input",
-                "additionalType" => "grid"
+                "additionalType" => "grid",
+                "return_statement" => "MERGE"
             ],
             "image" => [
                 "label" => "Image",
@@ -141,6 +157,7 @@ return [
                     "required" => 1,
                     "minItems" => 1,
                     "maxItems" => 1,
+                    "validation" => \Centauri\CMS\Validation\FileValidation::class
                 ]
             ],
             "file" => [
@@ -171,6 +188,7 @@ return [
                                 "required" => 1,
                                 "minItems" => 1,
                                 "maxItems" => 1,
+                                "validation" => \Centauri\CMS\Validation\FileValidation::class
                             ]
                         ],
 
@@ -258,8 +276,7 @@ return [
             ],
 
             "grids" => [
-                "grid-container-full",
-                "grid-space-top"
+                "grid"
             ]
         ],
 

@@ -77,12 +77,18 @@ class ContentElementsAjax implements AjaxInterface
             if(isset($fieldConfig["additionalType"])) {
                 $additionalType = $fieldConfig["additionalType"];
 
+                $additionalData = $this->findAdditionalDataByType($additionalType);
+
                 $html = view("Centauri::Backend.Modals.NewContentElement.Fields.AdditionalTypes." . $additionalType, [
-                    "fieldConfig" => $fieldConfig
+                    "fieldConfig" => $fieldConfig,
+                    "additionalData" => $additionalData
                 ])->render();
             } else {
+                $additionalData = $this->findAdditionalDataByType($fieldConfig["type"]);
+
                 $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $fieldConfig["type"], [
-                    "fieldConfig" => $fieldConfig
+                    "fieldConfig" => $fieldConfig,
+                    "additionalData" => $additionalData
                 ])->render();
             }
         }
@@ -139,11 +145,15 @@ class ContentElementsAjax implements AjaxInterface
                 throw new Exception($msg);
             }
 
+            $fieldConfig = [];
+
             if($parent != "") {
                 $fieldConfig = $CCEfields[$parent]["config"]["fields"][$field];
             } else {
                 $fieldConfig = $CCEfields[$field];
             }
+
+            $additionalData = $this->findAdditionalDataByType($fieldConfig["type"], "grid", $element);
 
             $html .= $this->renderHtmlByField($fieldConfig, [
                 "id" => $field,
@@ -151,6 +161,21 @@ class ContentElementsAjax implements AjaxInterface
                 "uid" => $element->uid,
                 "isInlineRecord" => ($parent != "")
             ], $parent);
+
+            if(isset($fieldConfig["return_statement"])) {
+                switch($fieldConfig["return_statement"]) {
+                    case "RETURN":
+                        return $additionalData;
+                        break;
+
+                    case "MERGE":
+                        $html .= $additionalData;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
         }
 
         return $html;
@@ -160,7 +185,7 @@ class ContentElementsAjax implements AjaxInterface
     {
         if($ajaxName == "findByPid") {
             $uid = $request->input("pid");
-            $lid = $request->input("lid") ?? 0;
+            $lid = $request->input("lid") ?? 1;
 
             $elements = Element::where([
                 "pid" => $uid,
@@ -276,62 +301,21 @@ class ContentElementsAjax implements AjaxInterface
                     }
                 }
 
-                // additionalData stuff for "special/custom fields"
-                $additionalData = [];
-
-                if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type])) {
-                    $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type]["class"];
-                    $additionalDataClass = Centauri::makeInstance($additionalDataClassName);
-
-                    if(!method_exists($additionalDataClass, "fetch")) {
-                        throw new Exception("Could not find 'fetch'-method in AdditionalData class of '" . $additionalDataClassName . "'!");
-                    }
-
-                    $additionalData = $additionalDataClass->fetch();
-                }
+                $additionalData = $this->findAdditionalDataByType($type);
 
                 if(!$isModel) {
                     // Model (Inline) Stuff
                     if($type == "model") {
                         $html = "";
 
-                        $modelFields = $config["fields"];
-
-                        $modelWrapper = view("Centauri::Backend.Modals.NewContentElement.Fields.model", [
-                            "modelName" => $field["label"],
-                            "modelIdName" => $ctype,
-                            "view" => "new"
-                        ])->render();
-
-                        foreach($modelFields as $modelFieldName => $modelField) {
-                            $modelLabel = $modelField["label"];
-                            $modelType = $modelField["type"];
-
-                            // Config stuff
-                            $modelConfig = $modelField["config"] ?? [];
-
-                            if($modelType == "plugin") {
-                                throw new Exception("The Model-Type '" . $modelType . "' is not allowed here!");
-                            }
-
-                            $_html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $modelType, [
-                                "id" => $modelFieldName,
-                                "label" => $modelLabel,
-                                "additionalData" => [],
-                                "config" => $modelConfig
-                            ])->render();
-
-                            $modelWrapper = str_replace("###MODEL_CONTENT###", $_html, $modelWrapper);
-                            $html = $modelWrapper;
+                        foreach($field["config"]["fields"] as $fieldId => $fieldIdConfig) {
+                            $html .= $this->renderHtmlByField($fieldIdConfig, [
+                                "id" => $ctype,
+                                "uid" => "",
+                                "additionalData" => $additionalData
+                            ], "");
                         }
                     } else {
-                        // $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $type, [
-                        //     "id" => $ctype,
-                        //     "label" => $label,
-                        //     "additionalData" => $additionalData,
-                        //     "config" => $config
-                        // ])->render();
-
                         $html = $this->renderHtmlByField($field, [
                             "id" => $ctype,
                             "uid" => "",
@@ -344,8 +328,6 @@ class ContentElementsAjax implements AjaxInterface
                 $CCE["fields"][$ctype]["_HTML"] = $html;
             }
 
-            dd($CCE);
-
             return view("Centauri::Backend.Modals.newContentElement", [
                 "CCE" => $CCE
             ])->render();
@@ -353,7 +335,7 @@ class ContentElementsAjax implements AjaxInterface
 
         if($ajaxName == "newElement") {
             $pid = $request->input("pid");
-            $lid = $request->input("lid") ?? 0;
+            $lid = $request->input("lid") ?? 1;
             $rowPos = $request->input("rowPos") ?? 0;
             $colPos = $request->input("colPos") ?? 0;
             $ctype = $request->input("ctype");
@@ -406,18 +388,24 @@ class ContentElementsAjax implements AjaxInterface
             $datasArr = json_decode($datas, true);
             $tableInfo = $request->input("tableInfo");
 
+            $CCEfields = config("centauri")["CCE"]["fields"];
+
+            $model = null;
+
             foreach($datasArr as $key => $arr) {
                 $key = $tableInfo[$key];
 
                 foreach($arr as $uid => $fieldsValues) {
-                    if($key == "elements") {
-                        $element = Element::where("uid", $uid)->get()->first();
-
-                        foreach($fieldsValues as $field => $value) {
-                            $element->setAttribute($field, $value);
+                    if($key == "elements" || $key == "") {
+                        if($uid != "") {
+                            $element = Element::where("uid", $uid)->get()->first();
                         }
 
-                        $element->save();
+                        foreach($fieldsValues as $field => $value) {
+                            if(!isset($CCEfields[$field]["config"]["model"])) {
+                                $element->setAttribute($field, $value);
+                            }
+                        }
                     } else {
                         $modelClass = $CCEfields[$key]["config"]["model"];
                         $model = $modelClass::where("uid", $uid)->get()->first();
@@ -425,13 +413,13 @@ class ContentElementsAjax implements AjaxInterface
                         foreach($fieldsValues as $field => $value) {
                             $model->setAttribute($field, $value);
                         }
-
-                        $model->save();
                     }
                 }
             }
 
-            dd($element);
+            if(!is_null($model)) {
+                $model->save();
+            }
 
             $element->save();
 
@@ -448,40 +436,18 @@ class ContentElementsAjax implements AjaxInterface
             $element = Element::where("uid", $uid)->get()->first();
             $ctype = $element->ctype;
 
-            // additionalData stuff for "special/custom fields"
-            $additionalData = [];
-
-            if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype])) {
-                if(!isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype]["class"])) {
-                    throw new Exception("AdditionalDataFuncs for CType '$ctype' has no specified class value!");
-                }
-
-                $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype]["class"];
-                $additionalDataClass = Centauri::makeInstance($additionalDataClassName);
-
-                if(method_exists($additionalDataClass, "onEditListener")) {
-                    $returns = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype]["return_statement"] ?? 0;
-
-                    if($returns) {
-                        return $additionalDataClass->onEditListener($element);
-                    }
-
-                    $additionalDataClass->onEditListener($element);
-                }
-            }
-
             $CCE = config("centauri")["CCE"];
             $elements = $CCE["elements"];
 
             $elementShowsFields = $elements[$ctype];
 
-            $__html = "";
+            $html = "";
 
             foreach($elementShowsFields as $fieldKey => $field) {
                 if(is_array($field)) {
-                    $__html .= $this->renderField($fieldKey, $element);
+                    $html .= $this->renderField($fieldKey, $element);
                 } else {
-                    $__html .= $this->renderField($field, $element);
+                    $html .= $this->renderField($field, $element);
                 }
             }
 
@@ -489,7 +455,7 @@ class ContentElementsAjax implements AjaxInterface
                 "element" => $element,
 
                 "data" => [
-                    "_HTML" => $__html
+                    "HTML" => $html
                 ]
             ])->render();
         }
@@ -528,7 +494,22 @@ class ContentElementsAjax implements AjaxInterface
                             $model = $modelClass::where("uid", $uid)->get()->first();
 
                             foreach($fieldsValues as $field => $value) {
-                                $model->setAttribute($field, $value);
+                                if(isset($CCEfields[$field]["config"]["validation"])) {
+                                    $class = $CCEfields[$field]["config"]["validation"];
+                                    $validation = $class::validate([
+                                        "field" => $field,
+                                        "value" => $value,
+                                        "CCE_FIELD" => $CCEfields[$field]
+                                    ]);
+
+                                    if(!$validation["state"]) {
+                                        return $validation["result"];
+                                    } else {
+                                        $model->setAttribute($field, $value);
+                                    }
+                                } else {
+                                    $model->setAttribute($field, $value);
+                                }
                             }
 
                             $model->save();
@@ -581,67 +562,27 @@ class ContentElementsAjax implements AjaxInterface
         }
 
         if($ajaxName == "sortElement") {
-            $data = $request->input("data");
+            $pid = $request->input("pid");
+            $dataArr = $request->input("data");
 
-            $parent = $data["parent"];
+            foreach($dataArr as $index => $data) {
+                $uid = $data["uid"];
+                $sorting = $data["sorting"];
+                $rowPos = $data["rowPos"];
+                $colPos = $data["colPos"];
+                $gridsorting = $data["gridsorting"];
 
-            $rowPos = $data["rowpos"];
-            $colPos = $data["colpos"];
+                $element = Element::where([
+                    "pid" => $pid,
+                    "uid" => $uid
+                ])->get()->first();
 
-            $currentElementUid = $data["currentElementUid"];
-            $currentSorting = $data["currentSorting"];
-            $sortto = $data["sortto"];
+                if(!is_null($element)) {
+                    $element->sorting = $sorting;
+                    $element->rowpos = $rowPos;
+                    $element->colpos = $colPos;
+                    $element->grids_sorting = $gridsorting;
 
-            $targetuid = $data["targetuid"] ?? -1;
-            $direction = $data["direction"];
-
-            $crtElement = Element::where("uid", $currentElementUid)->get()->first();
-
-            $element = Element::where([
-                "sorting" => $sortto,
-                "rowPos" => $rowPos,
-                "colPos" => $colPos
-            ])->get()->first();
-
-            $crtElement->rowPos = $rowPos;
-            $crtElement->colPos = $colPos;
-
-            if($parent == "grid") {
-                $parentUid = $data["parentUid"];
-            }
-
-            $crtElement->save();
-
-            if($direction == "before") {
-                $elements = Element::where("sorting", ">=", $sortto)->get()->all();
-
-                foreach($elements as $element) {
-                    $eSorting = $element->sorting;
-
-                    if($element->uid == $crtElement->uid) {
-                        $eSorting--;
-                    } else {
-                        $eSorting++;
-                    }
-
-                    $element->sorting = $eSorting;
-                    $element->save();
-                }
-            }
-
-            if($direction == "after") {
-                $elements = Element::where("sorting", "<=", $sortto)->get()->all();
-
-                foreach($elements as $element) {
-                    $eSorting = $element->sorting;
-
-                    if($element->uid == $crtElement->uid) {
-                        $eSorting++;
-                    } else {
-                        $eSorting--;
-                    }
-
-                    $element->sorting = $eSorting;
                     $element->save();
                 }
             }
@@ -656,8 +597,35 @@ class ContentElementsAjax implements AjaxInterface
         return AjaxAbstract::default($request, $ajaxName);
     }
 
-    public function saveElementByField($field, $uid, $attribute, $value)
+    public function findAdditionalDataByType($type = null, $ctype = null, $element = null)
     {
-        dd($field, $uid, $attribute, $value);
+        if(is_null($type) && !is_null($ctype)) {
+            $type = $ctype;
+        }
+
+        if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type])) {
+            $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type]["class"];
+            $additionalDataClass = Centauri::makeInstance($additionalDataClassName);
+
+            if(!method_exists($additionalDataClass, "fetch")) {
+                throw new Exception("Could not find 'fetch'-method in AdditionalData class of '" . $additionalDataClassName . "'!");
+            }
+
+            if(!is_null($ctype) && !is_null($element)) {
+                if(method_exists($additionalDataClass, "onEditListener")) {
+                    $returns = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype]["return_statement"] ?? 0;
+
+                    if($returns) {
+                        return $additionalDataClass->onEditListener($element);
+                    }
+
+                    $additionalDataClass->onEditListener($element);
+                }
+            }
+
+            return $additionalDataClass->fetch();
+        }
+
+        return null;
     }
 }

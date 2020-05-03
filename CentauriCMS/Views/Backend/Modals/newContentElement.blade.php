@@ -20,7 +20,9 @@
                     <div class="bottom" style="display: none;">
                         @foreach($CCE["elements"][$ctype] as $field)
                             @if(Str::contains($field, ";"))
-                                @php $splittedFields = explode(";", $field) @endphp
+                                @php
+                                    $splittedFields = explode(";", $field)
+                                @endphp
 
                                 <div class="row">
                                     @foreach($splittedFields as $splittedField)
@@ -30,7 +32,13 @@
                                     @endforeach
                                 </div>
                             @else
-                                {!! $CCE["fields"][$field]["_HTML"] !!}
+                                @if($CCE["fields"][$field]["type"] != "model")
+                                    {!! $CCE["fields"][$field]["_HTML"] !!}
+                                @else
+                                    <p>
+                                        Click the + (Plus) Button in order to configure this element.
+                                    </p>
+                                @endif
                             @endif
                         @endforeach
                     </div>

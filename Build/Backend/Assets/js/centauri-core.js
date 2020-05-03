@@ -152,14 +152,4 @@ function CentauriCoreFunctions() {
     Centauri.strReplace = function(string, searchValue, replaceValue) {
         return string.replace(searchValue, replaceValue, string);
     };
-
-    /**
-     * Returns whether Debugging for Centauri is enabled/disabled
-     * 
-     * @function isDebugging
-     * @return {boolean}
-     */
-    Centauri.isDebugging = () => {
-        return Centauri.Debugging;
-    };
 }

@@ -25,6 +25,8 @@ class Locales2JSService
                 "btn_delete" => trans("backend/modals.global.btn_delete")
             ],
 
+            "others" => trans("backend/others"),
+
             "EditorComponent" => [
                 "label_rootpage" => trans("backend/others.label_rootpage"),
                 "toggleHamburger" => trans("backend/others.EditorComponent.toggleHamburger"),

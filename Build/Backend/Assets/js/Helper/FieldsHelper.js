@@ -4,17 +4,15 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
     if($(element).is(Centauri.Helper.ModalHelper.Element)) {
         datas = Centauri.Helper.FieldsHelper.findDatasBySelectors([
             $(parentSelector + " .md-form > input", $(element)),
-            $(parentSelector + " .md-form > .md-textarea", $(element))
+            $(parentSelector + " .md-form > .md-textarea", $(element)),
+            $(parentSelector + " .md-form > select", $(element))
         ]);
     } else {
         datas = Centauri.Helper.FieldsHelper.findDatasBySelectors([
             $(parentSelector + " .md-form > input"),
-            $(parentSelector + " .md-form > .md-textarea")
+            $(parentSelector + " .md-form > .md-textarea"),
+            $(parentSelector + " .md-form > select")
         ]);
-    }
-
-    if(Centauri.isDebugging) {
-        console.table(datas);
     }
 
     return datas;
@@ -38,6 +36,12 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
                  */
                 if($(this).hasClass("md-textarea")) {
                     val = $(this).html();
+                }
+
+                if($(this).hasClass("image-input")) {
+                    if(val == "") {
+                        val = null;
+                    }
                 }
 
                 /**

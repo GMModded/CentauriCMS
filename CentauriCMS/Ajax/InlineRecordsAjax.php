@@ -73,7 +73,7 @@ class InlineRecordsAjax implements AjaxInterface
             $CCE = config("centauri")["CCE"];
             $CCEfields = $CCE["fields"];
 
-            $modelConfig = $CCEfields[$parentmodelid]["config"]["fields"][$modelid];
+            $modelConfig = $CCEfields[$parentmodelid]["config"]["fields"][$modelid] ?? $CCEfields[$parentmodelid];
 
             $modelNamespace = $modelConfig["config"]["model"];
             $parentUidName = $modelConfig["config"]["parent_uid"] ?? "parent_uid";

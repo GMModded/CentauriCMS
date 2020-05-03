@@ -171,14 +171,21 @@ class Request
         $page = Page::find($page->uid);
         $uid = $page->getAttribute("uid");
 
-        // Calling ElementComponent which renders the content elements by the given page-uid ($uid)
         $ElementComponent = Centauri::makeInstance(ElementComponent::class);
-        $renderedHTML = $ElementComponent->render($uid);
+        $renderedHTML = "";
+
+        $beLayout = config("centauri")["beLayouts"][$page->backend_layout];
+        if(isset($beLayout["rendering"])) {
+            $renderedHTML = Centauri::makeInstance($beLayout["rendering"])::rendering($page);
+        } else {
+            $renderedHTML = $ElementComponent->render($uid, $page->lid, 0, 0);
+        }
+
+        // Calling ElementComponent which renders the content elements by the given page-uid ($uid)
         $renderedHTML = str_replace("  ", "", $renderedHTML);
         $renderedHTML = str_replace("\r\n", "", $renderedHTML);
 
         $additionalHeadTagContent = FrontendRenderingHandler::getAdditonalHeadTagContent();
-
         $frontendHtml = FrontendRenderingHandler::getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent);
 
         // Caching only if it's set in Centauri's config array (which gets by default cached from Laravel)

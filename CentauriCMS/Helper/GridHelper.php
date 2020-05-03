@@ -12,7 +12,7 @@ class GridHelper
      * 
      * @return array
      */
-    public function findElementsByGridUid($uid, $lid = 0)
+    public function findElementsByGridUid($uid, $lid = 1)
     {
         return Element::where([
             "grids_sorting" => $uid,

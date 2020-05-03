@@ -16,11 +16,6 @@ const Centauri = {};
 Centauri.Env = "Development";
 
 /**
- * Centauri Debugging
- */
-Centauri.Debugging = false;
-
-/**
  * Centauri Module - ID
  * Default one when logging into the backend
  */

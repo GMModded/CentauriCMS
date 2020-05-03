@@ -1176,6 +1176,22 @@ table#pages tr.subpage td:first-child {
   padding-left: 30px; }
 
 /**
+ * Services
+ */
+.ui-sortable-placeholder.content-element {
+  border: 2px dashed black !important;
+  visibility: visible !important; }
+
+.sortable-elements .content-element {
+  transition-property: transform;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.26, 0.03, 0, 0.99);
+  transition-delay: 0s; }
+  .sortable-elements .content-element.ui-sortable-helper {
+    transform: scale(0.975);
+    cursor: move; }
+
+/**
  * Centauri
  */
 .loader {

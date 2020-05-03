@@ -115,36 +115,7 @@ Centauri.Modal.NewContentElementModal = function() {
                                                 data = JSON.parse(data);
                                                 Centauri.Notify(data.type, data.title, data.description);
 
-                                                Centauri.fn.Ajax(
-                                                    "ContentElements",
-                                                    "findByPid",
-
-                                                    {
-                                                        pid: Centauri.Components.PagesComponent.uid
-                                                    },
-
-                                                    {
-                                                        success: function(data) {
-                                                            var $container = $("#editor > .bottom > .container");
-                                                            $container.html(data);
-
-                                                            /**
-                                                             * Initializing edit-button for elements
-                                                             */
-                                                            Centauri.Helper.PagesHelper($container);
-
-                                                            /**
-                                                             * Registering click-event for newCEButton
-                                                             */
-                                                            Centauri.Modal.NewContentElementModal();
-
-                                                            /**
-                                                             * Initializing CKEditor 5
-                                                             */
-                                                            Centauri.Service.CKEditorInitService();
-                                                        }
-                                                    }
-                                                );
+                                                Centauri.Helper.findByPidHelper(Centauri.Components.PagesComponent.uid);
                                             },
 
                                             error: function(data) {

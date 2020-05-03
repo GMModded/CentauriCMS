@@ -40,6 +40,11 @@ Centauri.Helper.findByPidHelper = (pid, $contentelement = null) => {
                  * Initializing AccordionComponent for InlineRecords this element may has
                  */
                 Centauri.Components.AccordionComponent();
+
+                /**
+                 * Sorting-Service for the rendered Content-Elements in the EditorComponent
+                 */
+                Centauri.Service.CESortingService();
             }
         }
     );

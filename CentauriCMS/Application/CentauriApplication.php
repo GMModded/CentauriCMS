@@ -25,7 +25,7 @@ class CentauriApplication
                         "class" => \Centauri\CMS\AdditionalDatas\PluginAdditionalDatas::class
                     ],
 
-                    "grids" => [
+                    "grid" => [
                         "class" => \Centauri\CMS\AdditionalDatas\GridAdditionalDatas::class,
                         "return_statement" => 1
                     ]

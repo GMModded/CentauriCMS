@@ -14,8 +14,8 @@ class LinkBladeUtility
 
         $ssl = "https://";
 
-        if(isset($domain->ssl)) {
-            if(!$domain->ssl) {
+        if(isset($domainConfig->ssl)) {
+            if(!$domainConfig->ssl) {
                 $ssl = "http://";
             }
         }

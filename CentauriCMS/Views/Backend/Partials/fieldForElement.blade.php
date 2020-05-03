@@ -1,5 +1,5 @@
-<div class="fields" style="display: none;">
-    {!! $data["_HTML"] !!}
+<div class="fields" style="display: block;">
+    {!! $data["HTML"] !!}
 
     <div class="row">
         <div class="col text-right">
