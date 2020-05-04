@@ -487,84 +487,106 @@ Centauri.Components.PagesComponent = function(module) {
 
                 if(action == "domain-edit") {
                     Centauri.fn.Ajax(
-                        "Page",
-                        "getRootPages",
-
-                        {},
+                        "Domains",
+                        "findById",
 
                         {
-                            success: function(data) {
+                            id: "main"
+                        },
+
+                        {
+                            success: (data) => {
                                 data = JSON.parse(data);
-                                var rootpages = data;
+                                let pageTitlePrefix = data.pageTitlePrefix;
 
-                                Centauri.Components.EditorComponent("show", {
-                                    id: "EditDomain-" + id,
-                                    title: "Domain-Editor",
+                                Centauri.fn.Ajax(
+                                    "Page",
+                                    "getRootPages",
 
-                                    form: [
-                                        {
-                                            id: "rootpageuid",
-                                            type: "custom",
-                                            custom: "select",
+                                    {},
 
-                                            data: {
-                                                selectedOptionValue: rootpageuid,
-                                                label: "Rootpages",
-                                                options: rootpages,
-                                                required: true
-                                            }
-                                        },
+                                    {
+                                        success: function(data) {
+                                            data = JSON.parse(data);
+                                            var rootpages = data;
 
-                                        {
-                                            id: "id",
-                                            label: "ID",
-                                            type: "text",
-                                            value: id,
-                                            extraAttr: "disabled"
-                                        },
+                                            Centauri.Components.EditorComponent("show", {
+                                                id: "EditDomain-" + id,
+                                                title: "Domain-Editor",
 
-                                        {
-                                            id: "domain",
-                                            label: "Domain",
-                                            type: "text",
-                                            value: domain,
-                                            required: true
-                                        }
-                                    ],
+                                                form: [
+                                                    {
+                                                        id: "rootpageuid",
+                                                        type: "custom",
+                                                        custom: "select",
 
-                                    callbacks: {
-                                        save: function(formData) {
-                                            Centauri.fn.Ajax(
-                                                "Domains",
-                                                "edit",
-
-                                                {
-                                                    id: id,
-                                                    rootpageuid: formData.rootpageuid,
-                                                    domain: formData.domain
-                                                },
-
-                                                {
-                                                    success: function(data) {
-                                                        data = JSON.parse(data);
-                                                        Centauri.Notify(data.type, data.title, data.description);
-
-                                                        Centauri.Components.EditorComponent("close");
-
-                                                        Centauri.Components.ModulesComponent({
-                                                            type: "load",
-                                                            module: "domains"
-                                                        });
+                                                        data: {
+                                                            selectedOptionValue: rootpageuid,
+                                                            label: "Rootpages",
+                                                            options: rootpages,
+                                                            required: true
+                                                        }
                                                     },
 
-                                                    error: function(data) {
-                                                        console.error(data);
+                                                    {
+                                                        id: "id",
+                                                        label: "ID",
+                                                        type: "text",
+                                                        value: id,
+                                                        extraAttr: "disabled"
+                                                    },
+
+                                                    {
+                                                        id: "domain",
+                                                        label: "Domain",
+                                                        type: "text",
+                                                        value: domain,
+                                                        required: true
+                                                    },
+
+                                                    {
+                                                        id: "pageTitlePrefix",
+                                                        label: "Page-Title Prefix",
+                                                        type: "text",
+                                                        value: pageTitlePrefix
+                                                    }
+                                                ],
+
+                                                callbacks: {
+                                                    save: function(formData) {
+                                                        Centauri.fn.Ajax(
+                                                            "Domains",
+                                                            "edit",
+
+                                                            {
+                                                                id: id,
+                                                                data: formData
+                                                            },
+
+                                                            {
+                                                                success: function(data) {
+                                                                    data = JSON.parse(data);
+                                                                    Centauri.Notify(data.type, data.title, data.description);
+
+                                                                    Centauri.Components.EditorComponent("close");
+
+                                                                    Centauri.Components.ModulesComponent({
+                                                                        type: "load",
+                                                                        module: "domains"
+                                                                    });
+                                                                },
+
+                                                                error: function(data) {
+                                                                    console.error(data);
+                                                                }
+                                                            }
+                                                        );
                                                     }
                                                 }
-                                            );
+                                            });
                                         }
                                     }
-                                });
+                                );
                             }
                         }
                     );

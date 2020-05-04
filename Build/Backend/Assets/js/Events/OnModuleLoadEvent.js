@@ -6,7 +6,8 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
     Centauri.Components.PagesComponent(module);
 
     var splittedTitle = $.trim($("title", $(document.head)).text()).split("»");
-    var moduleName = Centauri.__trans.modules[Centauri.Module];
+    var _moduleName = Centauri.Module;
+    var moduleName = (Centauri.isNotUndefined(Centauri.__trans.modules[_moduleName]) ? Centauri.__trans.modules[_moduleName] : _moduleName.charAt(0).toUpperCase() + _moduleName.slice(1));
     if(Centauri.isUndefined(moduleName)) moduleName = "";
     var title = splittedTitle[0] + "» " + moduleName
     $("title", document.head).text(title);
