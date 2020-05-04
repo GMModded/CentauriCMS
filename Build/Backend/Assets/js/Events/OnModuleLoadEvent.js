@@ -502,9 +502,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                     "newLanguage",
 
                                     {
-                                        title: data.title,
-                                        langcode: data.langcode,
-                                        slug: data.slug
+                                        data: data
                                     },
 
                                     {

@@ -1,5 +1,9 @@
 <?php
 
+use Centauri\CMS\BladeHelper\BuildBladeHelper;
+use Centauri\CMS\BladeHelper\ImageBladeHelper;
+use Centauri\CMS\BladeHelper\URIBladeHelper;
+
 return [
 
     /*
@@ -225,9 +229,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         // "CentauriBladeHelper" => Centauri\CMS\BladeHelper\LoadBladeHelpers::class,
-        "ImageBladeHelper" => Centauri\CMS\BladeHelper\ImageBladeHelper::class,
-        "BuildBladeHelper" => Centauri\CMS\BladeHelper\BuildBladeHelper::class,
-        "URIBladeHelper" => \Centauri\CMS\BladeHelper\URIBladeHelper::class
+        "ImageBladeHelper" => ImageBladeHelper::class,
+        "BuildBladeHelper" => BuildBladeHelper::class,
+        "URIBladeHelper" => URIBladeHelper::class
     ],
 
 ];

@@ -15,7 +15,7 @@ class ElementComponent
      * 
      * @return void
      */
-    public function render($pageUid, $lid = 0, $rowPos = 0, $colPos = 0)
+    public function render($pageUid, $lid = 0, $rowPos = 0, $colPos = 0, $grids_sorting = null)
     {
         $elements = \Centauri\CMS\Model\Element::where([
             "pid" => $pageUid,
@@ -23,7 +23,7 @@ class ElementComponent
             "hidden" => 0,
             "rowPos" => $rowPos,
             "colPos" => $colPos,
-            "grids_sorting" => null
+            "grids_sorting" => $grids_sorting
         ])->orderBy("sorting", "asc")->get();
 
         return $this->getRenderedHtmlByElements($elements);

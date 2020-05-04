@@ -74,6 +74,10 @@ class ContentElementsAjax implements AjaxInterface
 
             $html = str_replace("###MODEL_CONTENT###", $modelsHtml, $modelWrapper);
         } else {
+            if(!isset($fieldConfig["value"])) {
+                $fieldConfig["value"] = "";
+            }
+
             if(isset($fieldConfig["additionalType"])) {
                 $additionalType = $fieldConfig["additionalType"];
 
@@ -588,7 +592,7 @@ class ContentElementsAjax implements AjaxInterface
             }
 
             return json_encode([
-                "type" => "success",
+                "type" => "primary",
                 "title" => "Element moved",
                 "description" => "Successfully moved this element"
             ]);

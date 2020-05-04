@@ -1,11 +1,7 @@
 <?php
 namespace Centauri\CMS\BladeHelper;
 
-use Centauri\CMS\Centauri;
-use Centauri\CMS\Model\Page;
-use Centauri\Extension\Controller\NewsController;
 use Exception;
-use Illuminate\Support\Facades\Route;
 
 /**
  * Usage:

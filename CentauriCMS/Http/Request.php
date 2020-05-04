@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Http;
 
+use Centauri\CMS\BladeHelper\URIBladeHelper;
 use Centauri\CMS\Cache\StaticFileCache;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Page;

@@ -5,9 +5,7 @@ $SQLService = \Centauri\CMS\Centauri::makeInstance(\Centauri\CMS\Service\SQLServ
 $table = "slideritems";
 $SQLService->createTable($table);
 
-$SQLService->createColumn($table, "image", "integer", [
-    "nullable" => true
-]);
+$SQLService->createColumn($table, "image", "integer", ["nullable" => true]);
 
-$SQLService->createColumn($table, "title", "string");
-$SQLService->createColumn($table, "teasertext", "text");
+$SQLService->createColumn($table, "title", "text", ["nullable" => true]);
+$SQLService->createColumn($table, "teasertext", "text", ["nullable" => true]);

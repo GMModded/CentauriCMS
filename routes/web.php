@@ -6,7 +6,7 @@ Route::any("{nodes}", function($nodes = []) {
     $host = str_replace("www.", "", $host);
 
     $splittedHost = explode(".", $host);
-    
+
     if(count($splittedHost) >= 3) {
         return Request::handle($nodes, $host, "subdomain");
     }

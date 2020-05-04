@@ -43,7 +43,7 @@ class FieldProcessor
                     $element->$_ = InlineProcessor::findByRelation($element->uid, $_, $field["config"]["model"]);
                 }
 
-                if(Str::contains($_, "grid-")) {
+                if(Str::startsWith($_, "grid")) {
                     $element->$_ = GridsProcessor::process($data);
                 }
             }

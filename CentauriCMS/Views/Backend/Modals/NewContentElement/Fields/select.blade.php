@@ -3,7 +3,7 @@
         {{ $fieldConfig["label"] }}
     </label>
 
-    <select class="mdb-select md-form" data-id="{{ $fieldConfig['id'] }}"{{ $fieldConfig["config"]["required"] ? " required" : ""}}>
+    <select class="mdb-select md-form" data-id="{{ $fieldConfig['id'] }}"{{ $fieldConfig["config"]["required"] ? " required" : ""}} data-uid="{{ $fieldConfig['uid'] }}">
         @if(isset($fieldConfig["config"]["default"]))
             <option value="{{ $fieldConfig["config"]["default"][1] }}" selected disabled>
                 {{ $fieldConfig["config"]["default"][0] }}

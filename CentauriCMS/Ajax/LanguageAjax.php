@@ -13,9 +13,11 @@ class LanguageAjax implements AjaxInterface
         $params = $request->input();
 
         if($ajaxName == "newLanguage") {
-            $title = $params["title"];
-            $langcode = $params["langcode"];
-            $slug = $params["slug"];
+            $data = json_decode($params["data"], true);
+
+            $title = $data["title"];
+            $langcode = $data["langcode"];
+            $slug = $data["slug"];
 
             $language = new Language;
 

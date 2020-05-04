@@ -51,8 +51,6 @@ class Element extends Model
         "hidden" => 0,
 
         "header" => "",
-        "subheader" => "",
-        "rte" => "",
 
         "plugin" => null,
         "image" => null

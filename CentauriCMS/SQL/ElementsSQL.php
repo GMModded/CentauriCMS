@@ -7,15 +7,9 @@ $SQLService = \Centauri\CMS\Centauri::makeInstance(\Centauri\CMS\Service\SQLServ
 $table = "elements";
 $SQLService->createTable($table);
 
-$SQLService->createColumn($table, "htag", "string", "", [
-    "default" => ""
-]);
-$SQLService->createColumn($table, "slideritems", "integer", 0, [
-    "default" => 0
-]);
-$SQLService->createColumn($table, "slideritems_buttons", "integer", 0, [
-    "default" => 0
-]);
-$SQLService->createColumn($table, "grid", "string", "", [
-    "default" => ""
-]);
+$SQLService->createColumn($table, "subheader", "string", ["nullable" => true]);
+$SQLService->createColumn($table, "RTE", "text", ["nullable" => true]);
+$SQLService->createColumn($table, "htag", "string", ["nullable" => false, "default" => ""]);
+$SQLService->createColumn($table, "slideritems", "string", ["nullable" => false, "default" => 0]);
+$SQLService->createColumn($table, "slideritems_buttons", "string", ["nullable" => false, "default" => 0]);
+$SQLService->createColumn($table, "grid", "string", ["nullable" => true, "default" => null]);
