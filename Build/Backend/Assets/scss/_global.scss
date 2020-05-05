@@ -192,3 +192,17 @@ div {
         width: 100% !important;
     }
 }
+
+.nav {
+    &.nav-tabs {
+        .nav-item {
+            a {
+                &.nav-link {
+                    &.active {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+}

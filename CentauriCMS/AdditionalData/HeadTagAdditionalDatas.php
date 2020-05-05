@@ -5,12 +5,13 @@ class HeadTagAdditionalDatas implements \Centauri\CMS\AdditionalDataInterface
 {
     public function fetch()
     {
+        $onload = "this.media='all'";
+
         $metaTags = [
             "<meta charset='UTF-8' />",
-            // "<meta name='description' content='Centauri is a CMS based on Laravel 6 (a PHP Framework). This is the official website.' />",
-            // "<meta name='keywords' content='Centauri, CMS, Content Management System, professional, modern'>",
             "<meta name='viewport' content='width=device-width, initial-scale=1.0'>",
-            "<meta http-equiv='X-UA-Compatible' content='ie=edge'>"
+            "<meta http-equiv='X-UA-Compatible' content='ie=edge'>",
+            "<link rel='stylesheet' href='" . asset("public/frontend/css/centauri.min.css") . "' media='print' onload=" . $onload . ">"
         ];
 
         return implode("\r\n", $metaTags);

@@ -83,7 +83,7 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
     }
 
     if(type == "textarea") {
-        html += "<div class='md-form'><textarea" + (Centauri.isNotUndefined(data.required) ? (data.required ? " required" : "") : "") + " id='" + inputObj.id + "' class='md-textarea form-control' rows='3'>" + (Centauri.isNotUndefined(data.value) ? data.value : "") + "</textarea><label" + (Centauri.isNotUndefined(data.value) ? " class='active'" : "") + " for='" + inputObj.id + "'>" + data.label + "</label></div>";
+        html += "<div class='md-form'><textarea" + (Centauri.isNotUndefined(data.required) ? (data.required ? " required" : "") : "") + " id='" + inputObj.id + "' class='md-textarea form-control' rows='3'>" + (Centauri.isNotUndefined(data.value) ? data.value : "") + "</textarea><label" + (Centauri.isNotUndefined(data.value) && data.value.length > 0 ? " class='active'" : "") + " for='" + inputObj.id + "'>" + data.label + "</label></div>";
     }
 
     return "<div class='field" + additionalFieldClasses + "'" + (Centauri.isNotUndefined(inputObj.extraAttr) ? " " + inputObj.extraAttr : "") + ">" + html + "</div>";

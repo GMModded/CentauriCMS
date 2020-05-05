@@ -8,7 +8,7 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
         },
 
         {
-            success: function(data) {
+            success: (data) => {
                 if(Centauri.elExists($(".data", $contentelement))) {
                     $(".data", $contentelement).remove();
                 }
@@ -19,8 +19,13 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                 $(".overlayer").removeClass("hidden");
 
                 $contentelement.data("loading-state", "loaded");
+
                 $contentelement.append("<div class='data'></div>");
                 $(".data", $contentelement).append(data);
+
+                if($contentelement.data("ctype") == "grids") {
+                    $(".data > .fields > .fields", $contentelement).appendTo($(".tab-pane#grid-tab-content"));
+                }
 
                 Centauri.View.ContentElementsView($contentelement);
 

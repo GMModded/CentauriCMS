@@ -11,12 +11,18 @@ Centauri.Service.CESortingService = () => {
 
     $(".sortable-elements").sortable({
         connectWith: ".sortable-elements",
+        dropOnEmpty: false,
+        cancel: ".ck-content",
 
         start: function(e, ui) {
-            $(".sortable-elements button[data-action='newContentElement'").remove();
+            $(".sortable-elements button[data-action='newContentElement'").hide();
         },
 
         stop: function(e, ui) {
+            $(".sortable-elements button[data-action='newContentElement'").show();
+        },
+
+        update: function(e, ui) {
             let data = [];
             let pid = Centauri.Components.PagesComponent.uid;
             let $this = $(this);
@@ -51,6 +57,8 @@ Centauri.Service.CESortingService = () => {
                     });
                 }
             });
+
+            console.log(data);
 
             Centauri.fn.Ajax(
                 "ContentElements",
