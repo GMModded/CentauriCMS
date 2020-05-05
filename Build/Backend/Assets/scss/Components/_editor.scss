@@ -16,6 +16,10 @@
         &.fluid-lg {
             min-width: 450px !important;
 
+            @media (max-width: 449px) {
+                min-width: 100%;
+            }
+
             @media (min-width: 992px) {
                 width: calc(41.67% - 300px) !important;
             }
@@ -166,8 +170,10 @@
                 padding: 0 15px 15px;
 
                 label {
-                    margin-bottom: 0;
-                    font-weight: bold;
+                    &:not(.form-check-label) {
+                        margin-bottom: 0;
+                        font-weight: bold;
+                    }
                 }
 
                 .image-field {

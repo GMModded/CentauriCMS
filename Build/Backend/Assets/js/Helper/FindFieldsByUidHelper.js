@@ -80,8 +80,16 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                 Centauri.Listener.EditorListener()
 
                 $(".row button", $contentelement).on("click", function() {
-                    var uid = $(this).parent().parent().parent().parent().data("uid");
+                    let $parent = $(this).parent().parent().parent().parent();
+
+                    if($parent.hasClass("data")) {
+                        $parent = $parent.parent();
+                    }
+
+                    var uid = $parent.data("uid");
                     var trigger = $(this).data("trigger");
+
+                    
 
                     if(trigger == "saveElementByUid") {
                         let datas = Centauri.Helper.FieldsHelper($(".fields"), ".content-element.active");

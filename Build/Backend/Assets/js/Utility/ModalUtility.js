@@ -8,10 +8,15 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
     var saveclass = "success";
 
     var closeOnSave = true;
+    var cached = true;
 
     if(Centauri.isNotUndefined(options)) {
         if(Centauri.isNotUndefined(options.id)) {
             id = "-" + options.id;
+        }
+
+        if(Centauri.isNotUndefined(options.cached)) {
+            cached = options.cached;
         }
 
         if(Centauri.isNotUndefined(options.size)) {
@@ -34,9 +39,16 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
         }
     }
 
-    if(Centauri.elExists($("#modal" + id))) {
+    let _showingCached = false;
+    if(Centauri.elExists($("#modal" + id)) && cached) {
+        _showingCached = true;
         $("#modal" + id).modal("show");
-        return false;
+
+        if(Centauri.isNotUndefined(callbacks)) {
+            if(Centauri.isNotUndefined(callbacks.showingCached)) {
+                callbacks.showingCached();
+            }
+        }
     }
 
     html = "<div class='modal fade' id='modal" + id + "' tabindex='-1' role='dialog' aria-labelledby='modal" + id + "-label' aria-hidden='true'>|</div>";
@@ -51,13 +63,41 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
     html = addHTMLFn(html, "<button type='button' data-type='save' class='btn btn-" + saveclass + " waves-effect waves-light mr-3'>" + options.save.label + "</button>&&");
     html = addHTMLFn(html, "<button type='button' data-type='close' class='btn btn-" + closeclass + " waves-effect waves-light'>" + options.close.label + "</button>", "&&");
 
-    $("body").append(html);
-    $("#modal" + id).modal();
+    if(!_showingCached) {
+        $("body").append(html);
+        $("#modal" + id).modal();
+    }
 
     if(Centauri.isNotUndefined(callbacks)) {
         if(Centauri.isNotUndefined(callbacks.ready)) {
             callbacks.ready();
         }
+    }
+
+    $("#modal" + id + " button").off();
+
+    $("#modal" + id + " button").on("click", this, function() {
+        var btntype = $(this).data("type");
+
+        if(btntype == "close") {
+            Centauri.fn.Modal.close();
+
+            if(Centauri.isNotUndefined(callbacks.close)) {
+                callbacks.close();
+            }
+        }
+
+        if(btntype == "save") {
+            if(closeOnSave) {
+                Centauri.fn.Modal.close();
+            }
+
+            callbacks.save();
+        }
+    });
+
+    if(_showingCached) {
+        return true;
     }
 
     Centauri.Utility.ModalUtility.Validator($("#modal"));
@@ -87,26 +127,6 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
         }
     });
 
-    $("#modal" + id + " button").on("click", this, function() {
-        var btntype = $(this).data("type");
-
-        if(btntype == "close") {
-            Centauri.fn.Modal.close();
-
-            if(Centauri.isNotUndefined(callbacks.close)) {
-                callbacks.close();
-            }
-        }
-
-        if(btntype == "save") {
-            if(closeOnSave) {
-                Centauri.fn.Modal.close();
-            }
-
-            callbacks.save();
-        }
-    });
-
     return true;
 };
 
@@ -132,6 +152,8 @@ Centauri.Utility.ModalUtility.close = function(id) {
         $(".modal").addClass("destroy");
         $(".modal").modal("hide");
     }
+
+
 };
 
 Centauri.fn.Modal.close = function() {

@@ -1,7 +1,7 @@
 Centauri.Components.CreateNewInlineComponent = () => {
     $("a.create-new-inline").off("click");
-    
-    $("a.create-new-inline").click(function(e) {
+
+    $("a.create-new-inline").on("click", this, function(e) {
         e.preventDefault();
 
         let $this = $(this);

@@ -28,19 +28,26 @@ Centauri.Service.CESortingService = () => {
                 let index = $ce.index();
                 let rowPos = $ce.parent().parent().parent().data("rowpos");
                 let colPos = $ce.parent().parent().data("colpos");
-                let gridsorting = null;
+
+                let gridsparent = null;
+                let grids_sorting_rowpos = null;
+                let grids_sorting_colpos = null;
 
                 if($ce.parents(".content-element").data("ctype") == "grids") {
-                    gridsorting = $ce.parents(".content-element").data("uid");
+                    gridsparent = $ce.parents(".content-element").data("uid");
+                    grids_sorting_rowpos = $ce.parent().parent().parent().data("grid-sorting-rowpos");
+                    grids_sorting_colpos = $ce.parent().parent().data("grid-sorting-colpos");
                 }
-    
+
                 if(Centauri.isNotNull(uid) && Centauri.isNotNull(index) && Centauri.isNotNull(rowPos) && Centauri.isNotNull(colPos)) {
                     data.push({
                         uid: uid,
                         sorting: index,
                         rowPos: rowPos,
                         colPos: colPos,
-                        gridsorting: gridsorting
+                        gridsparent: gridsparent,
+                        grids_sorting_rowpos: grids_sorting_rowpos,
+                        grids_sorting_colpos: grids_sorting_colpos
                     });
                 }
             });
