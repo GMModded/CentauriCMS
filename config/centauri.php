@@ -2,7 +2,11 @@
 
 return [
     "config" => [
-        "Caching" => false
+        "Caching" => false,
+
+        "FE" => [
+            "MainTemplate" => "centauri_frontend::Frontend.Templates.frontend"
+        ]
     ],
 
     "beLayouts" => [
@@ -64,10 +68,12 @@ return [
                 0 => [
                     "cols" => [
                         0 => [
+                            "col" => "6",
                             "label" => "Left"
                         ],
 
                         1 => [
+                            "col" => "6",
                             "label" => "Right"
                         ]
                     ]

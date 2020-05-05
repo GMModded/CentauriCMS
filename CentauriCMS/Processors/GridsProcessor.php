@@ -4,6 +4,7 @@ namespace Centauri\CMS\Processor;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Component\ElementComponent;
 use Centauri\CMS\Helper\GridHelper;
+use Exception;
 
 class GridsProcessor
 {
@@ -12,42 +13,42 @@ class GridsProcessor
         $GridHelper = Centauri::makeInstance(GridHelper::class);
 
         $gridUid = $data["element"]->uid;
-        $elements = $GridHelper->findElementsByGridUid($gridUid);
+        $elements = $GridHelper->findElementsByGridUid($gridUid, 1);
 
         $ElementComponent = Centauri::makeInstance(ElementComponent::class);
 
         $renderedHTML = "";
         $renderedColsHTML = [];
 
-        $gridLayout = $data["value"];
+        $value = $data["value"];
+        $gridLayout = config("centauri")["gridLayouts"][$value] ?? null;
 
-        if($gridLayout == "onecol") {
-            $renderedColsHTML = [
-                $ElementComponent->renderElements($elements)
-            ];
-        } else if($gridLayout == "twocol") {
-            $renderedColsHTML = [
-                $ElementComponent->renderElements($elements, 1, 0, 0, 3),
-                $ElementComponent->renderElements($elements, 1, 0, 0, 4)
-            ];
-        } else if($gridLayout == "threecol") {
-            $renderedColsHTML = [
-                $ElementComponent->renderElements($elements, 1, 0, 0, 3),
-                $ElementComponent->renderElements($elements, 1, 0, 0, 4),
-                $ElementComponent->renderElements($elements, 1, 0, 0, 5)
-            ];
-        } else if($gridLayout == "fourcol") {
-            $renderedColsHTML = [
-                $ElementComponent->renderElements($elements, 1, 0, 0, 3),
-                $ElementComponent->renderElements($elements, 1, 0, 0, 4),
-                $ElementComponent->renderElements($elements, 1, 0, 0, 5),
-                $ElementComponent->renderElements($elements, 1, 0, 0, 6)
-            ];
-        } else {
-            dd("GRIDS PROCESSOR");
+        if(is_null($gridLayout)) {
+            throw new Exception("Grid-Layout '" . $value . "' not found!");
         }
 
-        $renderedHTML = view("Centauri::Frontend.Grids." . $gridLayout, [
+        $elements = [];
+        $renderedColsHTML = [];
+
+        foreach($gridLayout["config"] as $rowPos => $rowArr) {
+            foreach($rowArr["cols"] as $colPos => $colArr) {
+                if(!isset($elements[$rowPos])) {
+                    $elements[$rowPos] = [
+                        $colPos => $GridHelper->findElementsByGridUid($gridUid, 1, $rowPos, $colPos)
+                    ];
+                } else {
+                    $elements[$rowPos][$colPos] = $GridHelper->findElementsByGridUid($gridUid, 1, $rowPos, $colPos);
+                }
+            }
+        }
+
+        foreach($elements as $rowPos => $colArr) {
+            foreach($colArr as $colPos => $elements) {
+                $renderedColsHTML[$colPos] = $ElementComponent->renderElements($elements);
+            }
+        }
+
+        $renderedHTML = view("Centauri::Frontend.Grids." . $value, [
             "renderedColsHTML" => $renderedColsHTML
         ])->render();
 

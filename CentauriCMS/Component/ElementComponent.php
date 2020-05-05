@@ -15,15 +15,27 @@ class ElementComponent
      * 
      * @return void
      */
-    public function render($pageUid, $lid = 0, $rowPos = 0, $colPos = 0, $grids_sorting = null)
+    public function render($pageUid, $lid = 1, $rowPos = 0, $colPos = 0, $grids_sorting = [])
     {
+        $_grids_sorting = [
+            "grids_sorting_rowpos" => null,
+            "grids_sorting_colpos" => null
+        ];
+
+        if(!empty($grids_sorting)) {
+            foreach($grids_sorting as $key => $value) {
+                $_grids_sorting[$key] = $value;
+            }
+        }
+
         $elements = \Centauri\CMS\Model\Element::where([
             "pid" => $pageUid,
             "lid" => $lid,
             "hidden" => 0,
             "rowPos" => $rowPos,
             "colPos" => $colPos,
-            "grids_sorting" => $grids_sorting
+            "grids_sorting_rowpos" => $_grids_sorting["grids_sorting_rowpos"],
+            "grids_sorting_colpos" => $_grids_sorting["grids_sorting_colpos"]
         ])->orderBy("sorting", "asc")->get();
 
         return $this->getRenderedHtmlByElements($elements);

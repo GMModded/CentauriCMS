@@ -137,7 +137,7 @@ class ContentElementsAjax implements AjaxInterface
                 ], $parent) . "</div>";
             }
 
-            $html = "<div class='row'>" . $html . "</div>";
+            $html = "<div class='col-12 d-flex px-0 ml-n2' style='max-width: calc(100% + 1rem); width: calc(100% + 1rem);'>" . $html . "</div>";
         } else {
             if(!isset($CCEfields[$field]) && !isset($CCEfields[$parent]["config"]["fields"][$field])) {
                 $msg = "CCE - The configuration for field '" . $field . "' could not be found.";
@@ -384,8 +384,13 @@ class ContentElementsAjax implements AjaxInterface
             $element->sorting = $sorting;
 
             if($type == "ingrid") {
-                $gridsorting = $request->input("gridsorting");
-                $element->grids_sorting = $gridsorting;
+                $gridsparent = $request->input("gridsparent");
+                $grids_sorting_rowpos = $request->input("grids_sorting_rowpos");
+                $grids_sorting_colpos = $request->input("grids_sorting_colpos");
+
+                $element->grids_parent = $gridsparent;
+                $element->grids_sorting_rowpos = $grids_sorting_rowpos;
+                $element->grids_sorting_colpos = $grids_sorting_colpos;
             }
 
             $datas = $request->input("datas");
@@ -574,7 +579,7 @@ class ContentElementsAjax implements AjaxInterface
                 $sorting = $data["sorting"];
                 $rowPos = $data["rowPos"];
                 $colPos = $data["colPos"];
-                $gridsorting = $data["gridsorting"];
+                $gridsparent = $data["gridsparent"];
 
                 $element = Element::where([
                     "pid" => $pid,
@@ -585,7 +590,15 @@ class ContentElementsAjax implements AjaxInterface
                     $element->sorting = $sorting;
                     $element->rowpos = $rowPos;
                     $element->colpos = $colPos;
-                    $element->grids_sorting = $gridsorting;
+
+                    if(!is_null($gridsparent)) {
+                        $grids_sorting_rowpos = $data["grids_sorting_rowpos"];
+                        $grids_sorting_colpos = $data["grids_sorting_colpos"];
+
+                        $element->grids_parent = $gridsparent;
+                        $element->grids_sorting_rowpos = $grids_sorting_rowpos;
+                        $element->grids_sorting_colpos = $grids_sorting_colpos;
+                    }
 
                     $element->save();
                 }

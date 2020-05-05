@@ -6,4 +6,4 @@
     {{ $element->subheader }}
 </h3>
 
-{!! $element->rte !!}
+{!! $element->RTE !!}

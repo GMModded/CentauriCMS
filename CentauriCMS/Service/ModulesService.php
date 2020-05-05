@@ -183,7 +183,7 @@ class ModulesService
                     "severity" => "ERROR",
                     "title" => "Page(s) with a language which doesn't exists anymore",
                     "text" => "Delete remaining pages which has a connection to the non-existing language to fix this issue.",
-                    "html" => "<a href='" . url("./centauri/fix/deletePagesWithNotExistingLanguage") . "'><button class='btn btn-warn waves-effect waves-light'>Fix issue</button></a>"
+                    "html" => "<a href='" . url("./centauri/fix/deletePagesWithNotExistingLanguage") . "'><button class='btn btn-warn waves-effect waves-light' style='color: #fff;'>Fix issue</button></a>"
                 ];
             }
 

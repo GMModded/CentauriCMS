@@ -83,7 +83,7 @@
 														</div>
 
 														<div class="col-auto">
-															<i class="fas fa-calendar fa-2x text-gray-300"></i>
+															<i class="fas fa-language fa-2x text-gray-300"></i>
 														</div>
 													</div>
 												</div>
@@ -107,7 +107,7 @@
 														</div>
 
 														<div class="col-auto">
-															<i class="fas fa-calendar fa-2x text-gray-300"></i>
+															<i class="fas fa-bell fa-2x text-gray-300"></i>
 														</div>
 													</div>
 												</div>
@@ -121,7 +121,7 @@
 						<div class="card shadow mb-4 w-100">
 							<div class="card-header py-3">
 								<h6 class="m-0 font-weight-bold text-primary">
-									Stats
+									Stats & Tracking
 								</h6>
 							</div>
 
@@ -132,6 +132,21 @@
 											<div class="card-body">
 												<div class="row no-gutters align-items-center">
 													<canvas id="lineChart_frontendcalls"></canvas>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-12 col-md-6 mb-4">
+										<div class="card border-left-info shadow h-100 py-2">
+											<div class="card-body">
+												<div class="row no-gutters align-items-center h-100">
+													<div class="col-12">
+														<p class="text-center">
+															Sorry<br><br>
+															You haven't connected Centauri's Tracking with your Google Analytics yet
+														</p>
+													</div>
 												</div>
 											</div>
 										</div>

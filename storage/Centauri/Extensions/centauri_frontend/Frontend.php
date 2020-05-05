@@ -29,7 +29,7 @@ class Frontend
         $leftColHTML = $ElementComponent->render($uid, $lid, 1, 2);
         $rightColHTML = $ElementComponent->render($uid, $lid, 1, 3);
 
-        return view("centauri_frontend::Frontend/frontend", [
+        return view("centauri_frontend::Frontend/Layouts/frontend", [
             "contentColHTML" => $contentColHTML,
             "leftColHTML" => $leftColHTML,
             "rightColHTML" => $rightColHTML

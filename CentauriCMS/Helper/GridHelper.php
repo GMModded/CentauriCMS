@@ -12,10 +12,12 @@ class GridHelper
      * 
      * @return array
      */
-    public function findElementsByGridUid($uid, $lid = 1)
+    public function findElementsByGridUid($uid, $lid = 1, $grids_sorting_rowpos = null, $grids_sorting_colpos = null)
     {
         return Element::where([
-            "grids_sorting" => $uid,
+            "grids_parent" => $uid,
+            "grids_sorting_rowpos" => $grids_sorting_rowpos,
+            "grids_sorting_colpos" => $grids_sorting_colpos,
             "lid" => $lid
         ])->orderBy("sorting", "asc")->get()->all();
     }

@@ -14,18 +14,18 @@
     }
 @endphp
 
-@foreach($data["gridConfig"]["config"] as $rowPos => $rowPosArr)
+@foreach($data["gridConfig"]["config"] as $rowPos => $rowArr)
     <div class="fields">
         @if(isset($data["fieldsBeforeElements"]))
             {!! $data["fieldsBeforeElements"] !!}
         @endif
 
-        <div class="row" data-rowPos="{{ $rowPos }}" style="width: calc(100% + 30px);">
-            @foreach($rowPosArr["cols"] as $colPos => $colData)
+        <div class="row" data-rowPos="{{ $rowPos }}" style="width: calc(100% + 30px);" data-grid-sorting-rowpos="{{ $rowPos }}">
+            @foreach($rowArr["cols"] as $colPos => $colData)
                 @if(isset($colData["col"]))
-                    <div class="col-12 col-md-{{ $colData['col'] }}">
+                    <div class="col-12 col-md-{{ $colData['col'] }}" data-colPos="{{ $colPos }}" data-grid-sorting-colpos="{{ $colPos }}">
                 @else
-                    <div class="col-12 col-md" data-colPos="{{ $colPos }}">
+                    <div class="col-12 col-md" data-colPos="{{ $colPos }}" data-grid-sorting-colpos="{{ $colPos }}">
                 @endif
                         @if(isset($colData["label"]))
                             <h6>
@@ -34,30 +34,28 @@
                         @endif
 
                         <div class="sortable-elements">
-                            @foreach($data["elements"] as $element)
-                                @if($element->colPos == $colPos)
-                                    <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="before" data-type="ingrid" data-gridsorting="{{ $data['gridelement']->uid }}">
-                                        <i class="fas fa-plus"></i>
-                                        Content
-                                    </button>
+                            @foreach($data["elements"][$colPos]["elements"] as $element)
+                                <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="before" data-type="ingrid" data-gridsparent="{{ $data['gridelement']->uid }}" data-grid-sorting-rowpos="{{ $rowPos }}" data-grid-sorting-colpos="{{ $colPos }}">
+                                    <i class="fas fa-plus"></i>
+                                    Content
+                                </button>
 
-                                    <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}">
-                                        <div class="top">
-                                            <span class="title">
-                                                {{ $element->ctype }}
-                                            </span>
+                            <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}">
+                                    <div class="top">
+                                        <span class="title">
+                                            {{ $element->ctype }}
+                                        </span>
 
-                                            <div class="button-view float-right">
-                                                <button class="edit btn btn-primary waves-effect waves-light btn-floating my-2 mx-3">
-                                                    <i class="fas fa-pen"></i>
-                                                </button>
-                                            </div>
+                                        <div class="button-view float-right">
+                                            <button class="edit btn btn-primary waves-effect waves-light btn-floating my-2 mx-3">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
                                         </div>
                                     </div>
-                                @endif
+                                </div>
                             @endforeach
 
-                            <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="after" data-type="ingrid" data-gridsorting="{{ $data['gridelement']->uid }}">
+                            <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="after" data-type="ingrid" data-gridsparent="{{ $data['gridelement']->uid }}" data-grid-sorting-rowpos="{{ $rowPos }}" data-grid-sorting-colpos="{{ $colPos }}">
                                 <i class="fas fa-plus"></i>
                                 Content
                             </button>

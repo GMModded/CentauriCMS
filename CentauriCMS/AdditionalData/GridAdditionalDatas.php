@@ -20,17 +20,26 @@ class GridAdditionalDatas implements \Centauri\CMS\AdditionalDataInterface
 
     public function onEditListener($gridelement)
     {
-        $gridUid = $gridelement->uid;
-
         $GridHelper = Centauri::makeInstance(GridHelper::class);
-        $elements = $GridHelper->findElementsByGridUid($gridUid, 1);
 
+        $gridUid = $gridelement->uid;
         $gridConfig = null;
 
         if(!is_null($gridelement->grid)) {
             $gridConfig = config("centauri")["gridLayouts"][$gridelement->grid] ?? null;
         } else {
             return response("Grid-Layout '" . $gridelement->grid . "' not found for Grid with ID: " . $gridUid . " in Grid-Layouts configuration", 500);
+        }
+
+        $elements = [];
+
+        foreach($gridConfig["config"] as $rowPos => $rowArr) {
+            foreach($rowArr["cols"] as $colPos => $colArr) {
+                $elements[$colPos] = [
+                    "colData" => $colArr,
+                    "elements" => $GridHelper->findElementsByGridUid($gridUid, 1, $rowPos, $colPos)
+                ];
+            }
         }
 
         $data = [

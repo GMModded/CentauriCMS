@@ -55,21 +55,33 @@ class DomainsAjax implements AjaxInterface
             }
         }
 
+        if($ajaxName == "findById") {
+            $id = $request->input("id");
+
+            $path = base_path("CentauriCMS/Domains/" . strtolower($id) . ".json");
+            $content = file_get_contents($path);
+
+            return $content;
+        }
+
         if($ajaxName == "findAll") {
             $domains = DomainsUtility::findAll();
             return json_encode($domains);
         }
 
         if($ajaxName == "edit") {
-            $id = $request->input("id");
-            $domain = $request->input("domain");
-            $rootpageuid = $request->input("rootpageuid");
+            $data = $request->input("data");
+            $datasArr = json_decode($data, true);
+
+            $id = strtolower($request->input("id"));
 
             $path = base_path("CentauriCMS/Domains/$id.json");
             $content = json_decode(file_get_contents($path));
 
-            $content->domain = $domain;
-            $content->rootpageuid = $rootpageuid;
+            foreach($datasArr as $key => $value) {
+                $content->$key = $value;
+            }
+
             file_put_contents($path, json_encode($content, JSON_PRETTY_PRINT));
 
             return json_encode([

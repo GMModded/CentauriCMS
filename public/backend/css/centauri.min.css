@@ -634,6 +634,12 @@ input:read-only:not(.select-dropdown) {
   border-right: unset !important;
   border-bottom: unset !important; }
 
+.border-left-info {
+  border-left: 0.25rem solid #28d !important;
+  border-top: unset !important;
+  border-right: unset !important;
+  border-bottom: unset !important; }
+
 .border-left-warning {
   border-left: 0.25rem solid #f6c23e !important;
   border-top: unset !important;
@@ -749,29 +755,32 @@ div > .bottom {
     margin-top: -2.5px;
     font-size: .66em;
     text-shadow: 0 0 15px #000; }
-  #dashboard #modules .module {
-    display: flex;
-    padding: 5px; }
-    #dashboard #modules .module:hover, #dashboard #modules .module.active {
-      background: #364159;
-      cursor: default; }
-    #dashboard #modules .module:not(.active) {
-      cursor: pointer; }
-    #dashboard #modules .module .icon-view {
-      margin: 10px 15px; }
-    #dashboard #modules .module .text-view {
-      margin: 10px; }
-    #dashboard #modules .module[data-module-id="notifications"] .icon-view span {
-      position: absolute;
-      margin-top: -10px;
-      margin-left: 5px;
-      font-size: 12px;
-      z-index: 1;
-      background: #ff3547;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      text-align: center; }
+  #dashboard #modules {
+    height: calc(100% - 200px);
+    overflow-y: auto; }
+    #dashboard #modules .module {
+      display: flex;
+      padding: 5px; }
+      #dashboard #modules .module:hover, #dashboard #modules .module.active {
+        background: #364159;
+        cursor: default; }
+      #dashboard #modules .module:not(.active) {
+        cursor: pointer; }
+      #dashboard #modules .module .icon-view {
+        margin: 10px 15px; }
+      #dashboard #modules .module .text-view {
+        margin: 10px; }
+      #dashboard #modules .module[data-module-id="notifications"] .icon-view span {
+        position: absolute;
+        margin-top: -10px;
+        margin-left: 5px;
+        font-size: 12px;
+        z-index: 1;
+        background: #ff3547;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        text-align: center; }
   #dashboard #user {
     position: absolute;
     bottom: 0;
@@ -1017,6 +1026,9 @@ section#header {
     right: 0 !important; }
     #editor.active.fluid-lg {
       min-width: 450px !important; }
+      @media (max-width: 449px) {
+        #editor.active.fluid-lg {
+          min-width: 100%; } }
       @media (min-width: 992px) {
         #editor.active.fluid-lg {
           width: calc(41.67% - 300px) !important; } }
@@ -1096,7 +1108,7 @@ section#header {
       #editor > .bottom .content-element .fields {
         width: 100%;
         padding: 0 15px 15px; }
-        #editor > .bottom .content-element .fields label {
+        #editor > .bottom .content-element .fields label:not(.form-check-label) {
           margin-bottom: 0;
           font-weight: bold; }
         #editor > .bottom .content-element .fields .image-field {

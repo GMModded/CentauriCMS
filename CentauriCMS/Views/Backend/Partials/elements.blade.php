@@ -2,7 +2,7 @@
     <div class="row" data-rowPos="{{ $rowPos }}">
         @foreach($rowPosArr["cols"] as $colPos => $colData)
             @if(isset($colData["col"]))
-                <div class="col-12 col-md-{{ $colData['col'] }}">
+                <div class="col-12 col-md-{{ $colData['col'] }}" data-colpos="{{ $colPos }}">
             @else
                 <div class="col-12 col-md" data-colPos="{{ $colPos }}">
             @endif
@@ -14,7 +14,7 @@
 
                     <div class="sortable-elements">
                         @foreach($data["elements"] as $element)
-                            @if(is_null($element->grids_sorting))
+                            @if(is_null($element->grids_parent))
                                 @if($element->colPos == $colPos)
                                     <button class="fixed btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="before">
                                         <i class="fas fa-plus"></i>

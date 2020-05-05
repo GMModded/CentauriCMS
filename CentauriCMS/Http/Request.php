@@ -45,7 +45,9 @@ class Request
         if(is_null($domain)) {
             throw new Exception("The requested domain could not be resolved");
         }
-        
+
+        $domainConfigJSON = json_decode(file_get_contents($domain));
+
         if($nodes == "centauri") {
             if(request()->session()->get("CENTAURI_BE_USER")) {
                 $Centauri->initBE();
@@ -172,9 +174,14 @@ class Request
         $page = Page::find($page->uid);
         $uid = $page->getAttribute("uid");
 
+        if(isset($domainConfigJSON->pageTitlePrefix)) {
+            $page->pageTitlePrefix = $domainConfigJSON->pageTitlePrefix;
+        }
+
         $ElementComponent = Centauri::makeInstance(ElementComponent::class);
         $renderedHTML = "";
 
+        // Overwrites of beLayouts (if custom layouts has been defined, this rendering can manage how the HTML-output looks like)
         $beLayout = config("centauri")["beLayouts"][$page->backend_layout];
         if(isset($beLayout["rendering"])) {
             $renderedHTML = Centauri::makeInstance($beLayout["rendering"])::rendering($page);

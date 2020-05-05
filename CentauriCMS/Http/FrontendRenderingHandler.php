@@ -46,7 +46,15 @@ class FrontendRenderingHandler
 
         $additionalHeadTagContent = self::getSEOHeadTags($page, $additionalHeadTagContent);
 
-        $frontendHtml = view("Centauri::Frontend", [
+        $frontendTemplate = "Centauri::Frontend";
+
+        if(is_array(config("centauri")["config"]["FE"])) {
+            if(isset(config("centauri")["config"]["FE"]["MainTemplate"])) {
+                $frontendTemplate = config("centauri")["config"]["FE"]["MainTemplate"];
+            }
+        }
+
+        $frontendHtml = view($frontendTemplate, [
             "page" => $page,
             "content" => $renderedHTML,
             "additionalHeadTagContent" => $additionalHeadTagContent

@@ -1,3 +1,5 @@
+{{-- {{ dd("hola") }} --}}
+
 {!! $contentColHTML !!}
 
 <div class="container">
