@@ -31,9 +31,6 @@ class Elements extends Migration
 
             $table->string("image")->nullable(),
             $table->string("file")->nullable(),
-            $table->string("header"),
-            $table->string("subheader"),
-            $table->text("rte"),
             $table->string("plugin")->nullable(),
 
             $table->integer("hidden"),

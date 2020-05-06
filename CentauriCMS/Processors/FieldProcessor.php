@@ -1,15 +1,17 @@
 <?php
 namespace Centauri\CMS\Processor;
 
+use Centauri\CMS\Helper\CCEHelper;
 use Illuminate\Support\Str;
 
 class FieldProcessor
 {
     public static function process($element, $data, $paramElFields = null)
     {
-        $CCE = config("centauri")["CCE"];
-        $fields = $CCE["fields"];
-        $elFields = (is_null($paramElFields) ? $CCE["elements"][$element->ctype] : dd($paramElFields));
+        $fields = CCEHelper::getAllFields();
+        $elements = CCEHelper::getAllElements();
+
+        $elFields = (is_null($paramElFields) ? $elements[$element->ctype] : dd($paramElFields));
 
         foreach($elFields as $key => $elField) {
             $_ = null;

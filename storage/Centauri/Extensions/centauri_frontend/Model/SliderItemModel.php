@@ -1,5 +1,5 @@
 <?php
-namespace Centauri\CMS\Model;
+namespace Centauri\Extension\Frontend\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -71,6 +71,6 @@ class SliderItemModel extends Model
      */
     public function buttons()
     {
-        return $this->hasMany(\Centauri\CMS\Model\SliderItemButtonModel::class, "parent_uid", "uid")->get()->all();
+        return $this->hasMany(\Centauri\Extension\Frontend\Model\SliderItemButtonModel::class, "parent_uid", "uid")->get()->all();
     }
 }

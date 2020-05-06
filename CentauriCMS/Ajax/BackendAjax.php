@@ -10,6 +10,10 @@ class BackendAjax implements AjaxInterface
     public function request(Request $request, String $ajaxName)
     {
         if($ajaxName == "login") {
+            if(is_null(session()->get("CENTAURI_BE_LANGUAGE"))) {
+                session()->put("CENTAURI_BE_LANGUAGE", 1);
+            }
+
             $username = $request->input("username");
             $password = $request->input("password");
 

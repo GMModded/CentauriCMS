@@ -50,8 +50,6 @@ class Element extends Model
     protected $attributes = [
         "hidden" => 0,
 
-        "header" => "",
-
         "plugin" => null,
         "image" => null
     ];

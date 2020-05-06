@@ -6,6 +6,8 @@ use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
+use Centauri\CMS\Component\ExtensionsComponent;
+use Centauri\CMS\Helper\CCEHelper;
 use Centauri\CMS\Helper\ContentElementBEHelper;
 use Centauri\CMS\Model\Element;
 use Illuminate\Support\Str;
@@ -106,7 +108,7 @@ class ContentElementsAjax implements AjaxInterface
         $splittedFields = [];
 
         $CCE = config("centauri")["CCE"];
-        $CCEfields = $CCE["fields"];
+        $CCEfields = CCEHelper::getAllFields();
 
         if(Str::contains($field, ";")) {
             $splittedFields = explode(";", $field);
@@ -198,7 +200,7 @@ class ContentElementsAjax implements AjaxInterface
             ])->orderBy("sorting", "asc")->get()->all();
 
             $CCE = config("centauri")["CCE"];
-            $fields = $CCE["fields"];
+            $fields = CCEHelper::getAllFields();
 
             $page = \Centauri\CMS\Model\Page::where("uid", $uid)->get()->first();
             $backendLayout = config("centauri")["beLayouts"][$page->getAttribute("backend_layout")] ?? null;
@@ -265,7 +267,7 @@ class ContentElementsAjax implements AjaxInterface
             }
 
             $CCE = $GLOBALS["Centauri"]["ContentElements"];
-            $fields = $CCE["fields"];
+            $fields = CCEHelper::getAllFields();
 
             foreach($fields as $ctype => $field) {
                 $isModel = false;
@@ -452,7 +454,15 @@ class ContentElementsAjax implements AjaxInterface
             $CCE = config("centauri")["CCE"];
             $elements = $CCE["elements"];
 
-            $elementShowsFields = $elements[$ctype];
+            $elementShowsFields = $elements[$ctype] ?? null;
+
+            foreach($GLOBALS["Centauri"]["ContentElements"] as $extension => $exArr) {
+                if(isset($exArr["elements"])) {
+                    if(isset($exArr["elements"][$ctype])) {
+                        $elementShowsFields = $exArr["elements"][$ctype];
+                    }
+                }
+            }
 
             $html = "";
 
@@ -490,6 +500,17 @@ class ContentElementsAjax implements AjaxInterface
 
                 $CCEfields = config("centauri")["CCE"]["fields"];
 
+                $_fields = [];
+                foreach($GLOBALS["Centauri"]["ContentElements"] as $extension => $arr) {
+                    if(isset($arr["fields"])) {
+                        foreach($arr["fields"] as $fieldCtype => $fieldArr) {
+                            $_fields[$fieldCtype] = $fieldArr;
+                        }
+                    }
+                }
+
+                $CCEfields = array_merge($_fields, $CCEfields);
+
                 foreach($datasArr as $key => $arr) {
                     $key = $tableInfo[$key];
 
@@ -509,6 +530,7 @@ class ContentElementsAjax implements AjaxInterface
                             foreach($fieldsValues as $field => $value) {
                                 if(isset($CCEfields[$field]["config"]["validation"])) {
                                     $class = $CCEfields[$field]["config"]["validation"];
+
                                     $validation = $class::validate([
                                         "field" => $field,
                                         "value" => $value,

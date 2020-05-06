@@ -18,10 +18,10 @@ class Centauri extends ServiceProvider
 
     protected $tables = [
         "be_users",
-        "elements",
-        "languages",
-        "notifications",
-        "pages"
+        // "elements",
+        // "languages",
+        // "notifications",
+        // "pages"
     ];
 
     /**
@@ -85,6 +85,8 @@ class Centauri extends ServiceProvider
      */
     public function initDB()
     {
+        // dd($this->tables);
+
         foreach($this->tables as $table) {
             if(!Schema::hasTable($table)) {
                 throw new Exception("Table: $table doesn't exists - please run a refresh of the migration for this table with Laravel Artisan or use Centauri FixUtility-Class.");

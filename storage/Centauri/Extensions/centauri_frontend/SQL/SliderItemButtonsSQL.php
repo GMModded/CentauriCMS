@@ -7,6 +7,6 @@ $SQLService->createTable($table);
 
 $SQLService->createColumn($table, "label", "string");
 $SQLService->createColumn($table, "link", "string");
-$SQLService->createColumn($table, "bgcolor", "string", [
-    "default" => ""
-]);
+$SQLService->createColumn($table, "bgcolor", "string", ["default" => ""]);
+$SQLService->createColumn($table, "sorting", "integer");
+$SQLService->createColumn($table, "parent_uid", "integer");

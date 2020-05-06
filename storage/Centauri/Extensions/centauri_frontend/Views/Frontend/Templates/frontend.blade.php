@@ -34,19 +34,17 @@
                             <div class="row">
                                 <div class="col-8">
                                     <h1>
-                                        <a href="/" style="border: 1px solid white;" class="px-2 pb-2">
-                                            <font color="#ffffff">
-                                                Logo
-                                            </font>
+                                        <a href="/" style="border: 1px solid white; color: #fff; background: #000;" class="px-2 pb-2">
+                                            Logo
                                         </a>
                                     </h1>
                                 </div>
 
                                 <div class="col">
                                     <ul class="list-unstyled d-flex align-items-center h-100">
-                                        @foreach(BuildBladeHelper::treeByPid(1) as $page)
+                                        @foreach(BuildBladeHelper::treeByPid(1, $page->uid) as $page)
                                             <li class="px-2">
-                                                <a href="{{ BuildBladeHelper::linkByUid($page->uid) }}" style="font-size: 20px; color: #fff;">
+                                                <a href="{{ BuildBladeHelper::linkByUid($page->uid) }}" style="font-size: 20px; color: #000; background: #fff;{{ $page->current ? ' text-decoration: underline;' : '' }}">
                                                     {{ $page->title }}
                                                 </a>
                                             </li>

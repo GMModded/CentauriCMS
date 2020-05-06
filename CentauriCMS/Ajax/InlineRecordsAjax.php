@@ -5,7 +5,9 @@ use Centauri\CMS\AjaxAbstract;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Exception\InlineRecordException;
+use Centauri\CMS\Helper\CCEHelper;
 use Centauri\CMS\Helper\ModelsHelper;
+use Centauri\CMS\Model\Element;
 use Centauri\CMS\Model\File;
 use Exception;
 use Illuminate\Support\Str;
@@ -64,6 +66,9 @@ class InlineRecordsAjax implements AjaxInterface
             $parentmodelid = $request->input("parentname");
             $modelid = $request->input("name");
 
+            $parentElement = Element::where("uid", $parentuid)->get()->first();
+            $lid = $parentElement->lid;
+
             if(!$modelid || $modelid == "") {
                 throw new InlineRecordException("CCE - InlineRecord - The 'modelid' (name-parameter) can't be empty/not setted!");
             }
@@ -71,9 +76,20 @@ class InlineRecordsAjax implements AjaxInterface
             $ContentElementAjax = Centauri::makeInstance(ContentElementsAjax::class);
 
             $CCE = config("centauri")["CCE"];
-            $CCEfields = $CCE["fields"];
+            $CCEfields = CCEHelper::getAllFields();
 
-            $modelConfig = $CCEfields[$parentmodelid]["config"]["fields"][$modelid] ?? $CCEfields[$parentmodelid];
+            $_fields = [];
+            foreach($GLOBALS["Centauri"]["ContentElements"] as $extension => $arr) {
+                if(isset($arr["fields"])) {
+                    foreach($arr["fields"] as $fieldCtype => $fieldArr) {
+                        $_fields[$fieldCtype] = $fieldArr;
+                    }
+                }
+            }
+
+            $CCEfields = array_merge($_fields, $CCEfields);
+
+            $modelConfig = $CCEfields[$parentmodelid]["config"]["fields"][$modelid] ?? $CCEfields[$parentmodelid] ?? null;
 
             $modelNamespace = $modelConfig["config"]["model"];
             $parentUidName = $modelConfig["config"]["parent_uid"] ?? "parent_uid";
@@ -82,6 +98,7 @@ class InlineRecordsAjax implements AjaxInterface
             $model->$parentUidName = $parentuid;
             $_lastSortingVal = $modelNamespace::latest()->value("sorting");
             $model->sorting = $_lastSortingVal + 1;
+            $model->lid = $lid;
 
             $model->save();
 
@@ -141,8 +158,7 @@ class InlineRecordsAjax implements AjaxInterface
                 "model" => $model
             ])->render();
 
-            $CCE = config("centauri")["CCE"];
-            $CCEfields = $CCE["fields"];
+            $CCEfields = CCEHelper::getAllFields();
 
             $modelConfig = $CCEfields[$parentmodelid]["config"]["fields"][$modelid];
 

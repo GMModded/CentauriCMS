@@ -19,16 +19,17 @@ class BuildBladeHelper
         }
     }
 
-    public static function treeByPid($pid)
+    public static function treeByPid($pid, $pageUid = null)
     {
         self::initClasses("page");
 
         $pages = Page::where([
             "pid" => $pid,
+            "hidden" => 0,
             "hidden_inpagetree" => 0
         ])->get()->all();
 
-        $pages = self::$pageBladeUtility::getSubpagesByPages($pages);
+        $pages = self::$pageBladeUtility::getSubpagesByPages($pages, $pageUid);
 
         return $pages;
     }

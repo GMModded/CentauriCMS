@@ -28,7 +28,7 @@ class Frontend
         $ViewResolver = Centauri::makeInstance(ViewResolver::class);
         $ViewResolver->register("centauri_frontend", "EXT:centauri_frontend/Views");
 
-
+        
     }
 
     public static function rendering($page)

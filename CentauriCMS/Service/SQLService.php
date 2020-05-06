@@ -13,12 +13,15 @@ class SQLService
         }
 
         Schema::create($table, function(Blueprint $table) {
-            $table->timestamps();
-            $table->softDeletes();
             $table->increments("uid");
             $table->integer("lid");
-            $table->integer("parent_uid");
-            $table->integer("sorting");
+            $table->timestamps();
+            $table->softDeletes();
+            
+            if($table == "elements") {
+                $table->integer("parent_uid");
+                $table->integer("sorting");
+            }
         });
 
         return true;

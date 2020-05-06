@@ -12,7 +12,7 @@ Centauri.Service.CESortingService = () => {
     $(".sortable-elements").sortable({
         connectWith: ".sortable-elements",
         dropOnEmpty: false,
-        cancel: ".ck-content",
+        cancel: ":input,.edit,.ck-content",
 
         start: function(e, ui) {
             $(".sortable-elements button[data-action='newContentElement'").hide();

@@ -21,7 +21,5 @@
         <section id="content">
             {!! $content !!}
         </section>
-
-        <section id="footer"></section>
     </body>
 </html>

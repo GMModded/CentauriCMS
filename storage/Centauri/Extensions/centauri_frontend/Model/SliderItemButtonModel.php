@@ -1,5 +1,5 @@
 <?php
-namespace Centauri\CMS\Model;
+namespace Centauri\Extension\Frontend\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -69,6 +69,6 @@ class SliderItemButtonModel extends Model
      */
     public function slideritem()
     {
-        return $this->belongsTo("\Centauri\CMS\Model\SliderItemModel");
+        return $this->belongsTo("\Centauri\Extension\Frontend\Model\SliderItemModel");
     }
 }
