@@ -17,7 +17,7 @@ var gulp     = require('gulp');
 // ============================================================================================================
 // Configurations
 	inputSrc = 'Assets/';
-	outputSrc = '../../public/backend/';
+	outputSrc = 'public/frontend/';
 	fileName = 'centauri.min';
 
 
@@ -27,19 +27,12 @@ var gulp     = require('gulp');
 //    you've to link it here in order the task for js recognize it and concat & uglifys it.
 // NOTE: Watch out for case-sensivity of directory names!
 	var modules = {
-		"jquery"              : "../../packages/jquery/jquery.min.js",
-		"jquery-ui"           : "../../packages/jquery-ui/jquery-ui.min.js",
+		"jquery"              : "packages/jquery/jquery.min.js",
 
-		"bootstrap"           : "../../packages/bootstrap/dist/js/bootstrap.min.js",
-		"popperjs"            : "../../packages/popperjs/popper.min.js",
-
-		"mdbootstrap"         : "../../packages/mdb/js/mdb.min.js",
-		"mdb_colorpicker"     : "../../packages/mdb_colorpicker/pickr.min.js",
-
-		"ckeditor"            : "../../packages/ckeditor5/build/ckeditor.js",
-
-		"cropperjs"           : "../../packages/cropperjs/dist/cropper.min.js",
-		"jquery-cropper"      : "../../packages/jquery-cropper/dist/jquery-cropper.js"
+		"bootstrap"           : "packages/bootstrap/dist/js/bootstrap.min.js",
+		"popperjs"            : "packages/popperjs/popper.min.js",
+		"mdbootstrap"         : "packages/mdb/js/mdb.min.js",
+		"slickjs"             : "packages/slick/slick.min.js"
 	};
 
 
@@ -67,14 +60,10 @@ gulp.task('css:deploy', function() {
 gulp.task('js:build', function() {
 	return gulp.src([
 		modules["jquery"],
-		modules["jquery-ui"],
-		modules["cropperjs"],
-		modules["jquery-cropper"],
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],
-		modules["mdb_colorpicker"],
-		modules["ckeditor"],
+		modules["slickjs"],
 
 		inputSrc + "js/**/*.js"
 	])
@@ -86,14 +75,10 @@ gulp.task('js:build', function() {
 gulp.task('js:deploy', function() {
 	return gulp.src([
 		modules["jquery"],
-		modules["jquery-ui"],
-		modules["cropperjs"],
-		modules["jquery-cropper"],
 		modules["popperjs"],
 		modules["bootstrap"],
 		modules["mdbootstrap"],
-		modules["mdb_colorpicker"],
-		modules["ckeditor"],
+		modules["slickjs"],
 
 		inputSrc + "js/**/*.js"
 	])

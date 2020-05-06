@@ -7,21 +7,21 @@
  * FontAwesome v5.12.0,
  * cropperjs v1.0.1
  */
-@import "../../../../packages/toastr/toastr";
+@import "../../../packages/toastr/toastr";
 
-@import "../../../../packages/bootstrap/scss/mixins";
-@import "../../../../packages/bootstrap/scss/functions";
-@import "../../../../packages/bootstrap/scss/variables";
-@import "../../../../packages/bootstrap/dist/css/bootstrap.min.css";
+@import "../../../packages/bootstrap/scss/mixins";
+@import "../../../packages/bootstrap/scss/functions";
+@import "../../../packages/bootstrap/scss/variables";
+@import "../../../packages/bootstrap/dist/css/bootstrap.min.css";
 
-@import "../../../../packages/mdb/css/mdb.min.css";
-@import "../../../../packages/mdb_colorpicker/color-picker";
+@import "../../../packages/mdb/css/mdb.min.css";
+@import "../../../packages/mdb_colorpicker/color-picker";
 
-@import "../../../../packages/fontawesome5.12.0/css/fontawesome.min.css";
-@import "../../../../packages/fontawesome5.12.0/css/solid.min.css";
-@import "../../../../packages/fontawesome5.12.0/css/brands.min.css";
+@import "../../../packages/fontawesome5.12.0/css/fontawesome.min.css";
+@import "../../../packages/fontawesome5.12.0/css/solid.min.css";
+@import "../../../packages/fontawesome5.12.0/css/brands.min.css";
 
-@import "../../../../packages/cropperjs/dist/cropper.min.css";
+@import "../../../packages/cropperjs/dist/cropper.min.css";
 
 /**
  * Overrides
