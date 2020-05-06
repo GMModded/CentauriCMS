@@ -591,14 +591,12 @@ class ContentElementsAjax implements AjaxInterface
                     $element->rowpos = $rowPos;
                     $element->colpos = $colPos;
 
-                    if(!is_null($gridsparent)) {
-                        $grids_sorting_rowpos = $data["grids_sorting_rowpos"];
-                        $grids_sorting_colpos = $data["grids_sorting_colpos"];
+                    $grids_sorting_rowpos = $data["grids_sorting_rowpos"];
+                    $grids_sorting_colpos = $data["grids_sorting_colpos"];
 
-                        $element->grids_parent = $gridsparent;
-                        $element->grids_sorting_rowpos = $grids_sorting_rowpos;
-                        $element->grids_sorting_colpos = $grids_sorting_colpos;
-                    }
+                    $element->grids_parent = $gridsparent;
+                    $element->grids_sorting_rowpos = $grids_sorting_rowpos;
+                    $element->grids_sorting_colpos = $grids_sorting_colpos;
 
                     $element->save();
                 }
@@ -607,7 +605,7 @@ class ContentElementsAjax implements AjaxInterface
             return json_encode([
                 "type" => "primary",
                 "title" => "Element moved",
-                "description" => "Successfully moved this element"
+                "description" => "This element has been moved"
             ]);
         }
 

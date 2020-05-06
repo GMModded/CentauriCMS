@@ -35,6 +35,10 @@
                                                 <button class="edit btn btn-primary waves-effect waves-light btn-floating my-2 mx-3">
                                                     <i class="fas fa-pen"></i>
                                                 </button>
+
+                                                <button class="sort btn btn-primary waves-effect waves-light btn-floating my-2 mx-3">
+                                                    <i class="fas fa-pen"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
