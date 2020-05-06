@@ -20,31 +20,36 @@ class FieldProcessor
                 $_ = $elField;
             }
 
-            if(isset($fields[$_])) {
-                $field = $fields[$_];
-                $value = $element->$_;
+            if(Str::contains($_, ";")) {
+                $splitted_ = explode(";", $_);
+            } else {
 
-                $fieldType = $field["type"];
+                if(isset($fields[$_])) {
+                    $field = $fields[$_];
+                    $value = $element->$_;
 
-                $data = [
-                    "element" => $element,
-                    "value" => $value
-                ];
+                    $fieldType = $field["type"];
 
-                if($fieldType == "image") {
-                    $element->$_ = ImageProcessor::process($data);
-                }
+                    $data = [
+                        "element" => $element,
+                        "value" => $value
+                    ];
 
-                if($fieldType == "RTE") {
-                    $element->$_ = RTEProcessor::process($data);
-                }
+                    if($fieldType == "image") {
+                        $element->$_ = ImageProcessor::process($data);
+                    }
 
-                if($fieldType == "model") {
-                    $element->$_ = InlineProcessor::findByRelation($element->uid, $_, $field["config"]["model"]);
-                }
+                    if($fieldType == "RTE") {
+                        $element->$_ = RTEProcessor::process($data);
+                    }
 
-                if(Str::startsWith($_, "grid")) {
-                    $element->$_ = GridsProcessor::process($data);
+                    if($fieldType == "model") {
+                        $element->$_ = InlineProcessor::findByRelation($element->uid, $_, $field["config"]["model"]);
+                    }
+
+                    if(Str::startsWith($_, "grid")) {
+                        $element->$_ = GridsProcessor::process($data);
+                    }
                 }
             }
         }

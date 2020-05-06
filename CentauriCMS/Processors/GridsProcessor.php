@@ -44,7 +44,7 @@ class GridsProcessor
 
         foreach($elements as $rowPos => $colArr) {
             foreach($colArr as $colPos => $elements) {
-                $renderedColsHTML[$colPos] = $ElementComponent->renderElements($elements);
+                $renderedColsHTML[$colPos] = $ElementComponent->renderElements($elements, "Centauri::Frontend.Elements");
             }
         }
 

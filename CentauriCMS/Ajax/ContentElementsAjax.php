@@ -352,7 +352,11 @@ class ContentElementsAjax implements AjaxInterface
             if($insert == "before") {
                 $sorting = $request->input("sorting");
 
-                $elements = Element::where("sorting", ">=", $sorting)->get()->all();
+                if(is_null($sorting)) {
+                    return response("ContentElements - New Element's 'sorting'-value can't be 'null'", 500);
+                }
+
+                $elements = Element::where("sorting", ">", $sorting)->get()->all();
                 foreach($elements as $element) {
                     $eSorting = $element->sorting;
 

@@ -42,12 +42,12 @@ Centauri.Modal.NewContentElementModal = function() {
 
                                 close: {
                                     label: "",
-                                    class: "danger fas fa-times btn-floating"
+                                    class: "danger fas fa-times fa-lg btn-floating"
                                 },
 
                                 save: {
                                     label: "",
-                                    class: "primary fas fa-plus btn-floating mr-2"
+                                    class: "primary fas fa-plus fa-lg btn-floating mr-2"
                                 }
                             },
 
@@ -157,18 +157,31 @@ Centauri.Modal.NewContentElementModal.gridsparent = null;
 Centauri.Modal.NewContentElementModal.grids_sorting_rowpos = null;
 Centauri.Modal.NewContentElementModal.grids_sorting_colpos = null;
 
-Centauri.Modal.NewContentElementModal.UpdateVars = ($el) => {
-    Centauri.Modal.NewContentElementModal.rowPos = $el.parent().parent().attr("data-rowpos");
-    Centauri.Modal.NewContentElementModal.colPos = $el.parent().attr("data-colpos");
-    Centauri.Modal.NewContentElementModal.sorting = $el.attr("data-sorting");
+Centauri.Modal.NewContentElementModal.UpdateVars = ($btn) => {
+    Centauri.Modal.NewContentElementModal.$element = $btn.parent();
 
-    Centauri.Modal.NewContentElementModal.$element;
-    Centauri.Modal.NewContentElementModal.insert = $el.attr("data-insert");
-    Centauri.Modal.NewContentElementModal.type = (Centauri.isNotUndefined($el.attr("data-type")) ? $el.attr("data-type") : "");
+    Centauri.Modal.NewContentElementModal.rowPos = $btn.parent().parent().attr("data-rowpos");
+    Centauri.Modal.NewContentElementModal.colPos = $btn.parent().attr("data-colpos");
+
+    Centauri.Modal.NewContentElementModal.insert = $btn.attr("data-insert");
+    Centauri.Modal.NewContentElementModal.type = (Centauri.isNotUndefined($btn.attr("data-type")) ? $btn.attr("data-type") : "");
+
+    let $elementPrev = $btn.prev();
+    let $elementNext = $btn.next();
+
+    if(Centauri.elExists($elementPrev)) {
+        Centauri.Modal.NewContentElementModal.sorting = $elementPrev.attr("data-sorting");
+    } else {
+        Centauri.Modal.NewContentElementModal.sorting = $elementNext.attr("data-sorting");
+    }
+
+    if(Centauri.isNull(Centauri.Modal.NewContentElementModal.sorting)) {
+        console.log("how?");
+    }
 
     if(Centauri.Modal.NewContentElementModal.type == "ingrid") {
-        Centauri.Modal.NewContentElementModal.gridsparent = $el.attr("data-gridsparent");
-        Centauri.Modal.NewContentElementModal.grids_sorting_rowpos = $el.attr("data-grid-sorting-rowpos");
-        Centauri.Modal.NewContentElementModal.grids_sorting_colpos = $el.attr("data-grid-sorting-colpos");
+        Centauri.Modal.NewContentElementModal.gridsparent = $btn.attr("data-gridsparent");
+        Centauri.Modal.NewContentElementModal.grids_sorting_rowpos = $btn.attr("data-grid-sorting-rowpos");
+        Centauri.Modal.NewContentElementModal.grids_sorting_colpos = $btn.attr("data-grid-sorting-colpos");
     }
 };

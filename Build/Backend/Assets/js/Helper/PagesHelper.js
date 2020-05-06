@@ -1,5 +1,5 @@
 Centauri.Helper.PagesHelper = function($container) {
-    var $tops = $(".top", $container);
+    let $tops = $(".top", $container);
 
     $tops.each(function() {
         let $top = $(this);
@@ -7,10 +7,19 @@ Centauri.Helper.PagesHelper = function($container) {
         if(!$top.hasClass("has-init")) {
             $top.addClass("has-init");
 
-            $(".edit", $top).on("click", this, function() {
-                var $this = $(this);
+            $(".sort", $top).on("mousedown", this, function() {
+                let $this = $(this);
+                let $top = $this.parent().parent();
+                $contentelement = $top.parent();
 
-                var $top = $this.parent().parent();
+                $this.toggleClass("btn-primary btn-info");
+                Centauri.Helper.VariablesHelper.__isSorting = true;
+                Centauri.Helper.VariablesHelper.__sortingElement = $contentelement;
+            });
+
+            $(".edit", $top).on("click", this, function() {
+                let $this = $(this);
+                let $top = $this.parent().parent();
                 $contentelement = $top.parent();
 
                 $contentelement.toggleClass("active");
@@ -31,5 +40,12 @@ Centauri.Helper.PagesHelper = function($container) {
                 }
             });
         }
+    });
+
+    $(document).on("mouseup", this, function() {
+        $(".top .sort", $(Centauri.Helper.VariablesHelper.__sortingElement)).toggleClass("btn-primary btn-info");
+
+        Centauri.Helper.VariablesHelper.__isSorting = false;
+        Centauri.Helper.VariablesHelper.__sortingElement = null;
     });
 };

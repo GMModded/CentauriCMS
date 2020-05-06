@@ -58,8 +58,6 @@ Centauri.Service.CESortingService = () => {
                 }
             });
 
-            console.log(data);
-
             Centauri.fn.Ajax(
                 "ContentElements",
                 "sortElement",

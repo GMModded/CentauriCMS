@@ -10,7 +10,7 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
         $("#maincontent .overlayer .loader").removeClass("hidden");
     }
 
-    $.ajax({
+    Centauri.Helper.VariablesHelper.xhr = $.ajax({
         url: url,
         type: "POST",
 
@@ -19,8 +19,7 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
         success: function(data) {
             if(Centauri.isNotUndefined(options)) {
                 if(
-                    Centauri.isNotUndefined(options.closeEditorComponentOnSuccess)
-                &&
+                    Centauri.isNotUndefined(options.closeEditorComponentOnSuccess) &&
                     (options.closeEditorComponentOnSuccess)
                 ) {
                     Centauri.Components.EditorComponent("hide");
@@ -48,6 +47,10 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
                 $("#maincontent .overlayer .loader").addClass("hidden");
             }
 
+            if(!navigator.onLine) {
+                Centauri.Notify("error", "Internet-Connection lost", "Make sure your connection is stable to execute this action.");
+            }
+
             if(Centauri.isNotUndefined(callbacks.error)) {
                 callbacks.error(data);
             } else {
@@ -63,7 +66,7 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
     });
 };
 
-Centauri.Utility.Ajax = function() {
+Centauri.Utility.Ajax = () => {
     Centauri.fn.Ajax.Overlayer = true;
 
     $.ajaxSetup({
@@ -77,15 +80,16 @@ window.onload = function() {
     Centauri.Utility.Ajax();
 
     $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
-        console.log(thrownError);
-
         // Session is over => throws unknown status
         if(thrownError == "unknown status") {
             location.href = "action/Backend/logout";
         }
 
         // General AJAX errors - some of Internal Server Errors are custom and some by Laravel default (a json-error-object returns sometimes - reason: unknown yet.)
-        if(thrownError == "Internal Server Error") {
+        if(
+            thrownError == "Internal Server Error" ||
+            thrownError == "Gateway Timeout"
+        ) {
             Centauri.Notify("error", thrownError, jqxhr.responseText);
             console.error(jqxhr);
         }

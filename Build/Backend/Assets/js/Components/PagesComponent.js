@@ -442,10 +442,6 @@ Centauri.Components.PagesComponent = function(module) {
                                                         {
                                                             success: function(data) {
                                                                 console.log(data);
-                                                            },
-
-                                                            error: function(data) {
-                                                                console.error(data);
                                                             }
                                                         }
                                                     );
@@ -893,9 +889,6 @@ Centauri.Components.PagesComponent = function(module) {
 
                                                         {
                                                             success: (data) => {
-                                                                $(".top .button-view .edit i", $originModelEl).removeClass("d-none");
-                                                                $(".top .button-view .edit .spinner-grow", $originModelEl).remove();
-
                                                                 $originModelEl.append(data);
                                                                 Centauri.View.ContentElementsView();
                                                                 Centauri.Service.CKEditorInitService(); 

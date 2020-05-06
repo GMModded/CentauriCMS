@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="container_fullwidth" data-id="container_fullwidth">
+                    <input type="checkbox" class="form-check-input" id="container_fullwidth" data-id="container_fullwidth" data-uid="{{ $fieldConfig['uid'] }}">
 
                     <label class="form-check-label" for="container_fullwidth">
                         Container Full-Width?

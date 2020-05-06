@@ -4,18 +4,31 @@ namespace Centauri\Extension;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Component\ElementComponent;
 use Centauri\CMS\Resolver\ViewResolver;
-use Centauri\Extension\Elements\TestElement;
+use Centauri\Extension\Frontend\Elements\Elements;
 
 class Frontend
 {
     public function __construct()
     {
-        // Backend Example/Test Content Element (customheaderfield and customtab)
-        // Centauri::makeInstance(TestElement::class);
+        // Register of all Frontend Elements
+        Centauri::makeInstance(Elements::class);
+
+        // Register of Configuration-Array for $GLOBALS["Centauri"]["Extensions"]["centauri_frontend"]
+        $GLOBALS["Centauri"]["Extensions"]["centauri_frontend"] = [
+            "config" => [
+                "Elements" => [
+                    "ViewNamespace" => [
+                        "headerdescription" => "centauri_frontend::Frontend.Templates"
+                    ]
+                ]
+            ]
+        ];
 
         // Views registration through ViewResolver class
         $ViewResolver = Centauri::makeInstance(ViewResolver::class);
         $ViewResolver->register("centauri_frontend", "EXT:centauri_frontend/Views");
+
+
     }
 
     public static function rendering($page)

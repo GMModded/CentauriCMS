@@ -141,9 +141,9 @@ return [
                 "label" => "Subheader",
                 "type" => "input"
             ],
-            "rte" => [
+            "RTE" => [
                 "label" => "RTE",
-                "type" => "rte"
+                "type" => "RTE"
             ],
             "plugin" => [
                 "label" => "Plugin",
@@ -265,12 +265,12 @@ return [
             "headerimage" => [
                 "image",
                 "header;subheader",
-                "rte"
+                "RTE"
             ],
 
             "headerdescription" => [
                 "htag;header;subheader",
-                "rte"
+                "RTE"
             ],
 
             "slider" => [

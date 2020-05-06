@@ -2,9 +2,9 @@
     <div class="row" data-rowPos="{{ $rowPos }}">
         @foreach($rowPosArr["cols"] as $colPos => $colData)
             @if(isset($colData["col"]))
-                <div class="col-12 col-md-{{ $colData['col'] }}" data-colpos="{{ $colPos }}">
+                <div class="col-12 col-md-{{ $colData['col'] }} mb-5 pb-4" data-colpos="{{ $colPos }}">
             @else
-                <div class="col-12 col-md" data-colPos="{{ $colPos }}">
+                <div class="col-12 col-md mb-5 pb-4" data-colPos="{{ $colPos }}">
             @endif
                     @if(isset($colData["label"]))
                         <h6>
@@ -32,12 +32,12 @@
                                             </span>
 
                                             <div class="button-view float-right">
-                                                <button class="edit btn btn-primary waves-effect waves-light btn-floating my-2 mx-3">
+                                                <button class="edit btn btn-primary waves-effect waves-light btn-floating my-2 mx-1">
                                                     <i class="fas fa-pen"></i>
                                                 </button>
 
-                                                <button class="sort btn btn-primary waves-effect waves-light btn-floating my-2 mx-3">
-                                                    <i class="fas fa-pen"></i>
+                                                <button class="sort btn btn-primary waves-effect waves-light btn-floating my-2 mx-2">
+                                                    <i class="fas fa-sort"></i>
                                                 </button>
                                             </div>
                                         </div>

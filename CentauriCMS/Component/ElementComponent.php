@@ -15,7 +15,7 @@ class ElementComponent
      * 
      * @return void
      */
-    public function render($pageUid, $lid = 1, $rowPos = 0, $colPos = 0, $grids_sorting = [])
+    public function render($pageUid, $lid = 1, $rowPos = 0, $colPos = 0, $grids_sorting = [], $viewNamespace = "Centauri::Frontend.Elements")
     {
         $_grids_sorting = [
             "grids_sorting_rowpos" => null,
@@ -38,32 +38,49 @@ class ElementComponent
             "grids_sorting_colpos" => $_grids_sorting["grids_sorting_colpos"]
         ])->orderBy("sorting", "asc")->get();
 
-        return $this->getRenderedHtmlByElements($elements);
+        return $this->getRenderedHtmlByElements($elements, $viewNamespace);
     }
 
-    public function renderElements($elements)
+    public function renderElements($elements, $viewNamespace)
     {
-        return $this->getRenderedHtmlByElements($elements);
+        return $this->getRenderedHtmlByElements($elements, $viewNamespace);
     }
 
-    public function getRenderedHtmlByElements($elements)
+    public function getRenderedHtmlByElements($elements, $viewNamespace)
     {
         $renderedHTML = "";
 
-        foreach($elements as $element) {
-            $data = [];
+        foreach($GLOBALS["Centauri"]["Extensions"] as $extension => $exArr) {
+            if(isset($exArr["config"])) {
+                if(isset($exArr["config"]["Elements"])) {
+                    if(isset($exArr["config"]["Elements"]["ViewNamespace"])) {
+                        if(is_array($exArr["config"]["Elements"]["ViewNamespace"])) {
+                            $key = key($exArr["config"]["Elements"]["ViewNamespace"]);
+                            $value = $exArr["config"]["Elements"]["ViewNamespace"][$key];
 
-            if($element->ctype == "plugin") {
-                $className = $element->plugin;
-                $data = Centauri::makeInstance($className, $element);
+                            $viewNamespace = $value;
+
+                            foreach($elements as $element) {
+                                $data = [];
+
+                                if($element->ctype == "plugin") {
+                                    $className = $element->plugin;
+                                    $data = Centauri::makeInstance($className, $element);
+                                }
+
+                                $element = \Centauri\CMS\Processor\FieldProcessor::process($element, $data);
+
+                                $renderedHTML .= view($viewNamespace . "." . $element->ctype, [
+                                    "element" => $element,
+                                    "data" => $data
+                                ])->render();
+                            }
+                        } else {
+                            $viewNamespace = $exArr["config"]["Elements"]["ViewNamespace"];
+                        }
+                    }
+                }
             }
-
-            $element = \Centauri\CMS\Processor\FieldProcessor::process($element, $data);
-
-            $renderedHTML .= view("Centauri::Frontend.Elements." . $element->ctype, [
-                "element" => $element,
-                "data" => $data
-            ])->render();
         }
 
         return $renderedHTML;

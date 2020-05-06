@@ -25,6 +25,7 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
 
                 if($contentelement.data("ctype") == "grids") {
                     $(".data > .fields > .fields", $contentelement).appendTo($(".tab-pane#grid-tab-content"));
+                    $(".data > .row", $contentelement).appendTo($(".data > .fields", $contentelement));
                 }
 
                 Centauri.View.ContentElementsView($contentelement);
@@ -218,8 +219,9 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                 }, 100);
             },
 
-            error: function(data) {
-                console.error(data);
+            complete: function(data) {
+                $(".top .button-view .edit i", $contentelement).removeClass("d-none");
+                $(".top .button-view .edit .spinner-grow", $contentelement).remove();
             }
         }
     );
