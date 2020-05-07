@@ -1203,7 +1203,7 @@ table#pages tr.subpage td:first-child {
   transition-timing-function: cubic-bezier(0.26, 0.03, 0, 0.99);
   transition-delay: 0s; }
   .sortable-elements .content-element.ui-sortable-helper {
-    transform: scale(0.975);
+    transform: scale(0.9);
     cursor: move; }
 
 /**

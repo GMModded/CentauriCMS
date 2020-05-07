@@ -66,33 +66,28 @@ class InlineRecordsAjax implements AjaxInterface
             $parentmodelid = $request->input("parentname");
             $modelid = $request->input("name");
 
-            $parentElement = Element::where("uid", $parentuid)->get()->first();
-            $lid = $parentElement->lid;
-
             if(!$modelid || $modelid == "") {
                 throw new InlineRecordException("CCE - InlineRecord - The 'modelid' (name-parameter) can't be empty/not setted!");
             }
 
             $ContentElementAjax = Centauri::makeInstance(ContentElementsAjax::class);
 
-            $CCE = config("centauri")["CCE"];
             $CCEfields = CCEHelper::getAllFields();
 
-            $_fields = [];
-            foreach($GLOBALS["Centauri"]["ContentElements"] as $extension => $arr) {
-                if(isset($arr["fields"])) {
-                    foreach($arr["fields"] as $fieldCtype => $fieldArr) {
-                        $_fields[$fieldCtype] = $fieldArr;
-                    }
-                }
-            }
+            $parentModelConfig = $CCEfields[$parentmodelid]["config"] ?? null;
+            $parentModelNamespace = null;
 
-            $CCEfields = array_merge($_fields, $CCEfields);
+            if(!is_null($parentModelConfig)) {
+                $parentModelNamespace = $parentModelConfig["model"];
+            }
 
             $modelConfig = $CCEfields[$parentmodelid]["config"]["fields"][$modelid] ?? $CCEfields[$parentmodelid] ?? null;
 
             $modelNamespace = $modelConfig["config"]["model"];
             $parentUidName = $modelConfig["config"]["parent_uid"] ?? "parent_uid";
+
+            $parentElement = $parentModelNamespace::where("uid", $parentuid)->get()->first();
+            $lid = $parentElement->getAttribute("lid");
 
             $model = new $modelNamespace;
             $model->$parentUidName = $parentuid;

@@ -10,6 +10,7 @@ use Centauri\CMS\Utility\DomainsUtility;
 use Centauri\CMS\Utility\FixerUtility;
 use Exception;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Request

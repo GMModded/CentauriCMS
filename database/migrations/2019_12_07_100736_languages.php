@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class Languages extends Migration
@@ -49,6 +50,13 @@ class Languages extends Migration
             Schema::create($this->table, function(Blueprint $table) {
                 $this->cols($table);
             });
+
+            DB::table($this->table)->insert([
+                "title" => "English",
+                "lang_code" => "en-EN",
+                "slug" => "/",
+                "flagsrc" => "/CentauriCMS/public/images/flags/UK.jpg"
+            ]);
         }
     }
 
