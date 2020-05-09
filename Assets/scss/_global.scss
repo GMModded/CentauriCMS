@@ -17,7 +17,8 @@ a {
             transition: .66s cubic-bezier(1, -0.09, 0, 1.16);
         }
 
-        &:hover {
+        &:hover,
+        &.active {
             color: gold !important;
 
             &:before {

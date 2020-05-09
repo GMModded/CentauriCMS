@@ -37,19 +37,10 @@ class Frontend
         $lid = $page->lid;
 
         $ElementComponent = Centauri::makeInstance(ElementComponent::class);
-
         $contentColHTML = $ElementComponent->render($uid, $lid, 0, 0);
-        // $leftColHTML = $ElementComponent->render($uid, $lid, 1, 2);
-        // $rightColHTML = $ElementComponent->render($uid, $lid, 1, 3);
-
-        $params = request()->post();
-        $dynPageRequest = $params["dynPageRequest"] ?? null;
 
         return view("centauri_frontend::Frontend/Layouts/frontend", [
-            "contentColHTML" => $contentColHTML,
-            // "leftColHTML" => $leftColHTML,
-            // "rightColHTML" => $rightColHTML,
-            "dynPageRequest" => $dynPageRequest
+            "contentColHTML" => $contentColHTML
         ])->render();
     }
 }

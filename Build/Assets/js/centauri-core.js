@@ -1,5 +1,5 @@
 /**
- * CentauriCoreFunctions
+ * Centauri-Core
  * 
  * Function which will be called when Centauri.load() has been called
  * Registers core functions e.g. Env, Versions etc.

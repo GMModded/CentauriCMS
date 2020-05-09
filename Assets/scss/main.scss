@@ -1,6 +1,7 @@
 /*
  * Packages
  */
+ @import "../../../../packages/mdb/css/mdb.min.css";
 @import "../../../../packages/bootstrap/dist/css/bootstrap.min.css";
 @import "../../../../packages/slick/slick-theme.css";
 @import "../../../../packages/slick/slick.css";
@@ -30,5 +31,16 @@
 
     .button-view {
         white-space: nowrap;
+    }
+}
+
+.progress {
+    &.inactive {
+        background-color: white !important;
+
+        &:before,
+        &:after {
+            animation: none !important;
+        }
     }
 }

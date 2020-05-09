@@ -1,35 +1,58 @@
 Centauri.Component.ATagComponent = () => {
-    let _token = $("meta[name='csrf-token']").attr("content");
+    $("a").off("click");
 
-    $("a").each(function() {
+    $("a").on("click", this, function(e) {
         let $this = $(this);
+        e.preventDefault();
 
-        $this.on("click", this, function(e) {
-            e.preventDefault();
-            let href = $(this).attr("href");
+        let href = $this.attr("href");
+        history.pushState({page: 1}, $("title").text(), location.href);
 
-            history.pushState(
-                {
-                    page: 1
-                },
+        Centauri.Component.ATagComponent.ajaxRequest(href, () => {
+            let seoUrl = Centauri.Utility.SeoUrlUtility($this.text());
+            history.pushState({page: 1}, seoUrl, href);
 
-                $("title").text(),
-                location.href
-            );
-
-            $.ajax({
-                type: "POST",
-                url: href,
-
-                data: {
-                    "_token": _token,
-                    "dynPageRequest": true
-                },
-
-                success: function(data) {
-                    $("body section#content").html(data);
-                }
-            });
+            if($this.hasClass("nav-item")) {
+                $("#header a.nav-item.active").removeClass("active");
+                $this.addClass("active");
+            }
         });
+    });
+
+    window.onpopstate = history.onpushstate = function(e) {
+        let reqHref = location.href;
+
+        if(reqHref != Centauri.Component.ATagComponent.lastHref) {
+            Centauri.Component.ATagComponent.ajaxRequest(reqHref);
+        }
+    };
+};
+
+Centauri.Component.ATagComponent.lastHref = "";
+
+Centauri.Component.ATagComponent.ajaxRequest = (href, cb) => {
+    $(".progress").toggleClass("inactive");
+
+    $.ajax({
+        type: "POST",
+        url: href,
+
+        data: {
+            "dynPageRequest": true
+        },
+
+        success: function(data) {
+            $(".progress").toggleClass("inactive");
+
+            Centauri.Component.ATagComponent.lastHref = href;
+            $("body section#content").html(data);
+            $("title").text(__dynPageData.title);
+
+            if(typeof cb != "undefined") {
+                cb();
+            }
+
+            Centauri.Component.ATagComponent();
+        }
     });
 };

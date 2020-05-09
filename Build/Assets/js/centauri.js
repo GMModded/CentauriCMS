@@ -4,7 +4,7 @@
  * @website https://centauricms.de/
  * @author m.sediqi@centauricms.de
  * @file Centauri Core JS file for BE
- * @copyright Matiullah Sediqi 2019-2020
+ * @copyright M.S. 2019-2020
  * 
  * © 2019-2020 All rights reserved.
  */

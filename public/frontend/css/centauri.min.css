@@ -1,6 +1,7 @@
 /*
  * Packages
  */
+@import url(../../../../packages/mdb/css/mdb.min.css);
 @import url(../../../../packages/bootstrap/dist/css/bootstrap.min.css);
 @import url(../../../../packages/slick/slick-theme.css);
 @import url(../../../../packages/slick/slick.css);
@@ -22,9 +23,9 @@ a.anim-underline {
     margin-top: 2px;
     background-color: gold;
     transition: 0.66s cubic-bezier(1, -0.09, 0, 1.16); }
-  a.anim-underline:hover {
+  a.anim-underline:hover, a.anim-underline.active {
     color: gold !important; }
-    a.anim-underline:hover:before {
+    a.anim-underline:hover:before, a.anim-underline.active:before {
       width: 100%; }
 
 /*
@@ -128,3 +129,8 @@ a.anim-underline {
     white-space: nowrap; }
   .button-view {
     white-space: nowrap; } }
+
+.progress.inactive {
+  background-color: white !important; }
+  .progress.inactive:before, .progress.inactive:after {
+    animation: none !important; }
