@@ -3,11 +3,15 @@
         <div data-contentelement="slider" style="max-height: 550px; overflow: hidden; margin-bottom: 0 !important;">
             @foreach($element->slideritems as $slideritem)
                 <div class="item">
+                    @if($slideritem->link)
+                        <a href="{{ $slideritem->link }}" style="color: #fff; text-decoration: none;">
+                    @endif
+
                     <div class="overlayer"></div>
 
                     <div class="image-view" style="min-height: 750px;">
                         @if($slideritem->image)
-                            <img class="img-fluid w-100" data-src="{!! ImageBladeHelper::getPath($slideritem->image) !!}" />
+                            <img class="img-fluid w-100" src="{!! ImageBladeHelper::getPath($slideritem->image) !!}" />
                         @endif
                     </div>
 
@@ -24,7 +28,7 @@
                             <div class="button-view mt-5">
                                 @foreach($slideritem->buttons() as $button)
                                     @if($button->link && $button->label)
-                                        <a href="{{ $button->link }}" target="_blank">
+                                        <a href="{{ $button->link }}" target="_blank" role="button">
                                             <button class="waves-effect btn btn-primary{{ ($button->bgcolor == '') || $button->bgcolor == "transparent" ? " transparent" : "" }}" style="background: {{ $button->bgcolor }};">
                                                 {{ $button->label }}
                                             </button>
@@ -34,6 +38,10 @@
                             </div>
                         @endif
                     </div>
+
+                    @if($slideritem->link)
+                        </a>
+                    @endif
                 </div>
             @endforeach
         </div>

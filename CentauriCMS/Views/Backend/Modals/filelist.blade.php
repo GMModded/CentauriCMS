@@ -19,6 +19,8 @@
 				<p class="text-center h-100 m-0 d-flex justify-content-center align-items-center">
 					Filelist is empty - please upload some files in order to use the File-Selector.
 				</p>
+
+
 			</div>
 		@endif
 
@@ -42,8 +44,10 @@
 	<div class="buttons">
 		<div class="d-flex">
 			@if(!empty($list))
-				<div class="col pl-2 pr-2">
+				<div class="col px-2">
 					<button class="btn btn-success waves-effect waves-light save">
+						<i class="fas fa-check mr-1"></i>
+
 						Select
 					</button>
 				</div>
@@ -51,6 +55,8 @@
 
 			<div class="col pl-2 pr-4">
 				<button class="btn btn-danger waves-effect waves-light cancel">
+					<i class="fas fa-times mr-1"></i>
+
 					Cancel
 				</button>
 			</div>

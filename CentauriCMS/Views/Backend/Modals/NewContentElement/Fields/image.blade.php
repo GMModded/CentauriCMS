@@ -16,7 +16,7 @@
             Add image
         </button>
 
-        <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3" data-centauri-btn="uploadimage" data-required="{{ $fieldConfig['required'] ?? '' }}" data-maxitems="{{ $fieldConfig['maxItems'] ?? '' }}" data-minitems="{{ $fieldConfig['minItems'] ?? '' }}>
+        <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3" data-centauri-btn="uploadimage" data-required="{{ $fieldConfig['required'] ?? '' }}" data-maxitems="{{ $fieldConfig['maxItems'] ?? '' }}" data-minitems="{{ $fieldConfig['minItems'] ?? '' }}">
             <i class="fas fa-cloud-upload-alt mr-2"></i>
 
             Upload image

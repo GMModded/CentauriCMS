@@ -56,8 +56,7 @@ class ContentElementsAjax implements AjaxInterface
 
             foreach($models as $model) {
                 $_modelsHtml = view("Centauri::Backend.Modals.NewContentElement.Fields.model_singleitem", [
-                    "uid" => $model->uid,
-                    "sorting" => $model->sorting
+                    "model" => $model
                 ])->render();
 
                 $existingItemLabel = $fieldConfig["existingItemLabel"];
@@ -418,7 +417,10 @@ class ContentElementsAjax implements AjaxInterface
 
                         foreach($fieldsValues as $field => $value) {
                             if(!isset($CCEfields[$field]["config"]["model"])) {
-                                $element->setAttribute($field, $value);
+                                foreach($fieldsValues as $field => $fieldDataArr) {
+                                    $value = $fieldDataArr["value"];
+                                    $element->setAttribute($field, $value);
+                                }
                             }
                         }
                     } else {
@@ -498,18 +500,7 @@ class ContentElementsAjax implements AjaxInterface
                 $datasArr = json_decode($datas, true);
                 $tableInfo = $request->input("tableInfo");
 
-                $CCEfields = config("centauri")["CCE"]["fields"];
-
-                $_fields = [];
-                foreach($GLOBALS["Centauri"]["ContentElements"] as $extension => $arr) {
-                    if(isset($arr["fields"])) {
-                        foreach($arr["fields"] as $fieldCtype => $fieldArr) {
-                            $_fields[$fieldCtype] = $fieldArr;
-                        }
-                    }
-                }
-
-                $CCEfields = array_merge($_fields, $CCEfields);
+                $CCEfields = CCEHelper::getAllFields();
 
                 foreach($datasArr as $key => $arr) {
                     $key = $tableInfo[$key];
@@ -518,7 +509,8 @@ class ContentElementsAjax implements AjaxInterface
                         if($key == "elements") {
                             $element = Element::where("uid", $uid)->get()->first();
 
-                            foreach($fieldsValues as $field => $value) {
+                            foreach($fieldsValues as $field => $fieldDataArr) {
+                                $value = $fieldDataArr["value"];
                                 $element->setAttribute($field, $value);
                             }
 
@@ -527,7 +519,9 @@ class ContentElementsAjax implements AjaxInterface
                             $modelClass = $CCEfields[$key]["config"]["model"];
                             $model = $modelClass::where("uid", $uid)->get()->first();
 
-                            foreach($fieldsValues as $field => $value) {
+                            foreach($fieldsValues as $field => $fieldDataArr) {
+                                $value = $fieldDataArr["value"];
+
                                 if(isset($CCEfields[$field]["config"]["validation"])) {
                                     $class = $CCEfields[$field]["config"]["validation"];
 
@@ -560,15 +554,14 @@ class ContentElementsAjax implements AjaxInterface
             }
 
             if($ajaxName == "hideElementByUid") {
-                $state = ($element->hidden ? "hidden" : "visible");
-
+                $state = (!$element->hidden ? "hidden" : "visible");
                 $element->hidden = !$element->hidden;
 
                 if($element->save()) {
                     return json_encode([
                         "type" => "primary",
                         "title" => "Element Visibility",
-                        "description" => "This element is now " . $state
+                        "description" => "This element is $state now"
                     ]);
                 }
             }

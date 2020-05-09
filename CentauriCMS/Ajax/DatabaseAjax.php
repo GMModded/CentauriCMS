@@ -4,7 +4,8 @@ namespace Centauri\CMS\Ajax;
 use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
-use Exception;
+use Centauri\CMS\Model\File;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -42,6 +43,38 @@ class DatabaseAjax implements AjaxInterface
                 "type" => "success",
                 "title" => "Database updated",
                 "description" => "All SQL queries has been successfully executed!"
+            ]);
+        }
+
+        if($ajaxName == "syncFiles") {
+            $files = Storage::disk("centauri_filelist")->allFiles();
+            DB::table("files")->truncate();
+
+            foreach($files as $fileItem) {
+                $path = Storage::disk("centauri_filelist")->path($fileItem);
+                $mimeType = \Illuminate\Support\Facades\File::mimeType($path);
+
+                $storagePath = "\\storage\\Centauri\\Filelist\\$fileItem";
+
+                $cropable = 0;
+                if(Str::contains($mimeType, "image")) {
+                    $cropable = 1;
+                }
+
+                $file = new File();
+
+                $file->name = $fileItem;
+                $file->path = $storagePath;
+                $file->type = $mimeType;
+                $file->cropable = $cropable;
+
+                $file->save();
+            }
+
+            return json_encode([
+                "type" => "success",
+                "title" => "Files synced",
+                "description" => "All SQL queries for the files table has been successfully executed!"
             ]);
         }
 

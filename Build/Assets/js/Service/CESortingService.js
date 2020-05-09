@@ -12,7 +12,7 @@ Centauri.Service.CESortingService = () => {
     $(".sortable-elements").sortable({
         connectWith: ".sortable-elements",
         dropOnEmpty: false,
-        cancel: ":input,.edit,.ck-content",
+        cancel: ":input, button, .ck-content, .accordion, a[role='button'], span, label, .pcr-app, .pcr-color-palette, .pcr-color-chooser, .pcr-color-opacity, .pcr-current-color, .pcr-last-color",
 
         start: function(e, ui) {
             $(".sortable-elements button[data-action='newContentElement'").hide();

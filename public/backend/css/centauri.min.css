@@ -972,11 +972,8 @@ section#header {
   margin-bottom: 10px; }
 
 .accordions.inline-records .accordion {
+  background-color: #fff;
   cursor: pointer; }
-  .accordions.inline-records .accordion:hover > .top .buttons-center, .accordions.inline-records .accordion.active > .top .buttons-center {
-    margin-top: 0; }
-  .accordions.inline-records .accordion:hover > .top .buttons-right, .accordions.inline-records .accordion.active > .top .buttons-right {
-    margin-right: 0; }
   .accordions.inline-records .accordion:not(.active) > .top {
     overflow: hidden; }
   .accordions.inline-records .accordion > .top {
@@ -993,7 +990,6 @@ section#header {
       transition: 0.66s cubic-bezier(1, -0.09, 0, 1.16); }
       .accordions.inline-records .accordion > .top .buttons-center button.btn-floating,
       .accordions.inline-records .accordion > .top .buttons-right button.btn-floating {
-        border-radius: 5px;
         width: 40px;
         height: 40px; }
         .accordions.inline-records .accordion > .top .buttons-center button.btn-floating[data-trigger="sortInlineElementBySorting"],
@@ -1004,13 +1000,8 @@ section#header {
           width: 100%;
           line-height: inherit; }
     .accordions.inline-records .accordion > .top .buttons-center {
-      margin-top: -60px;
-      right: 50px;
-      justify-content: center; }
-    .accordions.inline-records .accordion > .top .buttons-right {
-      margin-right: -60px;
       right: 0;
-      justify-content: flex-end; }
+      justify-content: center; }
   .accordions.inline-records .accordion > .bottom {
     padding: 0 1rem 1rem; }
 
@@ -1049,7 +1040,7 @@ section#header {
       box-shadow: none; } }
   #editor.fluid > .bottom {
     padding-bottom: 15px;
-    margin: 30px;
+    margin: 15px;
     overflow-y: auto;
     height: calc(100% - 115px);
     box-shadow: 0 0 15px #cecece;
@@ -1069,7 +1060,7 @@ section#header {
     margin-top: 30px;
     box-shadow: 10px 0 15px #bbb;
     padding-top: 10px;
-    overflow-y: scroll; }
+    overflow-y: auto; }
     #editor > .bottom #editorcomponent-tabs {
       background: linear-gradient(180deg, #303a4f, #2a3345) !important; }
       #editor > .bottom #editorcomponent-tabs .nav-item .nav-link.active {
@@ -1103,11 +1094,14 @@ section#header {
       #editor > .bottom .content-element.ui-draggable-dragging {
         cursor: move !important;
         z-index: 999 !important; }
-      #editor > .bottom .content-element .top .title {
-        text-transform: capitalize;
-        font-size: 20px;
-        display: inline-block;
-        padding: 15px; }
+      #editor > .bottom .content-element .top {
+        height: 60px; }
+        #editor > .bottom .content-element .top .title {
+          cursor: pointer;
+          text-transform: capitalize;
+          font-size: 20px;
+          display: inline-block;
+          padding: 15px; }
       #editor > .bottom .content-element .fields {
         width: 100%;
         padding: 0 15px 15px; }
@@ -1193,16 +1187,22 @@ table#pages tr.subpage td:first-child {
 /**
  * Services
  */
-.ui-sortable-placeholder.content-element {
+.ui-sortable-placeholder.content-element, .ui-sortable-placeholder.accordion {
   border: 2px dashed black !important;
   visibility: visible !important; }
 
-.sortable-elements .content-element {
+.sortable-elements .content-element,
+.sortable-elements .accordion,
+.accordions.inline-records .content-element,
+.accordions.inline-records .accordion {
   transition-property: transform;
   transition-duration: 0.2s;
   transition-timing-function: cubic-bezier(0.26, 0.03, 0, 0.99);
   transition-delay: 0s; }
-  .sortable-elements .content-element.ui-sortable-helper {
+  .sortable-elements .content-element.ui-sortable-helper,
+  .sortable-elements .accordion.ui-sortable-helper,
+  .accordions.inline-records .content-element.ui-sortable-helper,
+  .accordions.inline-records .accordion.ui-sortable-helper {
     transform: scale(0.9);
     cursor: move; }
 

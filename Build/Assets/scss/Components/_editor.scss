@@ -45,7 +45,7 @@
 
         > .bottom {
             padding-bottom: 15px;
-            margin: 30px;
+            margin: 15px;
             overflow-y: auto;
             height: calc(100% - 115px);
             box-shadow: 0 0 15px #cecece;
@@ -78,7 +78,7 @@
         margin-top: 30px;
         box-shadow: 10px 0 15px #bbb;
         padding-top: 10px;
-        overflow-y: scroll;
+        overflow-y: auto;
 
         #editorcomponent-tabs {
             background: linear-gradient(180deg, #303a4f, #2a3345) !important;
@@ -157,7 +157,10 @@
             }
 
             .top {
+                height: 60px;
+
                 .title {
+                    cursor: pointer;
                     text-transform: capitalize;
                     font-size: 20px;
                     display: inline-block;

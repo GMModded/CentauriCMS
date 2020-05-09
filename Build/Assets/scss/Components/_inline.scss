@@ -19,20 +19,8 @@
         }
 
         .accordion {
+            background-color: #fff;
             cursor: pointer;
-
-            &:hover,
-            &.active {
-                & > .top {
-                    .buttons-center {
-                        margin-top: 0;
-                    }
-
-                    .buttons-right {
-                        margin-right: 0;
-                    }
-                }
-            }
 
             &:not(.active) {
                 & > .top {
@@ -56,7 +44,6 @@
 
                     button {
                         &.btn-floating {
-                            border-radius: 5px;
                             width: 40px;
                             height: 40px;
 
@@ -73,15 +60,8 @@
                 }
 
                 .buttons-center {
-                    margin-top: -60px;
-                    right: 50px;
-                    justify-content: center;
-                }
-
-                .buttons-right {
-                    margin-right: -60px;
                     right: 0;
-                    justify-content: flex-end;
+                    justify-content: center;
                 }
             }
 

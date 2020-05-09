@@ -28,6 +28,66 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                     $(".data > .row", $contentelement).appendTo($(".data > .fields", $contentelement));
                 }
 
+                /**
+                 * Sorting of Inline-Records
+                 */
+                $(".accordions.inline-records:not(.ui-sortable)", $contentelement).sortable({
+                    dropOnEmpty: false,
+                    cancel: ":input, button, .ck-content, a[role='button'], span, label, .pcr-app, .pcr-color-palette, .pcr-color-chooser, .pcr-color-opacity, .pcr-current-color, .pcr-last-color",
+                    items: ".accordion",
+
+                    update: function(e, ui) {
+                        let parent = {
+                            el: $(ui.item).parent(),
+                            type: $(ui.item).parent().data("type"),
+                            parenttype: $(ui.item).parent().data("type-parent")
+                        };
+
+                        let uid = parent.el.parents(".content-element").data("uid");
+
+                        let data = [];
+                        let $this = $(this);
+
+                        $("> .accordion", parent.el).each(function() {
+                            let $record = $(this);
+
+                            let uid = $record.data("uid");
+                            let index = $record.index();
+
+                            if(Centauri.isNotNull(uid) && Centauri.isNotNull(index)) {
+                                data.push({
+                                    uid: uid,
+                                    sorting: index,
+                                });
+                            }
+                        });
+
+                        Centauri.fn.Ajax(
+                            "InlineRecords",
+                            "sortRecord",
+
+                            {
+                                uid: uid,
+                                data: data,
+                                type: parent.type,
+                                parenttype: parent.parenttype
+                            },
+
+                            {
+                                success: (data) => {
+                                    data = JSON.parse(data);
+                                    Centauri.Notify(data.type, data.title, data.description);
+                                },
+
+                                error: (data) => {
+                                    $this.sortable("cancel");
+                                    Centauri.Notify("error", "Inline-Records Sorting", "An error occurred while trying to sort this element!");
+                                }
+                            }
+                        );
+                    }
+                });
+
                 Centauri.View.ContentElementsView($contentelement);
 
                 Centauri.Components.CreateNewInlineComponent();
@@ -95,10 +155,8 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                     var uid = $parent.data("uid");
                     var trigger = $(this).data("trigger");
 
-                    
-
                     if(trigger == "saveElementByUid") {
-                        let datas = Centauri.Helper.FieldsHelper($(".fields"), ".content-element.active");
+                        let datas = Centauri.Helper.FieldsHelper($(".fields"), ".content-element.active", false);
 
                         let tempArr = [];
                         let tableInfo = {};
@@ -126,18 +184,13 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                                 success: function(data) {
                                     data = JSON.parse(data);
                                     Centauri.Notify(data.type, data.title, data.description);
-                                },
-
-                                error: function(data) {
-                                    console.error(data);
                                 }
                             }
                         );
                     }
 
                     if(trigger == "hideElementByUid") {
-                        $(this).toggleClass("btn-primary btn-info");
-                        $("i", $(this)).toggleClass("fa-eye fa-eye-slash");
+                        let $this = $(this);
 
                         Centauri.fn.Ajax(
                             "ContentElements",
@@ -149,12 +202,11 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
 
                             {
                                 success: function(data) {
+                                    $this.toggleClass("btn-primary btn-info");
+                                    $("i", $this).toggleClass("fa-eye fa-eye-slash");
+
                                     data = JSON.parse(data);
                                     Centauri.Notify(data.type, data.title, data.description);
-                                },
-
-                                error: function(data) {
-                                    console.error(data);
                                 }
                             }
                         );
@@ -195,10 +247,6 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                                                 Centauri.Notify(data.type, data.title, data.description);
                                                 Centauri.fn.Ajax.Overlayer = false;
                                                 Centauri.Helper.findByPidHelper(Centauri.Components.PagesComponent.uid);
-                                            },
-
-                                            error: function(data) {
-                                                console.error(data);
                                             }
                                         }
                                     );

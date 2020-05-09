@@ -37,7 +37,6 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
         $(".overlayer").attr("data-closer") == "DashboardView"
     ) {
         $(".hamburger").trigger("click");
-
         $(".overlayer").addClass("hidden");
         Centauri.Events.OnOverlayerHiddenEvent($(".overlayer").attr("data-closer"));
     }
@@ -597,7 +596,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
 
                                                 {
                                                     model: Centauri.Helper.ModalHelper.Element.data("model"),
-                                                    datas: JSON.stringify(datas)
+                                                    datas: datas
                                                 },
 
                                                 {

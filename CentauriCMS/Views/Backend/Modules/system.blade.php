@@ -11,6 +11,10 @@
                 <a href="#" role="button" class="btn btn-primary waves-effect waves-light" data-ajax="true" data-ajax-handler="Database" data-ajax-action="update">
                     Update Database
                 </a>
+
+                <a href="#" role="button" class="btn btn-primary waves-effect waves-light" data-ajax="true" data-ajax-handler="Database" data-ajax-action="syncFiles">
+                    Sync Filelist
+                </a>
             </div>
 
             <div id="systemmodule_buttons" class="col-12 text-right">

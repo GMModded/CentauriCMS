@@ -9,7 +9,7 @@ Centauri.Events.EditorComponent.Input.OnKeyDown = function(input, e) {
     if(dataID == "CreateNewPage") {
         if(id == "title") {
             if(e.which == 9 && value.length >= 2) {
-                let slugs = value.toLowerCase();
+                let slugs = value;
                     slugs = slugs[0] + slugs[1];
 
                 $("form #langcode", $editor).focus();
@@ -19,6 +19,8 @@ Centauri.Events.EditorComponent.Input.OnKeyDown = function(input, e) {
                 $("form #slug", $editor).val(slugs);
 
                 $("form #langcode", $editor).focus();
+
+                $("form #url", $editor).val("/" + Centauri.Utility.SeoUrlUtility(value));
             }
         }
 

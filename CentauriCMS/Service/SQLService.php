@@ -17,7 +17,7 @@ class SQLService
             $table->integer("lid");
             $table->timestamps();
             $table->softDeletes();
-            
+
             if($table == "elements") {
                 $table->integer("parent_uid");
                 $table->integer("sorting");
@@ -56,5 +56,12 @@ class SQLService
         });
 
         return true;
+    }
+
+    public function createInlineRecordColumns($table)
+    {
+        $this->createColumn($table, "hidden", "integer", ["default" => 0]);
+        $this->createColumn($table, "sorting", "integer");
+        $this->createColumn($table, "parent_uid", "integer", ["nullable" => true]);
     }
 }

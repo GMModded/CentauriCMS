@@ -7,7 +7,7 @@ Centauri.Components.EditorComponent = function(type, data) {
         Centauri.Components.EditorComponent.ButtonsInitialized = false;
 
         if(Centauri.isNotUndefined(data.size)) {
-            $editor.addClass(data.size);
+            $editor.attr("class", "active " + data.size);
             Centauri.Components.EditorComponent.Size = data.size;
         }
 
@@ -148,7 +148,7 @@ Centauri.Components.EditorComponent = function(type, data) {
                 $(".overlayer").addClass("hidden");
 
                 let closer = $(".overlayer").attr("data-closer");
-                Centauri.Events.OnOverlayerHiddenEvent(closer);
+                // Centauri.Events.OnOverlayerHiddenEvent(closer);
                 Centauri.Events.OnEditorComponentClosedEvent();
 
                 setTimeout(function() {
@@ -339,51 +339,20 @@ Centauri.Components.EditorComponent.CBsAfterFormRendered = (formSelector = "form
 };
 
 Centauri.Components.EditorComponent.init = () => {
-    $(".overlayer").on("click", this, function() {
-        let closer = $(this).attr("data-closer");
+    // $(".overlayer").on("click", this, function() {
+    //     let closer = $(this).attr("data-closer");
 
-        if(closer == "EditorComponent") {
-            setTimeout(() => {
-                Centauri.Components.EditorComponent("clear", {
-                    forceClear: true
-                });
-            }, Centauri.Components.EditorComponent.TransitionTime);
+    //     if(closer == "EditorComponent") {
+    //         setTimeout(() => {
+    //             Centauri.Components.EditorComponent("clear", {
+    //                 forceClear: true
+    //             });
+    //         }, Centauri.Components.EditorComponent.TransitionTime);
 
-            Centauri.Events.OnOverlayerHiddenEvent(closer);
-            Centauri.Events.OnEditorComponentClosedEvent();
-        }
-    });
-
-    $(document).on("keyup", this, function(e) {
-        let canClose = false;
-
-        if(e.which == 27) {
-            if(!Centauri.elExists($("#modal-new_contentelement"))) {
-                canClose = true;
-            } else {
-                if($("#modal-new_contentelement").css("display") == "none") {
-                    canClose = true;
-                }
-            }
-        }
-
-        if(canClose) {
-            let closer = $(".overlayer").attr("data-closer");
-
-            if(closer == "EditorComponent") {
-                Centauri.Components.EditorComponent("hide");
-
-                setTimeout(() => {
-                    Centauri.Components.EditorComponent("clear", {
-                        forceClear: true
-                    });
-                }, Centauri.Components.EditorComponent.TransitionTime);
-
-                Centauri.Events.OnOverlayerHiddenEvent(closer);
-                Centauri.Events.OnEditorComponentClosedEvent();
-            }
-        }
-    });
+    //         Centauri.Events.OnOverlayerHiddenEvent(closer);
+    //         Centauri.Events.OnEditorComponentClosedEvent();
+    //     }
+    // });
 };
 
 /**

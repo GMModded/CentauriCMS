@@ -17,27 +17,39 @@ Centauri.Helper.PagesHelper = function($container) {
                 Centauri.Helper.VariablesHelper.__sortingElement = $contentelement;
             });
 
-            $(".edit", $top).on("click", this, function() {
-                let $this = $(this);
-                let $top = $this.parent().parent();
-                $contentelement = $top.parent();
+            let selectors = [
+                $(".edit", $top),
+                $(".title", $top)
+            ];
 
-                $contentelement.toggleClass("active");
+            selectors.forEach(selector => {
+                selector.on("click", this, function() {
+                    let $this = $(this);
 
-                if(!Centauri.elExists($(".data > .fields", $contentelement))) {
-                    if(Centauri.isUndefined($contentelement.data("loading-state"))) {
-                        $(".top .button-view .edit i", $contentelement).addClass("d-none disabled");
-                        $(".top .button-view .edit", $contentelement).append("<span class='spinner-grow spinner-grow-sm' role='status' aria-hidden='true'></span>");
-
-                        Centauri.Helper.FindFieldsByUidHelper($contentelement, $this);
+                    if($this.hasClass("title")) {
+                        $this = $(this).parent().find(".button-view .edit");
                     }
-                } else {
-                    $fields = $contentelement.find(".data > .fields");
 
-                    $fields.slideToggle(function() {
-                        $this.toggleClass("btn-primary btn-info");
-                    });
-                }
+                    let $top = $this.parent().parent();
+                    $contentelement = $top.parent();
+
+                    $contentelement.toggleClass("active");
+
+                    if(!Centauri.elExists($(".data > .fields", $contentelement))) {
+                        if(Centauri.isUndefined($contentelement.data("loading-state"))) {
+                            $(".top .button-view .edit i", $contentelement).addClass("d-none disabled");
+                            $(".top .button-view .edit", $contentelement).append("<span class='spinner-grow spinner-grow-sm' role='status' aria-hidden='true'></span>");
+
+                            Centauri.Helper.FindFieldsByUidHelper($contentelement, $this);
+                        }
+                    } else {
+                        $fields = $contentelement.find(".data > .fields");
+
+                        $fields.slideToggle(function() {
+                            $this.toggleClass("btn-primary btn-info");
+                        });
+                    }
+                });
             });
         }
     });

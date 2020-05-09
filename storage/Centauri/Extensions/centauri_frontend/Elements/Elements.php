@@ -57,6 +57,11 @@ class Elements
                             ]
                         ],
 
+                        "link" => [
+                            "label" => "Link",
+                            "type" => "input",
+                        ],
+
                         "slideritems_buttons" => [
                             "label" => "Buttons",
                             "newItemLabel" => "Button",

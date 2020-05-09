@@ -23,7 +23,7 @@
 
                                     <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}" data-ctype="{{ $element->ctype }}">
                                         <div class="top">
-                                            <span class="title">
+                                            <span class="title waves-effect">
                                                 @if(isset($element->customTitle))
                                                     {{ $element->customTitle }}
                                                 @else
@@ -32,13 +32,13 @@
                                             </span>
 
                                             <div class="button-view float-right">
-                                                <button class="edit btn btn-primary waves-effect waves-light btn-floating my-2 mx-1">
+                                                <button class="edit btn btn-primary waves-effect waves-light btn-floating m-2">
                                                     <i class="fas fa-pen"></i>
                                                 </button>
 
-                                                <button class="sort btn btn-primary waves-effect waves-light btn-floating my-2 mx-2">
+                                                {{-- <button class="sort btn btn-primary waves-effect waves-light btn-floating my-2 mx-2">
                                                     <i class="fas fa-sort"></i>
-                                                </button>
+                                                </button> --}}
                                             </div>
                                         </div>
                                     </div>

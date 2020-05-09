@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'local'), #local | staging | production
+    'env' => env('APP_ENV', 'local'), // local | staging | production
 
     /*
     |--------------------------------------------------------------------------

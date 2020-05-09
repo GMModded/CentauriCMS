@@ -51,6 +51,7 @@ Centauri.Components.FileSelectorComponent = (type, cb = null) => {
 
                 $modal.show();
                 Centauri.Components.FileSelectorComponent("close");
+                Centauri.Events.OnOverlayerHiddenEvent("FileSelectorComponent");
             });
         });
 

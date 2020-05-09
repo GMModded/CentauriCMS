@@ -7,17 +7,17 @@
         <div class="row">
             <div class="col-12 text-view">
                 <div class="headings-view">
-                    <h1>
+                    <h1 class="mb-0">
                         {{ $element->header }}
                     </h1>
 
-                    <h2>
+                    <h3>
                         {{ $element->subheader }}
-                    </h2>
+                    </h3>
                 </div>
 
                 <div class="rte-view">
-                    {!! $element->rte !!}
+                    {!! $element->RTE !!}
                 </div>
             </div>
         </div>

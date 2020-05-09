@@ -1,7 +1,10 @@
-Centauri.Helper.FieldsHelper = function(element, parentSelector) {
+Centauri.Helper.FieldsHelper = function(element, parentSelector, returnAsJson = true) {
     let datas = [];
 
-    if($(element).is(Centauri.Helper.ModalHelper.Element)) {
+    if(
+        $(element).is(Centauri.Helper.ModalHelper.Element) ||
+        $(element).is($(".accordion.active"))
+    ) {
         datas = Centauri.Helper.FieldsHelper.findDatasBySelectors([
             $(parentSelector + " .md-form > input", $(element)),
             $(parentSelector + " .md-form > .md-textarea", $(element)),
@@ -13,6 +16,16 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector) {
             $(parentSelector + " .md-form > .md-textarea"),
             $(parentSelector + " .md-form > select")
         ]);
+    }
+
+    if(returnAsJson) {
+        let tempArr = [];
+
+        Object.keys(datas).forEach((data) => {
+            tempArr.push(datas[data]);
+        });
+
+        datas = JSON.stringify(tempArr);
     }
 
     return datas;
@@ -30,6 +43,7 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
                 let uid = $(this).data("uid");
                 let isIR = $(this).data("inline-record");
                 let table = "elements";
+                let parentuid = null;
 
                 /**
                  * Handling for specific elements (by checking their classes) the correct way of fetching its current/changed value
@@ -56,6 +70,7 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
                  */
                 if(isIR) {
                     table = $(this).parents(".accordions.inline-records").data("type");
+                    parentuid = $(this).parents(".accordions.inline-records").parents(".accordion").data("uid");
                 }
 
                 /**
@@ -67,7 +82,9 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
                 if(Centauri.isUndefined(datas[table][uid])) {
                     datas[table][uid] = {};
                 }
-                datas[table][uid][id] = val;
+                datas[table][uid][id] = {
+                    value: val
+                };
             }
         });
     });

@@ -1,4 +1,4 @@
-// Centauri.Helper.findByPidHelper(Centauri.Components.PagesComponent.uid);
+// Usage: Centauri.Helper.findByPidHelper(Centauri.Components.PagesComponent.uid);
 
 Centauri.Helper.findByPidHelper = (pid, $contentelement = null) => {
     $(".overlayer").addClass("findByPid").removeClass("hidden");

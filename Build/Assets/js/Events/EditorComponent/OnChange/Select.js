@@ -42,25 +42,24 @@ Centauri.Events.EditorComponent.Select.OnChange = function(select) {
             });
 
             if(Centauri.isNotNull($tr) && Centauri.elExists($tr) && Centauri.isNotUndefined($tr)) {
-                let slugs = $.trim($tr.find("td[data-type='url']").text());
-
-                if(slugs != "/") {
-                    slugs += "/";
-                }
-
-                $("form #url", $editor, $editor).focus();
-
-                if(uid != parseInt($.trim($("table#pages tr:first-child td[data-type='uid']").text()))) {
-                    if(slugs != "/") {
-                        $("form #url", $editor).val(slugs + $("form #title", $editor).val());
-                    } else {
-                        $("form #url", $editor).val(slugs + $("form #title", $editor).val().toLowerCase());
-                    }
-                }
+                // let slugs = $.trim($tr.find("td[data-type='url']").text());
+                let slugs = "/";
 
                 // if(slugs != "/") {
-                $("form #title", $editor, $editor).focus();
+                //     slugs += "/";
                 // }
+
+                // $("form #url", $editor, $editor).focus();
+
+                // if(uid != parseInt($.trim($("table#pages tr:first-child td[data-type='uid']").text()))) {
+                //     if(slugs != "/") {
+                //         $("form #url", $editor).val(slugs + $("form #title", $editor).val());
+                //     } else {
+                //         $("form #url", $editor).val(slugs + $("form #title", $editor).val().toLowerCase());
+                //     }
+                // }
+
+                $("form #title", $editor, $editor).focus();
             }
         }
     }
@@ -92,17 +91,13 @@ Centauri.Events.EditorComponent.Select.OnChange = function(select) {
                 save() {
                     let datas = Centauri.Helper.FieldsHelper($(".data"), ".content-element.active");
 
-                    let tempArr = [];
                     let tableInfo = {};
                     let i = 0;
 
-                    Object.keys(datas).forEach((data) => {
-                        tempArr.push(datas[data]);
-                        tableInfo[i] = data;
+                    Object.keys(JSON.parse(datas)[0]).forEach((data) => {
+                        tableInfo[i] = JSON.parse(datas)[0][data];
                         i++;
                     });
-
-                    let jsonDatas = JSON.stringify(tempArr);
 
                     Centauri.fn.Ajax(
                         "ContentElements",
@@ -110,7 +105,7 @@ Centauri.Events.EditorComponent.Select.OnChange = function(select) {
 
                         {
                             uid: $contentelement.data("uid"),
-                            datas: jsonDatas,
+                            datas: datas,
                             tableInfo: tableInfo
                         },
 

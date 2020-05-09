@@ -1,4 +1,6 @@
-Centauri.Listener.OverlayerListener = function() {
+Centauri.Listener.OverlayerListener = () => {
+    $(".overlayer").off("click");
+
     $(".overlayer").on("click", this, function() {
         let closer = $(this).attr("data-closer");
 

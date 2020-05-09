@@ -18,7 +18,7 @@ class ContentElementBEHelper
         $modelsHtml = "";
         foreach($models as $model) {
             $modelHtml = view("Centauri::Backend.Modals.NewContentElement.Fields.model_singleitem", [
-                "uid" => $model->uid
+                "model" => $model
             ])->render();
 
             $bottomHtml = "";

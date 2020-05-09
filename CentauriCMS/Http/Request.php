@@ -78,6 +78,12 @@ class Request
             $nnodes = explode("/", $nodes);
 
             if($nnodes[0] == "centauri") {
+                if(!request()->session()->get("CENTAURI_BE_USER")) {
+                    if($nodes != "centauri/ajax/Backend/login" && $nodes != "centauri/action/Backend/login") {
+                        return redirect("/centauri");
+                    }
+                }
+
                 if($nnodes[1] == "ajax" || $nnodes[1] == "action") {
                     $classname = $nnodes[2];
                     $method = $nnodes[3];

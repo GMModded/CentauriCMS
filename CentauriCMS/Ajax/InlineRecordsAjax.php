@@ -87,6 +87,14 @@ class InlineRecordsAjax implements AjaxInterface
             $parentUidName = $modelConfig["config"]["parent_uid"] ?? "parent_uid";
 
             $parentElement = $parentModelNamespace::where("uid", $parentuid)->get()->first();
+
+            if(
+                is_null($parentElement) &&
+                ($parentmodelid == $modelid)
+            ) {
+                $parentElement = Element::where("uid", $parentuid)->get()->first();
+            }
+
             $lid = $parentElement->getAttribute("lid");
 
             $model = new $modelNamespace;
@@ -171,6 +179,64 @@ class InlineRecordsAjax implements AjaxInterface
             foreach($modelConfig["config"]["fields"] as $_key => $_field) {
                 $bottom .= $ContentElementAjax->renderField((is_int($_key) ? $_field : $_key), $model, $modelid);
             }
+        }
+
+        if(
+            $ajaxName == "hideIRByUid" ||
+            $ajaxName == "deleteIRByUid"
+        ) {
+            $data = $request->input("data");
+
+            $uid = $data["uid"];
+            $type = $data["type"];
+            $parenttype = $data["parenttype"];
+
+            $CCEfields = CCEHelper::getAllFields();
+
+            if($ajaxName == "hideIRByUid") {
+                $modelConfig = $CCEfields[$data["type"]]["config"];
+                $modelNamespace = $modelConfig["model"];
+                $model = $modelNamespace::where("uid", $data["uid"])->get()->first();
+
+                $state = (!$model->hidden ? "hidden" : "visible");
+
+                $model->hidden = !$model->hidden;
+                $model->save();
+
+                return json_encode([
+                    "type" => "primary",
+                    "title" => "Inline-Record Visibility",
+                    "description" => "This record is $state now"
+                ]);
+            }
+        }
+
+        if($ajaxName == "sortRecord") {
+            $uid = $request->input("uid");
+            $element = Element::where("uid", $uid)->get()->first();
+
+            $data = $request->input("data");
+            $type = $request->Input("type");
+            $parenttype = $request->Input("parenttype");
+
+            $CCEfields = CCEHelper::getAllFields();
+
+            $modelNamespace = $CCEfields[$type]["config"]["model"];
+
+            foreach($data as $record) {
+                $irUid = $record["uid"];
+                $irSorting = $record["sorting"];
+
+                $model = $modelNamespace::where("uid", $irUid)->get()->first();
+                $model->sorting = $irSorting;
+                $model->save();
+            }
+
+            return json_encode([
+                "type" => "success",
+                "title" => "Inline-Record Sorting",
+                "description" => "Successfully updated sortings"
+            ]);
         }
 
         return AjaxAbstract::default($request, $ajaxName);

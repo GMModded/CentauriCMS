@@ -50,6 +50,7 @@ class File extends Model
     protected $attributes = [
         "title" => "",
         "description" => "",
-        "link" => ""
+        "link" => "",
+        "cropable" => 0
     ];
 }

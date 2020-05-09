@@ -73,14 +73,6 @@ Centauri.Modal.NewContentElementModal = function() {
                                     Centauri.fn.Modal.close();
                                     let datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
 
-                                    let tempArr = [];
-
-                                    Object.keys(datas).forEach((data) => {
-                                        tempArr.push(datas[data]);
-                                    });
-
-                                    let jsonDatas = JSON.stringify(tempArr);
-
                                     Centauri.fn.Ajax(
                                         "ContentElements",
                                         "newElement",
@@ -88,7 +80,7 @@ Centauri.Modal.NewContentElementModal = function() {
                                         {
                                             pid: Centauri.Components.PagesComponent.uid,
                                             ctype: Centauri.Helper.ModalHelper.Element.data("ctype"),
-                                            datas: jsonDatas,
+                                            datas: datas,
 
                                             rowPos: Centauri.Modal.NewContentElementModal.rowPos,
                                             colPos: Centauri.Modal.NewContentElementModal.colPos,

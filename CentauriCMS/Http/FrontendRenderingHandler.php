@@ -54,10 +54,13 @@ class FrontendRenderingHandler
             }
         }
 
+        $postParams = request()->post();
+
         $frontendHtml = view($frontendTemplate, [
             "page" => $page,
             "content" => $renderedHTML,
-            "additionalHeadTagContent" => $additionalHeadTagContent
+            "additionalHeadTagContent" => $additionalHeadTagContent,
+            "postParams" => $postParams
         ])->render();
 
         $frontendHtml = str_replace("  ", "", $frontendHtml);

@@ -16,7 +16,10 @@ Centauri.View.ContentElementsView = ($contentelement) => {
             fileListType = "images";
         }
 
-        if(type == "addfile" || type == "addimage") {
+        if(
+            type == "addfile" ||
+            type == "addimage"
+        ) {
             var $input = $(this).parent().parent().find("input");
 
             // Currently not used
@@ -67,7 +70,7 @@ Centauri.View.ContentElementsView = ($contentelement) => {
                             }, (510));
                         }, 150);
 
-                        Centauri.Components.FileSelectorComponent("show", (data) => {
+                        Centauri.Components.FileSelectorComponent("show", function(data) {
                             let selectedFiles = data.selectedFiles,
                                 selectedUids = data.selectedUids;
 
@@ -96,10 +99,6 @@ Centauri.View.ContentElementsView = ($contentelement) => {
 
                             // Centauri.fn.Modal.close();
                         });
-                    },
-
-                    error: (data) => {
-                        console.error(data);
                     }
                 }
             );

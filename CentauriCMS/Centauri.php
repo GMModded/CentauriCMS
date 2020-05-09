@@ -13,9 +13,14 @@ class Centauri extends ServiceProvider
 {
     /**
      * Centauri Core version
+     * @var string $version
      */
     protected $version = "1.0;EA1";
 
+    /**
+     * Tables for initDB-method
+     * @var $tables array
+     */
     protected $tables = [
         "be_users",
         // "elements",
@@ -26,21 +31,24 @@ class Centauri extends ServiceProvider
 
     /**
      * CentauriCMS root directory
+     * @var static $centauriDir string
      */
     protected static $centauriDir = __DIR__;
 
     /**
      * Centauri Modules-Service
+     * @var private $modulesService class
      */
     private $modulesService;
 
     /**
      * Centauri Path-Service
+     * @var private $pathService class
      */
     private $pathService;
 
     /**
-     * Centauri Core
+     * Centauri Core Constructor
      */
     public function __construct()
     {
@@ -90,5 +98,33 @@ class Centauri extends ServiceProvider
                 // throw new Exception("Table: $table doesn't exists - please run a refresh of the migration for this table with Laravel Artisan or use Centauri FixUtility-Class.");
             }
         }
+    }
+
+    public static function isProduction()
+    {
+        $env = strtolower(app("env"));
+
+        if(
+            $env == "production" ||
+            $env == "prod"
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function isLocal()
+    {
+        $env = strtolower(app("env"));
+
+        if(
+            $env == "local" ||
+            $env == "staging"
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

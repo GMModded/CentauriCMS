@@ -1,4 +1,4 @@
-Centauri.Events.OnOverlayerHiddenEvent = function(closer) {
+Centauri.Events.OnOverlayerHiddenEvent = (closer) => {
     let $overlayer = $(".overlayer");
 
     $overlayer.addClass("hidden");
@@ -7,16 +7,21 @@ Centauri.Events.OnOverlayerHiddenEvent = function(closer) {
         $overlayer.removeClass("overlay-modal");
     }
 
-    if(closer == "EditorComponent") {
-        Centauri.Components.EditorComponent("hide");
-    }
+    switch(closer) {
+        case "EditorComponent":
+            Centauri.Components.EditorComponent("hide");
+            break;
 
-    else if(closer == "DashboardView") {
-        $("#dashboard, .hamburger").removeClass("active");
-    }
+        case "DashboardView":
+            $("#dashboard, .hamburger").removeClass("active");
+            break;
 
-    else if(closer == "FileSelectorComponent") {
-        $("#file-selector").addClass("inactive");
-        $overlayer.attr("data-closer", "EditorComponent");
+        case "FileSelectorComponent":
+            $("#file-selector").addClass("inactive");
+            $overlayer.attr("data-closer", "EditorComponent");
+            break;
+
+        default:
+            break;
     }
 };

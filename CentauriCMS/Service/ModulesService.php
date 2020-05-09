@@ -45,10 +45,12 @@ class ModulesService
                 "icon" => "fas fa-plus"
             ],
 
+            /*
             "filelist" => [
                 "title" => trans("backend/modules.filelist.title"),
                 "icon" => "fas fa-cloud-upload-alt"
             ],
+            */
 
             "extensions" => [
                 "title" => trans("backend/modules.extensions.title"),
@@ -63,6 +65,11 @@ class ModulesService
             "system" => [
                 "title" => trans("backend/modules.system.title"),
                 "icon" => "fas fa-server"
+            ],
+
+            "schedulers" => [
+                "title" => trans("backend/modules.scheduler.title"),
+                "icon" => "fas fa-clock"
             ],
         ];
 

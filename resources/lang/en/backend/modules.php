@@ -43,5 +43,8 @@ return [
     "system" => [
         "title" => "System"
     ],
+    "scheduler" => [
+        "title" => "Scheduler"
+    ],
 
 ];

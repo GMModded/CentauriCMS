@@ -25,7 +25,7 @@
                     @endif
                 @else
                     <h5>
-                        Dieser News-Artikel ist leider nicht mehr verfügbar bzw. konnte nicht gefunden werden.
+                        Dieser News-Artikel konnte nicht gefunden werden bzw. ist leider nicht mehr verfügbar.
                     </h5>
                 @endif
 

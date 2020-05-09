@@ -1,12 +1,15 @@
 .ui-sortable-placeholder {
-    &.content-element {
+    &.content-element,
+    &.accordion {
         border: 2px dashed black !important;
         visibility: visible !important;
     }
 }
 
-.sortable-elements {
-    .content-element {
+.sortable-elements,
+.accordions.inline-records {
+    .content-element,
+    .accordion {
         transition-property: transform;
         transition-duration: 0.2s;
         transition-timing-function: cubic-bezier(0.26, 0.03, 0, 0.99);
