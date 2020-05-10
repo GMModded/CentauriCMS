@@ -16,4 +16,6 @@ Centauri.Event.OnWindowLoadEvent = () => {
         $slider.css("opacity", 1);
         Centauri.Component.ATagComponent();
     }, 100);
+
+    Centauri.Section.HeaderSection();
 };

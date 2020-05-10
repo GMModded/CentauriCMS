@@ -1,7 +1,14 @@
 #{ce("headerimage")} {
-    .boxitem {
-        p {
-            margin-bottom: 0;
+    & > div {
+        &:hover {
+            box-shadow: 0 16px 28px 0 rgba(0,0,0,.22),0 25px 55px 0 rgba(0,0,0,.21)!important;
+        }
+
+        .boxitem {
+
+            p {
+                margin-bottom: 0;
+            }
         }
     }
 }

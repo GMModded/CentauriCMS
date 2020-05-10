@@ -278,6 +278,64 @@ a.anim-underline {
       font-size: 20px; }
 
 /*
+ * Sections
+ */
+#header {
+  position: absolute;
+  z-index: 10; }
+  #header > div {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem;
+    background: linear-gradient(180deg, #303a4f, #2a3345);
+    z-index: 100;
+    padding: .75rem .5rem !important;
+    height: 100px; }
+    @media (max-width: 1199.98px) {
+      #header > div {
+        height: 75px; } }
+    #header > div > .progress {
+      position: absolute;
+      bottom: -20px;
+      width: 100%;
+      left: 0;
+      height: 4px;
+      background-color: gold; }
+    #header > div .wrappers .mobile #hamburger {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      width: 45px;
+      cursor: pointer;
+      transform: translateY(-50%);
+      transition: 0.66s cubic-bezier(1, -0.09, 0, 1.16); }
+      #header > div .wrappers .mobile #hamburger.active {
+        margin-top: -4px; }
+        #header > div .wrappers .mobile #hamburger.active span:first-child {
+          opacity: 0; }
+        #header > div .wrappers .mobile #hamburger.active span:nth-child(2) {
+          transform: rotate(45deg); }
+        #header > div .wrappers .mobile #hamburger.active span:last-child {
+          margin-top: -10px;
+          transform: rotate(-45deg); }
+      #header > div .wrappers .mobile #hamburger span {
+        display: block;
+        width: 100%;
+        height: 4px;
+        background-color: white;
+        transition: 0.66s cubic-bezier(1, -0.09, 0, 1.16); }
+        #header > div .wrappers .mobile #hamburger span:not(:last-child) {
+          margin-bottom: 7.5px; }
+
+#content {
+  padding-top: 100px; }
+  @media (max-width: 1199.98px) {
+    #content {
+      padding-top: 75px; } }
+
+/*
  * Content Elements
  */
 [data-contentelement='slider'] {
@@ -373,11 +431,11 @@ a.anim-underline {
 [data-contentelement='headerdescription'] p {
   font-size: 20px; }
 
-[data-contentelement='headerimage'] .boxitem p {
-  margin-bottom: 0; }
+[data-contentelement='headerimage'] > div:hover {
+  box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.22), 0 25px 55px 0 rgba(0, 0, 0, 0.21) !important; }
 
-#content {
-  padding-top: 142px; }
+[data-contentelement='headerimage'] > div .boxitem p {
+  margin-bottom: 0; }
 
 @media (max-width: 767px) {
   #header {

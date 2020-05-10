@@ -13,23 +13,23 @@
         </head>
 
         <body>
-            <section id="header" style="position:absolute;z-index:10;">
-                <div class="container-fluid" style="position:fixed;top:0;left:0;width:100%;padding:2rem;background: linear-gradient(180deg, #303a4f, #2a3345);">
-                    <div class="progress md-progress inactive" style="position: absolute;bottom: -20px;width: 100%;left: 0;height:4px;background:gold;">
+            <section id="header">
+                <div class="container-fluid">
+                    <div class="progress md-progress inactive">
                         <div class="indeterminate" style="background:white;"></div>
                     </div>
 
-                    <div class="container">
-                        <div class="row">
+                    <div class="container h-100">
+                        <div class="row h-100">
                             <div class="col-12">
-                                <div class="row">
-                                    <div class="col-8 align-items-center d-flex">
+                                <div class="row h-100 wrappers">
+                                    <div class="col-8 logo align-items-center d-flex h-100">
                                         <a href="/" class="anim-underline" style="color: #fff;font-size: 28px;letter-spacing: -1px;font-weight: bold;">
                                             CentauriCMS
                                         </a>
                                     </div>
 
-                                    <div class="col">
+                                    <div class="col desktop d-lg-block d-none">
                                         <ul class="list-unstyled d-flex align-items-center h-100">
                                             @foreach(BuildBladeHelper::treeByPid(1, $page->uid) as $page)
                                                 @if($page->page_type == "page" && $page->storage_id == null)
@@ -41,12 +41,18 @@
                                                 @endif
                                             @endforeach
 
-                                            <li class="ml-3 py-2 px-3 btn btn-info">
-                                                <a class="nav-item" href="#plans" style="font-size: 20px; color: #fff; text-transform: capitalize; text-decoration: none;">
-                                                    Plans
-                                                </a>
-                                            </li>
+                                            <a class="nav-item btn btn-info px-3" href="#plans" style="font-size: 16px; text-transform: capitalize; border-radius: 0;">
+                                                Plans
+                                            </a>
                                         </ul>
+                                    </div>
+
+                                    <div class="col mobile d-block d-lg-none">
+                                        <div id="hamburger">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

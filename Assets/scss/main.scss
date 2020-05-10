@@ -23,6 +23,12 @@
 @import "global";
 
 /*
+ * Sections
+ */
+@import "Sections/Header";
+@import "Sections/Content";
+
+/*
  * Content Elements
  */
 @import "Functions/ContentElements";
@@ -31,9 +37,7 @@
 @import "ContentElements/HeaderDescription";
 @import "ContentElements/HeaderImage";
 
-#content {
-    padding-top: 142px;
-}
+
 
 @media (max-width: 767px) {
     #header {

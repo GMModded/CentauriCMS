@@ -12,6 +12,7 @@ const Centauri = {};
 
 Centauri.Event = {};
 Centauri.Component = {};
+Centauri.Section = {};
 Centauri.Service = {};
 Centauri.Utility = {};
 
