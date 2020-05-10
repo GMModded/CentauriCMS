@@ -32,7 +32,6 @@
     <div class="accordions inline-records mt-2" data-type="image">
         @php
             if(isset($fieldConfig["value"]) && ($fieldConfig["value"] != "")) {
-
                 if(Str::contains($fieldConfig["value"], ",")) {
                     $fieldConfig["value"] = explode(",", $fieldConfig["value"]);
                 } else {

@@ -1,22 +1,35 @@
 <?php
 namespace Centauri\Extension\Frontend\Elements;
 
+use Centauri\CMS\Centauri;
+use Centauri\CMS\Service\ElementService;
+
 class Elements
 {
+    public $ElementService;
+
+    /**
+     * Constructor for this Elements class
+     * 
+     * @return void
+     */
     public function __construct()
     {
-        $tabs = [
+        $this->ElementService = Centauri::makeInstance(ElementService::class);
+
+        $this->ElementService->setTabs([
             "centaurifrontend_elements" => [
                 "label" => "Elements",
 
                 "elements" => [
                     "headerdescription",
-                    "slider"
+                    "slider",
+                    "headerimage"
                 ]
             ]
-        ];
+        ]);
 
-        $fields = [
+        $this->ElementService->setFields([
             "slideritems" => [
                 "label" => "Slider-Items",
                 "newItemLabel" => "Slider-Item",
@@ -57,6 +70,12 @@ class Elements
                             ]
                         ],
 
+                        "bgcolor" => [
+                            "label" => "Background-Color",
+                            "type" => "input",
+                            "renderAs" => "colorpicker"
+                        ],
+
                         "link" => [
                             "label" => "Link",
                             "type" => "input",
@@ -82,6 +101,7 @@ class Elements
                     ]
                 ]
             ],
+
             "slideritems_buttons" => [
                 "config" => [
                     "model" => \Centauri\Extension\Frontend\Model\SliderItemButtonModel::class,
@@ -101,13 +121,67 @@ class Elements
                             "label" => "Background-Color",
                             "type" => "input",
                             "renderAs" => "colorpicker"
+                        ]
+                    ]
+                ]
+            ],
+
+            "boxitems" => [
+                "label" => "Box-Items",
+                "newItemLabel" => "Box-Item",
+                "existingItemLabel" => "{title}",
+                "type" => "model",
+
+                "config" => [
+                    "model" => \Centauri\Extension\Frontend\Model\BoxitemModel::class,
+
+                    "fields" => [
+                        "icon" => [
+                            "label" => "Icon",
+                            "type" => "image",
+
+                            "config" => [
+                                "maxItems" => 1,
+                                "validation" => \Centauri\CMS\Validation\FileValidation::class
+                            ]
                         ],
+
+                        "header" => [
+                            "label" => "Header",
+                            "type" => "input",
+
+                            "config" => [
+                                "required" => 1
+                            ]
+                        ],
+
+                        "description" => [
+                            "label" => "Description",
+                            "type" => "RTE"
+                        ],
+
+                        "col_desktop" => [
+                            "label" => "Size (Desktop)",
+                            "type" => "input"
+                        ],
+
+                        "bgcolor_start" => [
+                            "label" => "Background-Color - Gradient - Start",
+                            "type" => "input",
+                            "renderAs" => "colorpicker"
+                        ],
+
+                        "bgcolor_end" => [
+                            "label" => "Background-Color - Gradient - End",
+                            "type" => "input",
+                            "renderAs" => "colorpicker"
+                        ]
                     ]
                 ]
             ]
-        ];
+        ]);
 
-        $elements = [
+        $this->ElementService->setElements([
             "headerdescription" => [
                 "htag;header;subheader",
                 "RTE"
@@ -115,14 +189,21 @@ class Elements
 
             "slider" => [
                 "slideritems"
+            ],
+            
+            "headerimage" => [
+                "image",
+                "header;subheader",
+                "RTE",
+                "boxitems"
             ]
-        ];
+        ]);
 
         $GLOBALS["Centauri"]["ContentElements"]["centauri_frontend"] = [
             "order" => "FIRST",
-            "tabs" => $tabs,
-            "fields" => $fields,
-            "elements" => $elements
+            "tabs" => $this->ElementService->getTabs(),
+            "fields" => $this->ElementService->getFields(),
+            "elements" => $this->ElementService->getElements()
         ];
     }
 }

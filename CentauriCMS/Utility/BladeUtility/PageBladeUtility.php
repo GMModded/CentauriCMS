@@ -15,12 +15,24 @@ class PageBladeUtility
         return Page::where("pid", $pid)->get()->all();
     }
 
-    public static function getSubpagesByPages($pages, $currentPageUid = null)
+    public static function getSubpagesByPages($pages, $currentPageUid = null, $field = "uid", $crtPage = null)
     {
         foreach($pages as $page) {
             if(!is_null($currentPageUid)) {
-                if($page->uid == $currentPageUid) {
-                    $page->current = true;
+                if($field == "uid") {
+                    if($page->$field == $currentPageUid && $page->storage_uid == null) {
+                        $page->current = true;
+                    }
+                } else {
+                    if($page->getAttribute($field) == $currentPageUid) {
+                        if(!is_null($crtPage)) {
+                            if($crtPage->storage_id == $page->storage_id) {
+                                if($page->uid == $crtPage->uid) {
+                                    $page->current = true;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

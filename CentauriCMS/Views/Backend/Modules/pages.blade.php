@@ -51,7 +51,7 @@
                                 @foreach($data["pages"] as $pagesArr)
                                     @foreach($pagesArr as $pageArr)
                                         @foreach($pageArr as $page)
-                                            <tr {{ !$page->is_rootpage ? "class=subpage" : "" }}>
+                                            <tr {{ (!$page->page_type == "rootpage" && !$page->page_type == "storage") ? "class=subpage" : "" }}>
                                                 <td data-type="uid">
                                                     # {{ $page->uid }}
                                                 </td>

@@ -18,13 +18,16 @@ class Frontend
             "config" => [
                 "Elements" => [
                     "ViewNamespace" => [
-                        // "headerdescription" => "centauri_frontend::Frontend.Templates.Elements",
-                        // "headerimage" => "centauri_frontend::Frontend.Templates.Elements",
+                        "headerdescription" => "centauri_frontend::Frontend.Templates.Elements",
+                        "headerimage" => "centauri_frontend::Frontend.Templates.Elements",
                         "slider" => "centauri_frontend::Frontend.Templates.Elements"
                     ]
                 ]
             ]
         ];
+
+        // Register of custom pageNotFound Handler
+        $GLOBALS["Centauri"]["Handlers"]["pageNotFound"] = \Centauri\Extension\Frontend\PageNotFound::class;
 
         // Views registration through ViewResolver class
         $ViewResolver = Centauri::makeInstance(ViewResolver::class);
@@ -37,10 +40,26 @@ class Frontend
         $lid = $page->lid;
 
         $ElementComponent = Centauri::makeInstance(ElementComponent::class);
-        $contentColHTML = $ElementComponent->render($uid, $lid, 0, 0);
 
-        return view("centauri_frontend::Frontend/Layouts/frontend", [
-            "contentColHTML" => $contentColHTML
-        ])->render();
+        $domain = $page->getDomain();
+        $id = "Main";
+
+        if(!is_null($domain)) {
+            $id = $domain->id;
+        }
+
+        if($id == "Main") {
+            $contentColHTML = $ElementComponent->render($uid, $lid, 0, 0);
+
+            return view("centauri_frontend::Frontend.Layouts.frontend", [
+                "contentColHTML" => $contentColHTML
+            ])->render();
+        } else {
+            $contentColHTML = "VIELEEEEEEEEEE";
+
+            return view("centauri_frontend::Frontend.Layouts.docs", [
+                "contentColHTML" => $contentColHTML
+            ])->render();
+        }
     }
 }

@@ -13,6 +13,9 @@ $table = "pages";
 /**
  * Columns
  */
+$SQLService->createColumn($table, "storage_id", "integer", ["nullable" => true]);
+$SQLService->createColumn($table, "page_type", "string");
+
 $SQLService->createColumn($table, "seo_keywords", "string", ["default" => ""]);
 $SQLService->createColumn($table, "seo_description", "string", ["default" => ""]);
 $SQLService->createColumn($table, "seo_robots_indexpage", "boolean", ["default" => true]);

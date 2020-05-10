@@ -9,11 +9,13 @@
         <section id="header">
             <ul class="list-unstyled d-flex align-items-center h-100">
                 @foreach(BuildBladeHelper::treeByPid(1) as $page)
-                    <li class="px-2">
-                        <a href="{{ BuildBladeHelper::linkByUid($page->uid) }}" style="font-size: 20px; color: #000;">
-                            {{ $page->title }}
-                        </a>
-                    </li>
+                    @if($page->page_type != "storage")
+                        <li class="px-2">
+                            <a href="{{ BuildBladeHelper::linkByUid($page->uid) }}" style="font-size: 20px; color: #000;">
+                                {{ $page->title }}
+                            </a>
+                        </li>
+                    @endif
                 @endforeach
             </ul>
         </section>

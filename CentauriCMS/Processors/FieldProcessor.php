@@ -30,7 +30,7 @@ class FieldProcessor
                     $field = $fields[$_];
                     $value = $element->$_;
 
-                    $fieldType = $field["type"];
+                    $fieldType = isset($field["type"]) ?? $field["type"];
 
                     $data = [
                         "element" => $element,
@@ -45,7 +45,7 @@ class FieldProcessor
                         $element->$_ = RTEProcessor::process($data);
                     }
 
-                    if($fieldType == "model") {
+                    if($fieldType == "model" && isset($field["config"]) && isset($field["config"]["model"])) {
                         $element->$_ = InlineProcessor::findByRelation($element->uid, $_, $field["config"]["model"]);
                     }
 

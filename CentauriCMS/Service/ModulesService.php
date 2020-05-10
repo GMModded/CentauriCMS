@@ -127,19 +127,25 @@ class ModulesService
             $domainFiles = DomainsUtility::findAll();
 
             foreach($pages as $page) {
-                if($page->getAttribute("is_rootpage")) {
+                if(
+                    $page->getAttribute("page_type") == "rootpage" ||
+                    $page->getAttribute("page_type") == "storage" ||
+                    $page->getAttribute("page_type") == "page"
+                ) {
                     $language = Language::where("uid", $page->lid)->get()->first();
 
                     if(is_null($language)) {
                         $notification = new Notification;
 
                         $notification->severity = "WARN";
-                        $notification->title = "Page with lid '" . $page->lid . "' doesn't exists";
+                        $notification->title = "Page with Language-ID '" . $page->lid . "' doesn't exists";
                         $notification->text = "This issue may caused by removing a language-entry from the 'languages' table.";
 
                         $notification->save();
                     } else {
-                        if($page->is_rootpage) {
+                        if(
+                            $page->page_type == "rootpage"
+                        ) {
                             $domainFileForUidExists = false;
 
                             foreach($domainFiles as $domainFile) {
@@ -164,7 +170,10 @@ class ModulesService
                 }
             }
             foreach($pages as $page) {
-                if(!$page->getAttribute("is_rootpage")) {
+                if(
+                    !$page->getAttribute("page_type") == "rootpage" &&
+                    !$page->getAttribute("page_type") == "storage"
+                ) {
                     $language = Language::where("uid", $page->lid)->get()->first();
 
                     if(is_null($language)) {

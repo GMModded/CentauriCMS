@@ -16,7 +16,7 @@ class SliderItemModel extends Model
      *
      * @var string
      */
-    protected $table = "slideritems";
+    protected $table = "centauri_frontend_slideritems";
 
     /**
      * The primary key associated with the table.
@@ -68,9 +68,21 @@ class SliderItemModel extends Model
 
     /**
      * Getter for of the buttons of this slider item.
+     * 
+     * @return array|void
      */
-    public function buttons()
+    public function getButtons()
     {
-        return $this->hasMany(\Centauri\Extension\Frontend\Model\SliderItemButtonModel::class, "parent_uid", "uid")->get()->all();
+        return $this->hasMany(
+            \Centauri\Extension\Frontend\Model\SliderItemButtonModel::class,
+            "parent_uid",
+            "uid"
+        )
+
+        ->where([
+            "hidden" => 0
+        ])
+
+        ->orderBy("sorting", "asc")->get()->all();
     }
 }

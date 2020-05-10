@@ -16,7 +16,7 @@ class SliderItemButtonModel extends Model
      *
      * @var string
      */
-    protected $table = "slideritem_buttons";
+    protected $table = "centauri_frontend_slideritem_buttons";
 
     /**
      * The primary key associated with the table.

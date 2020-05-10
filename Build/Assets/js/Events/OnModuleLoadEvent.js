@@ -251,15 +251,31 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                                         }
                                                                     },
 */
+
                                                                     {
-                                                                        id: "is_rootpage",
+                                                                        id: "page_type",
                                                                         type: "custom",
-                                                                        custom: "switch",
+                                                                        custom: "select",
 
                                                                         data: {
-                                                                            label: Centauri.__trans.EditorComponent.label_rootpage + "?",
-                                                                            isChecked: false,
-                                                                            onClick: "Centauri.Events.EditorComponent.Checkbox.OnClick(this)"
+                                                                            selectedOptionValue: "page",
+                                                                            label: "Page-Type",
+                                                                            options: [
+                                                                                {
+                                                                                    name: "Page",
+                                                                                    value: "page"
+                                                                                },
+
+                                                                                {
+                                                                                    name: "Root-Page",
+                                                                                    value: "rootpage"
+                                                                                },
+
+                                                                                {
+                                                                                    name: "Storage",
+                                                                                    value: "storage"
+                                                                                }
+                                                                            ]
                                                                         }
                                                                     },
 
@@ -288,7 +304,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                                         }
                                                                     },
 
-                                                                    save: function() {
+                                                                    save: function(formData) {
                                                                         Centauri.fn.Ajax.Overlayer = false;
 
                                                                         Centauri.fn.Ajax(
@@ -296,12 +312,7 @@ Centauri.Events.OnModuleLoadEvent = function(module) {
                                                                             "newPage",
 
                                                                             {
-                                                                                parentuid: $("#parent", $editor).val(),
-                                                                                language: $("#language", $editor).val(),
-                                                                                isrootpage: $("#is_rootpage", $editor).prop("checked"),
-                                                                                title: $("#title", $editor).val(),
-                                                                                url: $("#url", $editor).val(),
-                                                                                belayout: $("#be_layout").val()
+                                                                                data: formData
                                                                             },
 
                                                                             {

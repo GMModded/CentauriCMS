@@ -29,7 +29,20 @@ class BuildBladeHelper
             "hidden_inpagetree" => 0
         ])->get()->all();
 
-        $pages = self::$pageBladeUtility::getSubpagesByPages($pages, $pageUid);
+        foreach($pages as $page) {
+            $npages[] = $page;
+        }
+
+        $pages = self::$pageBladeUtility::getSubpagesByPages($pages, $pageUid, "uid", null);
+        return $pages;
+    }
+
+    public static function treeByStorageId($storage_id, $page = null)
+    {
+        self::initClasses("page");
+
+        $pages = Page::where("storage_id", $storage_id)->get()->all();
+        $pages = self::$pageBladeUtility::getSubpagesByPages($pages, $storage_id, "storage_id", $page);
 
         return $pages;
     }

@@ -89,9 +89,11 @@ class ContentElementsAjax implements AjaxInterface
                     "additionalData" => $additionalData
                 ])->render();
             } else {
-                $additionalData = $this->findAdditionalDataByType($fieldConfig["type"]);
+                $type = $fieldConfig["type"];
 
-                $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $fieldConfig["type"], [
+                $additionalData = $this->findAdditionalDataByType($type);
+
+                $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $type, [
                     "fieldConfig" => $fieldConfig,
                     "additionalData" => $additionalData
                 ])->render();
@@ -516,6 +518,10 @@ class ContentElementsAjax implements AjaxInterface
 
                             $element->save();
                         } else {
+                            if($key == "undefined") {
+                                dd($tableInfo);
+                            }
+
                             $modelClass = $CCEfields[$key]["config"]["model"];
                             $model = $modelClass::where("uid", $uid)->get()->first();
 

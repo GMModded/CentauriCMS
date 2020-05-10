@@ -43,11 +43,7 @@ class CentauriApplication
             ],
 
             "Handlers" => [
-                "pageNotFound" => [
-                    "config" => [
-                        "__DEFAULT__" => \Centauri\CMS\Http\PageNotFound::class
-                    ]
-                ],
+                "pageNotFound" => \Centauri\CMS\Http\PageNotFound::class,
 
                 "routes" => []
             ],

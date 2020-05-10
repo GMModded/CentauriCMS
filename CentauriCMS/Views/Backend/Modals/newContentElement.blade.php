@@ -32,7 +32,7 @@
                                     @endforeach
                                 </div>
                             @else
-                                @if($CCE["fields"][$field]["type"] != "model")
+                                @if(isset($CCE["fields"][$field]["type"]) && $CCE["fields"][$field]["type"] != "model")
                                     {!! $CCE["fields"][$field]["_HTML"] !!}
                                 @else
                                     <p>

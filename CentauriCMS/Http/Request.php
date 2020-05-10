@@ -176,7 +176,14 @@ class Request
             }
         }
 
-        self::throwNotFound(false, $page);
+        $notFoundData = self::throwNotFound(false, $page);
+
+        if(
+            !is_null($notFoundData) &&
+            $notFoundData->getStatusCode() == 404
+        ) {
+            return $notFoundData;
+        }
 
         $page = Page::find($page->uid);
         $uid = $page->getAttribute("uid");
@@ -224,7 +231,8 @@ class Request
         }
 
         if($throwNotFound) {
-            throw new Exception("The requested page could not be resolved");
+            $class = Centauri::makeInstance($GLOBALS["Centauri"]["Handlers"]["pageNotFound"]);
+            return $class::handle();
         }
     }
 }

@@ -13,46 +13,36 @@ class PageAjax implements AjaxInterface
         $params = $request->input();
 
         if($ajaxName == "newPage") {
-            $parentuid = null;
-            if($request->has("parentuid")) {
-                $parentuid = filter_var($params["parentuid"], FILTER_VALIDATE_INT);
-            } else {
-                return response("Parent-Page not found.\nPlease refresh/abort the current action!", 500);
-            }
+            $data = json_decode($params["data"], true);
 
-            $isrootpage = false;
-            if($request->has("isrootpage")) {
-                $isrootpage = filter_var($params["isrootpage"], FILTER_VALIDATE_BOOLEAN);
-            }
-
-            if(!$request->has("title") || $params["title"] == "") {
-                return response("Title can't be empty.\nPlease type in a title for your page name!", 500);
-            }
+            $parentuid = $data["parent"];
 
             $page = new Page;
             $page->pid = $parentuid;
-            $page->title = $params["title"];
-            $page->is_rootpage = $isrootpage;
-            $page->backend_layout = $params["belayout"] ?? "";
+            $page->title = $data["title"];
+            $page->page_type = $data["page_type"];
+            $page->backend_layout = $data["be_layout"] ?? "";
+            $page->page_type = $data["page_type"];
 
             if($page->backend_layout == "") {
                 return response("Backend-Layout can't be an empty string!", 500);
             }
 
-            $url = $params["url"];
+            $url = $data["url"];
 
-            if($isrootpage) {
-                if(!$request->has("language")) {
-                    return response("Selected language is not available as a rootpage!", 500);
-                }
+            if($data["page_type"] == "rootpage") {
+                // if(!$request->has("language")) {
+                //     return response("Selected language is not available as a rootpage!", 500);
+                // }
 
-                $page->lid = $params["language"];
+                $page->lid = $data["language"];
                 $page->slugs = $url;
             } else {
                 $parentPage = Page::where("uid", $parentuid)->get()->first();
 
                 $page->lid = $parentPage->lid;
-                $page->slugs = $params["url"] ?? "/";
+                $page->slugs = $data["url"] ?? "/";
+                $page->storage_id = $parentPage->uid;
             }
 
             return $this->savePage($page);
@@ -165,7 +155,7 @@ class PageAjax implements AjaxInterface
         }
 
         if($ajaxName == "getRootPages") {
-            $pages = Page::where("is_rootpage", 1)->get();
+            $pages = Page::where("page_type", "rootpage")->orWhere("page_type", "storage")->get();
 
             $data = [];
 

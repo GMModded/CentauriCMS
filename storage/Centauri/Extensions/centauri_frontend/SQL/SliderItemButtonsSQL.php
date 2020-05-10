@@ -2,7 +2,7 @@
 
 $SQLService = \Centauri\CMS\Centauri::makeInstance(\Centauri\CMS\Service\SQLService::class);
 
-$table = "slideritem_buttons";
+$table = "centauri_frontend_slideritem_buttons";
 $SQLService->createTable($table);
 
 $SQLService->createInlineRecordColumns($table);

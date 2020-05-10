@@ -1,5 +1,5 @@
 <div data-contentelement="headerimage">
-    <div class="image-view" style="position: relative; overflow: hidden; max-height: 600px;">
+    <div class="image-view" style="position: relative; overflow: hidden; max-height: 200px;">
         <img class="img-fluid w-100" src="{!! ImageBladeHelper::getPath($element->image) !!}" />
     </div>
 
@@ -11,14 +11,18 @@
                         {{ $element->header }}
                     </h1>
 
-                    <h3>
-                        {{ $element->subheader }}
-                    </h3>
+                    @if($element->subheader)
+                        <h3>
+                            {{ $element->subheader }}
+                        </h3>
+                    @endif
                 </div>
 
-                <div class="rte-view">
-                    {!! $element->RTE !!}
-                </div>
+                @if($element->RTE)
+                    <div class="rte-view my-3">
+                        {!! $element->RTE !!}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -32,17 +36,15 @@
     [data-contentelement="headerimage"] .image-view::before {content: " ";position: absolute;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0, 0, 0, .5);}
 
     [data-contentelement="headerimage"] .text-view {
-        position: relative;
-        margin-top: -160px;
-        margin-bottom: 160px;
     }
 
     [data-contentelement="headerimage"] .headings-view {
         color: white;
+        position: absolute;
+        top: -100%;
+        margin-top: 30px;
     }
 
     [data-contentelement="headerimage"] .rte-view {
-        color: black;
-        margin: 80px 0 -160px 0;
     }
 </style>

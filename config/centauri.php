@@ -171,7 +171,6 @@ return [
                 "type" => "file",
 
                 "config" => [
-                    // "saveToColumn" => "file",
                     "required" => 1,
                     "maxItems" => 1
                 ]
@@ -179,11 +178,11 @@ return [
         ],
 
         "elements" => [
-            "headerimage" => [
-                "image",
-                "header;subheader",
-                "RTE"
-            ],
+            // "headerimage" => [
+            //     "image",
+            //     "header;subheader",
+            //     "RTE"
+            // ],
 
             "plugin" => [
                 "header;plugin"
@@ -199,7 +198,7 @@ return [
                 "label" => "backend/modals.newContentElement.Tabs.general",
 
                 "elements" => [
-                    "headerimage"
+                    // "headerimage"
                 ]
             ],
             
@@ -221,7 +220,7 @@ return [
         ],
 
         "fieldConfiguration" => [
-            // "headerdescription" => [
+            // "headerimage" => [
             //     "select" => [
             //         "label" => "woooow"
             //     ]

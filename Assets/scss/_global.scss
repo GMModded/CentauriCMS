@@ -27,3 +27,26 @@ a {
         }
     }
 }
+
+.rte-view,
+.text-view {
+    ul {
+        &:not(.slick-dots) {
+            list-style: none;
+            padding-left: 15px;
+
+            li {
+                position: relative;
+                font-size: 18px;
+
+                &:before {
+                    content: "» ";
+                    position: absolute;
+                    top: -3px;
+                    left: -20px;
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+}

@@ -12,8 +12,9 @@ Centauri.Component.ATagComponent = () => {
             let seoUrl = Centauri.Utility.SeoUrlUtility($this.text());
             history.pushState({page: 1}, seoUrl, href);
 
+            $(".nav-item.active").removeClass("active");
+
             if($this.hasClass("nav-item")) {
-                $("#header a.nav-item.active").removeClass("active");
                 $this.addClass("active");
             }
         });
@@ -42,8 +43,6 @@ Centauri.Component.ATagComponent.ajaxRequest = (href, cb) => {
         },
 
         success: function(data) {
-            $(".progress").toggleClass("inactive");
-
             Centauri.Component.ATagComponent.lastHref = href;
             $("body section#content").html(data);
             $("title").text(__dynPageData.title);
@@ -52,7 +51,29 @@ Centauri.Component.ATagComponent.ajaxRequest = (href, cb) => {
                 cb();
             }
 
-            Centauri.Component.ATagComponent();
+            Centauri.Event.OnWindowLoadEvent();
+        },
+
+        error: function(jqXHR, textStatus, errorThrown) {
+            if(textStatus == "error") {
+                let responseJSON = jqXHR.responseJSON;
+                let description = (typeof responseJSON != "undefined") ? responseJSON.message : "";
+
+                console.table(jqXHR);
+
+                if(
+                    errorThrown == "unknown status" &&
+                    description == "CSRF token mismatch."
+                ) {
+                    location.href = "/";
+                } else {
+                    Centauri.Notify("error", errorThrown, description);
+                }
+            }
+        },
+
+        complete: function() {
+            $(".progress").toggleClass("inactive");
         }
     });
 };

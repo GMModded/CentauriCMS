@@ -33,7 +33,7 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                  */
                 $(".accordions.inline-records:not(.ui-sortable)", $contentelement).sortable({
                     dropOnEmpty: false,
-                    cancel: ":input, button, .ck-content, a[role='button'], span, label, .pcr-app, .pcr-color-palette, .pcr-color-chooser, .pcr-color-opacity, .pcr-current-color, .pcr-last-color",
+                    cancel: ":input, button, .ck-content, a[role='button'], span, label, .pcr-app, .pcr-color-palette, .pcr-color-chooser, .pcr-color-opacity, .pcr-current-color, .pcr-last-color, img",
                     items: ".accordion",
 
                     update: function(e, ui) {

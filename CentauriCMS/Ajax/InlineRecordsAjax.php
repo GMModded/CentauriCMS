@@ -106,8 +106,7 @@ class InlineRecordsAjax implements AjaxInterface
             $model->save();
 
             $modelHtml = view("Centauri::Backend.Modals.NewContentElement.Fields.model_singleitem", [
-                "uid" => $model->uid,
-                "sorting" => 0
+                "model" => $model
             ])->render();
 
             $modelHtml = str_replace("###MODEL_CONTENT_TOP###", ($modelConfig["newItemLabel"] ?? "Item"), $modelHtml);

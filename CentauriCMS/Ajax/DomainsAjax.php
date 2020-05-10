@@ -13,7 +13,7 @@ class DomainsAjax implements AjaxInterface
     public function request(Request $request, String $ajaxName)
     {
         if($ajaxName == "showModal") {
-            $rootpages = Page::where("is_rootpage", 1)->get()->all();
+            $rootpages = Page::where("page_type", "rootpage")->get()->all();
             
             foreach($rootpages as $rootpage) {
                 $lid = $rootpage->lid;

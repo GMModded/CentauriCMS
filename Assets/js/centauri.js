@@ -32,10 +32,6 @@ window.onload = () => {
 
     Centauri.Event.OnWindowLoadEvent();
 
-    if(document.querySelectorAll("[data-contentelement='slider']").length > 0) {
-        document.querySelectorAll("[data-contentelement='slider']")[0].style.maxHeight="550px";
-    }
-
     // Centauri.Service.UsedCSSService();
 
     document.addEventListener("DOMContentLoaded", () => {

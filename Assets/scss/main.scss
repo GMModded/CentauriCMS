@@ -1,10 +1,21 @@
 /*
  * Packages
  */
- @import "../../../../packages/mdb/css/mdb.min.css";
-@import "../../../../packages/bootstrap/dist/css/bootstrap.min.css";
-@import "../../../../packages/slick/slick-theme.css";
-@import "../../../../packages/slick/slick.css";
+@import "../../packages/toastr/toastr";
+
+@import "../../packages/bootstrap/scss/mixins";
+@import "../../packages/bootstrap/scss/functions";
+@import "../../packages/bootstrap/scss/variables";
+@import "../../packages/bootstrap/dist/css/bootstrap.min.css";
+
+@import "../../packages/mdb/css/mdb.min.css";
+@import "../../packages/slick/slick-theme.css";
+@import "../../packages/slick/slick.css";
+
+/**
+ * Fonts
+ */
+@import "font";
 
 /*
  * Global
@@ -17,7 +28,12 @@
 @import "Functions/ContentElements";
 
 @import "ContentElements/Slider";
+@import "ContentElements/HeaderDescription";
+@import "ContentElements/HeaderImage";
 
+#content {
+    padding-top: 142px;
+}
 
 @media (max-width: 767px) {
     #header {

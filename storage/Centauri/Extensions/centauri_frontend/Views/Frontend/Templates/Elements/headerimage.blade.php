@@ -1,0 +1,68 @@
+<div data-contentelement="headerimage">
+    <div class="image-view" style="position: relative; overflow: hidden; max-height: 200px;">
+        <img class="img-fluid w-100" src="{!! ImageBladeHelper::getPath($element->image) !!}" />
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-view">
+                <div class="headings-view">
+                    <h1 class="mb-0">
+                        {{ $element->header }}
+                    </h1>
+
+                    @if($element->subheader)
+                        <h3>
+                            {{ $element->subheader }}
+                        </h3>
+                    @endif
+                </div>
+
+                @if($element->RTE)
+                    <div class="rte-view my-3">
+                        {!! $element->RTE !!}
+                    </div>
+                @endif
+
+                @if($element->boxitems)
+                    <div class="row justify-content-center">
+                        @foreach($element->boxitems as $boxitem)
+                            <div class="col-lg-{{ $boxitem->col_desktop }} text-center m-4 z-depth-1" style="color: white;border-radius: 5px;padding: 20px 15px; background: linear-gradient(40deg, {{ $boxitem->bgcolor_start }}, {{ $boxitem->bgcolor_end }});">
+                                <div class="boxitem">
+                                    <h5>
+                                        {{ $boxitem->header }}
+                                    </h5>
+
+                                    <hr style="border-color: white;">
+
+                                    {!! $boxitem->description !!}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    [data-contentelement="headerimage"] {
+        position: relative;
+    }
+
+    [data-contentelement="headerimage"] .image-view::before {content: " ";position: absolute;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0, 0, 0, .5);}
+
+    [data-contentelement="headerimage"] .text-view {
+    }
+
+    [data-contentelement="headerimage"] .headings-view {
+        color: white;
+        position: absolute;
+        top: -100%;
+        margin-top: 30px;
+    }
+
+    [data-contentelement="headerimage"] .rte-view {
+    }
+</style>

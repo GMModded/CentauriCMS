@@ -2,7 +2,6 @@
 namespace Centauri\CMS\Utility;
 
 use Centauri\CMS\Model\Language;
-use Centauri\CMS\Model\Notification;
 use Centauri\CMS\Model\Page;
 use Illuminate\Support\Facades\File;
 

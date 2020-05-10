@@ -79,11 +79,20 @@
             transform: translate(-50%, -50%);
             color: white;
             text-align: center;
-            text-transform: uppercase;
 
             h4 {
-                font-size: 85px;
-                font-weight: bold;
+                font-family: $primaryFontBold;
+                font-size: 65px;
+                text-transform: uppercase;
+            }
+
+            p {
+                font-size: 25px;
+                padding: 15px 5px;
+            }
+
+            button {
+                font-size: 16px;
             }
         }
 
@@ -94,9 +103,6 @@
                 text-transform: initial;
                 padding: 15px 25px;
                 margin: 0 5px;
-                border: 1px solid transparent !important;
-                box-shadow: unset !important;
-                outline: unset !important;
                 transition: .3s ease-in-out;
 
                 &:before {
@@ -112,8 +118,6 @@
 
                 &:hover {
                     &:active {
-                        transform: scale(.9);
-
                         &:before {
                             background-color: rgba(0, 0, 0, .275);
                         }

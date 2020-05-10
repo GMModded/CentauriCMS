@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row">
-        <div data-contentelement="slider" style="max-height: 550px; overflow: hidden; margin-bottom: 0 !important;">
+        <div data-contentelement="slider" style="max-height: 600px; overflow: hidden; margin-bottom: 0 !important; opacity: 0; transition: .66s ease-in-out;">
             @foreach($element->slideritems as $slideritem)
                 <div class="item">
                     @if($slideritem->link)
@@ -20,16 +20,16 @@
                             {{ $slideritem->title }}
                         </h4>
 
-                        <p>
+                        <p style="background: {{ $slideritem->bgcolor }}">
                             {{ $slideritem->teasertext }}
                         </p>
 
-                        @if($slideritem->buttons())
+                        @if($slideritem->getButtons())
                             <div class="button-view mt-5">
-                                @foreach($slideritem->buttons() as $button)
+                                @foreach($slideritem->getButtons() as $button)
                                     @if($button->link && $button->label)
                                         <a href="{{ $button->link }}" target="_blank" role="button">
-                                            <button class="waves-effect btn btn-primary{{ ($button->bgcolor == '') || $button->bgcolor == "transparent" ? " transparent" : "" }}" style="background: {{ $button->bgcolor }};">
+                                            <button class="waves-effect btn btn-primary{{ ($button->bgcolor == '') || $button->bgcolor == "transparent" ? " transparent" : "" }}" style="background: {{ $button->bgcolor }} !important;">
                                                 {{ $button->label }}
                                             </button>
                                         </a>

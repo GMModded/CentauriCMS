@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Model;
 
+use Centauri\CMS\Utility\DomainsUtility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -49,12 +50,32 @@ class Page extends Model
      */
     protected $attributes = [
         "pid" => 1,
-        "lid" => 0,
+        "lid" => 1,
         "hidden" => 0,
-        "is_rootpage" => 0,
-        "backend_layout" => 0,
+        "backend_layout" => "",
 
         "seo_keywords" => "",
         "seo_description" => ""
     ];
+
+    /**
+     * Getter for of the buttons of this slider item.
+     * 
+     * @return array|void
+     */
+    public function getDomain()
+    {
+        if($this->page_type == "rootpage") {
+            $host = $this->slugs;
+
+            if($host == "/") {
+                $host = $_SERVER["HTTP_HOST"];
+            }
+
+            $file = DomainsUtility::getDomainFileByHost($host);
+            return DomainsUtility::getConfigByDomainFile($file);
+        }
+
+        return null;
+    }
 }
