@@ -5,7 +5,6 @@ use Centauri\CMS\Centauri;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Prophecy\Exception\Doubler\ClassNotFoundException;
 
 class ExtensionsComponent
 {
@@ -35,5 +34,10 @@ class ExtensionsComponent
                 }
             }
         }
+    }
+
+    public static function getExtensions()
+    {
+        return $GLOBALS["Centauri"]["Extensions"];
     }
 }

@@ -1,14 +1,15 @@
-Centauri.Utility.ModalUtility = function(title, description, options, callbacks) {
-    var html = "";
-    var addHTMLFn = Centauri.Utility.ModalUtility.addHTML;
+Centauri.Utility.ModalUtility = (title, description, options, callbacks) => {
+    let html = "";
+    let addHTMLFn = Centauri.Utility.ModalUtility.addHTML;
 
-    var id = "modal";
-    var modalSize = "";
-    var closeclass = "danger";
-    var saveclass = "success";
+    let id = "modal";
+    let modalSize = "";
+    let closeclass = "danger";
+    let saveclass = "success";
 
-    var closeOnSave = true;
-    var cached = true;
+    let isDialog = true;
+    let closeOnSave = true;
+    let cached = true;
 
     if(Centauri.isNotUndefined(options)) {
         if(Centauri.isNotUndefined(options.id)) {
@@ -21,6 +22,9 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
 
         if(Centauri.isNotUndefined(options.size)) {
             modalSize = " modal-" + options.size;
+        }
+        if(Centauri.isNotUndefined(options.isDialog)) {
+            isDialog = options.isDialog;
         }
         if(Centauri.isNotUndefined(options.closeOnSave)) {
             closeOnSave = options.closeOnSave;
@@ -42,7 +46,7 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
     let _showingCached = false;
     if(Centauri.elExists($("#modal" + id)) && cached) {
         _showingCached = true;
-        $("#modal" + id).modal("show");
+        Centauri.Modal($("#modal" + id), "show");
 
         if(Centauri.isNotUndefined(callbacks)) {
             if(Centauri.isNotUndefined(callbacks.showingCached)) {
@@ -51,7 +55,7 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
         }
     }
 
-    html = "<div class='modal fade' id='modal" + id + "' tabindex='-1' role='dialog' aria-labelledby='modal" + id + "-label' aria-hidden='true'>|</div>";
+    html = "<div class='modal fade" + (!isDialog ? " layout-default" : "") + "' id='modal" + id + "' tabindex='-1' role='dialog' aria-labelledby='modal" + id + "-label' aria-hidden='true'>|</div>";
     html = addHTMLFn(html, "<div class='modal-dialog" + modalSize + "' role='document'>|</div>");
     html = addHTMLFn(html, "<div class='modal-content'>|</div>");
     html = addHTMLFn(html, "<div class='modal-header'>|</div>&&");
@@ -65,7 +69,7 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
 
     if(!_showingCached) {
         $("body").append(html);
-        $("#modal" + id).modal();
+        Centauri.Modal();
     }
 
     if(Centauri.isNotUndefined(callbacks)) {
@@ -75,12 +79,11 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
     }
 
     $("#modal" + id + " button").off();
-
     $("#modal" + id + " button").on("click", this, function() {
-        var btntype = $(this).data("type");
+        let btntype = $(this).data("type");
 
         if(btntype == "close") {
-            Centauri.fn.Modal.close();
+            Centauri.Modal("close");
 
             if(Centauri.isNotUndefined(callbacks.close)) {
                 callbacks.close();
@@ -89,7 +92,7 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
 
         if(btntype == "save") {
             if(closeOnSave) {
-                Centauri.fn.Modal.close();
+                Centauri.Modal("close");
             }
 
             callbacks.save();
@@ -102,13 +105,14 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
 
     Centauri.Utility.ModalUtility.Validator($("#modal"));
 
-    $("#modal" + id + " select.mdb-select.md-form").materialSelect();
+    // $("#modal" + id + " select.mdb-select.md-form").materialSelect();
 
-    var selectedValue = $("#modal" + id + " select.mdb-select.md-form").val();
-    var selectedValueText = $.trim($("#modal" + id + " select option[value='" + selectedValue + "']").text());
+    let selectedValue = $("#modal" + id + " select.mdb-select.md-form").val();
+    let selectedValueText = $.trim($("#modal" + id + " select option[value='" + selectedValue + "']").text());
 
     $("#modal" + id + " select.mdb-select.md-form").parent().find("ul > li").each(function() {
-        var thisText = $.trim($("span", this).text());
+        let thisText = $.trim($("span", this).text());
+
         if(thisText == selectedValueText) {
             $(this).addClass("active selected");
             return;
@@ -120,17 +124,10 @@ Centauri.Utility.ModalUtility = function(title, description, options, callbacks)
      */
     Centauri.fn.__FormInputFix();
 
-    $("#modal-" + id).on("hidden.bs.modal", function(e) {
-        if($(this).hasClass("destroy")) {
-            $(this).modal("dispose");
-            $(this).remove();
-        }
-    });
-
     return true;
 };
 
-Centauri.Utility.ModalUtility.addHTML = function(crtHTML, html, split = "|") {
+Centauri.Utility.ModalUtility.addHTML = (crtHTML, html, split = "|") => {
     return (crtHTML.split(split).join(html));
 };
 
@@ -140,22 +137,60 @@ Centauri.Utility.ModalUtility.addHTML = function(crtHTML, html, split = "|") {
  * > Centauri.fn.Modal("Hello...", "...world!", {id: "id", close: {label: "CLOOOSE"}, save: {label: "SAAAAVE"}}, {size: "lg"});
  * with Callback > Centauri.fn.Modal("Hello...", "...world!", {id: "id", close: {label: "Cancel",class: "warning"}, save: {label: "Delete",class: "danger"}}, {save() {}});
  */
-Centauri.fn.Modal = function(title, description, options, callbacks) {
+Centauri.fn.Modal = (title, description, options, callbacks) => {
     return Centauri.Utility.ModalUtility(title, description, options, callbacks);
 };
 
-Centauri.Utility.ModalUtility.close = function(id) {
-    if(Centauri.isNotUndefined(id)) {
-        $("#modal-" + id).modal("dispose");
-        $("#modal-" + id).remove();
-    } else {
-        $(".modal").addClass("destroy");
-        $(".modal").modal("hide");
+Centauri.Modal = (arg = null, $this) => {
+    if(!Centauri.elExists($this) && Centauri.Utility.ModalUtility.AutofindModalIfNotProvided) {
+        $this = $("body > .modal");
     }
 
+    if(Centauri.isNotNull(arg)) {
+        if(arg == "show") {
+            $this.css("display", "block");
+            $this.removeClass("hide");
 
+            setTimeout(() => {
+                $this.addClass("show");
+            }, 660);
+        }
+
+        if(arg == "close") {
+            $this.addClass("hide");
+            $this.removeClass("show");
+
+            setTimeout(() => {
+                $this.remove();
+            }, 750);
+        }
+
+        if(arg == "hide") {
+            $this.addClass("hide");
+
+            setTimeout(() => {
+                $this.removeClass("show");
+            }, 660);
+
+            setTimeout(() => {
+                $this.css("display", "none");
+            }, 330);
+        }
+    } else {
+        $this.css("display", "block");
+        $this.addClass("hide");
+
+        setTimeout(() => {
+            $this.addClass("show");
+            $this.removeClass("hide");
+
+            $this.on("click", this, function(e) {
+                if(!Centauri.elExists($(e.target).parents($(".modal-dialog")))) {
+                    Centauri.Modal("close");
+                }
+            });
+        }, 10);
+    }
 };
 
-Centauri.fn.Modal.close = function() {
-    Centauri.Utility.ModalUtility.close();
-};
+Centauri.Utility.ModalUtility.AutofindModalIfNotProvided = true;

@@ -1,39 +1,75 @@
 <?php
-namespace Centauri\Extension;
+namespace Centauri\Extension\Frontend;
 
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Component\ElementComponent;
+use Centauri\CMS\Helper\GetModelBySlugHelper;
 use Centauri\CMS\Resolver\ViewResolver;
 use Centauri\Extension\Frontend\Elements\Elements;
 
 class Frontend
 {
+    private $extensionKey = "centauri_frontend";
+
+    /**
+     * Constructor of this class
+     * 
+     * @return void
+     */
     public function __construct()
     {
-        // Register of all Frontend Elements
+        /**
+         * Register of all Frontend Elements
+         */
         Centauri::makeInstance(Elements::class);
 
-        // Register of Configuration-Array for $GLOBALS["Centauri"]["Extensions"]["centauri_frontend"]
-        $GLOBALS["Centauri"]["Extensions"]["centauri_frontend"] = [
+        /**
+         * Register of Configuration-Array for $GLOBALS["Centauri"]["Extensions"][$this->extensionKey]
+         */
+        $GLOBALS["Centauri"]["Extensions"][$this->extensionKey] = $this->getConfig();
+
+        /**
+         * Register of custom pageNotFound Handler
+         */
+        $GLOBALS["Centauri"]["Handlers"]["pageNotFound"] = \Centauri\Extension\Frontend\PageNotFound::class;
+
+        /**
+         * Views registration through ViewResolver class
+         */
+        $ViewResolver = Centauri::makeInstance(ViewResolver::class);
+        $ViewResolver->register($this->extensionKey, "EXT:" . $this->extensionKey . "/Views");
+    }
+
+    /**
+     * Returns the configuration for this array for the $GLOBALS-array
+     * 
+     * @return array
+     */
+    public function getConfig()
+    {
+        // $pusherConfig = config("broadcasting")["connections"]["pusher"];
+
+        return [
             "config" => [
                 "Elements" => [
                     "ViewNamespace" => [
                         "headerdescription" => "centauri_frontend::Frontend.Templates.Elements",
                         "headerimage" => "centauri_frontend::Frontend.Templates.Elements",
-                        "slider" => "centauri_frontend::Frontend.Templates.Elements"
+                        "slider" => "centauri_frontend::Frontend.Templates.Elements",
+                        "boxitems" => "centauri_frontend::Frontend.Templates.Elements",
+                        "titleteaser" => "centauri_frontend::Frontend.Templates.Elements"
                     ]
                 ]
             ]
         ];
-
-        // Register of custom pageNotFound Handler
-        $GLOBALS["Centauri"]["Handlers"]["pageNotFound"] = \Centauri\Extension\Frontend\PageNotFound::class;
-
-        // Views registration through ViewResolver class
-        $ViewResolver = Centauri::makeInstance(ViewResolver::class);
-        $ViewResolver->register("centauri_frontend", "EXT:centauri_frontend/Views");
     }
 
+    /**
+     * Static function defined in /config/centauri.php -> ["beLayouts"]["default"]["rendering"]
+     * 
+     * @param \Centauri\CMS\Model\Page $page
+     * @return void
+     */
     public static function rendering($page)
     {
         $uid = $page->uid;
@@ -48,18 +84,17 @@ class Frontend
             $id = $domain->id;
         }
 
-        if($id == "Main") {
-            $contentColHTML = $ElementComponent->render($uid, $lid, 0, 0);
+        $contentColHTML = $ElementComponent->render($uid, $lid, 0, 0);
 
-            return view("centauri_frontend::Frontend.Layouts.frontend", [
-                "contentColHTML" => $contentColHTML
-            ])->render();
-        } else {
-            $contentColHTML = "VIELEEEEEEEEEE";
+        $template = "frontend";
 
-            return view("centauri_frontend::Frontend.Layouts.docs", [
-                "contentColHTML" => $contentColHTML
-            ])->render();
+        if($id == "Docs") {
+            $template = "docs";
         }
+
+        return view("centauri_frontend::Frontend.Layouts." . $template, [
+            "domain" => $domain,
+            "contentColHTML" => $contentColHTML
+        ])->render();
     }
 }

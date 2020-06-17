@@ -1,18 +1,16 @@
-<ul class="nav nav-tabs md-tabs" id="nCETabs" role="tablist">
+<ul class="nav nav-tabs" id="new-ce-tabs" role="tablist">
     @foreach($CCE["tabs"] as $tabKey => $tabArr)
-        <li class="nav-item waves-effect">
-            <a class="nav-link{{ $loop->first ? ' active' : '' }}" id="{{ $tabKey }}-tab-md" data-toggle="tab" href="#{{ $tabKey }}-md" role="tab" aria-controls="{{ $tabKey }}-md" aria-selected="true">
-                {{ __($tabArr['label']) }}
-            </a>
+        <li class="nav-item waves-effect waves-light{{ $loop->first ? ' active' : '' }}" data-tab-id="{{ $tabKey }}">
+            {{ __($tabArr['label']) }}
         </li>
     @endforeach
 </ul>
 
-<div class="tab-content card pt-5" id="nCEContent">
+<div class="tab-content card pt-5">
     @foreach($CCE["tabs"] as $tabKey => $tabArr)
-        <div class="tab-pane fade {{ $loop->first ? ' show active' : '' }}" id="{{ $tabKey }}-md" role="tabpanel" aria-labelledby="{{ $tabKey }}-tab-md">
+        <div class="tab-pane fade {{ $loop->first ? ' show active' : '' }}" data-tab-id="{{ $tabKey }}">
             @foreach($tabArr["elements"] as $ctype)
-                <div class="element z-depth-1 mb-3" data-ctype="{{ $ctype }}">
+                <div class="element ci-bs-1 mb-3" data-ctype="{{ $ctype }}">
                     <div class="top waves-effect">
                         @lang("backend/modals.newContentElement.Elements.$ctype")
                     </div>

@@ -1,4 +1,4 @@
-Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
+Centauri.fn.Ajax = (ajax, method, data, callbacks, options) => {
     if(Centauri.isUndefined(callbacks.success)) {
         return console.warn("Centauri.fn.Ajax: Can't call an AJAX without a callback-handler for the success-scope!");
     }
@@ -16,7 +16,7 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
 
         data: data,
 
-        success: function(data) {
+        success: (data) => {
             if(Centauri.isNotUndefined(options)) {
                 if(
                     Centauri.isNotUndefined(options.closeEditorComponentOnSuccess) &&
@@ -25,7 +25,7 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
                     Centauri.Components.EditorComponent("hide");
 
                     if(Centauri.Components.EditorComponent.ClearOnSave) {
-                        setTimeout(function() {
+                        setTimeout(() => {
                             Centauri.Components.EditorComponent("clear", {
                                 forceClear: true
                             });
@@ -42,7 +42,9 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
             callbacks.success(data);
         },
 
-        error: function(data) {
+        error: (data) => {
+            $("#maincontent .overlayer").addClass("hidden");
+
             if(Centauri.fn.Ajax.Overlayer) {
                 $("#maincontent .overlayer .loader").addClass("hidden");
             }
@@ -54,11 +56,11 @@ Centauri.fn.Ajax = function(ajax, method, data, callbacks, options) {
             if(Centauri.isNotUndefined(callbacks.error)) {
                 callbacks.error(data);
             } else {
-                console.error(data);
+                // console.error(data);
             }
         },
 
-        complete: function(data) {
+        complete: (data) => {
             if(Centauri.isNotUndefined(callbacks.complete)) {
                 callbacks.complete(data);
             }
@@ -76,7 +78,7 @@ Centauri.Utility.Ajax = () => {
     });
 };
 
-window.onload = function() {
+window.onload = () => {
     Centauri.Utility.Ajax();
 
     $(document).ajaxError(function(event, jqxhr, settings, thrownError) {

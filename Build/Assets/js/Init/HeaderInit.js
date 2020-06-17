@@ -41,17 +41,57 @@ Centauri.Init.HeaderInit = () => {
         });
 
         $(".tool", $header).click(function() {
-            $(".overlayer").toggleClass("hidden");
-            $blocks.toggleClass("active");
+            $(this).toggleClass("active");
+
+            let dataType = $(this).data("type");
+            let $el = Centauri.elExists($(".block[data-type='" + dataType + "']", $blocks)) ? $(".block[data-type='" + dataType + "']", $blocks) : null;
+
+            if(Centauri.isNotNull($el)) {
+                $el.show();
+
+                $(".overlayer").toggleClass("hidden");
+                $blocks.toggleClass("active");
+            } else {
+                switch(dataType) {
+                    case "fullscreen":
+                        let $content = $("body > #app > section#maincontent > section#content");
+                        let $containers = $("> section > div", $content);
+
+                        if(Centauri.LocalStorage.get("BE_USER_SETTINGS.FULLSCREEN") != "ON") {
+                            Centauri.LocalStorage.set("BE_USER_SETTINGS.FULLSCREEN", "ON");
+
+                            if(Centauri.elExists($("style#fullscreen"))) {
+                                $("style#fullscreen").html("<style id='fullscreen'>body > #app > section#maincontent > section#content > section > div{max-width: 100% !important; transition: max-width .66s cubic-bezier(1, -.09, 0, 1.16) !important;}/style>");
+                            } else {
+                                $("body").append("<style id='fullscreen'>body > #app > section#maincontent > section#content > section > div{max-width: 100% !important; transition: max-width .66s cubic-bezier(1, -.09, 0, 1.16) !important;}/style>");
+                            }
+                        } else {
+                            Centauri.LocalStorage.set("BE_USER_SETTINGS.FULLSCREEN", "OFF");
+                            $("style#fullscreen").html("<style id='fullscreen'>body > #app > section#maincontent > section#content > section > div{transition: max-width .66s cubic-bezier(1, -.09, 0, 1.16) !important;}/style>");
+
+                            setTimeout(() => {
+                                $("style#fullscreen").remove();
+                            }, 660);
+                        }
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
         });
 
         $(document).click(function(e) {
-            if(
-                !$(e.target).is($(".tool"))
-            &&
-                $blocks.hasClass("active")
-            ) {
+            if(!$(e.target).is($(".tool")) && $blocks.hasClass("active")) {
+                $(".tool.active", $blocks).removeClass("active");
+
                 $blocks.removeClass("active");
+                $(".overlayer").removeClass("active");
+
+                setTimeout(() => {
+                    $(".block", $blocks).hide();
+                }, 770);
             }
         });
     }

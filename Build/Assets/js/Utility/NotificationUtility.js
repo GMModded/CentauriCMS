@@ -2,6 +2,15 @@ Centauri.Utility.NotificationUtility = function(severity, title, description, op
     return toastr[severity](title, description, options);
 };
 
-Centauri.Notify = function(severity, title, description, options = {}) {
+Centauri.Notify = function(severity, title = "", description = "", options = {}) {
+    if(typeof severity == "object") {
+        let config = severity;
+
+        severity = config.type;
+        title = config.title;
+        description = config.description;
+        options = (Centauri.isNotUndefined(config.options)) ? config.options : {};
+    }
+
     return Centauri.Utility.NotificationUtility(severity, title, description, options);
 };

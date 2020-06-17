@@ -13,10 +13,11 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                     $(".data", $contentelement).remove();
                 }
 
+                $(".top .button-view .edit", $contentelement).removeClass("center");
                 $(".top .button-view .edit i", $contentelement).removeClass("d-none");
                 $(".top .button-view .edit .spinner-grow", $contentelement).remove();
 
-                $(".overlayer").removeClass("hidden");
+                $(".overlayer").addClass("hidden");
 
                 $contentelement.data("loading-state", "loaded");
 
@@ -24,8 +25,11 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                 $(".data", $contentelement).append(data);
 
                 if($contentelement.data("ctype") == "grids") {
-                    $(".data > .fields > .fields", $contentelement).appendTo($(".tab-pane#grid-tab-content"));
+                    $(".data > .fields > .fields", $contentelement).appendTo($(".tab-pane[data-tab-id='grids-tab-ces']"));
                     $(".data > .row", $contentelement).appendTo($(".data > .fields", $contentelement));
+
+                    CentauriJS.Components.TabComponent();
+                    CentauriJS.Utilities.Form.Select();
                 }
 
                 /**
@@ -33,7 +37,7 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                  */
                 $(".accordions.inline-records:not(.ui-sortable)", $contentelement).sortable({
                     dropOnEmpty: false,
-                    cancel: ":input, button, .ck-content, a[role='button'], span, label, .pcr-app, .pcr-color-palette, .pcr-color-chooser, .pcr-color-opacity, .pcr-current-color, .pcr-last-color, img",
+                    cancel: ":input, button, .ck-content, a[role='button'], span, label, .pcr-app, .pcr-color-palette, .pcr-color-chooser, .pcr-color-opacity, .pcr-current-color, .pcr-last-color, img, .nav-tabs",
                     items: ".accordion",
 
                     update: function(e, ui) {
@@ -94,10 +98,11 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                 Centauri.Components.AccordionComponent();
 
                 if($contentelement.data("ctype") == "grids") {
-                    Centauri.Modal.NewContentElementModal();
+                    Centauri.NewContentElementModal();
                 }
 
-                $(".data > .fields select", $contentelement).materialSelect();
+                CentauriJS.Utilities.Form.Select();
+                CentauriJS.Utilities.Form.FieldHasValueUtility();
 
                 /**
                  * Initializing CKEditor 5
@@ -145,15 +150,15 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                  */
                 Centauri.Listener.EditorListener()
 
-                $(".row button", $contentelement).on("click", function() {
+                $(".row button", $contentelement).on("click", this, function() {
                     let $parent = $(this).parent().parent().parent().parent();
 
                     if($parent.hasClass("data")) {
                         $parent = $parent.parent();
                     }
 
-                    var uid = $parent.data("uid");
-                    var trigger = $(this).data("trigger");
+                    let uid = $parent.data("uid");
+                    let trigger = $(this).data("trigger");
 
                     if(trigger == "saveElementByUid") {
                         let datas = Centauri.Helper.FieldsHelper($(".fields"), ".content-element.active", false);
@@ -181,7 +186,7 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                             },
 
                             {
-                                success: function(data) {
+                                success: (data) => {
                                     data = JSON.parse(data);
                                     Centauri.Notify(data.type, data.title, data.description);
                                 }
@@ -201,12 +206,16 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                             },
 
                             {
-                                success: function(data) {
+                                success: (data) => {
+                                    $parent.toggleClass("hidden");
+
                                     $this.toggleClass("btn-primary btn-info");
                                     $("i", $this).toggleClass("fa-eye fa-eye-slash");
 
                                     data = JSON.parse(data);
-                                    Centauri.Notify(data.type, data.title, data.description);
+                                    Centauri.Notify(data.type, data.title, data.description, {
+                                        timeOut: 1500
+                                    });
                                 }
                             }
                         );
@@ -214,19 +223,19 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
 
                     if(trigger == "deleteElementByUid") {
                         Centauri.fn.Modal(
-                            Centauri.__trans.modals.areyousure,
+                            Centauri__trans.modals.areyousure,
                             "Do you want to continue deleting this element?",
 
                             {
                                 id: "areyousure_deleteelement",
 
                                 close: {
-                                    label: Centauri.__trans.modals.btn_cancel,
+                                    label: Centauri__trans.modals.btn_cancel,
                                     class: "warning"
                                 },
 
                                 save: {
-                                    label: Centauri.__trans.modals.btn_delete,
+                                    label: Centauri__trans.modals.btn_delete,
                                     class: "danger"
                                 }
                             },
@@ -242,7 +251,7 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                                         },
 
                                         {
-                                            success: function(data) {
+                                            success: (data) => {
                                                 data = JSON.parse(data);
                                                 Centauri.Notify(data.type, data.title, data.description);
                                                 Centauri.fn.Ajax.Overlayer = false;
@@ -256,7 +265,7 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                     }
                 });
 
-                setTimeout(function() {
+                setTimeout(() => {
                     $(".data > .fields", $contentelement).slideDown();
                     $editBtnElement.toggleClass("btn-primary btn-info");
                     Centauri.View.ContentElementsView($contentelement);
@@ -267,7 +276,8 @@ Centauri.Helper.FindFieldsByUidHelper = ($contentelement, $editBtnElement) => {
                 }, 100);
             },
 
-            complete: function(data) {
+            complete: (data) => {
+                $(".top .button-view .edit", $contentelement).removeClass("center");
                 $(".top .button-view .edit i", $contentelement).removeClass("d-none");
                 $(".top .button-view .edit .spinner-grow", $contentelement).remove();
             }

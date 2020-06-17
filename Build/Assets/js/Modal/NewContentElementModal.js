@@ -1,7 +1,5 @@
-Centauri.Modal.NewContentElementModal = function() {
-    // $("button", $editor).off("click");
-
-    $("button", $editor).on("click", this, function() {
+Centauri.NewContentElementModal = function($container) {
+    $("button", $container).on("click", this, function() {
         let $btn = $(this);
         let action = $(this).data("action");
 
@@ -9,7 +7,7 @@ Centauri.Modal.NewContentElementModal = function() {
             $btn.css("cursor", "wait");
 
             let $this = $(this);
-            Centauri.Modal.NewContentElementModal.UpdateVars($this);
+            Centauri.NewContentElementModal.UpdateVars($this);
 
             // sorting = $element.attr("data-sorting");
 
@@ -27,8 +25,6 @@ Centauri.Modal.NewContentElementModal = function() {
 
                 {
                     success: (data) => {
-                        $(".overlayer").removeClass("hidden");
-
                         Centauri.fn.Modal(
                             "New Content Element",
 
@@ -39,6 +35,7 @@ Centauri.Modal.NewContentElementModal = function() {
                                 size: "xl",
                                 closeOnSave: false,
                                 cached: false,
+                                isDialog: false,
 
                                 close: {
                                     label: "",
@@ -53,14 +50,15 @@ Centauri.Modal.NewContentElementModal = function() {
 
                             {
                                 ready: () => {
-                                    Centauri.Modal.NewContentElementModal.UpdateVars($this);
+                                    Centauri.NewContentElementModal.UpdateVars($this);
+                                    CentauriJS.Components.TabComponent();
 
                                     $btn.css("cursor", "pointer");
                                     Centauri.Components.CreateNewInlineComponent();
                                 },
 
                                 save: () => {
-                                    Centauri.Modal.NewContentElementModal.UpdateVars($this);
+                                    Centauri.NewContentElementModal.UpdateVars($this);
 
                                     if(Centauri.isNull(Centauri.Helper.ModalHelper.Element)) {
                                         toastr["error"]("Content Elements Error", "Please select any element in order to create one!");
@@ -70,7 +68,7 @@ Centauri.Modal.NewContentElementModal = function() {
                                     let $modal = $("#modal");
                                     $modal.hide();
 
-                                    Centauri.fn.Modal.close();
+                                    Centauri.Modal("close");
                                     let datas = Centauri.Helper.FieldsHelper($(Centauri.Helper.ModalHelper.Element), ".bottom");
 
                                     Centauri.fn.Ajax(
@@ -82,14 +80,14 @@ Centauri.Modal.NewContentElementModal = function() {
                                             ctype: Centauri.Helper.ModalHelper.Element.data("ctype"),
                                             datas: datas,
 
-                                            rowPos: Centauri.Modal.NewContentElementModal.rowPos,
-                                            colPos: Centauri.Modal.NewContentElementModal.colPos,
-                                            insert: Centauri.Modal.NewContentElementModal.insert,
-                                            sorting: Centauri.Modal.NewContentElementModal.sorting,
-                                            type: Centauri.Modal.NewContentElementModal.type,
-                                            gridsparent: Centauri.Modal.NewContentElementModal.gridsparent,
-                                            grids_sorting_rowpos: Centauri.Modal.NewContentElementModal.grids_sorting_rowpos,
-                                            grids_sorting_colpos: Centauri.Modal.NewContentElementModal.grids_sorting_colpos
+                                            rowPos: Centauri.NewContentElementModal.rowPos,
+                                            colPos: Centauri.NewContentElementModal.colPos,
+                                            insert: Centauri.NewContentElementModal.insert,
+                                            sorting: Centauri.NewContentElementModal.sorting,
+                                            type: Centauri.NewContentElementModal.type,
+                                            gridsparent: Centauri.NewContentElementModal.gridsparent,
+                                            grids_sorting_rowpos: Centauri.NewContentElementModal.grids_sorting_rowpos,
+                                            grids_sorting_colpos: Centauri.NewContentElementModal.grids_sorting_colpos
                                         },
 
                                         {
@@ -137,43 +135,43 @@ Centauri.Modal.NewContentElementModal = function() {
     });
 };
 
-Centauri.Modal.NewContentElementModal.rowPos = null;
-Centauri.Modal.NewContentElementModal.colPos = null;
-Centauri.Modal.NewContentElementModal.sorting = null;
+Centauri.NewContentElementModal.rowPos = null;
+Centauri.NewContentElementModal.colPos = null;
+Centauri.NewContentElementModal.sorting = null;
 
-Centauri.Modal.NewContentElementModal.$element = null;
-Centauri.Modal.NewContentElementModal.insert = null;
-Centauri.Modal.NewContentElementModal.type = null;
+Centauri.NewContentElementModal.$element = null;
+Centauri.NewContentElementModal.insert = null;
+Centauri.NewContentElementModal.type = null;
 
-Centauri.Modal.NewContentElementModal.gridsparent = null;
-Centauri.Modal.NewContentElementModal.grids_sorting_rowpos = null;
-Centauri.Modal.NewContentElementModal.grids_sorting_colpos = null;
+Centauri.NewContentElementModal.gridsparent = null;
+Centauri.NewContentElementModal.grids_sorting_rowpos = null;
+Centauri.NewContentElementModal.grids_sorting_colpos = null;
 
-Centauri.Modal.NewContentElementModal.UpdateVars = ($btn) => {
-    Centauri.Modal.NewContentElementModal.$element = $btn.parent();
+Centauri.NewContentElementModal.UpdateVars = ($btn) => {
+    Centauri.NewContentElementModal.$element = $btn.parent();
 
-    Centauri.Modal.NewContentElementModal.rowPos = $btn.parent().parent().attr("data-rowpos");
-    Centauri.Modal.NewContentElementModal.colPos = $btn.parent().attr("data-colpos");
+    Centauri.NewContentElementModal.rowPos = $btn.parent().parent().attr("data-rowpos");
+    Centauri.NewContentElementModal.colPos = $btn.parent().attr("data-colpos");
 
-    Centauri.Modal.NewContentElementModal.insert = $btn.attr("data-insert");
-    Centauri.Modal.NewContentElementModal.type = (Centauri.isNotUndefined($btn.attr("data-type")) ? $btn.attr("data-type") : "");
+    Centauri.NewContentElementModal.insert = $btn.attr("data-insert");
+    Centauri.NewContentElementModal.type = (Centauri.isNotUndefined($btn.attr("data-type")) ? $btn.attr("data-type") : "");
 
     let $elementPrev = $btn.prev();
     let $elementNext = $btn.next();
 
     if(Centauri.elExists($elementPrev)) {
-        Centauri.Modal.NewContentElementModal.sorting = $elementPrev.attr("data-sorting");
+        Centauri.NewContentElementModal.sorting = $elementPrev.attr("data-sorting");
     } else {
-        Centauri.Modal.NewContentElementModal.sorting = $elementNext.attr("data-sorting");
+        Centauri.NewContentElementModal.sorting = $elementNext.attr("data-sorting");
     }
 
-    if(Centauri.isNull(Centauri.Modal.NewContentElementModal.sorting)) {
+    if(Centauri.isNull(Centauri.NewContentElementModal.sorting)) {
         console.log("how?");
     }
 
-    if(Centauri.Modal.NewContentElementModal.type == "ingrid") {
-        Centauri.Modal.NewContentElementModal.gridsparent = $btn.attr("data-gridsparent");
-        Centauri.Modal.NewContentElementModal.grids_sorting_rowpos = $btn.attr("data-grid-sorting-rowpos");
-        Centauri.Modal.NewContentElementModal.grids_sorting_colpos = $btn.attr("data-grid-sorting-colpos");
+    if(Centauri.NewContentElementModal.type == "ingrid") {
+        Centauri.NewContentElementModal.gridsparent = $btn.attr("data-gridsparent");
+        Centauri.NewContentElementModal.grids_sorting_rowpos = $btn.attr("data-grid-sorting-rowpos");
+        Centauri.NewContentElementModal.grids_sorting_colpos = $btn.attr("data-grid-sorting-colpos");
     }
 };

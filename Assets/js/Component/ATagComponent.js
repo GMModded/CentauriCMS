@@ -2,8 +2,9 @@ Centauri.Component.ATagComponent = () => {
     $("a").off("click");
 
     $("a").on("click", this, function(e) {
-        let $this = $(this);
         e.preventDefault();
+
+        let $this = $(this);
 
         let href = $this.attr("href");
         history.pushState({page: 1}, $("title").text(), location.href);
@@ -14,8 +15,10 @@ Centauri.Component.ATagComponent = () => {
 
             $(".nav-item.active").removeClass("active");
 
-            if($this.hasClass("nav-item")) {
-                $this.addClass("active");
+            let $navItem = $(".nav-item[data-uid='" + __dynPageData.uid + "']");
+
+            if(Centauri.elExists($navItem)) {
+                $navItem.addClass("active");
             }
         });
     });
@@ -27,12 +30,44 @@ Centauri.Component.ATagComponent = () => {
             Centauri.Component.ATagComponent.ajaxRequest(reqHref);
         }
     };
+
+    $(window).bind("keydown", function(e) {
+        let reload = false;
+        let char = String.fromCharCode(e.which).toLowerCase();
+
+        if(e.ctrlKey || e.metaKey) {
+            if(char == "r") {
+                reload = true;
+            }
+        }
+
+        if(e.keyCode == 116 || e.key == "F5") {
+            reload = true;
+        }
+
+        if(reload && Centauri.Component.ATagComponent.canReload) {
+            e.preventDefault();
+
+            Centauri.Component.ATagComponent.canReload = false;
+
+            let href = Centauri.Component.ATagComponent.lastHref;
+            Centauri.Component.ATagComponent.ajaxRequest(href, () => {
+                setTimeout(() => {
+                    Centauri.Component.ATagComponent.canReload = true;
+                }, 1500);
+            });
+        } else if(!Centauri.Component.ATagComponent.canReload && reload) {
+            e.preventDefault();
+        }
+    });
 };
 
 Centauri.Component.ATagComponent.lastHref = "";
+Centauri.Component.ATagComponent.canReload = true;
+Centauri.Component.ATagComponent.status = new Response().status;
 
 Centauri.Component.ATagComponent.ajaxRequest = (href, cb) => {
-    $(".progress").toggleClass("inactive");
+    $(".progress").removeClass("inactive");
 
     $.ajax({
         type: "POST",
@@ -42,38 +77,59 @@ Centauri.Component.ATagComponent.ajaxRequest = (href, cb) => {
             "dynPageRequest": true
         },
 
-        success: function(data) {
-            Centauri.Component.ATagComponent.lastHref = href;
-            $("body section#content").html(data);
-            $("title").text(__dynPageData.title);
-
-            if(typeof cb != "undefined") {
-                cb();
-            }
-
-            Centauri.Event.OnWindowLoadEvent();
+        success: (data) => {
+            Centauri.Component.ATagComponent.loadPage(href, data, cb);
         },
 
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: (jqXHR, textStatus, errorThrown) => {
             if(textStatus == "error") {
                 let responseJSON = jqXHR.responseJSON;
-                let description = (typeof responseJSON != "undefined") ? responseJSON.message : "";
+                let responseText = jqXHR.responseText;
 
-                console.table(jqXHR);
+                let description = (typeof responseJSON != "undefined") ? responseJSON.message : "";
 
                 if(
                     errorThrown == "unknown status" &&
                     description == "CSRF token mismatch."
                 ) {
-                    location.href = "/";
+                    console.log("reload");
+                    location.reload();
                 } else {
-                    Centauri.Notify("error", errorThrown, description);
+                    if(errorThrown == "Not Found") {
+                        Centauri.Component.ATagComponent.loadPage(href, responseText, cb);
+                    } else {
+                        Centauri.Notify("error", errorThrown, description);
+                    }
                 }
             }
         },
 
-        complete: function() {
-            $(".progress").toggleClass("inactive");
+        complete: (jqXHR, textStatus) => {
+            $(".progress").addClass("inactive");
+
+            try {
+                if(pageNotFound) {
+                    location.reload();
+                }
+            } catch(e) {}
         }
+    });
+};
+
+Centauri.Component.ATagComponent.loadPage = (href, data, cb = undefined) => {
+    Centauri.Component.ATagComponent.lastHref = href;
+
+    $("body section#content").html(data).promise().done(() => {
+        $(".progress").toggleClass("inactive");
+
+        if(typeof __dynPageData != "undefined") {
+            $("title").text(__dynPageData.title);
+        }
+
+        if(Centauri.isNotUndefined(cb)) {
+            cb();
+        }
+
+        Centauri.Event.OnWindowLoadEvent();
     });
 };

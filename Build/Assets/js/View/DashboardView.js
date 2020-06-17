@@ -19,19 +19,19 @@ Centauri.View.DashboardView = function() {
     $(".hamburger").on("click", function() {
         if(Centauri.Components.EditorComponent("isOpen")) {
             Centauri.fn.Modal(
-                Centauri.__trans.modals.areyousure,
-                Centauri.__trans.EditorComponent.toggleHamburger,
+                Centauri__trans.modals.areyousure,
+                Centauri__trans.EditorComponent.toggleHamburger,
 
                 {
                     id: "areyousure_togglehamburger",
 
                     close: {
-                        label: Centauri.__trans.modals.btn_cancel,
+                        label: Centauri__trans.modals.btn_cancel,
                         class: "warning"
                     },
 
                     save: {
-                        label: Centauri.__trans.modals.btn_toggle,
+                        label: Centauri__trans.modals.btn_toggle,
                         class: "danger"
                     }
                 },
@@ -39,17 +39,17 @@ Centauri.View.DashboardView = function() {
                 {
                     save() {
                         Centauri.View.DashboardView.fn__toggle(true);
-                        Centauri.fn.Modal.close("modal-areyousure_togglehamburger");
+                        Centauri.Modal("close");
                     }
                 }
             );
         } else {
             Centauri.View.DashboardView.fn__toggle();
-            Centauri.fn.Modal.close("modal-areyousure_togglehamburger");
+            Centauri.Modal("close");
         }
     });
 
-    $("#language").materialSelect();
+    // $("#language").materialSelect();
 
     $("#language").on("change", this, function() {
         location.href = Centauri.Utility.PathsUtility.root + Centauri.Utility.PathsUtility.centauri + Centauri.Utility.PathsUtility.action + "Backend/language/" + $("#language").val();

@@ -2,9 +2,10 @@
 namespace Centauri\CMS;
 
 use Centauri\CMS\Component\ExtensionsComponent;
+use Centauri\CMS\Model\Scheduler;
 use Centauri\CMS\Service\ModulesService;
 use Centauri\CMS\Service\PathService;
-use Exception;
+use Centauri\CMS\Service\SchedulerService;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
@@ -13,12 +14,14 @@ class Centauri extends ServiceProvider
 {
     /**
      * Centauri Core version
+     * 
      * @var string $version
      */
     protected $version = "1.0;EA1";
 
     /**
      * Tables for initDB-method
+     * 
      * @var $tables array
      */
     protected $tables = [
@@ -31,18 +34,21 @@ class Centauri extends ServiceProvider
 
     /**
      * CentauriCMS root directory
+     * 
      * @var static $centauriDir string
      */
     protected static $centauriDir = __DIR__;
 
     /**
      * Centauri Modules-Service
+     * 
      * @var private $modulesService class
      */
     private $modulesService;
 
     /**
      * Centauri Path-Service
+     * 
      * @var private $pathService class
      */
     private $pathService;
@@ -59,6 +65,7 @@ class Centauri extends ServiceProvider
         $this->extensionsComponent = Centauri::makeInstance(ExtensionsComponent::class);
         $this->modulesService = Centauri::makeInstance(ModulesService::class);
         $this->pathService = Centauri::makeInstance(PathService::class);
+        $this->schedulerService = Centauri::makeInstance(SchedulerService::class);
 
         $this->initBE();
     }
@@ -68,6 +75,7 @@ class Centauri extends ServiceProvider
      * Makes an instance of the given $class param
      * 
      * @param class $class - Class name as class-object
+     * 
      * @return class
      */
     public static function makeInstance($class, $params = [])

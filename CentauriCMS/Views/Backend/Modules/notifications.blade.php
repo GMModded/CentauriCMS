@@ -9,7 +9,23 @@
                 @section("headertitle") @lang("backend/modules.notifications.title") @endsection
 
                 <div class="table-wrapper">
-                    <table id="notifications" class="table table-dark table-hover z-depth-1-half">
+                    @if(count($data["notifications"]) > 0)
+                        <div class="text-right mb-5">
+                            <a 
+                                role="button"
+                                class="btn btn-danger waves-effect m-0 action"
+                                data-ajax="true"
+                                data-ajax-handler="Notification"
+                                data-ajax-action="deleteAll"
+                            >
+                                Delete all
+
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    @endif
+
+                    <table id="notifications" class="table table-dark table-hover ci-bs-2">
                         <thead class="thead-dark">
                             <tr>
                                 <th>
@@ -63,12 +79,12 @@
 
                                     <td class="text-center">
                                         <div class="actions">
-                                            <div class="d-block d-lg-none action p-2 waves-effect waves-light" data-action="actions-trigger">
+                                            <div class="d-block d-lg-none action btn btn-primary p-2 waves-effect waves-light" data-action="actions-trigger">
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </div>
 
                                             <div class="d-none d-lg-flex">
-                                                <div class="action mr-3 p-2 waves-effect waves-light" data-action="notification-delete" data-uid="{{ $notification->uid }}">
+                                                <div class="action btn btn-danger mr-3 p-2 waves-effect waves-light" data-action="deleteByUid" data-uid="{{ $notification->uid }}">
                                                     <i class="fas fa-trash fa-lg"></i>
                                                 </div>
                                             </div>
@@ -81,8 +97,8 @@
                 </div>
             </div>
 
-            <div id="notificationsmodule_buttons" class="col-12 text-right">
-                <button class="btn btn-info btn-floating waves-effect waves-light" data-button-type="refresh">
+            <div id="notificationsmodule_buttons" class="col-12 text-right pb-5">
+                <button class="btn btn-info btn-floating fa-lg waves-effect" data-button-type="refresh">
                     <i class="fas fa-sync-alt"></i>
                 </button>
             </div>

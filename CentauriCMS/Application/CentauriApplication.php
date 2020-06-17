@@ -1,6 +1,8 @@
 <?php
 namespace Centauri\CMS\Application;
 
+use \Centauri\CMS\AdditionalDatas;
+
 class CentauriApplication
 {
     public $Centauri;
@@ -15,18 +17,18 @@ class CentauriApplication
                 "Frontend" => [
                     "Tags" => [
                         "Head" => [
-                            \Centauri\CMS\AdditionalDatas\HeadTagAdditionalDatas::class
+                            AdditionalDatas\HeadTagAdditionalDatas::class
                         ]
                     ]
                 ],
 
                 "ContentElements" => [
                     "plugin" => [
-                        "class" => \Centauri\CMS\AdditionalDatas\PluginAdditionalDatas::class
+                        "class" => AdditionalDatas\PluginAdditionalDatas::class
                     ],
 
                     "grid" => [
-                        "class" => \Centauri\CMS\AdditionalDatas\GridAdditionalDatas::class,
+                        "class" => AdditionalDatas\GridAdditionalDatas::class,
                         "return_statement" => 1
                     ]
                 ]

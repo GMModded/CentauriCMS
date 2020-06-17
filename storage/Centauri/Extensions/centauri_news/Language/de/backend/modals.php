@@ -2,6 +2,6 @@
 
 return [
     "models" => [
-        "Centauri\Extension\Model\News" => "News"
+        "\Centauri\Extension\Model\News" => "News"
     ]
 ];

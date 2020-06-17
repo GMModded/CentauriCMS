@@ -8,7 +8,8 @@
  * 
  * © 2019-2020 All rights reserved.
  */
-const Centauri = {};
+var Centauri = {} || Centauri;
+CentauriCoreFunctions();
 
 Centauri.Event = {};
 Centauri.Component = {};
@@ -16,13 +17,11 @@ Centauri.Section = {};
 Centauri.Service = {};
 Centauri.Utility = {};
 
+Centauri.Breakpoint = "";
+
 Centauri.Utility.ContentElementUtility = (ceName) => {
     return $("[data-contentelement='" + ceName + "']");
 };
-
-(function() {
-    
-})();
 
 window.onload = () => {
     $.ajaxSetup({
@@ -32,8 +31,6 @@ window.onload = () => {
     });
 
     Centauri.Event.OnWindowLoadEvent();
-
-    // Centauri.Service.UsedCSSService();
 
     document.addEventListener("DOMContentLoaded", () => {
         Centauri.Service.LazyLoadService();

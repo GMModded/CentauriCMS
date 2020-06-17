@@ -48,8 +48,11 @@ class GridsProcessor
             }
         }
 
+        
+
         $renderedHTML = view("Centauri::Frontend.Grids." . $value, [
-            "renderedColsHTML" => $renderedColsHTML
+            "renderedColsHTML" => $renderedColsHTML,
+            "grid" => $data["element"]
         ])->render();
 
         $renderedHTML = str_replace("  ", "", $renderedHTML);

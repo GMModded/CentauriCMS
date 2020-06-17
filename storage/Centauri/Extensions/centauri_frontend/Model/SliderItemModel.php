@@ -73,16 +73,14 @@ class SliderItemModel extends Model
      */
     public function getButtons()
     {
-        return $this->hasMany(
-            \Centauri\Extension\Frontend\Model\SliderItemButtonModel::class,
-            "parent_uid",
-            "uid"
-        )
-
-        ->where([
-            "hidden" => 0
-        ])
-
-        ->orderBy("sorting", "asc")->get()->all();
+        return
+            $this->hasMany(
+                \Centauri\Extension\Frontend\Model\SliderItemButtonModel::class,
+                "parent_uid",
+                "uid"
+            )
+            ->where("hidden", 0)
+            ->orderBy("sorting", "asc")->get()->all()
+        ;
     }
 }

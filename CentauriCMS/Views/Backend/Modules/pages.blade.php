@@ -1,132 +1,51 @@
 @extends("Centauri::Backend.Layouts.be_module")
 
 @section("moduleid"){{"pages"}}@endsection
+@section("no_search"){{"1"}}@endsection
+@section("module_fullheight"){{"1"}}@endsection
+@section("module_fullwidth"){{"1"}}@endsection
 
 @section("content")
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
+    <div class="container-fluid h-100 pb-5">
+        <div class="row h-100 pb-5">
+            <div class="col-12 h-100">
                 @section("headertitle") @lang("backend/modules.pages.title") @endsection
 
-                <div class="table-wrapper">
-                    <table id="pages" class="table table-dark table-hover z-depth-1-half">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>
-                                    UID
-                                </th>
+                <div class="d-flex h-100 ci-bs-1">
+                    @if($data["pageTreeHTML"])
+                        <div id="pagetree" class="col-lg-3 ci-bs-2" style="max-width: 20%; padding: 15px;">
+                            {!! $data["pageTreeHTML"] !!}
 
-                                <th>
-                                    Language
-                                </th>
+                            <div id="pagemodule_buttons" class="col-12 text-center">
+                                <button class="btn btn-primary btn-floating fa-lg waves-effect mx-2" data-button-type="create">
+                                    <i class="fas fa-plus"></i>
+                                </button>
 
-                                <th>
-                                    @lang("backend/centauri.tables.title")
-                                </th>
+                                <button class="btn btn-info btn-floating fa-lg waves-effect mx-2" data-button-type="refresh">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
 
-                                <th>
-                                    URL
-                                </th>
+                        <div id="pagecontent" class="col-lg p-3 position-relative" style="overflow-y: auto;">
+                            <h5 class="mb-0 h-100 align-items-center justify-content-center d-flex">
+                                Select a page from the pagetree
+                            </h5>
+                        </div>
 
-                                <th>
-                                    Layout
-                                </th>
+                        @if(isset($data["__uid"]))
+                            <script type="text/javascript" id="script-preselectitem">
+                                var preselectitem = function() {
+                                    var uid = parseInt("{{ $data['__uid'] }}");
+                                    var $page = $("#pagetree div[data-uid='" + uid + "']");
+                                    $page.trigger("click");
 
-                                <th>
-                                    @lang("backend/centauri.tables.created_at")
-                                </th>
-
-                                <th>
-                                    @lang("backend/centauri.tables.modified_at")
-                                </th>
-
-                                <th>
-                                    @lang("backend/centauri.tables.actions")
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @if($data["pages"])
-                                @foreach($data["pages"] as $pagesArr)
-                                    @foreach($pagesArr as $pageArr)
-                                        @foreach($pageArr as $page)
-                                            <tr {{ (!$page->page_type == "rootpage" && !$page->page_type == "storage") ? "class=subpage" : "" }}>
-                                                <td data-type="uid">
-                                                    # {{ $page->uid }}
-                                                </td>
-
-                                                <td data-type="lid" data-lid="{{ $page->lid }}">
-                                                    <img src="{!! $page->language->flagsrc !!}" class="img-fluid flag ml-md-4" />
-                                                </td>
-
-                                                <td data-type="title">
-                                                    {{ $page->title }}
-                                                </td>
-
-                                                <td data-type="url">
-                                                    {{ $page->slugs }}
-                                                </td>
-
-                                                <td data-type="be_layout">
-                                                    {{ $page->backend_layout }}
-                                                </td>
-
-                                                <td data-type="created_at">
-                                                    {{ $page->created_at }}
-                                                </td>
-
-                                                <td data-type="updated_at">
-                                                    {{ $page->updated_at }}
-                                                </td>
-
-                                                <td>
-                                                    <div class="actions">
-                                                        <div class="d-block d-lg-none action p-2 waves-effect waves-light" data-action="actions-trigger">
-                                                            <i class="fas fa-ellipsis-h"></i>
-                                                        </div>
-
-                                                        <div class="d-none d-lg-flex">
-                                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="page-edit" data-uid="{{ $page->uid }}">
-                                                                <i class="fas fa-pen fa-lg"></i>
-                                                            </div>
-
-                                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="page-contentelement-edit" data-uid="{{ $page->uid }}">
-                                                                <i class="fab fa-elementor fa-lg"></i>
-                                                            </div>
-
-                                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="page-show" data-uid="{{ $page->uid }}">
-                                                                <i class="fas fa-eye fa-lg"></i>
-                                                            </div>
-
-                                                            <div class="action mr-3 p-2 waves-effect waves-light" data-action="page-translations" data-uid="{{ $page->uid }}">
-                                                                <i class="fas fa-language fa-lg"></i>
-                                                            </div>
-
-                                                            <div class="action p-2 waves-effect waves-light" data-action="page-delete" data-uid="{{ $page->uid }}">
-                                                                <i class="fas fa-trash fa-lg"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endforeach
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                    $("script#script-preselectitem").remove();
+                                };
+                            </script>
+                        @endif
+                    @endif
                 </div>
-            </div>
-
-            <div id="pagemodule_buttons" class="col-12 text-right">
-                <button class="btn btn-primary btn-floating waves-effect waves-light" data-button-type="create">
-                    <i class="fas fa-plus"></i>
-                </button>
-
-                <button class="btn btn-info btn-floating waves-effect waves-light" data-button-type="refresh">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
             </div>
         </div>
     </div>

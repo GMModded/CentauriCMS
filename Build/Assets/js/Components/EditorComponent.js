@@ -15,6 +15,17 @@ Centauri.Components.EditorComponent = function(type, data) {
         let id      = data.id,
             title   = data.title;
 
+        let options = {
+            closeOnSave: true,
+            htmlAndFields: false
+        };
+
+        if(Centauri.isNotNull(data.options)) {
+            $.each(data.options, (key, value) => {
+                options[key] = value;
+            });
+        }
+
         $(".top > p", $editor).html(title);
 
         if(crtID != id) {
@@ -27,8 +38,6 @@ Centauri.Components.EditorComponent = function(type, data) {
             $(".bottom > .container:not([data-content])", $editor).remove();
 
             if(Centauri.isNotUndefined(data.html)) {
-                $("form", $editor).remove();
-
                 if(Centauri.isNotUndefined(data.container)) {
                     $(".bottom", $editor).empty().addClass("px-3").append("<div class='" + data.container + "'>" + data.html + "</div>");
                 } else {
@@ -43,7 +52,7 @@ Centauri.Components.EditorComponent = function(type, data) {
                     $("form", $editor).remove();
                     $(".bottom > .p-2", $editor).attr("class", "p-3");
 
-                    let tabHTML = "<ul class='nav nav-tabs md-tabs' id='editorcomponent-tabs' role='tablist'>{LIS}</ul>";
+                    let tabHTML = "<ul class='nav nav-tabs' id='editorcomponent-tabs' role='tablist'>{LIS}</ul>";
                         tabHTML += "<div class='tab-content card pt-5'>{TABPANES}</div>";
 
                     let tabLIS = "";
@@ -55,13 +64,15 @@ Centauri.Components.EditorComponent = function(type, data) {
 
                         let tabLiAClass = "nav-link";
                         let tabPaneClass = "tab-pane fade show";
+                        let isActive = false;
 
                         if(tabI == 0) {
                             tabPaneClass += " active";
-                            tabLiAClass += " active";
+                            // tabLiAClass += " active";
+                            isActive = true;
                         }
 
-                        let tabPaneHTML = "<div class='" + tabPaneClass + "' id='" + tabPaneId + "' role='tabpanel' aria-labelledby='alb-" + tabPaneId + "'>{TABPANEHTML}</div>";
+                        let tabPaneHTML = "<div class='" + tabPaneClass + "' data-tab-id='" + tabPaneId + "' role='tabpanel'>{TABPANEHTML}</div>";
 
                         if(Centauri.isNotUndefined(tab.html)) {
                             tabPaneHTML = tabPaneHTML.replace("{TABPANEHTML}", tab.html);
@@ -70,7 +81,7 @@ Centauri.Components.EditorComponent = function(type, data) {
                             tabPaneHTML = tabPaneHTML.replace("{TABPANEHTML}", formHTML);
                         }
 
-                        tabLIS += "<li class='nav-item waves-effect waves-light'><a class='" + tabLiAClass + "' id='alb-" + tabPaneId + "' data-toggle='tab' href='#" + tabPaneId + "' role='tab' aria-controls='" + tabPaneId + "'>" + tab.title + "</a></li>";
+                        tabLIS += "<li class='nav-item waves-effect waves-light" + (isActive ? " active" : "") + "' data-tab-id='" + tabPaneId + "'>" + tab.title + "</li>";
                         tabPanes += tabPaneHTML;
 
                         tabI++;
@@ -80,6 +91,8 @@ Centauri.Components.EditorComponent = function(type, data) {
                     tabHTML = tabHTML.replace("{TABPANES}", tabPanes);
 
                     $(".bottom > .p-3", $editor).append(tabHTML);
+
+                    CentauriJS.Components.TabComponent();
                     Centauri.Components.EditorComponent.CBsAfterFormRendered(".field");
                 } else {
                     if(Centauri.isNotUndefined(data.form)) {
@@ -129,6 +142,7 @@ Centauri.Components.EditorComponent = function(type, data) {
 
                 if(Centauri.elExists($("input.error:not(.select-dropdown)", $editor)) || formValErr) {
                     Centauri.Notify("error", "Form Validation", "Please fill out all fields!");
+                    return;
                 } else {
                     let formData = Centauri.Helper.EditorComponentFieldHelper();
                     data.callbacks.save(formData);
@@ -139,6 +153,14 @@ Centauri.Components.EditorComponent = function(type, data) {
                             module: data.loadModuleAfterSaved
                         });
                     }
+                }
+
+                if(
+                    Centauri.isNotUndefined(options.closeOnSave) &&
+                    (options.closeOnSave)
+                ) {
+                    Centauri.Components.EditorComponent("close");
+                    return;
                 }
             });
 
@@ -151,7 +173,7 @@ Centauri.Components.EditorComponent = function(type, data) {
                 // Centauri.Events.OnOverlayerHiddenEvent(closer);
                 Centauri.Events.OnEditorComponentClosedEvent();
 
-                setTimeout(function() {
+                setTimeout(() => {
                     Centauri.Components.EditorComponent("clear", {
                         forceClear: Centauri.Components.EditorComponent.ClearOnClose
                     });
@@ -245,7 +267,7 @@ Centauri.Components.EditorComponent.GetHTMLByFormArray = (form, data, formSelect
             if(Centauri.isNotUndefined(inputObj[0])) {
                 if(Centauri.isNotUndefined(inputObj[0].config)) {
                     let config = inputObj[0];
-                    formHTML += (Centauri.isNotUndefined(config["row"]) ? (Centauri.isNotUndefined(config["row"]["title"]) ? "<p" + (Centauri.isNotUndefined(config["row"]["titleClass"]) ? " class='" + config["row"]["titleClass"] + "'" : "") + ">" + config["row"]["title"] + "</p>" : "") + "<div class='row'>" : "") + Centauri.Components.EditorComponent.GetHTMLByFormArray(inputObj, data, formSelector, (Centauri.isNotUndefined(config["row"]) ? config : null)) + (Centauri.isNotUndefined(config["row"]) ? "</div>" : "");
+                    formHTML += (Centauri.isNotUndefined(config["row"]) ? (Centauri.isNotUndefined(config["row"]["title"]) ? "<p" + (Centauri.isNotUndefined(config["row"]["titleClass"]) ? " class='" + config["row"]["titleClass"] + "'" : "") + ">" + config["row"]["title"] + "</p>" : "") + "<div class='row row-wrapper'>" : "") + Centauri.Components.EditorComponent.GetHTMLByFormArray(inputObj, data, formSelector, (Centauri.isNotUndefined(config["row"]) ? config : null)) + (Centauri.isNotUndefined(config["row"]) ? "</div>" : "");
                 } else {
                     console.warn("Centauri - EditorComponent: The first array of your FormDatas has to be your config-array!");
                 }
@@ -290,7 +312,7 @@ Centauri.Components.EditorComponent.GetHTMLByFormArray = (form, data, formSelect
                 label = "<label for='" + inputObj.id + "'" + activeClass + ">" + inputObj.label + "</label>";
             }
 
-            let html = "<div class='md-form'><input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + inputObj.id + "'" + extraAttr + required + " />" + label + "</div>";
+            let html = "<div class='ci-field'><input class='form-control' type='" + type + "' placeholder='" + placeholder + "' value='" + value + "' id='" + inputObj.id + "'" + extraAttr + required + " />" + label + "</div>";
 
             if(Centauri.isUndefined(inputObj.id)) {
                 html = "";
@@ -312,6 +334,10 @@ Centauri.Components.EditorComponent.GetHTMLByFormArray = (form, data, formSelect
                         }
                     }
 
+                    if(Centauri.isNotNull(inputObj.colClasses) && Centauri.isNotUndefined(inputObj.colClasses)) {
+                        colClasses = inputObj.colClasses + " ";
+                    }
+
                     formHTML += "<div class='" + colClasses + "col'>" + html + "</div>";
                 } else {
                     formHTML += html;
@@ -324,18 +350,10 @@ Centauri.Components.EditorComponent.GetHTMLByFormArray = (form, data, formSelect
 };
 
 Centauri.Components.EditorComponent.CBsAfterFormRendered = (formSelector = "form") => {
-    $(formSelector + " .mdb-select", $editor).materialSelect();
+    CentauriJS.Utilities.Form.Select();
+    CentauriJS.Utilities.Form.FieldHasValueUtility();
     Centauri.Utility.EditorUtility.Validator();
     Centauri.Listener.EditorListener();
-
-    if(formSelector == ".field") {
-        $(formSelector).css("position", "relative");
-
-        $(formSelector + " label", $editor).css({
-            top: 0,
-            left: 0
-        });
-    }
 };
 
 Centauri.Components.EditorComponent.init = () => {

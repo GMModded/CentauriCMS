@@ -10,6 +10,8 @@ $tablebordercolor: #2b3447;
                 tr {
                     th {
                         background: $tablegradient;
+                        font-weight: normal;
+                        text-decoration: underline;
                     }
                 }
             }
@@ -44,39 +46,33 @@ $tablebordercolor: #2b3447;
 
                 .action {
                     cursor: pointer;
-                    transition: .3s;
 
-                    &[data-action="actions-trigger"].active + .d-none {
-                        @include media-breakpoint-down(md) {
-                            display: flex !important;
-                            position: absolute;
-                            top: -5px;
-                            right: 65px;
-                            width: 250px;
-                            background: #262d3d;
-                            padding: 5px;
-                            box-shadow: 0 0 5px #000;
+                    &[data-action="actions-trigger"] {
+                        margin-top: 0 !important;
 
-                            &:after {
-                                content: " ";
-                                width: 0;
-                                height: 0;
-                                border-style: solid;
-                                border-width: 17.5px 0 17.5px 20px;
-                                border-color: transparent transparent transparent #262d3d;
+                        &.active + .d-none {
+                            @include media-breakpoint-down(md) {
                                 position: absolute;
-                                right: -20px;
-                                top: 6px;
+                                top: -5px;
+                                right: 65px;
+                                display: flex !important;
+                                justify-content: center;
+                                padding: 10px;
+                                background: #262d3d;
+                                box-shadow: 0 0 5px #000;
+    
+                                &:after {
+                                    content: " ";
+                                    width: 0;
+                                    height: 0;
+                                    border-style: solid;
+                                    border-width: 17.5px 0 17.5px 20px;
+                                    border-color: transparent transparent transparent #262d3d;
+                                    position: absolute;
+                                    right: -20px;
+                                    top: 6px;
+                                }
                             }
-                        }
-                    }
-
-                    &:hover {
-                        // color: #1e2533;
-                        transform: scale(1.33);
-
-                        &:active {
-                            transform: scale(.9);
                         }
                     }
                 }

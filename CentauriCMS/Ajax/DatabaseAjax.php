@@ -19,7 +19,8 @@ class DatabaseAjax implements AjaxInterface
             // Laoding SQL files from Centauri-Core first
             foreach($sqlFiles as $sqlFile) {
                 $path = base_path("CentauriCMS/SQL/" . $sqlFile);
-                require_once($path);
+                DB::unprepared(file_get_contents($path));
+                // require_once($path);
             }
 
             // Loading SQL files from extensions
@@ -34,7 +35,8 @@ class DatabaseAjax implements AjaxInterface
                     
                     foreach($extSQLFiles as $extSQLFile) {
                         $extSQLPath = storage_path("Centauri/Extensions/$extSQLFile");
-                        require_once($extSQLPath);
+                        DB::unprepared(file_get_contents($extSQLPath));
+                        // require_once($extSQLPath);
                     }
                 }
             }

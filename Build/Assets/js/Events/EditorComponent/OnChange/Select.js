@@ -73,7 +73,7 @@ Centauri.Events.EditorComponent.Select.OnChange = function(select) {
                 id: "refreshrequired_gridselect",
 
                 close: {
-                    label: Centauri.__trans.modals.btn_cancel,
+                    label: Centauri__trans.modals.btn_cancel,
                     class: "warning"
                 },
 

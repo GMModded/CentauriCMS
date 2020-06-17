@@ -1,4 +1,4 @@
-Centauri.Events.Window.OnInputFileChange = function(element) {
+Centauri.Events.Window.OnInputFileChange = (element) => {
     var id = $(element).attr("id");
     var file = document.querySelector("input[type=file]").files[0];
 
@@ -17,8 +17,8 @@ Centauri.Events.Window.OnInputFileChange = function(element) {
 
         if(id == "filelist_upload") {
             Centauri.fn.Modal(
-                Centauri.__trans.modules[Centauri.Module],
-                "<div class='md-form'><input id='file_name' type='text' class='form-control' /><label>" + Centauri.__trans.global.label_title + "</label></div>",
+                Centauri__trans.modules[Centauri.Module],
+                "<div class='md-form'><input id='file_name' type='text' class='form-control' /><label>" + Centauri__trans.global.label_title + "</label></div>",
 
                 {
                     id: "new_filelistupload",

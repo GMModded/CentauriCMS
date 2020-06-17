@@ -23,9 +23,9 @@
         <div class="row" data-rowPos="{{ $rowPos }}" style="width: calc(100% + 30px);" data-grid-sorting-rowpos="{{ $rowPos }}">
             @foreach($rowArr["cols"] as $colPos => $colData)
                 @if(isset($colData["col"]))
-                    <div class="col-12 col-md-{{ $colData['col'] }} mb-5 pb-4" data-colPos="{{ $colPos }}" data-grid-sorting-colpos="{{ $colPos }}">
+                    <div class="col-12 col-md-{{ $colData['col'] }}" data-colPos="{{ $colPos }}" data-grid-sorting-colpos="{{ $colPos }}">
                 @else
-                    <div class="col-12 col-md mb-5 pb-4" data-colPos="{{ $colPos }}" data-grid-sorting-colpos="{{ $colPos }}">
+                    <div class="col-12 col-md" data-colPos="{{ $colPos }}" data-grid-sorting-colpos="{{ $colPos }}">
                 @endif
                         @if(isset($colData["label"]))
                             <h6>
@@ -40,20 +40,16 @@
                                     Content
                                 </button>
 
-                                <div class="content-element z-depth-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}">
+                                <div class="content-element{{ ($element->hidden ? ' hidden' : '') }} ci-bs-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}">
                                     <div class="top">
                                         <span class="title">
                                             {{ $element->ctype }}
                                         </span>
 
                                         <div class="button-view float-right">
-                                            <button class="edit btn btn-primary waves-effect waves-light btn-floating m-2">
+                                            <button class="edit fa-lg btn btn-primary waves-effect btn-floating m-2">
                                                 <i class="fas fa-pen"></i>
                                             </button>
-
-                                            {{-- <button class="sort btn btn-primary waves-effect waves-light btn-floating my-2 mx-2">
-                                                <i class="fas fa-sort"></i>
-                                            </button> --}}
                                         </div>
                                     </div>
                                 </div>

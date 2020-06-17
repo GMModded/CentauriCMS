@@ -45,4 +45,23 @@ class BeUser extends Model
         "username" => "",
         "password" => "",
     ];
+
+    /**
+     * Getter for of the buttons of this slider item.
+     * 
+     * @return array|void
+     */
+    public function getRoles()
+    {
+        return
+            $this->hasMany(
+                \Centauri\CMS\Model\Role::class,
+                "parent_uid",
+                "uid"
+            )
+            ->where("hidden", 0)
+            ->get()
+            ->all()
+        ;
+    }
 }

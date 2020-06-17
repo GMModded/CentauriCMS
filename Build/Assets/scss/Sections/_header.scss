@@ -9,9 +9,28 @@ section {
         background: linear-gradient(180deg, #303a4f, #2a3345);
         color: white;
 
+        & > .container {
+            height: 70px;
+
+            & > .row {
+                & > div {
+                    height: 70px;
+
+                    & > .row {
+                        height: 100%;
+
+                        & > .row {
+                            height: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
         .tool {
             cursor: pointer;
-            height: 68px;
+            height: 100%;
+            top: -4px;
             width: 68px;
             display: flex;
             text-align: center;
@@ -21,6 +40,24 @@ section {
             margin-right: 15px;
             font-size: 18px;
             transition: .3s;
+
+            &[data-type="fullscreen"] {
+                .icon-view {
+                    i {
+                        transition: .66s cubic-bezier(1, -0.5, 0.25, 1.42);
+                    }
+                }
+            }
+
+            &.active {
+                &[data-type="fullscreen"] {
+                    .icon-view {
+                        i {
+                            transform: rotate(135deg);
+                        }
+                    }
+                }
+            }
         }
 
         .blocks {

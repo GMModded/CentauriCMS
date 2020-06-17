@@ -8,6 +8,7 @@ class RTEProcessor
     public static function process($data)
     {
         $value = $data["value"];
+        return $value;
         $exploded = explode(" ", $value);
 
         $i = 0;
@@ -17,7 +18,7 @@ class RTEProcessor
             if(Str::contains($item, "style")) {
                 $val = str_replace('style="', "", $item);
                 $stylesStr = explode('">', $val)[0];
-                
+
                 $property = explode(":", $stylesStr)[0];
                 $value = explode(":", $stylesStr)[1];
 

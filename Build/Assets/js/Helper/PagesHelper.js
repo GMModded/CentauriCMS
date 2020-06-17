@@ -37,6 +37,7 @@ Centauri.Helper.PagesHelper = function($container) {
 
                     if(!Centauri.elExists($(".data > .fields", $contentelement))) {
                         if(Centauri.isUndefined($contentelement.data("loading-state"))) {
+                            $(".top .button-view .edit", $contentelement).addClass("center");
                             $(".top .button-view .edit i", $contentelement).addClass("d-none disabled");
                             $(".top .button-view .edit", $contentelement).append("<span class='spinner-grow spinner-grow-sm' role='status' aria-hidden='true'></span>");
 

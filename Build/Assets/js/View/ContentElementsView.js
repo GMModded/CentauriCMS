@@ -6,33 +6,34 @@ Centauri.View.ContentElementsView = ($contentelement) => {
 
     $("[data-centauri-btn]").off("click");
 
-    $("[data-centauri-btn]").on("click", function(e) {
+    $("[data-centauri-btn]").on("click", this, function(e) {
         e.preventDefault();
 
-        var type = $(this).data("centauri-btn");
-        var fileListType = "file";
+        let $btn = $(this);
 
-        if(type == "addimage") {
-            fileListType = "images";
-        }
+        let data = $btn.data("centauri-btn");
+        let type = data.type;
 
-        if(
-            type == "addfile" ||
-            type == "addimage"
-        ) {
-            var $input = $(this).parent().parent().find("input");
+        if(type == "addfile" || type == "addimage") {
+            let fileListType = "file";
+
+            if(type == "addimage") {
+                fileListType = "images";
+            }
+
+            let $input = $(this).parent().parent().find("input");
 
             // Currently not used
-            var id = $input.attr("data-id");
+            let id = $input.attr("data-id");
 
-            var value = $input.val();
+            let value = $input.val();
 
             // For validation
-            var required = $(this).data("required");
-            var minItems = $(this).data("minitems");
-            var maxItems = $(this).data("maxitems");
+            let required = $(this).data("required");
+            let minItems = $(this).data("minitems");
+            let maxItems = $(this).data("maxitems");
 
-            var $accordions = $("> .accordions", $input.parent());
+            let $accordions = $("> .accordions", $input.parent());
 
             Centauri.fn.Ajax(
                 "File",
@@ -45,7 +46,7 @@ Centauri.View.ContentElementsView = ($contentelement) => {
 
                 {
                     success: (data) => {
-                        var html = data;
+                        let html = data;
                         $("body").append(html);
 
                         setTimeout(() => {
@@ -89,19 +90,33 @@ Centauri.View.ContentElementsView = ($contentelement) => {
                                     success: (data) => {
                                         $accordions.html(data);
                                         Centauri.Components.AccordionComponent();
-                                    },
-
-                                    error: (data) => {
-                                        console.error(data);
                                     }
                                 }
                             );
-
-                            // Centauri.fn.Modal.close();
                         });
                     }
                 }
             );
+        }
+
+        if(type == "button") {
+            let action = data.action;
+
+            if(action == "generate-slug") {
+                let sourceFieldDataId = data.sourceField;
+
+                let value = Centauri.Helper.GetParentCiFieldValueByDataIdHelper($btn, sourceFieldDataId);
+                seoUrl = Centauri.Utility.SeoUrlUtility(value);
+
+                let $element = Centauri.Helper.GetCiFieldByBtn($btn);
+                $element.val(seoUrl);
+            } else {
+                console.warn("Centauri.View.ContentElementsView: There's no condition-handling for the action: '" + action + "'");
+            }
+        }
+
+        else {
+            console.warn("Centauri.View.ContentElementsView: There's no condition-handling for the type: '" + type + "'");
         }
     });
 };

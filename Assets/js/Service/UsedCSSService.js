@@ -40,7 +40,7 @@ Centauri.Service.UsedCSSService = () => {
         return s;
     };
 
-    let _endCss = "";
+    let _endCss = [];
 
     $("body *").each(function(index, obj) {
         let type = $(this).get(0).tagName;
@@ -51,10 +51,44 @@ Centauri.Service.UsedCSSService = () => {
             if(typeof obj == "object") {
                 if(type != "script" && type != "style") {
                     let css = self._getCSS($(obj));
+
+                    if(Object.keys(css).length > 0) {
+                        _endCss.push({
+                            element: $(obj),
+                            css: css
+                        });
+                    }
                 }
             }
         }
     });
 
-    console.log(CSS);
+    return _endCss;
 };
+
+/*
+window.onload = () => {
+    var css = Centauri.Service.UsedCSSService();
+    var i = 0;
+    var genStyleTag = "";
+
+    css.forEach(item => {
+        i++;
+
+        let $element = item.element;
+        let id = "element-" + i;
+        var thisGenStyle = "";
+
+        $element.attr("id", id);
+
+        for(var key in item["css"]) {
+            thisGenStyle += key + ":" + item["css"][key] + ";";
+        }
+
+        thisGenStyle = "#" + id + "{" + thisGenStyle + "}";
+        genStyleTag += thisGenStyle;
+    });
+
+    $("head").append("<style>" + genStyleTag + "</style>");
+};
+*/

@@ -7,11 +7,24 @@ class ImageBladeHelper
 {
     public static function get($uid)
     {
-        return File::where("uid", $uid)->get()->first() ?? false;
+        $file = File::where("uid", $uid)->get()->first() ?? false;
+
+        if(!$file) {
+            return;
+        }
+
+        $file->relativePath = "/storage/Centauri/Filelist/" . $file->name;
+        return $file;
     }
 
     public static function getPath($uid)
     {
-        return File::where("uid", $uid)->get()->first()->path ?? false;
+        $file = self::get($uid);
+
+        if(!$file) {
+            return;
+        }
+
+        return $file->relativePath;
     }
 }

@@ -4,6 +4,7 @@ namespace Centauri\CMS\Ajax;
 use Centauri\CMS\AjaxAbstract;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
+use Centauri\CMS\Event\OnNewElementEvent;
 use Centauri\CMS\Exception\InlineRecordException;
 use Centauri\CMS\Helper\CCEHelper;
 use Centauri\CMS\Helper\ModelsHelper;
@@ -44,7 +45,7 @@ class InlineRecordsAjax implements AjaxInterface
                 $namespace = $request->input("namespace");
 
                 $modelInstance = new $namespace;
-                $models = $modelInstance::orderBy("sorting", "asc")->get()->all();
+                $models = $modelInstance::orderBy("sorting", "ASC")->get()->all();
 
                 $CMEs = ModelsHelper::getAllCMEs();
                 $modelConfig = $CMEs["models"][$namespace] ?? null;
@@ -160,6 +161,7 @@ class InlineRecordsAjax implements AjaxInterface
                 "model" => $model
             ])->render();
 
+            /*
             $CCEfields = CCEHelper::getAllFields();
 
             $modelConfig = $CCEfields[$parentmodelid]["config"]["fields"][$modelid];
@@ -178,6 +180,7 @@ class InlineRecordsAjax implements AjaxInterface
             foreach($modelConfig["config"]["fields"] as $_key => $_field) {
                 $bottom .= $ContentElementAjax->renderField((is_int($_key) ? $_field : $_key), $model, $modelid);
             }
+            */
         }
 
         if(
@@ -201,6 +204,11 @@ class InlineRecordsAjax implements AjaxInterface
 
                 $model->hidden = !$model->hidden;
                 $model->save();
+
+                event(new OnNewElementEvent([
+                    "reloadpage" => true,
+                    "uid" => $model->pid
+                ]));
 
                 return json_encode([
                     "type" => "primary",
@@ -231,11 +239,51 @@ class InlineRecordsAjax implements AjaxInterface
                 $model->save();
             }
 
+            event(new OnNewElementEvent([
+                "reloadpage" => true,
+                "uid" => $element->pid
+            ]));
+
             return json_encode([
                 "type" => "success",
                 "title" => "Inline-Record Sorting",
                 "description" => "Successfully updated sortings"
             ]);
+        }
+
+        if($ajaxName == "saveModelByUid") {
+            $namespace = $request->input("namespace");
+            $uid = $request->input("uid");
+            $data = $request->input("data");
+
+            $data = json_decode($data, true);
+            
+            $modelInstance = new $namespace;
+            $model = $modelInstance::where("uid", $uid)->get()->first();
+
+            foreach($data as $dataArr) {
+                foreach($dataArr as $fieldArr) {
+                    foreach($fieldArr as $id => $field) {
+                        $value = $field["value"];
+                        $model->$id = $value;
+                    }
+                }
+            }
+
+            if($model->save()) {
+                event(new OnNewElementEvent([
+                    "reloadpage" => true,
+                    "uid" => $model->pid
+                ]));
+
+                return json_encode([
+                    "type" => "success",
+                    "title" => "Inline-Record",
+                    "description" => "This record has been saved"
+                ]);
+            }
+
+            return response("Looks like this Inline-Record could not be saved... Does it has been deleted by a previous action (may from another BE user)?", 500);
         }
 
         return AjaxAbstract::default($request, $ajaxName);

@@ -30,7 +30,7 @@
                     
                 </div>
 
-                <div class="col-12 col-lg-3 align-items-center d-flex w-100">
+                <div class="col-12 col-lg-3 align-items-center justify-content-center d-flex w-100">
                     <div class="row">
                         <div class="col-12">
                             <h2 class="text-center">
@@ -41,7 +41,7 @@
                         <form class="col-12" action="{!! Centauri\CMS\BladeHelper\URIBladeHelper::action("Backend", "login") !!}" method="post">
                             @csrf
 
-                            <div class="md-form">
+                            <div class="ci-field">
                                 <input class="form-control mb-3" type="text" name="username" id="username" />
 
                                 <label for="username">
@@ -49,7 +49,7 @@
                                 </label>
                             </div>
 
-                            <div class="md-form">
+                            <div class="ci-field">
                                 <input class="form-control mb-4" type="password" name="password" id="password" />
 
                                 <label for="password">
@@ -59,9 +59,9 @@
 
                             <div class="row">
                                 <div class="col-12 mt-2">
-                                    <span class="d-block waves-effect waves-light">
-                                        <input class="blue-gradient btn btn-default w-100 m-0" type="submit" value="Login" />
-                                    </span>
+                                    <button class="btn btn-primary waves-effect w-100 m-0" type="submit">
+                                        Login
+                                    </button>
                                 </div>
                             </div>
                         </form>

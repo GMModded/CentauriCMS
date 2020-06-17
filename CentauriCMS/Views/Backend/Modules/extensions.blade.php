@@ -9,7 +9,7 @@
                 @section("headertitle") @lang("backend/modules.extensions.title") @endsection
 
                 <div class="table-wrapper">
-                    <table id="extensions" class="table table-dark table-hover z-depth-1-half">
+                    <table id="extensions" class="table table-dark table-hover ci-bs-2">
                         <thead class="thead-dark">
                             <tr>
                                 <th>
@@ -17,11 +17,15 @@
                                 </th>
 
                                 <th>
-                                    Models
+                                    Version
                                 </th>
 
                                 <th>
                                     State
+                                </th>
+
+                                <th>
+                                    Author
                                 </th>
                             </tr>
                         </thead>
@@ -34,11 +38,21 @@
                                     </td>
 
                                     <td>
-                                        -
+                                        {{ $ext["version"] ?? "-" }}
                                     </td>
 
                                     <td>
                                         {{ $ext["state"] }}
+                                    </td>
+
+                                    <td>
+                                        @if(isset($ext["author_link"]))
+                                            <a href="{{ $ext['author_link'] }}" target="_blank">
+                                                {{ $ext["author"] ?? "-" }}
+                                            </a>
+                                        @else
+                                            {{ $ext["author"] ?? "-" }}
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -48,7 +62,7 @@
             </div>
 
             <div id="extensionsmodule_buttons" class="col-12 text-right">
-                <button class="btn btn-info btn-floating waves-effect waves-light" data-button-type="refresh">
+                <button class="btn btn-info btn-floating fa-lg waves-effect" data-button-type="refresh">
                     <i class="fas fa-sync-alt"></i>
                 </button>
             </div>

@@ -1,4 +1,4 @@
-Centauri.Components.ModulesComponent = function(data) {
+Centauri.Components.ModulesComponent = (data) => {
     if(data.type == "init") {
         $("#dashboard #modules .module").each(function() {
             $module = $(this);
@@ -8,19 +8,19 @@ Centauri.Components.ModulesComponent = function(data) {
 
                 if(Centauri.Components.EditorComponent("isOpen")) {
                     Centauri.fn.Modal(
-                        Centauri.__trans.modals.areyousure,
-                        Centauri.__trans.modals.editorcomponent_switch,
+                        Centauri__trans.modals.areyousure,
+                        Centauri__trans.modals.editorcomponent_switch,
 
                         {
                             id: "areyousure_switch_editorcomponent_to_dashboard",
 
                             close: {
-                                label: Centauri.__trans.modals.btn_cancel,
+                                label: Centauri__trans.modals.btn_cancel,
                                 class: "warning"
                             },
 
                             save: {
-                                label: Centauri.__trans.modals.btn_switch,
+                                label: Centauri__trans.modals.btn_switch,
                                 class: "danger"
                             }
                         },
@@ -94,15 +94,17 @@ Centauri.Components.ModulesComponent = function(data) {
     }
 
     if(data.type == "load") {
-        var module = data.module;
+        let module = data.module;
+
+        let _ = {
+            moduleid: module
+        };
 
         Centauri.fn.Ajax(
             "Modules",
             "show",
 
-            {
-                moduleid: module
-            },
+            _,
 
             {
                 success: function(sData) {

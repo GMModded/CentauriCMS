@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use Centauri\CMS\Model\Scheduler;
+use Centauri\CMS\Service\ExecuteSchedulerService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,8 +26,23 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedulers = Scheduler::get()->all();
+
+        foreach($schedulers as $scheduler) {
+            $uid = $scheduler->uid;
+
+            $time = $scheduler->time;
+
+            $schedule
+                ->call(function() use($uid) {
+                    /**
+                     * Returns JSON string back.
+                     */
+                    $data = ExecuteSchedulerService::execute($uid);
+                })
+            ->runInBackground()
+            ->$time();
+        }
     }
 
     /**
@@ -35,8 +52,8 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . "/Commands");
 
-        require base_path('routes/console.php');
+        require base_path("routes/console.php");
     }
 }

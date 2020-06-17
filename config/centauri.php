@@ -2,15 +2,37 @@
 
 return [
     "config" => [
-        "Caching" => false,
+        "Caching" => true,
 
         "FE" => [
-            "MainTemplate" => "centauri_frontend::Frontend.Templates.frontend"
+            # "Default" in case a beLayout has no "template"-definition so it will use this one as default.
+            "DefaultMainTemplate" => "centauri_frontend::Frontend.Templates.frontend"
         ]
     ],
 
     "beLayouts" => [
         "default" => [
+            "rendering" => \Centauri\Extension\Frontend\Frontend::class,
+            "template" => "centauri_frontend::Frontend.Templates.Page.frontend",
+            "label" => "backend/be_layout.layouts.default.label",
+
+            "config" => [
+                // rowPos - will be saved into the DB as key
+                0 => [
+                    // "cols" => Array
+                    "cols" => [
+                        // colPositions - will be saved into the DB as key
+                        0 => [
+                            "label" => "backend/be_layout.layouts.default.cols.content"
+                        ]
+                    ]
+                ]
+            ]
+        ],
+
+        "docs" => [
+            "rendering" => \Centauri\Extension\Frontend\Frontend::class,
+            "template" => "centauri_frontend::Frontend.Templates.Page.docs",
             "label" => "backend/be_layout.layouts.default.label",
 
             "config" => [
@@ -37,12 +59,54 @@ return [
                     ]
                 ]
                 */
-            ],
-
-            "rendering" => \Centauri\Extension\Frontend::class
+            ]
         ]
     ],
 
+    "grids" => [
+        "config" => [
+            "templateRootPath" => "EXT:centauri_frontend"
+        ],
+
+        "layouts" => [
+            "onecol" => [
+                "label" => " » One Column Container",
+
+                "config" => [
+                    // rowPos - will be saved into the DB as key
+                    0 => [
+                        // "cols" => Array
+                        "cols" => [
+                            // colPositions - will be saved into the DB as key
+                            0 => [
+                                "label" => "backend/be_layout.layouts.default.cols.content"
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+
+            "twocol" => [
+                "label" => " » Two Column Container",
+
+                "config" => [
+                    0 => [
+                        "cols" => [
+                            0 => [
+                                "col" => "6",
+                                "label" => "Left"
+                            ],
+
+                            1 => [
+                                "col" => "6",
+                                "label" => "Right"
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
     "gridLayouts" => [
         "onecol" => [
             "label" => " » One Column Container",
@@ -175,6 +239,11 @@ return [
                     "maxItems" => 1
                 ]
             ],
+            "colorpicker" => [
+                "label" => "Color",
+                "type" => "input",
+                "renderAs" => "colorpicker"
+            ],
         ],
 
         "elements" => [
@@ -236,6 +305,96 @@ return [
             "general" => [
                 "label" => "General",
                 "models" => []
+            ]
+        ]
+    ],
+
+    # Schedulers
+    "schedulers" => [
+        "centauri_backup" => [
+            "enabled" => 1,
+            "dailyAt" => "00:00"
+        ]
+    ],
+
+    "forms" => [
+        "tabs" => [
+            "inputs" => [
+                "label" => "Inputs",
+
+                "fields" => [
+                    "row" => [
+                        "HTMLType" => "HTML",
+                        "type" => "row",
+                        "html" => "<div class='row'><div class='col-12 col-lg-6'></div><div class='col-12 col-lg-6'></div></div>",
+
+                        "config" => [
+                            "intern_label" => "Row",
+                        ]
+                    ],
+
+                    "input" => [
+                        "HTMLType" => "input",
+                        "type" => "text",
+
+                        "config" => [
+                            "label" => "Input",
+                            "placeholder" => "Input"
+                        ]
+                    ],
+
+                    "textarea" => [
+                        "HTMLType" => "textarea",
+
+                        "config" => [
+                            "label" => "Textarea",
+                            "placeholder" => "Textarea",
+                            "rows" => "5"
+                        ]
+                    ]
+                ]
+            ],
+
+            "radiocheckboxes" => [
+                "label" => "Radio/Checkboxes",
+
+                "fields" => [
+                    "radio" => [
+                        "HTMLType" => "input",
+                        "type" => "radio",
+
+                        "config" => [
+                            "label" => "Lmao"
+                        ]
+                    ]
+                ]
+            ],
+
+            "texts" => [
+                "label" => "Texts",
+
+                "fields" => [
+                    "h4" => [
+                        "HTMLType" => "HTML",
+                        "type" => "TextTag",
+                        "html" => "<h4 class='m-0'>H4</h4>"
+                    ],
+                    "h5" => [
+                        "HTMLType" => "HTML",
+                        "type" => "TextTag",
+                        "html" => "<h5 class='m-0'>H5</h5>"
+                    ],
+                    "h6" => [
+                        "HTMLType" => "HTML",
+                        "type" => "TextTag",
+                        "html" => "<h6 class='m-0'>H6</h6>"
+                    ],
+                    "p" => [
+                        "HTMLType" => "HTML",
+                        "type" => "TextTag",
+                        "html" => "<p class='m-0'>P</p>"
+                    ]
+                ]
             ]
         ]
     ]

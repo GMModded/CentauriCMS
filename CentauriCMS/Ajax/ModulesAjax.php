@@ -4,13 +4,9 @@ namespace Centauri\CMS\Ajax;
 use Centauri\CMS\AjaxAbstract;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
-use Centauri\CMS\Model\File;
 use Centauri\CMS\Service\ModulesService;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ModulesAjax implements AjaxInterface
 {
@@ -44,6 +40,10 @@ class ModulesAjax implements AjaxInterface
             $bladeNamespace = "Centauri";
             if($namespace != "") {
                 $bladeNamespace = $namespace;
+            }
+
+            if(request()->has("uid")) {
+                $data["__uid"] = request()->input("uid");
             }
 
             return view($bladeNamespace . "::Backend.Modules.$moduleid", [

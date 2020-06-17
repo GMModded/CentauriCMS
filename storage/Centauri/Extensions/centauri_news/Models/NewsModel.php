@@ -1,10 +1,10 @@
 <?php
-namespace Centauri\Extension\Model;
+namespace Centauri\Extension\News\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class News extends Model
+class NewsModel extends Model
 {
     /**
      * For soft deletions (using 'deleted_at' column in database table)

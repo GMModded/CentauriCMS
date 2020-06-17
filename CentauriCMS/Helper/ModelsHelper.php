@@ -50,6 +50,7 @@ class ModelsHelper
 
                 $_HTML .= view("Centauri::Backend.Modals.NewContentElement.Fields.$fieldType", [
                     "fieldConfig" => [
+                        "uid" => "NEW",
                         "id" => $fieldKey,
                         "label" => $fieldLabel
                     ]

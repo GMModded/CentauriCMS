@@ -21,7 +21,7 @@
 								<div class="row">
 									<div class="col-xl-3 col-md-6 mb-4">
 										<a href="{{ url('/centauri/pages') }}" data-module="true" data-moduleid="pages">
-											<div class="card border-left-primary shadow h-100 py-2 waves-effect">
+											<div class="card w-100 border-left-primary shadow h-100 py-2 waves-effect">
 												<div class="card-body">
 													<div class="row no-gutters align-items-center">
 														<div class="col mr-2">
@@ -45,7 +45,7 @@
 
 									<div class="col-xl-3 col-md-6 mb-4">
 										<a href="{{ url('/centauri/domains') }}" data-module="true" data-moduleid="domains">
-											<div class="card border-left-success shadow h-100 py-2 waves-effect">
+											<div class="card w-100 border-left-success shadow h-100 py-2 waves-effect">
 												<div class="card-body">
 													<div class="row no-gutters align-items-center">
 														<div class="col mr-2">
@@ -69,7 +69,7 @@
 
 									<div class="col-xl-3 col-md-6 mb-4">
 										<a href="{{ url('/centauri/languages') }}" data-module="true" data-moduleid="languages">
-											<div class="card border-left-warning shadow h-100 py-2 waves-effect">
+											<div class="card w-100 border-left-warning shadow h-100 py-2 waves-effect">
 												<div class="card-body">
 													<div class="row no-gutters align-items-center">
 														<div class="col mr-2">
@@ -93,7 +93,7 @@
 
 									<div class="col-xl-3 col-md-6 mb-4">
 										<a href="{{ url('/centauri/notifications') }}" data-module="true" data-moduleid="notifications">
-											<div class="card border-left-danger shadow h-100 py-2 waves-effect">
+											<div class="card w-100 border-left-danger shadow h-100 py-2 waves-effect">
 												<div class="card-body">
 													<div class="row no-gutters align-items-center">
 														<div class="col mr-2">
@@ -128,22 +128,35 @@
 							<div class="card-body">
 								<div class="row">
 									<div class="col-12 col-md-6 mb-4">
-										<div class="card border-left-primary shadow h-100 py-2">
+										<div class="card w-100 border-left-primary shadow h-100 py-2">
 											<div class="card-body">
-												<div class="row no-gutters align-items-center">
-													<canvas id="lineChart_frontendcalls"></canvas>
+												<div class="font-weight-bold text-xs text-info text-uppercase mb-1 px-3">
+													CI-Stats
+												</div>
+
+												<div class="row no-gutters align-items-center h-100">
+													<div class="col-12">
+														<p class="text-center mb-5">
+															Stats loading...
+														</p>
+													</div>
+
+													<canvas id="lineChart_frontendcalls" class="d-none"></canvas>
 												</div>
 											</div>
 										</div>
 									</div>
 
 									<div class="col-12 col-md-6 mb-4">
-										<div class="card border-left-info shadow h-100 py-2">
+										<div class="card w-100 border-left-info shadow h-100 py-2">
 											<div class="card-body">
+												<div class="font-weight-bold text-xs text-info text-uppercase mb-1 px-3">
+													CI-Tracker
+												</div>
+
 												<div class="row no-gutters align-items-center h-100">
 													<div class="col-12">
-														<p class="text-center">
-															Sorry<br><br>
+														<p class="text-center mb-5">
 															You haven't connected Centauri's Tracking with your Google Analytics yet
 														</p>
 													</div>

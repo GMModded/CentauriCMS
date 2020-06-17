@@ -1,8 +1,6 @@
 <?php
 
-use Centauri\CMS\BladeHelper\BuildBladeHelper;
-use Centauri\CMS\BladeHelper\ImageBladeHelper;
-use Centauri\CMS\BladeHelper\URIBladeHelper;
+use Centauri\CMS\Centauri;
 
 return [
 
@@ -45,6 +43,15 @@ return [
 
     'debug' => true,
 
+    /**
+     * Centauri DB
+     */
+    "db_host" => env("DB_HOST"),
+    "db_port" => env("DB_PORT"),
+    "db_database" => env("DB_DATABASE"),
+    "db_username" => env("DB_USERNAME"),
+    "db_password" => env("DB_PASSWORD"),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -56,7 +63,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://127.0.0.1/'),
+    'url' => env('APP_URL', 'http://centauri.msediqi.lan/'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -71,7 +78,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Berlin',
 
     /*
     |--------------------------------------------------------------------------
@@ -228,10 +235,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        // "CentauriBladeHelper" => Centauri\CMS\BladeHelper\LoadBladeHelpers::class,
-        "ImageBladeHelper" => ImageBladeHelper::class,
-        "BuildBladeHelper" => BuildBladeHelper::class,
-        "URIBladeHelper" => URIBladeHelper::class
+        // Centauri::makeInstance(\Centauri\CMS\Service\LoadBladeHelpersService::class),
+        // Centauri::makeInstance(\Centauri\Extension\Frontend\Service\LoadBladeHelpersService::class),
     ],
 
 ];

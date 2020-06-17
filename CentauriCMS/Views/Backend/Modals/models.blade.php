@@ -1,19 +1,17 @@
-<ul class="nav nav-tabs md-tabs" id="nCETabs" role="tablist">
+<ul class="nav nav-tabs" id="new-ce-tabs" role="tablist">
     @foreach($CME["tabs"] as $tabKey => $tabArr)
-        <li class="nav-item waves-effect">
-            <a class="nav-link{{ $loop->first ? ' active' : '' }}" id="{{ $tabKey }}-tab-md" data-toggle="tab" href="#{{ $tabKey }}-md" role="tab" aria-controls="{{ $tabKey }}-md" aria-selected="true">
-                {{ __($tabArr["label"]) }}
-            </a>
+        <li class="nav-item waves-effect waves-light{{ $loop->first ? ' active' : '' }}" data-tab-id="{{ $tabKey }}">
+            {{ __($tabArr["label"]) }}
         </li>
     @endforeach
 </ul>
 
-<div class="tab-content card pt-5" id="nCEContent">
+<div class="tab-content card pt-5">
     @foreach($CME["tabs"] as $tabKey => $tabArr)
-        <div class="tab-pane fade {{ $loop->first ? ' show active' : '' }}" id="{{ $tabKey }}-md" role="tabpanel" aria-labelledby="{{ $tabKey }}-tab-md">
+        <div class="tab-pane fade{{ $loop->first ? ' show active' : '' }}" data-tab-id="{{ $tabKey }}">
             @foreach($tabArr["models"] as $model => $modelArr)
                 @if ($tabKey == $modelArr["tab"])
-                    <div class="element z-depth-1 mb-3" data-model="{{ $model }}">
+                    <div class="element ci-bs-1 mb-3" data-model="{{ $model }}">
                         <div class="top waves-effect p-3">
                             @lang($modelArr['_NAMESPACE'] . "::backend/modals.models.$model")
                         </div>

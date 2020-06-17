@@ -51,7 +51,9 @@ class Page extends Model
     protected $attributes = [
         "pid" => 1,
         "lid" => 1,
+        "storage_id" => null,
         "hidden" => 0,
+        "hidden_inpagetree" => 0,
         "backend_layout" => "",
 
         "seo_keywords" => "",
@@ -59,7 +61,7 @@ class Page extends Model
     ];
 
     /**
-     * Getter for of the buttons of this slider item.
+     * Returns the connected domain of this page model.
      * 
      * @return array|void
      */
@@ -74,8 +76,19 @@ class Page extends Model
 
             $file = DomainsUtility::getDomainFileByHost($host);
             return DomainsUtility::getConfigByDomainFile($file);
+        } else {
+            $domain_id = $this->domain_id;
+
+            if(!is_null($domain_id)) {
+                return DomainsUtility::findDomainConfigByPageUid($domain_id);
+            }
         }
 
         return null;
+    }
+
+    public function getBackendLayoutConfig()
+    {
+        return config("centauri")["beLayouts"][$this->backend_layout] ?? null;
     }
 }

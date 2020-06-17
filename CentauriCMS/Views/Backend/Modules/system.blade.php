@@ -18,7 +18,7 @@
             </div>
 
             <div id="systemmodule_buttons" class="col-12 text-right">
-                <button class="btn btn-info btn-floating waves-effect waves-light" data-button-type="refresh">
+                <button class="btn btn-info btn-floating fa-lg waves-effect" data-button-type="refresh">
                     <i class="fas fa-sync-alt"></i>
                 </button>
             </div>

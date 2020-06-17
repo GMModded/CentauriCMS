@@ -1,4 +1,4 @@
-Centauri.Helper.FieldsHelper = function(element, parentSelector, returnAsJson = true) {
+Centauri.Helper.FieldsHelper = (element, parentSelector, returnAsJson = true, secondAttempt = false) => {
     let datas = [];
 
     if(
@@ -6,15 +6,17 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector, returnAsJson = 
         $(element).is($(".accordion.active"))
     ) {
         datas = Centauri.Helper.FieldsHelper.findDatasBySelectors([
-            $(parentSelector + " .md-form > input", $(element)),
-            $(parentSelector + " .md-form > .md-textarea", $(element)),
-            $(parentSelector + " .md-form > select", $(element))
+            $(parentSelector + " .ci-field > input", $(element)),
+            $(parentSelector + " .ci-switch > input[type='checkbox']", $(element)),
+            $(parentSelector + " .ci-field > .ci-textarea", $(element)),
+            $(parentSelector + " .ci-field > select", $(element))
         ]);
     } else {
         datas = Centauri.Helper.FieldsHelper.findDatasBySelectors([
-            $(parentSelector + " .md-form > input"),
-            $(parentSelector + " .md-form > .md-textarea"),
-            $(parentSelector + " .md-form > select")
+            $(parentSelector + " .ci-field > input"),
+            $(parentSelector + " .ci-switch > input[type='checkbox']"),
+            $(parentSelector + " .ci-field > .ci-textarea"),
+            $(parentSelector + " .ci-field > select")
         ]);
     }
 
@@ -28,6 +30,10 @@ Centauri.Helper.FieldsHelper = function(element, parentSelector, returnAsJson = 
         datas = JSON.stringify(tempArr);
     }
 
+    if(datas.length == 0 && !secondAttempt) {
+        // datas = Centauri.Helper.FieldsHelper(element, ".fields", returnAsJson, true);
+    }
+
     return datas;
 };
 
@@ -37,8 +43,10 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
     selectors.forEach(selector => {
         $(selector).each(function() {
             let id = $(this).data("id");
+            console.log($(this));
 
             if(Centauri.isNotUndefined(id)) {
+
                 let val = $(this).val();
                 let uid = $(this).data("uid");
                 let isIR = $(this).data("inline-record");
@@ -48,7 +56,7 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
                 /**
                  * Handling for specific elements (by checking their classes) the correct way of fetching its current/changed value
                  */
-                if($(this).hasClass("md-textarea")) {
+                if($(this).hasClass("ci-textarea")) {
                     val = $(this).html();
                 }
 
@@ -56,6 +64,14 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
                     if(val == "") {
                         val = null;
                     }
+                }
+
+                if($(this).is("input[type='checkbox']")) {
+                    val = $(this).prop("checked");
+                }
+
+                if($(this).hasClass("form-check-input")) {
+                    val = $(this).prop("checked");
                 }
 
                 /**

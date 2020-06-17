@@ -6,21 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 class SQLService
 {
-    public function createTable($table)
+    public function createTable($table, $hasLid = true)
     {
         if(Schema::hasTable($table)) {
             return false;
         }
 
-        Schema::create($table, function(Blueprint $table) {
+        Schema::create($table, function(Blueprint $table) use($hasLid) {
             $table->increments("uid");
-            $table->integer("lid");
             $table->timestamps();
             $table->softDeletes();
 
             if($table == "elements") {
                 $table->integer("parent_uid");
                 $table->integer("sorting");
+            }
+
+            if(!$hasLid) {
+                $table->integer("lid");
             }
         });
 

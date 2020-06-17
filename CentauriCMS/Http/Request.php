@@ -10,6 +10,7 @@ use Centauri\CMS\Utility\DomainsUtility;
 use Centauri\CMS\Utility\FixerUtility;
 use Exception;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -64,14 +65,6 @@ class Request
             }
 
             return view("Centauri::Backend.login");
-        }
-
-        $uniqid = preg_replace("/[^a-zA-Z0-9]+/", "", $host) . (!empty($nodes) ? "-" . preg_replace("/[^a-zA-Z0-9]+/", "", $nodes) : "");
-
-        if(isset(config("centauri")["config"]["Caching"]) && (config("centauri")["config"]["Caching"])) {
-            if(\Cache::has($uniqid)) {
-                return \Cache::get($uniqid);
-            }
         }
 
         if(!empty($nodes) && Str::contains($nodes, "/")) {
@@ -150,7 +143,18 @@ class Request
         $page = null;
 
         if(!empty($nodes) && Str::contains($nodes, "/") && $nodes != "/") {
-            $page = Page::where("slugs", $nodes)->orWhere("slugs", "/" . $nodes)->get()->first();
+            $page = Page::where([
+                "domain_id" => $domain->content->rootpageuid,
+                "slugs" => $nodes
+            ])->get()->first();
+
+            if(is_null($page)) {
+                $page = Page::where([
+                    "domain_id" => $domain->content->rootpageuid,
+                    "slugs" => "/" . $nodes
+                ])->get()->first();
+            }
+
             $nodes = explode("/", $nodes);
         } else {
             $slugs = str_replace("/", "", $nodes);
@@ -158,7 +162,7 @@ class Request
             if(!is_null($domain)) {
                 if(!empty($nodes)) {
                     $page = Page::where([
-                        "pid" => $domain->content->rootpageuid,
+                        "domain_id" => $domain->content->rootpageuid,
                         "slugs" => "/" . $slugs
                     ])->get()->first();
 
@@ -177,7 +181,6 @@ class Request
         }
 
         $notFoundData = self::throwNotFound(false, $page);
-
         if(
             !is_null($notFoundData) &&
             $notFoundData->getStatusCode() == 404
@@ -188,22 +191,48 @@ class Request
         $page = Page::find($page->uid);
         $uid = $page->getAttribute("uid");
 
+        $uniqid = preg_replace("/[^a-zA-Z0-9]+/", "", $host) . "-" . $page->uid;
+
+        $renderedHTML = "";
+
+        if(config("centauri")["config"]["Caching"]) {
+            if(Cache::has($uniqid)) {
+                $renderedHTML = Cache::get($uniqid);
+            }
+        }
+
+        if($renderedHTML != "") {
+            $renderedHTML .= "\r\n<!-- End Cached Content -->";
+            $page->cached_content = $renderedHTML;
+        }
+
         if(isset($domainConfigJSON->pageTitlePrefix)) {
             $page->pageTitlePrefix = $domainConfigJSON->pageTitlePrefix;
         }
 
-        $ElementComponent = Centauri::makeInstance(ElementComponent::class);
-        $renderedHTML = "";
-
         // Overwrites of beLayouts (if custom layouts has been defined, this rendering can manage how the HTML-output looks like)
-        $beLayout = config("centauri")["beLayouts"][$page->backend_layout];
-        if(isset($beLayout["rendering"])) {
-            $renderedHTML = Centauri::makeInstance($beLayout["rendering"])::rendering($page);
+        $beLayout = config("centauri")["beLayouts"][$page->backend_layout] ?? null;
+        $ElementComponent = Centauri::makeInstance(ElementComponent::class);
+
+        if($renderedHTML != "") {
+            $renderedHTML = "";
+
+            if(!isset(config("centauri")["beLayouts"][$page->backend_layout]) || is_null($beLayout)) {
+                if(Centauri::isLocal()) {
+                    throw new Exception("The BE-Layout '" . $page->backend_layout . "' for this page has no configuration yet!");
+                }
+            }
+
+            // Calling ElementComponent which renders the content elements by the given page-uid ($uid) or rendering if its overwritten
+            if(!isset($beLayout["rendering"])) {
+                $renderedHTML = $ElementComponent->render($uid, $page->lid, 0, 0);
+            }
         } else {
-            $renderedHTML = $ElementComponent->render($uid, $page->lid, 0, 0);
+            if(isset($beLayout["rendering"])) {
+                $renderedHTML = Centauri::makeInstance($beLayout["rendering"])::rendering($page);
+            }
         }
 
-        // Calling ElementComponent which renders the content elements by the given page-uid ($uid)
         $renderedHTML = str_replace("  ", "", $renderedHTML);
         $renderedHTML = str_replace("\r\n", "", $renderedHTML);
 
@@ -212,9 +241,10 @@ class Request
 
         // Caching only if it's set in Centauri's config array (which gets by default cached from Laravel)
         if(isset(config("centauri")["config"]["Caching"]) && (config("centauri")["config"]["Caching"])) {
-            $frontendHtml .= "\r\n<!-- End Cached Content -->";
             // Caching before returning the outputted frontend html for 24 hours (86400 seconds)
-            \Cache::put($uniqid, $frontendHtml, 86400);
+            if($renderedHTML != "") {
+                Cache::put($uniqid, $renderedHTML, 86400);
+            }
         }
 
         return $frontendHtml;

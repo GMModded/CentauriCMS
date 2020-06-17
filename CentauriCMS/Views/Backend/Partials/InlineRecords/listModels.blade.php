@@ -1,3 +1,5 @@
+{{-- {{ dd(get_defined_vars()["__data"]) }} --}}
+
 <div class="models p-3" data-namespace="{{ $namespace }}">
     <div class="row mb-3">
         <div class="col align-items-center d-flex">
@@ -6,12 +8,12 @@
                     Centauri
                 </span>
 
-                » News
+                » @lang($config["namespace"] . "::backend/modals.models.$namespace")
             </h5>
         </div>
 
         <div class="col col-md-4">
-            <div class="md-form">
+            <div class="ci-field">
                 <input id="filter_modelitems" class="form-control" type="text" />
 
                 <label for="filter_modelitems">
@@ -55,20 +57,18 @@
                 }
             @endphp
 
-            <div class="model z-depth-1 col-12 py-2 mb-3" data-uid="{{ $model->uid }}">
-                <div class="top">
-                    <span class="title mt-1 pt-2 d-inline-block">
-                        {!! $label !!}
-                    </span>
+            <div class="col-12 mb-3 py-2">
+                <div class="model ci-bs-1 p-3 h-100" data-uid="{{ $model->uid }}">
+                    <div class="top">
+                        <span class="title mt-2 d-inline-block">
+                            {!! $label !!}
+                        </span>
 
-                    <div class="button-view float-right">
-                        <button class="edit btn btn-primary waves-effect waves-light btn-floating my-0 mx-1">
-                            <i class="fas fa-pen"></i>
-                        </button>
-
-                        <button class="sort btn btn-primary waves-effect waves-light btn-floating my-0 mx-1">
-                            <i class="fas fa-sort"></i>
-                        </button>
+                        <div class="button-view float-right">
+                            <button class="edit fa-lg btn btn-primary waves-effect btn-floating my-0 mx-1 mt-n2">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

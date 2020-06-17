@@ -1,0 +1,10 @@
+$sizes: 25, 50, 75, 100;
+$unit: "%";
+
+@include media-breakpoint-up(lg) {
+    @each $size in $sizes {
+        .w-lg-#{$size} {
+            width: #{$size}#{$unit};
+        }
+    }
+}

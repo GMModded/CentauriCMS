@@ -1,5 +1,10 @@
-<section id="module_{{ e($__env->yieldContent('moduleid')) }}">
-    <div class="container">
+@php
+    $module_fullheight = (e($__env->yieldContent("module_fullheight")) != "") ? true : false;
+    $module_fullwidth = (e($__env->yieldContent("module_fullwidth")) != "") ? true : false;
+@endphp
+
+<section id="module_{{ e($__env->yieldContent('moduleid')) }}" class="{{ $module_fullheight ? 'h-100 pb-5' : '' }}">
+    <div class="container{{ $module_fullwidth ? '-fluid' : '' }}">
         <div class="row mb-3">
             <div class="col align-items-center d-flex">
                 <h3 id="title">
@@ -10,13 +15,15 @@
             </div>
 
             <div class="col col-md-4">
-                <div class="md-form">
-                    <input id="filter" class="form-control" type="text" />
+                @if(!e($__env->yieldContent("no_search")))
+                    <div class="ci-field">
+                        <input id="filter" class="form-control" type="text" />
 
-                    <label for="filter">
-                        @lang("backend/centauri.search")
-                    </label>
-                </div>
+                        <label for="filter">
+                            @lang("backend/centauri.search")
+                        </label>
+                    </div>
+                @endif
             </div>
         </div>
 

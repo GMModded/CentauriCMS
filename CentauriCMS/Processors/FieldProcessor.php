@@ -11,7 +11,7 @@ class FieldProcessor
         $fields = CCEHelper::getAllFields();
         $elements = CCEHelper::getAllElements();
 
-        $elFields = (is_null($paramElFields) ? $elements[$element->ctype] : dd($paramElFields));
+        $elFields = (is_null($paramElFields) ? $elements[$element->ctype] : dd("LOL", $paramElFields));
 
         foreach($elFields as $key => $elField) {
             $_ = null;
@@ -25,12 +25,11 @@ class FieldProcessor
             if(Str::contains($_, ";")) {
                 $splitted_ = explode(";", $_);
             } else {
-
                 if(isset($fields[$_])) {
                     $field = $fields[$_];
                     $value = $element->$_;
 
-                    $fieldType = isset($field["type"]) ?? $field["type"];
+                    $fieldType = isset($field["type"]) ? $field["type"] : "";
 
                     $data = [
                         "element" => $element,

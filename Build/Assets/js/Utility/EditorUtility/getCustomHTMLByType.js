@@ -1,40 +1,46 @@
-Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
+Centauri.Utility.EditorUtility.getCustomHTMLByType = (inputObj) => {
     let html = "";
     let type = inputObj.custom;
     let data = inputObj.data;
 
+    let fieldClassName = "field";
     let additionalFieldClasses = "";
 
     if(type == "select") {
-        let options = "";
+        fieldClassName = "ci-field";
 
-        let labelHTML = "<label class='mdb-main-label' for='" + inputObj.id + "'>" + data.label + "</label>";
-        html = "<select id='" + inputObj.id + "' class='mdb-select select2 colorful-select dropdown-primary md-form' searchable='" + Centauri.__trans.global.searchhere + "' " + (Centauri.isNotUndefined(data.required) ? (data.required ? "required" : "") : "required") + ">|</select>";
+        let label = (Centauri.isNotUndefined(data.label) ? data.label : "Choose an option");
+        html = "<select class='ci-select' id='" + inputObj.id + "'>|</select><i class='fas fa-chevron-down'></i>{LABEL}";
 
-        if(Centauri.isNotUndefined(data.label)) {
-            html.split("|").join("<option value='' disabled selected>" + data.label + "</option>|");
-            html = html + labelHTML;
-        }
-
+        let optionsHtml = "<option selected disabled>" + label + "</option>";
         if(Centauri.isNotUndefined(data.options)) {
-            $.each(data.options, function(index, optionObj) {
+            $.each(data.options, (index, optionObj) => {
                 if(Centauri.isNotUndefined(data.selectedOptionValue)) {
                     if(data.selectedOptionValue == optionObj.value) {
-                        options += "<option value='" + optionObj.value + "' selected>" + optionObj.name;
+                        optionsHtml += "<option value='" + optionObj.value + "' selected>" + optionObj.name;
+
+                        if(Centauri.strContains(html, "{LABEL}")) {
+                            html = html.replace("{LABEL}", "<label for='" + inputObj.id + "'>" + optionObj.name + "</label>");
+                        }
                     } else {
-                        options += "<option value='" + optionObj.value + "'>" + optionObj.name;
+                        optionsHtml += "<option value='" + optionObj.value + "'>" + optionObj.name;
                     }
                 } else {
-                    options += "<option value='" + optionObj.value + "'>" + optionObj.name;
+                    optionsHtml += "<option value='" + optionObj.value + "'>" + optionObj.name;
                 }
             });
         }
 
-        html = html.split("|").join(options);
+        if(Centauri.strContains(html, "{LABEL}")) {
+            html = html.replace("{LABEL}", "<label for='" + inputObj.id + "'>" + label + "</label>");
+        }
+
+        html = html.split("|").join(optionsHtml);
     }
 
     if(type == "image") {
-        html = "<label class='d-block' style='font-size: 1rem; transform: translateY(-14px) scale(.8); margin-left: -22.5px !important; margin-top: 25px !important; margin-bottom: -15px !important;'>" + data.label + "</label><img src='" + data.src + "' class='img-fluid' style='width: 30px;' />";
+        fieldClassName = "ci-field";
+        html = "<img src='" + data.src + "' class='img-fluid' style='width: 30px;' /><label style='transform: translateY(-25px) scale(.8);' class='active'>" + data.label + "</label>";
     }
 
     if(type == "checkbox") {
@@ -51,6 +57,8 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
     }
 
     if(type == "switch") {
+        additionalFieldClasses = " ci-switch";
+
         let checked = "";
         let onClick = "";
 
@@ -61,11 +69,10 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
         }
 
         if(Centauri.isNotUndefined(data.onClick)) {
-            let onClick = " onclick='" + data.onClick + "'";
+            onClick = " onclick='" + data.onClick + "'";
         }
 
-        additionalFieldClasses = " switch";
-        html = "<label><input type='checkbox'" + checked + " id='" + inputObj.id + "'" + onClick + " /><span class='ml-1 lever'></span>" + data.label + "</label>";
+        html = "<label><input type='checkbox'" + checked + " id='" + inputObj.id + "'" + onClick + " /><span></span>" + data.label + "</label>";
     }
 
     if(type == "radio") {
@@ -83,8 +90,8 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = function(inputObj) {
     }
 
     if(type == "textarea") {
-        html += "<div class='md-form'><textarea" + (Centauri.isNotUndefined(data.required) ? (data.required ? " required" : "") : "") + " id='" + inputObj.id + "' class='md-textarea form-control' rows='3'>" + (Centauri.isNotUndefined(data.value) ? data.value : "") + "</textarea><label" + (Centauri.isNotUndefined(data.value) && data.value.length > 0 ? " class='active'" : "") + " for='" + inputObj.id + "'>" + data.label + "</label></div>";
+        html += "<div class='ci-field'><textarea" + (Centauri.isNotUndefined(data.required) ? (data.required ? " required" : "") : "") + " id='" + inputObj.id + "' class='md-textarea form-control' rows='3'>" + (Centauri.isNotUndefined(data.value) ? data.value : "") + "</textarea><label" + (Centauri.isNotUndefined(data.value) && data.value.length > 0 ? " class='active'" : "") + " for='" + inputObj.id + "'>" + data.label + "</label></div>";
     }
 
-    return "<div class='field" + additionalFieldClasses + "'" + (Centauri.isNotUndefined(inputObj.extraAttr) ? " " + inputObj.extraAttr : "") + ">" + html + "</div>";
+    return "<div class='" + fieldClassName + "" + additionalFieldClasses + "'" + (Centauri.isNotUndefined(inputObj.extraAttr) ? " " + inputObj.extraAttr : "") + ">" + html + "</div>";
 };

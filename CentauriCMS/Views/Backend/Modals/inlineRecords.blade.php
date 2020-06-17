@@ -1,6 +1,6 @@
 @foreach($files as $file)
     @if($file)
-        <div class="accordion px-3 z-depth-1 mb-2" data-uid="{{ $file->uid}}">
+        <div class="accordion px-3 ci-bs-1 mb-2" data-uid="{{ $file->uid}}">
             <div class="top py-3">
                 {{ $file->name }}
             </div>
@@ -30,7 +30,7 @@
 
                 @if($file->cropable)
                     <div class="col-12 col-md-3 image-cropper-view p-0">
-                        <img src="{!! ImageBladeHelper::getPath($file->uid) !!}" class="img-fluid w-100 d-block z-depth-1 p-3" />
+                        <img src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($file->uid) !!}" class="img-fluid w-100 d-block ci-bs-1 p-3" />
 
                         <button class="btn btn-success waves-effect waves-light w-100 mt-2 m-0">
                             Crop Image

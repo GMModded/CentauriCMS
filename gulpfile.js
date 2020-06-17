@@ -5,13 +5,14 @@
 
 // ============================================================================================================
 // Definitions
-var gulp     = require('gulp');
-	clean    = require('gulp-clean');
-	watch    = require('gulp-watch');
-	concat   = require('gulp-concat');
-	terser   = require('gulp-terser');
-	sass     = require('gulp-sass');
-	minify   = require('gulp-minify-css');
+var gulp     = require("gulp");
+	clean    = require("gulp-clean");
+	watch    = require("gulp-watch");
+	concat   = require("gulp-concat");
+	terser   = require("gulp-terser");
+	sass     = require("gulp-sass");
+	minify   = require("gulp-minify-css");
+	critical = require("critical");
 
 
 // ============================================================================================================
@@ -26,29 +27,48 @@ var gulp     = require('gulp');
 // => when you'd like to use the downloaded package / module,
 //    you've to link it here in order the task for js recognize it and concat & uglifys it.
 // NOTE: Watch out for case-sensivity of directory names!
-	var modules = {
-		"jquery"              : "packages/jquery/jquery.min.js",
 
-		"bootstrap"           : "packages/bootstrap/dist/js/bootstrap.min.js",
-		"popperjs"            : "packages/popperjs/popper.min.js",
-		"mdbootstrap"         : "packages/mdb/js/mdb.min.js",
-		"slickjs"             : "packages/slick/slick.min.js"
-	};
+	let modules = [
+		"jquery/jquery.min.js",
+		"slick/slick.min.js",
+		"waves/dist/waves.min.js",
+		"pusher-js/dist/web/pusher.min.js"
+	];
 
+	let m = 0;
+	modules.forEach(_module => {
+		modules[m] = "packages/" + _module;
+		m++;
+	});
+
+
+// ============================================================================================================
+// Critical Task
+gulp.task("critical", function() {
+	critical.generate({
+        inline: true,
+        base: "dist/",
+        src: "index.html",
+        dest: "dist/index-critical.html",
+        minify: true,
+        width: 320,
+        height: 480
+    });
+});
 
 
 // ============================================================================================================
 // CSS Tasks
 
-gulp.task('css:build', function() {
+gulp.task("css:build", function() {
 	return gulp.src(inputSrc + "scss/main.scss")
-		.pipe(sass().on('error', sass.logError))
+		.pipe(sass().on("error", sass.logError))
 		.pipe(concat(fileName + ".css"))
 		.pipe(gulp.dest(outputSrc + "css"))
 });
-gulp.task('css:deploy', function() {
+gulp.task("css:deploy", function() {
 	return gulp.src(inputSrc + "scss/main.scss")
-		.pipe(sass().on('error', sass.logError))
+		.pipe(sass().on("error", sass.logError))
 		.pipe(concat(fileName + ".css"))
 		.pipe(minify())
 		.pipe(gulp.dest(outputSrc + "css"))
@@ -57,32 +77,24 @@ gulp.task('css:deploy', function() {
 // ============================================================================================================
 // JS Tasks
 
-gulp.task('js:build', function() {
-	return gulp.src([
-		modules["jquery"],
-		modules["popperjs"],
-		modules["bootstrap"],
-		modules["mdbootstrap"],
-		modules["slickjs"],
-
-		inputSrc + "js/**/*.js"
-	])
-
+gulp.task("js:build", function() {
+	return gulp.src(
+        Array.prototype.concat(
+            modules,
+			inputSrc + "js/**/*.js"
+        )
+    )
 	.pipe(concat(fileName + ".js"))
-	.pipe(gulp.dest(outputSrc + "js"))
+	.pipe(gulp.dest(outputSrc + "js"));
 });
 
-gulp.task('js:deploy', function() {
-	return gulp.src([
-		modules["jquery"],
-		modules["popperjs"],
-		modules["bootstrap"],
-		modules["mdbootstrap"],
-		modules["slickjs"],
-
-		inputSrc + "js/**/*.js"
-	])
-
+gulp.task("js:deploy", function() {
+	return gulp.src(
+        Array.prototype.concat(
+            modules,
+			inputSrc + "js/**/*.js"
+        )
+    )
 	.pipe(concat(fileName + ".js"))
 	.pipe(terser())
 	.pipe(gulp.dest(outputSrc + "js"));
@@ -94,17 +106,17 @@ gulp.task('js:deploy', function() {
 // ============================================================================================================
 // Build with Watcher Task
 
-gulp.task('watch:build:task', function() {
-	gulp.watch(inputSrc + "scss/**/*.{sass,scss}", gulp.series('css:build'));
-	gulp.watch(inputSrc + "js/**/*.js", gulp.series('js:build'));
+gulp.task("watch:build:task", function() {
+	gulp.watch(inputSrc + "scss/**/*.{sass,scss}", gulp.series("css:build"));
+	gulp.watch(inputSrc + "js/**/*.js", gulp.series("js:build"));
 });
 
-gulp.task('watch:build', gulp.series('css:build', 'js:build',
-	gulp.parallel('watch:build:task')
+gulp.task("watch:build", gulp.series('css:build', "js:build",
+	gulp.parallel("watch:build:task")
 ));
 
-gulp.task('build', gulp.series('css:build', 'js:build',
-	gulp.parallel('watch:build')
+gulp.task("build", gulp.series("css:build", "js:build",
+	gulp.parallel("watch:build")
 ));
 // ============================================================================================================
 
@@ -113,13 +125,13 @@ gulp.task('build', gulp.series('css:build', 'js:build',
 // ============================================================================================================
 // Deploy with Watcher Task
 
-gulp.task('watch:deploy:task', function() {
-	gulp.watch(inputSrc + "scss/**/*.{sass,scss}", gulp.series('css:deploy'));
-	gulp.watch(inputSrc + "js/**/*.js", gulp.series('js:deploy'));
+gulp.task("watch:deploy:task", function() {
+	gulp.watch(inputSrc + "scss/**/*.{sass,scss}", gulp.series("css:deploy"));
+	gulp.watch(inputSrc + "js/**/*.js", gulp.series("js:deploy"));
 });
 
-gulp.task('watch:deploy', gulp.series('css:deploy', 'js:deploy', gulp.parallel('watch:deploy:task')));
-gulp.task('watch:deploy', gulp.series('css:deploy', 'js:deploy', gulp.parallel('watch:deploy')));
+gulp.task("watch:deploy", gulp.series("css:deploy", "js:deploy", gulp.parallel("watch:deploy:task")));
+gulp.task("watch:deploy", gulp.series("css:deploy", 'js:deploy', gulp.parallel("watch:deploy")));
 // ============================================================================================================
 
 

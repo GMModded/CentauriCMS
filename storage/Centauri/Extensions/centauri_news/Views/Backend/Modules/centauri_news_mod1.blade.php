@@ -12,4 +12,4 @@
     @endforeach
 </ul>
 
-{{ dd($data) }}
+{{-- {{ dd($data) }} --}}

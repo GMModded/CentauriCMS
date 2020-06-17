@@ -9,9 +9,9 @@
 
                     <div class="overlayer"></div>
 
-                    <div class="image-view" style="min-height: 750px;">
+                    <div class="image-view placeholder" style="min-height: 750px; height: 750px;">
                         @if($slideritem->image)
-                            <img class="img-fluid w-100" src="{!! ImageBladeHelper::getPath($slideritem->image) !!}" />
+                            <img class="img-fluid w-100" data-src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($slideritem->image) !!}" />
                         @endif
                     </div>
 

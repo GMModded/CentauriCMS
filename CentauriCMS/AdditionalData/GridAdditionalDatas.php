@@ -28,7 +28,7 @@ class GridAdditionalDatas implements \Centauri\CMS\AdditionalDataInterface
         if(!is_null($gridelement->grid)) {
             $gridConfig = config("centauri")["gridLayouts"][$gridelement->grid] ?? null;
         } else {
-            return response("Grid-Layout '" . $gridelement->grid . "' not found for Grid with ID: " . $gridUid . " in Grid-Layouts configuration", 500);
+            return response("Grid-Layout '" . $gridelement->grid . "' not found for Grid with UID: " . $gridUid . " in Grid-Layouts configuration", 500);
         }
 
         $elements = [];

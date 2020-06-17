@@ -13,3 +13,6 @@ $SQLService->createColumn($table, "subheader", "string", ["nullable" => false, "
 $SQLService->createColumn($table, "RTE", "text", ["nullable" => false]);
 $SQLService->createColumn($table, "file", "integer", ["nullable" => true]);
 $SQLService->createColumn($table, "image", "integer", ["nullable" => true]);
+$SQLService->createColumn($table, "colorpicker", "string", ["nullable" => true]);
+
+

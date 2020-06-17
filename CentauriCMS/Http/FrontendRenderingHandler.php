@@ -49,8 +49,15 @@ class FrontendRenderingHandler
         $frontendTemplate = "Centauri::Frontend";
 
         if(is_array(config("centauri")["config"]["FE"])) {
-            if(isset(config("centauri")["config"]["FE"]["MainTemplate"])) {
-                $frontendTemplate = config("centauri")["config"]["FE"]["MainTemplate"];
+            if(isset(config("centauri")["config"]["FE"]["DefaultMainTemplate"])) {
+                $frontendTemplate = config("centauri")["config"]["FE"]["DefaultMainTemplate"];
+            }
+        }
+
+        $beLayoutCfg = $page->getBackendLayoutConfig();
+        if(!is_null($beLayoutCfg)) {
+            if(isset($beLayoutCfg["template"])) {
+                $frontendTemplate = $beLayoutCfg["template"];
             }
         }
 
@@ -58,6 +65,7 @@ class FrontendRenderingHandler
 
         $frontendHtml = view($frontendTemplate, [
             "page" => $page,
+            "domain" => $page->getDomain(),
             "content" => $renderedHTML,
             "additionalHeadTagContent" => $additionalHeadTagContent,
             "postParams" => $postParams

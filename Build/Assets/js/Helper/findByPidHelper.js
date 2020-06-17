@@ -1,6 +1,6 @@
 // Usage: Centauri.Helper.findByPidHelper(Centauri.Components.PagesComponent.uid);
 
-Centauri.Helper.findByPidHelper = (pid, $contentelement = null) => {
+Centauri.Helper.findByPidHelper = (pid, $container = $("#pagecontent"), rootpageid, cb = null) => {
     $(".overlayer").addClass("findByPid").removeClass("hidden");
     $(".loader").removeClass("hidden");
 
@@ -9,16 +9,17 @@ Centauri.Helper.findByPidHelper = (pid, $contentelement = null) => {
         "findByPid",
 
         {
-            pid: pid
+            pid: pid,
+            rootpageid: rootpageid
         },
 
         {
-            success: function(data) {
+            success: (data) => {
                 // Centauri.fn.Ajax.Overlayer = true;
                 $(".overlayer").addClass("hidden").removeClass("findByPid");
                 $(".loader").addClass("hidden");
 
-                var $container = $("#editor > .bottom > .container");
+                // var $container = $("#editor > .bottom > .container");
                 $container.html(data);
 
                 /**
@@ -29,7 +30,7 @@ Centauri.Helper.findByPidHelper = (pid, $contentelement = null) => {
                 /**
                  * Registering click-event for newCEButton
                  */
-                Centauri.Modal.NewContentElementModal();
+                Centauri.NewContentElementModal($container);
 
                 /**
                  * Initializing CKEditor 5
@@ -45,6 +46,13 @@ Centauri.Helper.findByPidHelper = (pid, $contentelement = null) => {
                  * Sorting-Service for the rendered Content-Elements in the EditorComponent
                  */
                 Centauri.Service.CESortingService();
+
+                /**
+                 * Callback
+                 */
+                if(Centauri.isNotNull(cb)) {
+                    cb();
+                }
             }
         }
     );

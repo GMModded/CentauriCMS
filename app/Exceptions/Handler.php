@@ -51,6 +51,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // if(is_null(session()->get("CENTAURI_EXCEPTION"))) {
+        //     if(!env("APP_DEBUG", false)) {
+        //         return view("centauri_frontend::Frontend/Templates.Errors.500");
+        //     }
+        // }
+
         return parent::render($request, $exception);
     }
 }

@@ -1,12 +1,16 @@
 <?php
 namespace Centauri\CMS\Service;
 
+use Centauri\CMS\BladeHelper\BuildBladeHelper;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Model\Language;
 use Centauri\CMS\Model\Notification;
 use Centauri\CMS\Component\ExtensionsComponent;
+use Centauri\CMS\Helper\PageTreeHelper;
 use Centauri\CMS\Model\File;
+use Centauri\CMS\Model\Form;
+use Centauri\CMS\Model\Scheduler;
 use Centauri\CMS\Utility\DomainsUtility;
 use Illuminate\Support\Facades\Storage;
 
@@ -43,6 +47,11 @@ class ModulesService
             "models" => [
                 "title" => trans("backend/modules.models.title"),
                 "icon" => "fas fa-plus"
+            ],
+
+            "forms" => [
+                "title" => "Forms",
+                "icon" => "fab fa-wpforms"
             ],
 
             /*
@@ -120,91 +129,13 @@ class ModulesService
 
         if($moduleid == "pages") {
             $languages = Language::all();
+            $lid = LanguageService::getLanguage();
 
-            $pages = Page::get()->all();
-            $npages = [];
-
-            $domainFiles = DomainsUtility::findAll();
-
-            foreach($pages as $page) {
-                if(
-                    $page->getAttribute("page_type") == "rootpage" ||
-                    $page->getAttribute("page_type") == "storage" ||
-                    $page->getAttribute("page_type") == "page"
-                ) {
-                    $language = Language::where("uid", $page->lid)->get()->first();
-
-                    if(is_null($language)) {
-                        $notification = new Notification;
-
-                        $notification->severity = "WARN";
-                        $notification->title = "Page with Language-ID '" . $page->lid . "' doesn't exists";
-                        $notification->text = "This issue may caused by removing a language-entry from the 'languages' table.";
-
-                        $notification->save();
-                    } else {
-                        if(
-                            $page->page_type == "rootpage"
-                        ) {
-                            $domainFileForUidExists = false;
-
-                            foreach($domainFiles as $domainFile) {
-                                if($domainFile->content->rootpageuid == $page->uid) {
-                                    $page->slugs = $domainFile->content->domain;
-                                    $domainFileForUidExists = true;
-                                }
-                            }
-
-                            if(!$domainFileForUidExists) {
-                                echo "<script id='_'>Centauri.Notify('primary', 'Domains', 'Please create a new domain-record for your new rootpage <br><i>" . $page->title . " [" . $language->title . " - #" . $page->uid . "]</i>, so it can be connected.', {timeOut: 20000});$('script#_').remove();</script>";
-                                break;
-                            }
-                        }
-
-                        $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
-                        $language->flagsrc = $flagsrc;
-
-                        $page->setAttribute("language", $language);
-                        $npages[$page->getAttribute("lid")][$page->getAttribute("uid")][] = $page;
-                    }
-                }
-            }
-            foreach($pages as $page) {
-                if(
-                    !$page->getAttribute("page_type") == "rootpage" &&
-                    !$page->getAttribute("page_type") == "storage"
-                ) {
-                    $language = Language::where("uid", $page->lid)->get()->first();
-
-                    if(is_null($language)) {
-                        $notification = new Notification;
-
-                        $notification->severity = "WARN";
-                        $notification->title = "Page with lid '" . $page->lid . "' doesn't exists";
-                        $notification->text = "This issue may caused by removing a language-entry from the 'languages' table.";
-
-                        $notification->save();
-                    } else {
-                        $flagsrc = env("APP_URL") . "/" . $language->flagsrc;
-                        $language->flagsrc = $flagsrc;
-
-                        $page->setAttribute("language", $language);
-                        $npages[$page->getAttribute("lid")][$page->getAttribute("pid")][] = $page;
-                    }
-                }
-            }
-
-            if(is_null($npages) || empty($npages) && !empty($pages)) {
-                $__notification = [
-                    "severity" => "ERROR",
-                    "title" => "Page(s) with a language which doesn't exists anymore",
-                    "text" => "Delete remaining pages which has a connection to the non-existing language to fix this issue.",
-                    "html" => "<a href='" . url("./centauri/fix/deletePagesWithNotExistingLanguage") . "'><button class='btn btn-warn waves-effect waves-light' style='color: #fff;'>Fix issue</button></a>"
-                ];
-            }
+            $pages = BuildBladeHelper::treeByPid(0, null, $lid);
+            $pageTreeHTML = PageTreeHelper::buildTreeHTML($pages);
 
             $data = [
-                "pages" => $npages,
+                "pageTreeHTML" => $pageTreeHTML,
                 "languages" => $languages
             ];
         }
@@ -238,6 +169,20 @@ class ModulesService
             $data = [
                 "models" => $models
             ];
+        }
+
+        if($moduleid == "forms") {
+            $forms = Form::get()->all();
+
+            $data = [
+                "forms" => $forms
+            ];
+
+            // $tabs = config("centauri")["forms"]["tabs"];
+
+            // $data = [
+            //     "tabs" => $tabs
+            // ];
         }
 
         if($moduleid == "filelist") {
@@ -307,7 +252,7 @@ class ModulesService
             $extensions = [];
             foreach($GLOBALS["Centauri"]["Extensions"] as $extKey => $ext) {
                 if(!isset($ext["state"])) {
-                    $ext["state"] = "Beta";
+                    $ext["state"] = "UNKNOWN";
                 }
 
                 $extensions[$extKey] = $ext;
@@ -329,6 +274,14 @@ class ModulesService
         if($moduleid == "sites") {
             $data = [
                 "a" => "b"
+            ];
+        }
+
+        if($moduleid == "schedulers") {
+            $schedulers = Scheduler::get()->all();
+
+            $data = [
+                "schedulers" => $schedulers
             ];
         }
 

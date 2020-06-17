@@ -9,7 +9,7 @@
                 @section("headertitle") @lang("backend/modules.models.title") @endsection
 
                 <div class="table-wrapper">
-                    <table id="models" class="table table-dark table-hover z-depth-1-half">
+                    <table id="models" class="table table-dark table-hover ci-bs-2">
                         <thead class="thead-dark">
                             <tr>
                                 <th title="Label">
@@ -59,12 +59,12 @@
 
                                     <td>
                                         <div class="actions">
-                                            <div class="d-block d-lg-none action p-2 waves-effect waves-light" data-action="actions-trigger">
+                                            <div class="d-block d-lg-none action btn btn-primary p-2 waves-effect waves-light" data-action="actions-trigger">
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </div>
 
                                             <div class="d-none d-lg-flex">
-                                                <div class="action mr-3 p-2 waves-effect waves-light" data-action="models-list" data-uid="1">
+                                                <div class="action btn btn-primary p-2 waves-effect waves-light" data-action="models-list" data-uid="1">
                                                     <i class="fas fa-list fa-lg"></i>
                                                 </div>
                                             </div>
@@ -78,11 +78,11 @@
             </div>
 
             <div id="modelsmodule_buttons" class="col-12 text-right">
-                <button class="btn btn-primary btn-floating waves-effect waves-light" data-button-type="create">
+                <button class="btn btn-primary btn-floating fa-lg waves-effect" data-button-type="create">
                     <i class="fas fa-plus"></i>
                 </button>
 
-                <button class="btn btn-info btn-floating waves-effect waves-light" data-button-type="refresh">
+                <button class="btn btn-info btn-floating fa-lg waves-effect" data-button-type="refresh">
                     <i class="fas fa-sync-alt"></i>
                 </button>
             </div>

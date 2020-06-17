@@ -5,13 +5,13 @@
 
 // ============================================================================================================
 // Definitions
-var gulp     = require('gulp');
-	clean    = require('gulp-clean');
-	watch    = require('gulp-watch');
-	concat   = require('gulp-concat');
-	terser   = require('gulp-terser');
-	sass     = require('gulp-sass');
-	minify   = require('gulp-minify-css');
+var gulp     = require("gulp");
+	clean    = require("gulp-clean");
+	watch    = require("gulp-watch");
+	concat   = require("gulp-concat");
+	terser   = require("gulp-terser");
+	sass     = require("gulp-sass");
+	minify   = require("gulp-minify-css");
 
 
 // ============================================================================================================
@@ -26,23 +26,25 @@ var gulp     = require('gulp');
 // => when you'd like to use the downloaded package / module,
 //    you've to link it here in order the task for js recognize it and concat & uglifys it.
 // NOTE: Watch out for case-sensivity of directory names!
-	var modules = {
-		"jquery"              : "../packages/jquery/jquery.min.js",
-		"jquery-ui"           : "../packages/jquery-ui/jquery-ui.min.js",
 
-		"bootstrap"           : "../packages/bootstrap/dist/js/bootstrap.min.js",
-		"popperjs"            : "../packages/popperjs/popper.min.js",
+	let modules = [
+		"jquery/jquery.min.js",
+		"jquery-ui/jquery-ui.min.js",
 
-		"mdbootstrap"         : "../packages/mdb/js/mdb.min.js",
-		"mdb_colorpicker"     : "../packages/mdb_colorpicker/pickr.min.js",
+		"waves/dist/waves.min.js",
+		"pickr/dist/pickr.min.js",
 
-		"ckeditor"            : "../packages/ckeditor5/build/ckeditor.js",
+		"ckeditor5/build/ckeditor.js",
 
-		"cropperjs"           : "../packages/cropperjs/dist/cropper.min.js",
-		"jquery-cropper"      : "../packages/jquery-cropper/dist/jquery-cropper.js"
-	};
+		"cropperjs/dist/cropper.min.js",
+		"jquery-cropper/dist/jquery-cropper.js"
+	];
 
-
+	let m = 0;
+	modules.forEach(_module => {
+		modules[m] = "../packages/" + _module;
+		m++;
+	});
 
 // ============================================================================================================
 // CSS Tasks
@@ -65,39 +67,23 @@ gulp.task('css:deploy', function() {
 // JS Tasks
 
 gulp.task('js:build', function() {
-	return gulp.src([
-		modules["jquery"],
-		modules["jquery-ui"],
-		modules["cropperjs"],
-		modules["jquery-cropper"],
-		modules["popperjs"],
-		modules["bootstrap"],
-		modules["mdbootstrap"],
-		modules["mdb_colorpicker"],
-		modules["ckeditor"],
-
-		inputSrc + "js/**/*.js"
-	])
-
+	return gulp.src(
+        Array.prototype.concat(
+            modules,
+			inputSrc + "js/**/*.js"
+        )
+    )
 	.pipe(concat(fileName + ".js"))
 	.pipe(gulp.dest(outputSrc + "js"))
 });
 
 gulp.task('js:deploy', function() {
-	return gulp.src([
-		modules["jquery"],
-		modules["jquery-ui"],
-		modules["cropperjs"],
-		modules["jquery-cropper"],
-		modules["popperjs"],
-		modules["bootstrap"],
-		modules["mdbootstrap"],
-		modules["mdb_colorpicker"],
-		modules["ckeditor"],
-
-		inputSrc + "js/**/*.js"
-	])
-
+	return gulp.src(
+        Array.prototype.concat(
+            modules,
+			inputSrc + "js/**/*.js"
+        )
+    )
 	.pipe(concat(fileName + ".js"))
 	.pipe(terser())
 	.pipe(gulp.dest(outputSrc + "js"));

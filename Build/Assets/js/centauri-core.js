@@ -58,7 +58,7 @@ function CentauriCoreFunctions() {
      * @return {boolean}
      */
     Centauri.isUndefined = function(variable) {
-        return (typeof variable == undefined || typeof variable == "undefined");
+        return (typeof variable == undefined || typeof variable == "undefined" || variable == undefined || variable == "undefined");
     };
 
     /**
@@ -69,7 +69,7 @@ function CentauriCoreFunctions() {
      * @return {boolean}
      */
     Centauri.isNotUndefined = function(variable) {
-        return (typeof variable != undefined && typeof variable != "undefined");
+        return (typeof variable != undefined && typeof variable != "undefined" && variable != undefined && variable != "undefined");
     };
 
     /**
@@ -95,6 +95,28 @@ function CentauriCoreFunctions() {
     };
 
     /**
+     * Checks if the given variable is a function
+     * 
+     * @function isFunction
+     * @param {mixin} variable The variable of this function
+     * @return {boolean}
+     */
+    Centauri.isFunction = function(variable) {
+        return (typeof variable == "function");
+    };
+
+    /**
+     * Checks if the given variable is not a function
+     * 
+     * @function isNotFunction
+     * @param {mixin} variable The variable of this function
+     * @return {boolean}
+     */
+    Centauri.isNotFunction = function(variable) {
+        return (typeof variable !== "function");
+    };
+
+    /**
      * Checks if a given element (by selector) exists or not
      * 
      * @function elExists
@@ -108,7 +130,7 @@ function CentauriCoreFunctions() {
             }
         }
 
-        return ($(selector).length === 1 ? true : false);
+        return ($(selector).length > 0 ? true : false);
     };
 
     /**
@@ -151,5 +173,17 @@ function CentauriCoreFunctions() {
      */
     Centauri.strReplace = function(string, searchValue, replaceValue) {
         return string.replace(searchValue, replaceValue, string);
+    };
+
+    /**
+     * Returns whether an array has the given item
+     * 
+     * @function inArray
+     * @param {string|object} item
+     * @param {array} array
+     * @return {boolean}
+     */
+    Centauri.inArray = (item, array) => {
+        return (!!~$.inArray(item, array));
     };
 }

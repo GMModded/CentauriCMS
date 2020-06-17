@@ -53,4 +53,39 @@ class DomainsUtility
     {
         return json_decode(file_get_contents($domainFile), $json);
     }
+
+    public static function findDomainConfigByPageUid($uid)
+    {
+        $domainFiles = self::findAll();
+        $nConfig = null;
+
+        foreach($domainFiles as $domainFile) {
+            $config = self::getConfigByDomainFile($domainFile);
+
+            if($config->rootpageuid == $uid) {
+                $nConfig = $config;
+            }
+        }
+
+        return $nConfig;
+    }
+
+    public static function getUriByConfig($config)
+    {
+        if(is_null($config)) {
+            return;
+        }
+
+        $protocol = "http://";
+        $uri = $config->domain;
+
+        if(isset($config->ssl)) {
+            if($config->ssl) {
+                $protocol = "https://";
+            }
+        }
+
+        $uri = $protocol . $uri;
+        return $uri;
+    }
 }

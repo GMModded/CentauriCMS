@@ -1,7 +1,8 @@
 {
     "id": "Docs",
     "ssl": false,
-    "domain": "docs.dev.localhost",
+    "domain": "docs.centauri.msediqi.lan",
     "rootpageuid": "5",
-    "pageTitlePrefix": "Centauri CMS \u00bb "
+    "pageTitlePrefix": "",
+    "pageNotFound": "17"
 }

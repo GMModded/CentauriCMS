@@ -1,4 +1,4 @@
-/*
+/**
  * Packages
  */
 @import "../../packages/toastr/toastr";
@@ -12,31 +12,59 @@
 @import "../../packages/slick/slick-theme.css";
 @import "../../packages/slick/slick.css";
 
+@import "../../packages/fontawesome5.12.0/css/fontawesome.min.css";
+@import "../../packages/fontawesome5.12.0/css/solid.min.css";
+@import "../../packages/fontawesome5.12.0/css/brands.min.css";
+
+/**
+ * Colors
+ */
+@import "colors";
+
 /**
  * Fonts
  */
 @import "font";
 
-/*
+/**
+ * Variables
+ */
+@import "variables";
+
+/**
  * Global
  */
 @import "global";
 
-/*
+/**
+ * Custom
+ */
+@import "custom";
+
+/**
  * Sections
  */
 @import "Sections/Header";
 @import "Sections/Content";
 
-/*
- * Content Elements
+/**
+ * Functions
  */
 @import "Functions/ContentElements";
 
+/**
+ * Content Elements
+ */
 @import "ContentElements/Slider";
 @import "ContentElements/HeaderDescription";
 @import "ContentElements/HeaderImage";
+@import "ContentElements/Boxitems";
 
+
+/**
+ * Utilities
+ */
+@import "Utilities/PlaceholderUtility";
 
 
 @media (max-width: 767px) {

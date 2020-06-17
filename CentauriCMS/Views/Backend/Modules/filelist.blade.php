@@ -9,7 +9,7 @@
                 @section("headertitle") @lang("backend/modules.filelist.title") @endsection
 
                 <div class="table-wrapper overflow-auto">
-                    <table id="filelist" class="table table-dark table-hover z-depth-1-half mb-0">
+                    <table id="filelist" class="table table-dark table-hover ci-bs-2 mb-0">
                         <thead class="thead-dark">
                             <tr>
                                 <th>
@@ -73,26 +73,26 @@
 
                                     <td>
                                         <div class="actions">
-                                            <div class="d-block d-lg-none action p-2 waves-effect waves-light" data-action="actions-trigger">
+                                            <div class="d-block d-lg-none action btn btn-primary p-2 waves-effect waves-light" data-action="actions-trigger">
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </div>
 
                                             <div class="d-none d-lg-flex">
-                                                <div class="action mr-3 p-2 waves-effect waves-light" data-action="file-edit" data-uid="">
+                                                <div class="action btn btn-default mr-3 p-2 waves-effect waves-light" data-action="file-edit" data-uid="">
                                                     <i class="fas fa-pen fa-lg"></i>
                                                 </div>
 
                                                 @if($file["cropable"])
-                                                    <div class="action mr-3 p-2 waves-effect waves-light" data-action="file-crop" data-uid="">
+                                                    <div class="action btn btn-default mr-3 p-2 waves-effect waves-light" data-action="file-crop" data-uid="">
                                                         <i class="fas fa-crop fa-lg"></i>
                                                     </div>
                                                 @endif
 
-                                                <div class="action mr-3 p-2 waves-effect waves-light" data-action="file-show" data-uid="">
+                                                <div class="action btn btn-default btn btn-defaultmr-3 p-2 waves-effect waves-light" data-action="file-show" data-uid="">
                                                     <i class="fas fa-eye fa-lg"></i>
                                                 </div>
 
-                                                <div class="action p-2 waves-effect waves-light" data-action="file-delete" data-uid="">
+                                                <div class="action btn btn-default btn btn-defaultp-2 waves-effect waves-light" data-action="file-delete" data-uid="">
                                                     <i class="fas fa-trash fa-lg"></i>
                                                 </div>
                                             </div>
@@ -107,7 +107,7 @@
 
             <div id="filelistmodule_buttons" class="col-12 text-right">
                 <div class="file-field position-absolute" style="right: 80px;">
-                    <button class="btn btn-primary btn-floating waves-effect waves-light" data-button-type="upload">
+                    <button class="btn btn-primary btn-floating fa-lg waves-effect waves-light" data-button-type="upload">
                         <i class="fas fa-cloud-upload-alt"></i>
 
                         <input type="file" id="filelist_upload" onchange="Centauri.Events.Window.OnInputFileChange(this)" />

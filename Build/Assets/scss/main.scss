@@ -3,7 +3,6 @@
  *
  * Toastr (customized),
  * Bootstrap v4.1.3,
- * MDB Pro v4.8.x,
  * FontAwesome v5.12.0,
  * cropperjs v1.0.1
  */
@@ -14,14 +13,21 @@
 @import "../../../packages/bootstrap/scss/variables";
 @import "../../../packages/bootstrap/dist/css/bootstrap.min.css";
 
-@import "../../../packages/mdb/css/mdb.min.css";
-@import "../../../packages/mdb_colorpicker/color-picker";
+// @import "../../../packages/ci-bs/css/ci-bs.css";
+
+@import "../../../packages/waves/dist/waves.min.css";
+@import "../../../packages/pickr/dist/themes/classic.min.css";
 
 @import "../../../packages/fontawesome5.12.0/css/fontawesome.min.css";
 @import "../../../packages/fontawesome5.12.0/css/solid.min.css";
 @import "../../../packages/fontawesome5.12.0/css/brands.min.css";
 
 @import "../../../packages/cropperjs/dist/cropper.min.css";
+
+/**
+ * Centauri-Bootstrap (ci-bs)
+ */
+@import "Centauri/Bootstrap/main";
 
 /**
  * Overrides
@@ -59,6 +65,7 @@
 @import "Modules/_modules-view";
 @import "Modules/dashboard";
 @import "Modules/pages";
+@import "Modules/forms";
 
 /**
  * Services
@@ -78,7 +85,8 @@
 /**
  * Utilities
  */
-@import "Utility/tablewrapper";
+ @import "Utility/tablewrapper";
+ @import "Utility/modal";
 
 /**
  * Customizations

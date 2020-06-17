@@ -2,10 +2,10 @@ Centauri.Helper.EditorComponentFieldHelper = () => {
     let datas = [];
 
     let selectors = [
-        $(".bottom .md-form > input", $editor),
-        $(".bottom .field.switch > label > input", $editor),
-        $(".bottom .md-form > .md-textarea", $editor),
-        $(".bottom .md-form > .mdb-select", $editor)
+        $(".bottom .ci-field > input", $editor),
+        $(".bottom .ci-switch > label > input", $editor),
+        $(".bottom .ci-field > textarea", $editor),
+        $(".bottom .ci-field > select", $editor)
     ];
 
     selectors.forEach(selector => {
@@ -14,6 +14,10 @@ Centauri.Helper.EditorComponentFieldHelper = () => {
 
             if(Centauri.isUndefined($this.attr("disabled")) && Centauri.isUndefined($this.attr("readonly"))) {
                 let id = $this.attr("id");
+
+                if($this.is("select")) {
+                    id = $this.data("id");
+                }
 
                 if(Centauri.isNotUndefined(id)) {
                     let value = $this.val();

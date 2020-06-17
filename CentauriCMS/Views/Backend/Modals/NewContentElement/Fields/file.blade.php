@@ -1,12 +1,12 @@
-<div class="md-form">
+<div class="ci-field">
     <div class="file-field d-flex mt-2">
-        <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3 mr-2" data-centauri-btn="addfile" data-required="{{ $fieldConfig['config']['required'] ?? '' }}" data-maxitems="{{ $fieldConfig['config']['maxItems'] ?? '' }}">
+        <button class="input-group-text btn btn-primary waves-effect waves-light p-3 mx-0 mt-3 mr-2" data-centauri-btn="addfile" data-required="{{ $fieldConfig['config']['required'] ?? '' }}" data-maxitems="{{ $fieldConfig['config']['maxItems'] ?? '' }}">
             <i class="fas fa-file mr-2"></i>
 
             Add file
         </button>
 
-        <button class="input-group-text md-addon btn btn-primary waves-effect waves-light p-3 mx-0 mt-3" data-centauri-btn="uploadfile" data-required="{{ $fieldConfig['config']['required'] ?? '' }}" data-maxitems="{{ $fieldConfig['config']['maxItems'] ?? '' }}">
+        <button class="input-group-text btn btn-primary waves-effect waves-light p-3 mx-0 mt-3" data-centauri-btn="uploadfile" data-required="{{ $fieldConfig['config']['required'] ?? '' }}" data-maxitems="{{ $fieldConfig['config']['maxItems'] ?? '' }}">
             <i class="fas fa-cloud-upload-alt mr-2"></i>
 
             Upload file
@@ -35,13 +35,13 @@
 
         @if(isset($splittedUids))
             @foreach($splittedUids as $imgUid)
-                <div class="accordion p-3 z-depth-1 mb-2">
+                <div class="accordion p-3 ci-bs-1 mb-2">
                     <div class="top">
-                        {{ ImageBladeHelper::get($imgUid)->name ?? "" }}
+                        {{ Centauri\CMS\BladeHelper\ImageBladeHelper::get($imgUid)->name ?? "" }}
                     </div>
 
                     <div class="bottom" style="display:none;">
-                        <img src="{!! ImageBladeHelper::getPath($imgUid) !!}" class="img-fluid mr-2" />
+                        <img src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($imgUid) !!}" class="img-fluid mr-2" />
                     </div>
                 </div>
             @endforeach

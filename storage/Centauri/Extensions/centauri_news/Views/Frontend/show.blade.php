@@ -1,21 +1,12 @@
-<style>
-    #header {
-        background: black;
-        position: relative !important;
-    }
-
-    #header .container-fluid {
-        position: relative !important;
-    }
-</style>
-
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div class="my-5 text-center">
+            <div class="my-5">
                 @if($newsItem)
                     <h3>
-                        {{ $newsItem->title }}
+                        <b>
+                            {{ $newsItem->title }}
+                        </b>
                     </h3>
 
                     <hr>
@@ -25,15 +16,17 @@
                     @endif
                 @else
                     <h5>
-                        Dieser News-Artikel konnte nicht gefunden werden bzw. ist leider nicht mehr verfügbar.
+                        This news article couldn't be found anymore or is no longer available.
                     </h5>
                 @endif
 
-                <h6>
-                    <a href="/news">
-                        Zurück zu den News
-                    </a>
-                </h6>
+                <hr>
+
+                <a class="anim-underline" href="/news">
+                    <u>
+                        Back to the news.
+                    </u>
+                </a>
             </div>
         </div>
     </div>

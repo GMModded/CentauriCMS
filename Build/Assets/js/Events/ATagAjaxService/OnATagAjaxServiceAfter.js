@@ -13,8 +13,17 @@ Centauri.Events.OnATagAjaxServiceAfter = (type, data) => {
 
     if(handler == "Cache") {
         if(action == "flushBackend") {
-            $(".modal").modal("hide").modal("dispose").remove();
+            Centauri.Modal($(".modal"), "dispose");
             $("body > .ck-rounded-corners").remove();
+        }
+    }
+
+    if(handler == "Notification") {
+        if(action == "deleteAll") {
+            Centauri.Components.ModulesComponent({
+                type: "load",
+                module: Centauri.Module
+            });
         }
     }
 };

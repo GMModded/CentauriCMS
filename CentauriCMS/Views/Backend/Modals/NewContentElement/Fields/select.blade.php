@@ -1,9 +1,9 @@
-<div class="md-form">
+<div class="ci-field">
     <label for="{{ $fieldConfig['id'] }}"{{ ((isset($fieldConfig["value"]) || isset($fieldConfig["config"]["default"]) || (!empty($fieldConfig["config"]["items"]))) ? " class=active" : "") }}>
         {{ $fieldConfig["label"] }}
     </label>
 
-    <select class="mdb-select md-form" data-id="{{ $fieldConfig['id'] }}"{{ $fieldConfig["config"]["required"] ? " required" : ""}} data-uid="{{ $fieldConfig['uid'] }}">
+    <select data-id="{{ $fieldConfig['id'] }}"{{ $fieldConfig["config"]["required"] ? " required" : ""}} data-uid="{{ $fieldConfig['uid'] }}">
         @if(isset($fieldConfig["config"]["default"]))
             <option value="{{ $fieldConfig["config"]["default"][1] }}" selected disabled>
                 {{ $fieldConfig["config"]["default"][0] }}

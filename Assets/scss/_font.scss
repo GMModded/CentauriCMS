@@ -24,3 +24,8 @@ strong,
 b {
     font-family: $primaryFontBold;
 }
+
+a {
+    color: $primaryColor;
+    text-decoration: underline;
+}

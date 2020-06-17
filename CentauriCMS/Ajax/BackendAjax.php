@@ -4,6 +4,8 @@ namespace Centauri\CMS\Ajax;
 use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
+use Centauri\CMS\Model\BeUser;
+use Centauri\CMS\Service\SchedulerService;
 
 class BackendAjax implements AjaxInterface
 {
@@ -17,8 +19,34 @@ class BackendAjax implements AjaxInterface
             $username = $request->input("username");
             $password = $request->input("password");
 
-            if($username == "admin" && $password == "password") {
+            $user = BeUser::where([
+                "username" => $username,
+                "password" => $password
+            ])->get()->first();
+
+            if(!is_null($user)) {
                 $request->session()->put("CENTAURI_BE_USER", true);
+
+                // $Centauri->initBE();
+                $localizedArr = \Centauri\CMS\Service\Locales2JSService::getLocalizedArray();
+
+                $html = view("Centauri::Backend.centauri", [
+                    "data" => [
+                        "modules" => $GLOBALS["Centauri"]["Modules"],
+                        "localizedArr" => $localizedArr,
+                        "dashboard" => $_GET["dashboard"] ?? "1"
+                    ]
+                ])->render();
+
+                $explodedHtml = explode("\n", $html);
+                
+                foreach($explodedHtml as $key => $value) {
+                    if(\Str::contains($value, "<script ")) {
+                        unset($explodedHtml[$key]);
+                    }
+                }
+
+                $html = implode("\n", $explodedHtml);
 
                 return json_encode([
                     "type" => "success",
@@ -27,25 +55,28 @@ class BackendAjax implements AjaxInterface
 
                     "headtags" => [
                         ["title", "CentauriCMS"]
-                    ]
+                    ],
+
+                    "html" => $html
                 ]);
             }
 
-            return json_encode([
-                "type" => "error",
-                "title" => "Login failed",
-                "description" => "Username/password is wrong!"
-            ]);
+            return response("Username/Password is wrong!", 500);
         }
 
         if($ajaxName == "getBackendLayout") {
             $pid = $request->input("pid");
 
             $page = \Centauri\CMS\Model\Page::find($pid);
-            $backendLayout = \Centauri\CMS\Model\BackendLayout::find($page->getAttribute("backend_layout"));
+            return null;
+            // $backendLayout = \Centauri\CMS\Model\BackendLayout::find($page->getAttribute("backend_layout"));
 
             // $backendLayoutData = json_decode($backendLayout->getAttribute("data"));
-            return $backendLayout->getAttribute("data");
+            // return $backendLayout->getAttribute("data");
+        }
+
+        if($ajaxName == "triggerscheduler") {
+            return SchedulerService::run("test_scheduler");
         }
 
         return AjaxAbstract::default($request, $ajaxName);

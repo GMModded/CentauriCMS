@@ -82,24 +82,24 @@
 
                         <div class="dropdown-view" style="display: none;">
                             <div class="col mt-2">
-                                <div class="position-relative">
-                                    <select class="pt-4 mdb-select md-form m-0" id="language">
-                                        <option value="en"{{ (app()->getLocale() == "en") ? " selected" : "" }}>
-                                            English
-                                        </option>
-
-                                        <option value="de"{{ (app()->getLocale() == "de") ? " selected" : "" }}>
-                                            Deutsch
-                                        </option>
-                                    </select>
-
-                                    <label class="mdb-main-label" for="language" style="color:white; left:0;">
+                                <div class="ci-field ci-select position-relative">
+                                    <label for="language">
                                         @lang("backend/global.label_language")
                                     </label>
+
+                                    <select name="language" id="language">
+                                        <option value="de" selected>
+                                            uff1
+                                        </option>
+
+                                        <option value="en">
+                                            uff2
+                                        </option>
+                                    </select>
                                 </div>
 
-                                <a role="button" class="btn btn-danger waves-effect waves-light mt-2 ml-0 w-100" href="{{ url('centauri/action/Backend/logout') }}">
-                                    Abmelden
+                                <a role="button" class="btn btn-danger btn-floating waves-effect m-0 center" href="{{ url('centauri/action/Backend/logout') }}">
+                                    <i class="fas fa-sign-out-alt"></i>
                                 </a>
                             </div>
                         </div>
@@ -141,12 +141,18 @@
                                                 <i class="fas fa-bolt"></i>
                                             </div>
                                         </div>
+
+                                        <div class="tool waves-effect waves-light" data-type="fullscreen">
+                                            <div class="icon-view">
+                                                <i class="fas fa-compress"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col col-md-4">
-                                <div class="mt-2 md-form">
+                                <div class="mt-2 ci-field">
                                     <input id="global_search" class="form-control" type="text">
 
                                     <label for="global_search">
@@ -206,7 +212,7 @@
                     <div class="row"></div>
                 </div>
 
-                <div class="footer z-depth-1">
+                <div class="footer ci-bs-1">
                     <div class="container">
                         <div class="d-flex float-right">
                             <button style="left: -7.5px;" class="btn btn-success waves-effect waves-light" data-id="save" data-trigger="SaveEditorComponent" style="">
@@ -226,11 +232,11 @@
             </div>
         </div>
 
-        <script src="{{ asset('public/backend/js/centauri.min.js') }}"></script>
-        <script src="{{ asset('resources/js/centauri-env.js') }}"></script>
+        <script src="{{ asset('public/backend/js/centauri.min.js') }}" async defer></script>
+        <script src="{{ asset('resources/js/centauri-env.js') }}" async defer></script>
 
         <script>
-            Centauri.__trans = {!! $data["localizedArr"] !!}
+            var Centauri__trans = {!! $data["localizedArr"] !!}
         </script>
     </body>
 </html>

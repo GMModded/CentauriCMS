@@ -1,3 +1,3 @@
-Centauri.Events.OnBackendEvent = function() {
+Centauri.Events.OnBackendEvent = () => {
     Centauri.load();
 };

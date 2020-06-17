@@ -1,6 +1,6 @@
 <div data-contentelement="headerimage">
     <div class="image-view" style="position: relative; overflow: hidden; max-height: 200px;">
-        <img class="img-fluid w-100" src="{!! ImageBladeHelper::getPath($element->image) !!}" />
+        <img class="img-fluid w-100" src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($element->image) !!}" />
     </div>
 
     <div class="container">

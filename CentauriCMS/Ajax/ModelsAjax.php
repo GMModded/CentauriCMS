@@ -23,13 +23,15 @@ class ModelsAjax implements AjaxInterface
             $datas = json_decode($request->input("datas"), true);
 
             $model = new $modelClassName();
-            $model->lid = 0;
+            $model->lid = 1;
 
             foreach($datas as $data) {
-                $id = $data["id"];
-                $value = $data["value"];
-
-                $model->$id = $value;
+                foreach($data as $uid => $dataArr) {
+                    foreach($dataArr as $id => $fieldArr) {
+                        $value = $fieldArr["value"];
+                        $model->$id = $value;
+                    }
+                }
             }
 
             $CME = config("centauri")["CME"];
@@ -45,6 +47,7 @@ class ModelsAjax implements AjaxInterface
 
                     $_HTML .= view("Centauri::Backend.Modals.NewContentElement.Fields.$fieldType", [
                         "fieldConfig" => [
+                            "uid" => "NEW",
                             "id" => $fieldKey,
                             "label" => $fieldLabel
                         ]

@@ -13,7 +13,7 @@
 		</div>
 	@endif
 
-    <div class="items z-depth-1{{ empty($list) ? " h-100" : "" }}">
+    <div class="items ci-bs-1{{ empty($list) ? " h-100" : "" }}">
 		@if(empty($list))
 			<div class="col-12 h-100">
 				<p class="text-center h-100 m-0 d-flex justify-content-center align-items-center">
@@ -26,9 +26,9 @@
 
 		@foreach($list as $item)
 			<div class="item" data-uid="{{ $item->uid }}">
-				<div class="wrapper d-flex waves-effect z-depth-1">
+				<div class="wrapper d-flex waves-effect ci-bs-1">
 					<div class="image-view col-4 px-0">
-						<img class="img-fluid" src="{!! ImageBladeHelper::getPath($item->uid) !!}" alt="" />
+						<img class="img-fluid" src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($item->uid) !!}" alt="" />
 					</div>
 
 					<div class="text-view col-8">

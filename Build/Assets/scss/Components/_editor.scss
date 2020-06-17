@@ -146,44 +146,6 @@
                 }
             }
         }
-
-        .content-element {
-            background-color: white;
-            margin-top: 15px;
-
-            &.ui-draggable-dragging {
-                cursor: move !important;
-                z-index: 999 !important;
-            }
-
-            .top {
-                height: 60px;
-
-                .title {
-                    cursor: pointer;
-                    text-transform: capitalize;
-                    font-size: 20px;
-                    display: inline-block;
-                    padding: 15px;
-                }
-            }
-
-            .fields {
-                width: 100%;
-                padding: 0 15px 15px;
-
-                label {
-                    &:not(.form-check-label) {
-                        margin-bottom: 0;
-                        font-weight: bold;
-                    }
-                }
-
-                .image-field {
-                    padding-top: 1px;
-                }
-            }
-        }
     }
 
     > .footer {

@@ -24,7 +24,9 @@ class Elements
                 "elements" => [
                     "headerdescription",
                     "slider",
-                    "headerimage"
+                    "headerimage",
+                    "titleteaser",
+                    "boxitems"
                 ]
             ]
         ]);
@@ -146,6 +148,16 @@ class Elements
                             ]
                         ],
 
+                        "link_label" => [
+                            "label" => "Link - Label",
+                            "type" => "input"
+                        ],
+
+                        "link" => [
+                            "label" => "Link",
+                            "type" => "input"
+                        ],
+
                         "header" => [
                             "label" => "Header",
                             "type" => "input",
@@ -190,11 +202,18 @@ class Elements
             "slider" => [
                 "slideritems"
             ],
-            
+
             "headerimage" => [
                 "image",
                 "header;subheader",
-                "RTE",
+                "RTE"
+            ],
+
+            "titleteaser" => [
+                "header;colorpicker"
+            ],
+
+            "boxitems" => [
                 "boxitems"
             ]
         ]);

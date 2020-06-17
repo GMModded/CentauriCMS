@@ -1,4 +1,4 @@
-Centauri.View.LoginView = function() {
+Centauri.View.LoginView = () => {
     $("#login form").on("submit", this, function(e) {
         e.preventDefault();
 
@@ -14,20 +14,26 @@ Centauri.View.LoginView = function() {
             {
                 success: function(data) {
                     data = JSON.parse(data);
-                    Centauri.Notify(data.type, data.title, data.description);
 
                     if(data.type == "success") {
-                        $(document.body).load(window.location.href, function() {
-                            Centauri.Notify(data.type, data.title, data.description);
-                            Centauri.Events.OnBackendEvent();
+                        // $(document.body).load(window.location.href, function() {
+                        //     Centauri.Notify(data.type, data.title, data.description);
+                        //     Centauri.Events.OnBackendEvent();
 
-                            location.reload();
-                        });
+                        //     console.log(data);
+
+                        //     // location.reload();
+                        // });
+
+                        let newHTMLDoc = document.open("text/html", "replace");
+                        newHTMLDoc.write(data.html);
+                        newHTMLDoc.close();
+
+                        Centauri.Notify(data.type, data.title, data.description);
+                        Centauri.Lib.CKEditorLib();
+
+                        Centauri.load();
                     }
-                },
-
-                error: function(data) {
-                    console.error(data);
                 }
             }
         );

@@ -10,8 +10,11 @@
     "require": {
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
-        "laravel/framework": "^7.0",
-        "laravel/tinker": "^2.0"
+        "laravel/framework": "^7.15",
+        "laravel/tinker": "^2.0",
+        "pusher/pusher-php-server": "^4.1",
+        "spatie/db-dumper": "^2.16",
+        "titasgailius/terminal": "^0.3.1"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
@@ -35,7 +38,9 @@
             "App\\": "app/",
 
             "Centauri\\CMS\\": "CentauriCMS/",
-            "Centauri\\Extension\\": "storage/Centauri/Extensions/"
+            "Centauri\\Extension\\Frontend\\": "storage/Centauri/Extensions/centauri_frontend/",
+            "Centauri\\Extension\\News\\": "storage/Centauri/Extensions/centauri_news/",
+            "Centauri\\Extension\\Jobs\\": "storage/Centauri/Extensions/centauri_jobs/"
         },
         "classmap": [
             "database/seeds",

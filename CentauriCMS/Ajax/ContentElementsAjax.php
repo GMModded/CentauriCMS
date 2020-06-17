@@ -6,12 +6,11 @@ use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Centauri;
-use Centauri\CMS\Component\ExtensionsComponent;
+use Centauri\CMS\Event\OnNewElementEvent;
 use Centauri\CMS\Helper\CCEHelper;
-use Centauri\CMS\Helper\ContentElementBEHelper;
 use Centauri\CMS\Model\Element;
+use Centauri\CMS\Utility\DomainsUtility;
 use Illuminate\Support\Str;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class ContentElementsAjax implements AjaxInterface
 {
@@ -83,10 +82,12 @@ class ContentElementsAjax implements AjaxInterface
                 $additionalType = $fieldConfig["additionalType"];
 
                 $additionalData = $this->findAdditionalDataByType($additionalType);
+                $element = Element::where("uid", $data["uid"])->get()->first();
 
                 $html = view("Centauri::Backend.Modals.NewContentElement.Fields.AdditionalTypes." . $additionalType, [
                     "fieldConfig" => $fieldConfig,
-                    "additionalData" => $additionalData
+                    "additionalData" => $additionalData,
+                    "element" => $element
                 ])->render();
             } else {
                 $type = $fieldConfig["type"];
@@ -108,7 +109,6 @@ class ContentElementsAjax implements AjaxInterface
         $html = "";
         $splittedFields = [];
 
-        $CCE = config("centauri")["CCE"];
         $CCEfields = CCEHelper::getAllFields();
 
         if(Str::contains($field, ";")) {
@@ -193,11 +193,11 @@ class ContentElementsAjax implements AjaxInterface
         if($ajaxName == "findByPid") {
             $uid = $request->input("pid");
             $lid = $request->input("lid") ?? 1;
+            $rootpageid = $request->input("rootpageid") ?? null;
 
             $elements = Element::where([
                 "pid" => $uid,
-                "lid" => $lid,
-                "hidden" => 0
+                "lid" => $lid
             ])->orderBy("sorting", "asc")->get()->all();
 
             $CCE = config("centauri")["CCE"];
@@ -219,9 +219,29 @@ class ContentElementsAjax implements AjaxInterface
                     }
                 }
             }
+            
+            $domainConfig = null;
+
+            if(!is_null($rootpageid)) {
+                $domainConfig = DomainsUtility::findDomainConfigByPageUid($rootpageid);
+            } else {
+                $domainConfig = DomainsUtility::findDomainConfigByPageUid($page->uid);
+            }
+
+            $host = DomainsUtility::getUriByConfig($domainConfig);
+            if($domainConfig->domain != $page->slugs) {
+                $page->uri = $host . $page->slugs;
+            } else {
+                $page->uri = $host;
+            }
+
+            if($host == "/") {
+                $page->uri = $page->slugs;
+            }
 
             return view("Centauri::Backend.Partials.elements", [
                 "data" => [
+                    "page" => $page,
                     "beLayout" => $backendLayout,
                     "elements" => $elements,
                     "fields" => $fields
@@ -442,6 +462,11 @@ class ContentElementsAjax implements AjaxInterface
 
             $element->save();
 
+            event(new OnNewElementEvent([
+                "reloadpage" => true,
+                "uid" => $element->pid
+            ]));
+
             return json_encode([
                 "type" => "success",
                 "title" => "Element created",
@@ -552,6 +577,11 @@ class ContentElementsAjax implements AjaxInterface
                     }
                 }
 
+                event(new OnNewElementEvent([
+                    "reloadpage" => true,
+                    "uid" => $element->pid
+                ]));
+
                 return json_encode([
                     "type" => "success",
                     "title" => "Element saved",
@@ -563,6 +593,11 @@ class ContentElementsAjax implements AjaxInterface
                 $state = (!$element->hidden ? "hidden" : "visible");
                 $element->hidden = !$element->hidden;
 
+                event(new OnNewElementEvent([
+                    "reloadpage" => true,
+                    "uid" => $element->pid
+                ]));
+
                 if($element->save()) {
                     return json_encode([
                         "type" => "primary",
@@ -573,7 +608,14 @@ class ContentElementsAjax implements AjaxInterface
             }
 
             if($ajaxName == "deleteElementByUid") {
+                $elementPid = $element->pid ?? null;
+
                 if(!is_null($element) && ($element->delete())) {
+                    event(new OnNewElementEvent([
+                        "reloadpage" => true,
+                        "uid" => $elementPid
+                    ]));
+
                     return json_encode([
                         "type" => "success",
                         "title" => "Element deleted",
@@ -626,6 +668,11 @@ class ContentElementsAjax implements AjaxInterface
                     $element->save();
                 }
             }
+
+            event(new OnNewElementEvent([
+                "reloadpage" => true,
+                "uid" => $pid
+            ]));
 
             return json_encode([
                 "type" => "primary",

@@ -8,7 +8,7 @@
  * 
  * © 2019-2020 All rights reserved.
  */
-const Centauri = {};
+var Centauri = {};
 
 /**
  * Centauri Environment
@@ -16,8 +16,8 @@ const Centauri = {};
 Centauri.Env = "Development";
 
 /**
- * Centauri Module - ID
- * Default one when logging into the backend
+ * Centauri default ModuleID
+ * The default one which will be used when logging into the backend
  */
 Centauri.defaultModule = "dashboard";
 
@@ -38,6 +38,7 @@ Centauri.Helper = {};
 Centauri.Helper.VariablesHelper = {};
 
 Centauri.Events = {};
+Centauri.Lib = {};
 Centauri.Listener = {};
 Centauri.Components = {};
 Centauri.Modal = {};
@@ -50,7 +51,7 @@ Centauri.View = {};
  * @function Centauri.load
  * @returns {void}
  */
-Centauri.load = function() {
+Centauri.load = () => {
     /**
      * This function is 
      */
@@ -63,6 +64,11 @@ Centauri.load = function() {
     if(Centauri.isNotUndefined(CentauriEnv)) {
         CentauriEnv();
     }
+
+    /**
+     * Creating a new LocalStorage Object to fill in data which can hold temporary BE user values (e.g. fullscreen feature etc.)
+     */
+    Centauri.LocalStorage = new CentauriLocalStorageService();
 
     /**
      * Window related stuff (events etc.)
@@ -92,9 +98,14 @@ Centauri.load = function() {
     Centauri.Components.EditorComponent.init();
 
     /**
-     * Listeners which register events mainly
+     * Listener handling the overlayer (for EditorComponent or ModalUtility)
      */
     Centauri.Listener.OverlayerListener();
+
+    /**
+     * Listener for EditorComponent and ModalUtility (when pressing buttons on keyboard while one of those is active)
+     */
+    Centauri.Listener.DocumentKeyUpListener();
 };
 
 
@@ -109,6 +120,11 @@ $(document).ready(function() {
      * Initializing Centauri Core Functions by this such as Centauri Core itself.
      */
     Centauri.load();
+
+    /**
+     * Initializing CentauriJS Core
+     */
+    CentauriJS.init();
 
     /**
      * Initializations - mainly for functions which should happen after Centauri.load() has been called (async).

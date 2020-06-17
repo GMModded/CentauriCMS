@@ -2,7 +2,7 @@ a {
     &.anim-underline {
         position: relative;
         text-decoration: none !important;
-        transition: .66s cubic-bezier(1, -0.09, 0, 1.16);
+        transition: .66s before cubic-bezier(1, -.1, 0, 1.15), .66s after cubic-bezier(1, -.1, 0, 1.15);
 
         &:before {
             content: "";
@@ -14,7 +14,7 @@ a {
             height: 3px;
             margin-top: 2px;
             background-color: gold;
-            transition: .66s cubic-bezier(1, -0.09, 0, 1.16);
+            transition: $transition_66;
         }
 
         &:hover,
@@ -33,7 +33,7 @@ a {
     ul {
         &:not(.slick-dots) {
             list-style: none;
-            padding-left: 15px;
+            padding-left: 20px;
 
             li {
                 position: relative;
@@ -49,4 +49,21 @@ a {
             }
         }
     }
+}
+
+*::selection {
+    background: $primaryColor;
+    color: white;
+}
+
+h1,h2,h3,h4,h5,h6,p,ul>li,span,label {
+    cursor: default;
+}
+
+a[role="button"] {
+    text-decoration: none !important;
+}
+
+.ci-textarea {
+    cursor: text !important;
 }

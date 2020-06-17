@@ -13,7 +13,10 @@ $table = "pages";
 /**
  * Columns
  */
-$SQLService->createColumn($table, "storage_id", "integer", ["nullable" => true]);
+$SQLService->createColumn($table, "domain_id", "integer", ["default" => null, "nullable" => true]);
+$SQLService->createColumn($table, "storage_id", "integer", ["default" => null, "nullable" => true]);
+
+
 $SQLService->createColumn($table, "page_type", "string");
 
 $SQLService->createColumn($table, "seo_keywords", "string", ["default" => ""]);

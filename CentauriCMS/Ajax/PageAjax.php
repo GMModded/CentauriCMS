@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Centauri\CMS\AjaxInterface;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Model\Language;
+use Centauri\CMS\Utility\DomainsUtility;
 
 class PageAjax implements AjaxInterface
 {
@@ -226,44 +227,18 @@ class PageAjax implements AjaxInterface
 
     public function savePage($page)
     {
-        $existingPage = Page::where([
-            "slugs" => $page->slugs
-        ])->orWhere([
-            "slugs" => "/" . $page->slugs
-        ])->first();
-
-        if(is_null($existingPage)) {
-            $existingPage = Page::where("title", $page->title)->first();
-
-            if(is_null($existingPage)) {
-                if($page->save()) {
-                    return json_encode([
-                        "type" => "success",
-                        "title" => "Page '" . $page->title . "' created",
-                        "description" => "Successfully created '" . $page->title . "'"
-                    ]);
-                }
-
-                return json_encode([
-                    "type" => "error",
-                    "title" => "New Page failed",
-                    "description" => "An error occured while creating '" . $page->title . "'"
-                ]);
-            } else {
-                return json_encode([
-                    "type" => "error",
-                    "title" => "Page exists",
-                    "description" => "The page '" . $existingPage->title . "' has this title already!"
-                ]);
-            }
-        } else {
+        if($page->save()) {
             return json_encode([
-                "type" => "error",
-                "title" => "Page exists",
-                "description" => "The page '" . $existingPage->title . "' has this URL already!"
+                "type" => "success",
+                "title" => "Page '" . $page->title . "' created",
+                "description" => "Successfully created '" . $page->title . "'"
             ]);
         }
 
-        return null;
+        return json_encode([
+            "type" => "error",
+            "title" => "New Page failed",
+            "description" => "An error occured while creating '" . $page->title . "'"
+        ]);
     }
 }

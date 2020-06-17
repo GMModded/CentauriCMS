@@ -10,15 +10,27 @@ class NotificationAjax implements AjaxInterface
 {
     public function request(Request $request, String $ajaxName)
     {
-        $uid = $request->input("uid");
-        Notification::destroy($uid);
+        if($ajaxName == "deleteByUid") {
+            $uid = $request->input("uid");
+            Notification::destroy($uid);
 
-        return json_encode([
-            "type" => "primary",
-            "title" => "Notifications",
-            "description" => "This notification has been deleted"
-        ]);
+            return json_encode([
+                "type" => "primary",
+                "title" => "Notifications",
+                "description" => "This notification has been deleted"
+            ]);
+        }
 
-        // return AjaxAbstract::default($request, $ajaxName);
+        if($ajaxName == "deleteAll") {
+            Notification::truncate();
+
+            return json_encode([
+                "type" => "primary",
+                "title" => "Notifications",
+                "description" => "All notifications have been deleted"
+            ]);
+        }
+
+        return AjaxAbstract::default($request, $ajaxName);
     }
 }
