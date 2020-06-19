@@ -2,7 +2,7 @@
 namespace Centauri\CMS\Ajax;
 
 use Centauri\CMS\AjaxAbstract;
-use Centauri\CMS\AjaxInterface;
+use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Model\Scheduler;
 use Centauri\CMS\Service\ExecuteSchedulerService;
 use Illuminate\Http\Request;

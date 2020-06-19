@@ -1,7 +1,7 @@
 <?php
 namespace Centauri\CMS\Tracker;
 
-use Centauri\CMS\TrackingInterface;
+use Centauri\CMS\Interfaces\TrackingInterface;
 
 class FrontendTracker implements TrackingInterface
 {

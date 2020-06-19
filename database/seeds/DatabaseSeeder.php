@@ -5,7 +5,7 @@ use Centauri\CMS\Model\Page;
 use Centauri\CMS\Model\Language;
 use Centauri\CMS\Model\Element;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {

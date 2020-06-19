@@ -2,7 +2,7 @@
 namespace Centauri\CMS\Ajax;
 
 use Illuminate\Http\Request;
-use Centauri\CMS\AjaxInterface;
+use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Model\Page;
 use Centauri\CMS\Model\Language;
 use Centauri\CMS\Utility\DomainsUtility;

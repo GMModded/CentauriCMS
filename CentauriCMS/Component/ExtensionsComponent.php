@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class ExtensionsComponent
 {
-    public function __construct()
+    public function loadExtensions()
     {
         $extensionsDirs = Storage::disk("centauri_extensions")->allDirectories();
         $extensionsFiles = Storage::disk("centauri_extensions")->allFiles();
@@ -26,10 +26,20 @@ class ExtensionsComponent
                     $config = include $extConfigFilePath;
 
                     if(gettype($config) == "array") {
-                        $mainclass = $config["mainclass"];
+                        $loadExtension = true;
 
-                        Centauri::makeInstance($mainclass);
-                        $GLOBALS["Centauri"]["Extensions"][$extName] = $config;
+                        if(isset($config["status"])) {
+                            if($config["status"] != "ENABLED") {
+                                $loadExtension = false;
+                            }
+                        }
+
+                        if($loadExtension) {
+                            $mainclass = $config["mainclass"];
+
+                            Centauri::makeInstance($mainclass);
+                            $GLOBALS["Centauri"]["Extensions"][$extName] = $config;
+                        }
                     }
                 }
             }

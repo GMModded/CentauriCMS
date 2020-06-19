@@ -4,7 +4,7 @@ namespace Centauri\CMS\Ajax;
 use Exception;
 use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
-use Centauri\CMS\AjaxInterface;
+use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Event\OnNewElementEvent;
 use Centauri\CMS\Helper\CCEHelper;

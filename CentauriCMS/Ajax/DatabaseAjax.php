@@ -3,7 +3,7 @@ namespace Centauri\CMS\Ajax;
 
 use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
-use Centauri\CMS\AjaxInterface;
+use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Model\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;

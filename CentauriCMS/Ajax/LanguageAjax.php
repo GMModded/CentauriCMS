@@ -3,7 +3,7 @@ namespace Centauri\CMS\Ajax;
 
 use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
-use Centauri\CMS\AjaxInterface;
+use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Model\Language;
 
 class LanguageAjax implements AjaxInterface

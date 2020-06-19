@@ -247,7 +247,7 @@ class ModulesService
         }
 
         if($moduleid == "extensions") {
-            Centauri::makeInstance(ExtensionsComponent::class);
+            Centauri::makeInstance(ExtensionsComponent::class)->loadExtensions();
 
             $extensions = [];
             foreach($GLOBALS["Centauri"]["Extensions"] as $extKey => $ext) {

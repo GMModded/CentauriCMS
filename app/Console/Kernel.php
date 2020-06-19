@@ -2,10 +2,10 @@
 
 namespace App\Console;
 
-use Centauri\CMS\Model\Scheduler;
-use Centauri\CMS\Service\ExecuteSchedulerService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Centauri\CMS\Model\Scheduler;
+use Centauri\CMS\Service\ExecuteSchedulerService;
 
 class Kernel extends ConsoleKernel
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Centauri\CMS\Cache;
+namespace Centauri\CMS\Caches;
 
 /**
  * This caching class will either cache a specific page (frontend only) if it has not been found as static file
@@ -7,6 +7,11 @@ namespace Centauri\CMS\Cache;
  */
 class StaticFileCache
 {
+    /**
+     * Returns the path (as a string) to the temp cached directory of rendered pages/html.
+     * 
+     * @return string
+     */
     public static function getCachedTempDir()
     {
         return realpath(__DIR__ . "\\..\\temp\\Cache");
@@ -21,7 +26,7 @@ class StaticFileCache
      * 
      * @return boolean|null|void
      */
-    public static function setCache(string $id, string $data)
+    public static function setCache(string $id, string $data): bool
     {
         $cachedFile = fopen(self::getCachedTempDir() . "\\$id.html", "w+");
         fwrite($cachedFile, $data);

@@ -2,7 +2,7 @@
 namespace Centauri\CMS\Ajax;
 
 use Centauri\CMS\AjaxAbstract;
-use Centauri\CMS\AjaxInterface;
+use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Model\Notification;
 use Illuminate\Http\Request;
 

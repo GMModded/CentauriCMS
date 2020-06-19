@@ -37,10 +37,33 @@
         "psr-4": {
             "App\\": "app/",
 
-            "Centauri\\CMS\\": "CentauriCMS/",
-            "Centauri\\Extension\\Frontend\\": "storage/Centauri/Extensions/centauri_frontend/",
-            "Centauri\\Extension\\News\\": "storage/Centauri/Extensions/centauri_news/",
-            "Centauri\\Extension\\Jobs\\": "storage/Centauri/Extensions/centauri_jobs/"
+            "Centauri\\CMS\\": "CentauriCMS/Centauri/",
+            "Centauri\\CMS\\Abstract\\": "CentauriCMS/Abstract/",
+            "Centauri\\CMS\\AdditionalDatas\\": "CentauriCMS/AdditionalDatas/",
+            "Centauri\\CMS\\Ajax\\": "CentauriCMS/Ajax/",
+            "Centauri\\CMS\\Application\\": "CentauriCMS/Application/",
+            "Centauri\\CMS\\BladeHelper\\": "CentauriCMS/BladeHelper/",
+            "Centauri\\CMS\\Cache\\": "CentauriCMS/Cache/",
+            "Centauri\\CMS\\Component\\": "CentauriCMS/Component/",
+            "Centauri\\CMS\\Controller\\": "CentauriCMS/Controller/",
+            "Centauri\\CMS\\Event\\": "CentauriCMS/Event/",
+            "Centauri\\CMS\\Exception\\": "CentauriCMS/Exception/",
+            "Centauri\\CMS\\Helper\\": "CentauriCMS/Helper/",
+            "Centauri\\CMS\\Http\\": "CentauriCMS/Http/",
+            "Centauri\\CMS\\Interfaces\\": "CentauriCMS/Interfaces/",
+            "Centauri\\CMS\\Model\\": "CentauriCMS/Model/",
+            "Centauri\\CMS\\Processors\\": "CentauriCMS/Processors/",
+            "Centauri\\CMS\\Resolver\\": "CentauriCMS/Resolver/",
+            "Centauri\\CMS\\Scheduler\\": "CentauriCMS/Scheduler/",
+            "Centauri\\CMS\\Service\\": "CentauriCMS/Service/",
+            "Centauri\\CMS\\Tracker\\": "CentauriCMS/Tracker/",
+            "Centauri\\CMS\\Utility\\": "CentauriCMS/Utility/",
+            "Centauri\\CMS\\Validation\\": "CentauriCMS/Validation/",
+
+            "Centauri\\Extension\\Frontend\\": "storage/Centauri/Extensions/centauri_frontend/Classes/",
+            "Centauri\\Extension\\News\\": "storage/Centauri/Extensions/centauri_news/Classes/",
+            "Centauri\\Extension\\Jobs\\": "storage/Centauri/Extensions/centauri_jobs/Classes/",
+            "Centauri\\Extension\\Cookie\\": "storage/Centauri/Extensions/centauri_cookie/Classes/"
         },
         "classmap": [
             "database/seeds",
