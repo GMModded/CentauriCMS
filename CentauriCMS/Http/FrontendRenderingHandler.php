@@ -10,9 +10,11 @@ class FrontendRenderingHandler
     {
         $additionalHeadTagContent = "";
 
-        foreach($GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Head"] as $headClass) {
-            $instance = Centauri::makeInstance($headClass);
-            $additionalHeadTagContent .= $instance->fetch();
+        if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]) && (is_array($GLOBALS["Centauri"]["AdditionalDataFuncs"]))) {
+            foreach($GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Head"] as $headClass) {
+                $instance = Centauri::makeInstance($headClass);
+                $additionalHeadTagContent .= $instance->fetch();
+            }
         }
 
         return $additionalHeadTagContent;

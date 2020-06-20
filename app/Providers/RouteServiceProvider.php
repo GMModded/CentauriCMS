@@ -88,6 +88,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapCentauriRoutes()
     {
-        Route::namespace($this->namespace)->group(base_path("CentauriCMS/Http/Routes.php"));
+        Route::namespace($this->namespace)->group(base_path("CentauriCMS/Http/CentauriRoutes.php"));
     }
 }

@@ -7,14 +7,17 @@ namespace Centauri\CMS\Caches;
  */
 class StaticFileCache
 {
+    public static $cachedTempDirPath = "";
+
     /**
-     * Returns the path (as a string) to the temp cached directory of rendered pages/html.
+     * The constructor for the StaticFileCache class.
+     * Sets currently only the cached temporary directory path.
      * 
-     * @return string
+     * @return void
      */
-    public static function getCachedTempDir()
+    public function __construct()
     {
-        return realpath(__DIR__ . "\\..\\temp\\Cache");
+        $this->cachedTempDirPath = realpath(__DIR__ . "\\..\\temp\\Cache");
     }
 
     /**
@@ -28,7 +31,7 @@ class StaticFileCache
      */
     public static function setCache(string $id, string $data): bool
     {
-        $cachedFile = fopen(self::getCachedTempDir() . "\\$id.html", "w+");
+        $cachedFile = fopen(self::$cachedTempDirPath . "\\$id.html", "w+");
         fwrite($cachedFile, $data);
         fclose($cachedFile);
 
@@ -48,7 +51,7 @@ class StaticFileCache
             return;
         }
 
-        return file_get_contents(self::getCachedTempDir() . "\\$id.html");
+        return file_get_contents(self::$cachedTempDirPath . "\\$id.html");
     }
 
     /**
@@ -60,6 +63,28 @@ class StaticFileCache
      */
     public static function hasCache($id)
     {
-        return file_exists(self::getCachedTempDir() . "\\$id.html");
+        return file_exists(self::$cachedTempDirPath . "\\$id.html");
+    }
+
+    /**
+     * Delets a cached static file by its id.
+     * 
+     * @param string $id - The uniqid of this cache to be deleted.
+     * 
+     * @return boolean
+     */
+    public static function deleteCache($id)
+    {
+        return unlink(self::$cachedTempDirPath . "\\$id.html");
+    }
+
+    /**
+     * Deletes all cached static files.
+     * 
+     * @return boolean
+     */
+    public static function deleteAll()
+    {
+        return unlink(self::$cachedTempDirPath . "\\*.html");
     }
 }

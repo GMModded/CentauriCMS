@@ -1,8 +1,10 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
-use Centauri\CMS\AjaxAbstract;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Centauri\CMS\Abstracts\AjaxAbstract;
 use Centauri\CMS\Interfaces\AjaxInterface;
 
 class CacheAjax extends AjaxAbstract implements AjaxInterface
@@ -10,8 +12,8 @@ class CacheAjax extends AjaxAbstract implements AjaxInterface
     public function request(Request $request, String $ajaxName)
     {
         if($ajaxName == "flushFrontend") {
-            \Artisan::call("cache:clear");
-            \Artisan::call("view:clear");
+            Artisan::call("cache:clear");
+            Artisan::call("view:clear");
 
             return json_encode([
                 "type" => "success",
@@ -21,9 +23,9 @@ class CacheAjax extends AjaxAbstract implements AjaxInterface
         }
 
         if($ajaxName == "flushBackend") {
-            \Artisan::call("cache:clear");
-            \Artisan::call("config:clear");
-            \Artisan::call("config:cache");
+            Artisan::call("cache:clear");
+            Artisan::call("config:clear");
+            Artisan::call("config:cache");
 
             return json_encode([
                 "type" => "success",
@@ -33,12 +35,12 @@ class CacheAjax extends AjaxAbstract implements AjaxInterface
         }
 
         if($ajaxName == "flushAll") {
-            \Artisan::call("cache:clear");
-            \Artisan::call("config:clear");
-            \Artisan::call("view:clear");
-            \Artisan::call("config:cache");
+            Artisan::call("cache:clear");
+            Artisan::call("config:clear");
+            Artisan::call("view:clear");
+            Artisan::call("config:cache");
 
-            \Cache::flush();
+            Cache::flush();
 
             return json_encode([
                 "type" => "success",

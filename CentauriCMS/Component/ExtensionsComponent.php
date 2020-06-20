@@ -2,7 +2,11 @@
 namespace Centauri\CMS\Component;
 
 use Centauri\CMS\Centauri;
+use Centauri\CMS\Model\Notification;
+use Centauri\CMS\Utility\NotificationUtility;
+use Centauri\CMS\Utility\ToastUtility;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -36,6 +40,14 @@ class ExtensionsComponent
 
                         if($loadExtension) {
                             $mainclass = $config["mainclass"];
+
+                            if(!class_exists($mainclass)) {
+                                if(Centauri::isProduction()) {
+                                    $errMsg = "The class $mainclass could not be found while loading all extensions!";
+                                    NotificationUtility::create("ERROR", "Centauri Extensions-Component", $errMsg, "error");
+                                    continue;
+                                }
+                            }
 
                             Centauri::makeInstance($mainclass);
                             $GLOBALS["Centauri"]["Extensions"][$extName] = $config;

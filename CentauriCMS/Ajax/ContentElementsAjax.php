@@ -2,7 +2,7 @@
 namespace Centauri\CMS\Ajax;
 
 use Exception;
-use Centauri\CMS\AjaxAbstract;
+use Centauri\CMS\Abstracts\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Centauri;

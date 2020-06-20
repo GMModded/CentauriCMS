@@ -12,6 +12,7 @@ use Centauri\CMS\Model\File;
 use Centauri\CMS\Model\Form;
 use Centauri\CMS\Model\Scheduler;
 use Centauri\CMS\Utility\DomainsUtility;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ModulesService
@@ -49,10 +50,12 @@ class ModulesService
                 "icon" => "fas fa-plus"
             ],
 
+            /*
             "forms" => [
                 "title" => "Forms",
                 "icon" => "fab fa-wpforms"
             ],
+            */
 
             /*
             "filelist" => [
@@ -98,7 +101,7 @@ class ModulesService
 
         $modules["notifications"]["data"] = Notification::get()->count();
 
-        $extensionModules = $GLOBALS["Centauri"]["Modules"];
+        $extensionModules = $GLOBALS["Centauri"]["Modules"] ?? [];
         $GLOBALS["Centauri"]["Modules"] = array_merge($modules, $extensionModules);
     }
 

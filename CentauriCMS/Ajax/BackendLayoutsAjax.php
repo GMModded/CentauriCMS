@@ -1,7 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
-use Centauri\CMS\AjaxAbstract;
+use Centauri\CMS\Abstracts\AjaxAbstract;
 use \Illuminate\Http\Request;
 use Centauri\CMS\Interfaces\AjaxInterface;
 

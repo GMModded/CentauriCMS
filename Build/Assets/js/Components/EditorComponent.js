@@ -1,4 +1,4 @@
-Centauri.Components.EditorComponent = function(type, data) {
+Centauri.Components.EditorComponent = (type, data) => {
     $editor = $("#editor");
 
     if(type == "show") {
@@ -206,7 +206,7 @@ Centauri.Components.EditorComponent = function(type, data) {
         Centauri.Helper.VariablesHelper.__EditorComponentIsOpen = false;
         $editor.removeClass("active");
 
-        setTimeout(function() {
+        setTimeout(() => {
             $(".overlayer").addClass("hidden");
             $(".overlayer").removeAttr("data-closer");
         }, Centauri.Components.EditorComponent.TransitionTime);

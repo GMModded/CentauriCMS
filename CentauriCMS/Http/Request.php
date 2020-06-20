@@ -1,18 +1,15 @@
 <?php
 namespace Centauri\CMS\Http;
 
-use Centauri\CMS\BladeHelper\URIBladeHelper;
-use Centauri\CMS\Cache\StaticFileCache;
+use Exception;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Centauri\CMS\Centauri;
-use Centauri\CMS\Model\Page;
+use Centauri\CMS\Caches\StaticFileCache;
 use Centauri\CMS\Component\ElementComponent;
+use Centauri\CMS\Model\Page;
 use Centauri\CMS\Utility\DomainsUtility;
 use Centauri\CMS\Utility\FixerUtility;
-use Exception;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class Request
 {
@@ -195,7 +192,23 @@ class Request
 
         $renderedHTML = "";
 
-        if(config("centauri")["config"]["Caching"]) {
+        $customCacheCfg = false;
+        $cachingConfig = config("centauri")["config"]["Caching"];
+        $cacheState = $cachingConfig["state"];
+        $cachingType = $cachingConfig["type"] ?? null;
+
+        if($cacheState) {
+            if($cachingType == "STATIC_FILE_CACHE") {
+                if(StaticFileCache::hasCache($uniqid)) {
+                    $renderedHTML = StaticFileCache::getCache($uniqid);
+                    dd($renderedHTML);
+                }
+            } else {
+                $customCacheCfg = true;
+            }
+        }
+
+        if($cacheState && !$customCacheCfg) {
             if(Cache::has($uniqid)) {
                 $renderedHTML = Cache::get($uniqid);
             }
@@ -242,8 +255,14 @@ class Request
         // Caching only if it's set in Centauri's config array (which gets by default cached from Laravel)
         if(isset(config("centauri")["config"]["Caching"]) && (config("centauri")["config"]["Caching"])) {
             // Caching before returning the outputted frontend html for 24 hours (86400 seconds)
-            if($renderedHTML != "") {
-                Cache::put($uniqid, $renderedHTML, 86400);
+            if($renderedHTML != "" && $cacheState) {
+                if($customCacheCfg) {
+                    if($cachingType == "STATIC_FILE_CACHE") {
+                        StaticFileCache::setCache($uniqid, $renderedHTML);
+                    }
+                } else {
+                    Cache::put($uniqid, $renderedHTML, 86400);
+                }
             }
         }
 

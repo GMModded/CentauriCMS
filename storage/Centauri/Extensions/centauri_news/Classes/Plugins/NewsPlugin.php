@@ -1,7 +1,7 @@
 <?php
 namespace Centauri\Extension\News\Plugins;
 
-use Centauri\CMS\PluginAbstract;
+use Centauri\CMS\Abstracts\PluginAbstract;
 use Centauri\CMS\PluginInterface;
 use Centauri\Extension\News\Model\NewsModel;
 

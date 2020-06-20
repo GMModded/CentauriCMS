@@ -3,7 +3,7 @@ namespace Centauri\CMS\Utility;
 
 class ToastUtility
 {
-    public function show($type, $title, $description = "", $options = [])
+    public static function show($type, $title, $description = "", $options = [])
     {
         $description = str_replace("\\", "\\\\", $description);
 
