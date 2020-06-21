@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Storage;
+use Centauri\CMS\Centauri;
+use Centauri\CMS\Component\ExtensionsComponent;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,19 +25,24 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Loads localization files of all extensions
-        $extensions = Storage::disk("centauri_extensions")->allDirectories();
+        $extensionsComponent = Centauri::makeInstance(ExtensionsComponent::class);
+        $extensionsComponent->loadExtensions();
 
-        foreach($extensions as $extension) {
-            if(!Str::contains($extension, "/")) {
-                $extName = $extension;
-                $extConfigFilePath = storage_path("Centauri/Extensions/$extName/ext_config.php");
+        $this->loadMigrationsFrom(base_path("CentauriCMS/SQL"));
 
-                $config = require_once($extConfigFilePath);
-                $localizationFolder = $config["localizationFolder"] ?? "Language";
+        // // Loads localization files of all extensions
+        // $extensions = Storage::disk("centauri_extensions")->allDirectories();
 
-                $this->loadTranslationsFrom(storage_path("Centauri/Extensions/$extName/$localizationFolder"), $extName);
-           }
-        }
+        // foreach($extensions as $extension) {
+        //     if(!Str::contains($extension, "/")) {
+        //         $extName = $extension;
+        //         $extConfigFilePath = storage_path("Centauri/Extensions/$extName/ext_config.php");
+
+        //         $config = require_once($extConfigFilePath);
+        //         $localizationFolder = $config["localizationFolder"] ?? "Language";
+
+        //         $this->loadTranslationsFrom(storage_path("Centauri/Extensions/$extName/$localizationFolder"), $extName);
+        //    }
+        // }
     }
 }

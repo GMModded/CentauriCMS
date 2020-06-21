@@ -54,6 +54,7 @@
                                     </td>
 
                                     <td data-type="items">
+                                        {{ dd($data["models"]) }}
                                         {{ count($data["models"][$namespace]) }}
                                     </td>
 

@@ -160,12 +160,17 @@ class ModulesService
         }
 
         if($moduleid == "models") {
-            $models = collect();
+            $models = [];
 
             foreach($GLOBALS["Centauri"]["Models"] as $key => $model) {
+                $items = $key::get()->count();
+
+                dd($key, $items);
+
                 $models[$key] = [
                     "label" => $model["label"],
-                    "loaded" => (class_exists($key))
+                    "loaded" => (class_exists($key)),
+                    "items" => collect()
                 ];
             }
 
