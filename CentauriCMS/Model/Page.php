@@ -49,12 +49,8 @@ class Page extends Model
      * @var array
      */
     protected $attributes = [
-        "pid" => 1,
-        "lid" => 1,
-        "storage_id" => null,
         "hidden" => 0,
         "hidden_inpagetree" => 0,
-        "backend_layout" => "",
 
         "seo_keywords" => "",
         "seo_description" => ""

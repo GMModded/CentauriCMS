@@ -374,7 +374,7 @@ Centauri.Events.OnModuleLoadEvent.Pages = () => {
                     {},
 
                     {
-                        success: function(data) {
+                        success: (data) => {
                             data = JSON.parse(data);
                             let rootpages = data;
 
@@ -385,7 +385,7 @@ Centauri.Events.OnModuleLoadEvent.Pages = () => {
                                 {},
 
                                 {
-                                    success: function(data) {
+                                    success: (data) => {
                                         data = JSON.parse(data);
                                         let languages = data;
 
@@ -421,7 +421,8 @@ Centauri.Events.OnModuleLoadEvent.Pages = () => {
                                                                     custom: "select",
 
                                                                     data: {
-                                                                        label: "Root-/Storage-Page",
+                                                                        label: "Parent-Page",
+                                                                        selectedOptionValue: "1",
                                                                         options: rootpages
                                                                     }
                                                                 },
@@ -430,10 +431,10 @@ Centauri.Events.OnModuleLoadEvent.Pages = () => {
                                                                     id: "language",
                                                                     type: "custom",
                                                                     custom: "select",
-                                                                    extraAttr: "style='display: none!important;'",
 
                                                                     data: {
                                                                         label: Centauri__trans.global.label_languages,
+                                                                        selectedOptionValue: 1,
                                                                         options: languages
                                                                     }
                                                                 },

@@ -17,15 +17,15 @@ class Centauri extends ServiceProvider
      * 
      * @var string $version
      */
-    protected $version = "1.0;EA1";
+    protected $version = "55.0;EA1";
 
     /**
      * Tables for initDB-method
      * 
-     * @var $tables array
+     * @var array $tables
      */
     protected $tables = [
-        "be_users",
+        // "be_users",
         // "elements",
         // "languages",
         // "notifications",
@@ -42,14 +42,14 @@ class Centauri extends ServiceProvider
     /**
      * Centauri Modules-Service
      * 
-     * @var private $modulesService class
+     * @var class $modulesService class
      */
     private $modulesService;
 
     /**
      * Centauri Path-Service
      * 
-     * @var private $pathService class
+     * @var class $pathService class
      */
     private $pathService;
 
@@ -108,6 +108,12 @@ class Centauri extends ServiceProvider
         }
     }
 
+    /**
+     * Determines if the application is running on production (e.g. live) mode
+     * And returns possibly true, else false.
+     * 
+     * @return boolean
+     */
     public static function isProduction()
     {
         $env = strtolower(app("env"));
@@ -122,6 +128,12 @@ class Centauri extends ServiceProvider
         return false;
     }
 
+    /**
+     * Determines if the application is running in local (e.g. docker/development) mode
+     * And returns possibly true, else false.
+     * 
+     * @return boolean
+     */
     public static function isLocal()
     {
         $env = strtolower(app("env"));
@@ -134,5 +146,25 @@ class Centauri extends ServiceProvider
         }
 
         return false;
+    }
+
+    /**
+     * Current version of Centauri.
+     * 
+     * @return string
+     */
+    public static function getVersion()
+    {
+        return self::$version;
+    }
+
+    /**
+     * Returns if sites, in case throwing an exception, should be tried to get annulated or redirect to the home page.
+     * 
+     * @return void
+     */
+    public static function keepSiteAlive()
+    {
+        dd(config("centauri")["config"]);
     }
 }

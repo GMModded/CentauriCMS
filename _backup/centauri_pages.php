@@ -2,31 +2,36 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class BeUsers extends Migration
+class Pages extends Migration
 {
     /**
      * Name of this table
      */
-    private $table = "be_users";
+    private $table = "pages";
 
     /**
      * Columns of this table
      * 
-     * @param string $table
+     * @param Blueprint $table
      * 
      * @return void
      */
-    private function cols($table)
+    private function getColumns($table)
     {
         return [
             $table->increments("uid"),
-            $table->string("username"),
-            $table->string("password"),
+            $table->integer("pid"),
+            $table->integer("lid"),
+            $table->string("backend_layout"),
+            $table->string("page_type"),
+            $table->string("title"),
+            $table->text("slugs"),
 
-            $table->timestamps()
+            $table->integer("hidden"),
+            $table->timestamps(),
+            $table->softDeletes()
         ];
     }
 
@@ -41,17 +46,12 @@ class BeUsers extends Migration
 
         if($tableExists) {
             Schema::table($this->table, function(Blueprint $table) {
-                $this->cols($table);
+                $this->getColumns($table);
             });
         } else {
             Schema::create($this->table, function(Blueprint $table) {
-                $this->cols($table);
+                $this->getColumns($table);
             });
-
-            DB::table($this->table)->insert([
-                "username" => "admin",
-                "password" => "password"
-            ]);
         }
     }
 

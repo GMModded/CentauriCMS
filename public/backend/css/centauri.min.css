@@ -426,6 +426,14 @@ div.ci-select {
   background-color: white;
   box-shadow: 0 2.5px 5px 0 rgba(0, 0, 0, 0.16), 0 2.5px 10px 0 rgba(0, 0, 0, 0.12);
   z-index: 1; }
+  div.ci-select.active {
+    z-index: 2; }
+    div.ci-select.active ~ i {
+      z-index: 2; }
+    div.ci-select.active ~ label:not(:last-child) {
+      transform: translateY(-25px) scale(0.8) !important; }
+  div.ci-select ~ label:not(:last-child) {
+    transform: translateY(-15px) scale(0.8) !important; }
   div.ci-select ~ i {
     position: absolute;
     top: 12.5px;
@@ -455,6 +463,8 @@ div.ci-select {
 input.ci-select-toggler {
   background-color: transparent !important;
   cursor: pointer; }
+  input.ci-select-toggler:hover ~ label:not(:last-child) {
+    transform: translateY(-25px) scale(0.8) !important; }
 
 input.ci-select-toggler ~ label {
   cursor: pointer;
@@ -637,7 +647,6 @@ textarea[disabled] {
 
 .ci-field input.error {
   color: red !important;
-  box-shadow: none !important;
   border-bottom-color: red !important; }
   .ci-field input.error + label {
     color: red !important; }

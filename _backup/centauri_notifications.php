@@ -3,35 +3,30 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
-class Pages extends Migration
+class Notifications extends Migration
 {
     /**
      * Name of this table
      */
-    private $table = "pages";
+    private $table = "notifications";
 
     /**
      * Columns of this table
      * 
-     * @param string $table
+     * @param Blueprint $table
      * 
      * @return void
      */
-    private function cols($table)
+    private function getColumns($table)
     {
         return [
             $table->increments("uid"),
-            $table->integer("pid"),
-            $table->integer("lid"),
-            $table->string("backend_layout"),
-            $table->string("page_type"),
+            $table->string("severity"),
             $table->string("title"),
-            $table->text("slugs"),
-
-            $table->integer("hidden"),
-            $table->timestamps(),
-            $table->softDeletes()
+            $table->text("text"),
+            $table->timestamps()
         ];
     }
 
@@ -46,11 +41,11 @@ class Pages extends Migration
 
         if($tableExists) {
             Schema::table($this->table, function(Blueprint $table) {
-                $this->cols($table);
+                $this->getColumns($table);
             });
         } else {
             Schema::create($this->table, function(Blueprint $table) {
-                $this->cols($table);
+                $this->getColumns($table);
             });
         }
     }

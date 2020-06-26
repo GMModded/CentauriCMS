@@ -15,16 +15,6 @@
                     @if($data["pageTreeHTML"])
                         <div id="pagetree" class="col-lg-3 ci-bs-2" style="max-width: 20%; padding: 15px;">
                             {!! $data["pageTreeHTML"] !!}
-
-                            <div id="pagemodule_buttons" class="col-12 text-center">
-                                <button class="btn btn-primary btn-floating fa-lg waves-effect mx-2" data-button-type="create">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-
-                                <button class="btn btn-info btn-floating fa-lg waves-effect mx-2" data-button-type="refresh">
-                                    <i class="fas fa-sync-alt"></i>
-                                </button>
-                            </div>
                         </div>
 
                         <div id="pagecontent" class="col-lg p-3 position-relative" style="overflow-y: auto;">
@@ -32,6 +22,8 @@
                                 Select a page from the pagetree
                             </h5>
                         </div>
+
+                        @yield("buttons")
 
                         @if(isset($data["__uid"]))
                             <script type="text/javascript" id="script-preselectitem">
@@ -48,5 +40,17 @@
                 </div>
             </div>
         </div>
+    </div>
+@endsection
+
+@section("buttons")
+    <div id="pagemodule_buttons" class="col-12 text-center">
+        <button class="btn btn-primary btn-floating fa-lg waves-effect mx-2" data-button-type="create">
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <button class="btn btn-info btn-floating fa-lg waves-effect mx-2" data-button-type="refresh">
+            <i class="fas fa-sync-alt"></i>
+        </button>
     </div>
 @endsection

@@ -10,7 +10,7 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = (inputObj) => {
         fieldClassName = "ci-field";
 
         let label = (Centauri.isNotUndefined(data.label) ? data.label : "Choose an option");
-        html = "<select class='ci-select' id='" + inputObj.id + "'>|</select><i class='fas fa-chevron-down'></i>{LABEL}";
+        html = "<select class='ci-select' id='" + inputObj.id + "'>|</select>{LABEL_1}<i class='fas fa-chevron-down'></i>{LABEL_2}";
 
         let optionsHtml = "<option selected disabled>" + label + "</option>";
         if(Centauri.isNotUndefined(data.options)) {
@@ -19,8 +19,8 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = (inputObj) => {
                     if(data.selectedOptionValue == optionObj.value) {
                         optionsHtml += "<option value='" + optionObj.value + "' selected>" + optionObj.name;
 
-                        if(Centauri.strContains(html, "{LABEL}")) {
-                            html = html.replace("{LABEL}", "<label for='" + inputObj.id + "'>" + optionObj.name + "</label>");
+                        if(Centauri.strContains(html, "{LABEL_2}")) {
+                            html = html.replace("{LABEL_2}", "<label for='" + inputObj.id + "'>" + optionObj.name + "</label>");
                         }
                     } else {
                         optionsHtml += "<option value='" + optionObj.value + "'>" + optionObj.name;
@@ -31,9 +31,8 @@ Centauri.Utility.EditorUtility.getCustomHTMLByType = (inputObj) => {
             });
         }
 
-        if(Centauri.strContains(html, "{LABEL}")) {
-            html = html.replace("{LABEL}", "<label for='" + inputObj.id + "'>" + label + "</label>");
-        }
+        html = html.replace("{LABEL_1}", "<label for='" + inputObj.id + "'>" + label + "</label>");
+        html = html.replace("{LABEL_2}", "");
 
         html = html.split("|").join(optionsHtml);
     }

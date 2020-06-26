@@ -53,7 +53,7 @@ CentauriJS.Utilities.Form.Select = () => {
 
                 let txt = $.trim($that.text());
 
-                $that.parents(".ci-field").find("label").text(txt);
+                $that.parents(".ci-field").find("label:last-child").text(txt);
                 $that.parents(".ci-field").find("select").val(val);
             }
         });

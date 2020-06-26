@@ -28,8 +28,6 @@ class AppServiceProvider extends ServiceProvider
         $extensionsComponent = Centauri::makeInstance(ExtensionsComponent::class);
         $extensionsComponent->loadExtensions();
 
-        $this->loadMigrationsFrom(base_path("CentauriCMS/SQL"));
-
         // // Loads localization files of all extensions
         // $extensions = Storage::disk("centauri_extensions")->allDirectories();
 

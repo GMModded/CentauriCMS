@@ -1,6 +1,9 @@
 <?php
 
 return [
+    /**
+     * Centauri Core/Main Configuration
+     */
     "config" => [
         "Caching" => [
             "state" => true,
@@ -9,10 +12,14 @@ return [
 
         "FE" => [
             # "Default" in case a beLayout has no "template"-definition so it will use this one as default.
-            "DefaultMainTemplate" => "centauri_frontend::Frontend.Templates.frontend"
+            "DefaultMainTemplate" => "centauri_frontend::Frontend.Templates.frontend",
+            "keepSiteAlive" => false
         ]
     ],
 
+    /**
+     * Backend Layouts
+     */
     "beLayouts" => [
         "default" => [
             "rendering" => \Centauri\Extension\Frontend\Frontend::class,
@@ -31,41 +38,12 @@ return [
                     ]
                 ]
             ]
-        ],
-
-        "docs" => [
-            "rendering" => \Centauri\Extension\Frontend\Frontend::class,
-            "template" => "centauri_frontend::Frontend.Templates.Page.docs",
-            "label" => "backend/be_layout.layouts.default.label",
-
-            "config" => [
-                // rowPos - will be saved into the DB as key
-                0 => [
-                    // "cols" => Array
-                    "cols" => [
-                        // colPositions - will be saved into the DB as key
-                        0 => [
-                            "label" => "backend/be_layout.layouts.default.cols.content"
-                        ]
-                    ]
-                ],
-
-                /*
-                1 => [
-                    "cols" => [
-                        2 => [
-                            "label" => "ColPos with value 2 & rowPos 1"
-                        ],
-                        3 => [
-                            "label" => "ColPos with value 3 & rowPos 1"
-                        ]
-                    ]
-                ]
-                */
-            ]
         ]
     ],
 
+    /**
+     * Grids
+     */
     "grids" => [
         "config" => [
             "templateRootPath" => "EXT:centauri_frontend"
@@ -110,6 +88,10 @@ return [
             ]
         ]
     ],
+
+    /**
+     * Grid-Layouts
+     */
     "gridLayouts" => [
         "onecol" => [
             "label" => " » One Column Container",
@@ -149,7 +131,9 @@ return [
         ]
     ],
 
-    # CentauriContentElements - CCE
+    /**
+     * CentauriContentElements - CCE
+     */
     "CCE" => [
         "fields" => [
             "htag" => [
@@ -300,7 +284,9 @@ return [
         ]
     ],
 
-    # CentauriModelElements - CME
+    /**
+     * CentauriModelElements - CME
+     */
     "CME" => [
         "models" => [],
 
@@ -312,15 +298,7 @@ return [
         ]
     ],
 
-    # Schedulers
-    "schedulers" => [
-        "centauri_backup" => [
-            "enabled" => 1,
-            "dailyAt" => "00:00"
-        ]
-    ],
-
-    "forms" => [
+    "Forms" => [
         "tabs" => [
             "inputs" => [
                 "label" => "Inputs",
@@ -400,5 +378,13 @@ return [
                 ]
             ]
         ]
-    ]
+    ],
+
+    /**
+     * SQL Files
+     */
+    "SQLFiles" => [
+        // \Centauri\CMS\SQL\PagesSQL::class,
+        \Centauri\CMS\SQL\TestSQL::class
+    ],
 ];

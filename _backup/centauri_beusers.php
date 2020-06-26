@@ -1,19 +1,21 @@
 <?php
-namespace Centauri\CMS\SQL;
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class PagesSQL extends Migration
+class centauri_beusers extends Migration
 {
     /**
      * Name of this table
      */
-    private $table = "pages";
+    private $table = "be_users";
 
     /**
-     * Preparation of columns for this migrations' table.
+     * Columns of this table
+     * 
+     * @param Blueprint $table
      * 
      * @return void
      */
@@ -21,25 +23,10 @@ class PagesSQL extends Migration
     {
         return [
             $table->increments("uid"),
-            $table->integer("pid"),
-            $table->integer("lid"),
+            $table->string("username"),
+            $table->string("password"),
 
-            $table->timestamps(),
-            $table->softDeletes(),
-
-            $table->integer("storage_id"),
-            $table->integer("domain_id"),
-
-            $table->unsignedTinyInteger("hidden"),
-            $table->unsignedTinyInteger("hidden_inpagetree"),
-
-            $table->string("backend_layout", 255),
-            $table->string("page_type", 255),
-
-            $table->string("seo_keywords", 255),
-            $table->string("seo_description", 255),
-            $table->unsignedTinyInteger("seo_robots_indexpage", 255),
-            $table->unsignedTinyInteger("seo_robots_followpage", 255)
+            $table->timestamps()
         ];
     }
 
@@ -60,6 +47,11 @@ class PagesSQL extends Migration
             Schema::create($this->table, function(Blueprint $table) {
                 $this->cols($table);
             });
+
+            DB::table($this->table)->insert([
+                "username" => "admin",
+                "password" => "password"
+            ]);
         }
     }
 

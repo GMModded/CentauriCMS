@@ -15,11 +15,11 @@ class Languages extends Migration
     /**
      * Columns of this table
      * 
-     * @param string $table
+     * @param Blueprint $table
      * 
      * @return void
      */
-    private function cols($table)
+    private function getColumns($table)
     {
         return [
             $table->increments("uid"),
@@ -44,11 +44,11 @@ class Languages extends Migration
 
         if($tableExists) {
             Schema::table($this->table, function(Blueprint $table) {
-                $this->cols($table);
+                $this->getColumns($table);
             });
         } else {
             Schema::create($this->table, function(Blueprint $table) {
-                $this->cols($table);
+                $this->getColumns($table);
             });
 
             DB::table($this->table)->insert([

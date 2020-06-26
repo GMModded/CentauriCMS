@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Model\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File as FacadesFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -16,35 +17,38 @@ class DatabaseAjax extends ServiceProvider implements AjaxInterface
     public function request(Request $request, String $ajaxName)
     {
         if($ajaxName == "update") {
-            $path = base_path("CentauriCMS/SQL");
+            // $sqlFiles = config("centauri")["SQLFiles"];
 
-            $sqlInstance = Centauri::makeInstance(\Centauri\CMS\SQL::class);
-            dd($sqlInstance);
+            // foreach($sqlFiles as $sqlFile) {
+            //     Centauri::makeInstance($sqlFile);
+            // }
+
+            $sqlFiles = Storage::disk("centauri_core_sql")->allFiles();
 
             // Laoding SQL files from Centauri-Core first
-            // foreach($sqlFiles as $sqlFile) {
-                // $path = base_path("CentauriCMS/SQL/" . $sqlFile);
-                // require_once($path);
+            foreach($sqlFiles as $sqlFile) {
+                $path = base_path("CentauriCMS/SQL/" . $sqlFile);
                 // DB::unprepared(file_get_contents($path));
-            // }
+                require_once($path);
+            }
 
             // Loading SQL files from extensions
-            // $extensionsDirs = Storage::disk("centauri_extensions")->allDirectories();
-            // $extensionsFiles = Storage::disk("centauri_extensions")->allFiles();
+            $extensionsDirs = Storage::disk("centauri_extensions")->allDirectories();
+            $extensionsFiles = Storage::disk("centauri_extensions")->allFiles();
 
-            // $extensions = [];//array_merge($extensionsDirs, $extensionsFiles);
+            $extensions = []; // array_merge($extensionsDirs, $extensionsFiles);
 
-            // foreach($extensions as $extension) {
-            //     if(!Str::contains($extension, "/")) {
-            //         $extSQLFiles = Storage::disk("centauri_extensions")->allFiles("/$extension/Classes/SQL");
+            foreach($extensions as $extension) {
+                if(!Str::contains($extension, "/")) {
+                    $extSQLFiles = Storage::disk("centauri_extensions")->allFiles("/$extension/Classes/SQL");
 
-            //         foreach($extSQLFiles as $extSQLFile) {
-            //             $extSQLPath = storage_path("Centauri/Extensions/$extSQLFile");
-            //             require_once($extSQLPath);
-                        // DB::unprepared(file_get_contents($extSQLPath));
-            //         }
-            //     }
-            // }
+                    foreach($extSQLFiles as $extSQLFile) {
+                        $extSQLPath = storage_path("Centauri/Extensions/$extSQLFile");
+                        DB::unprepared(file_get_contents($extSQLPath));
+                        // require_once($extSQLPath);
+                    }
+                }
+            }
 
             return json_encode([
                 "type" => "success",

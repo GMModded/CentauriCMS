@@ -71,7 +71,6 @@ textarea {
     input {
         &.error {
             color: red !important;
-            box-shadow: none !important;
             border-bottom-color: red !important;
 
             + label {

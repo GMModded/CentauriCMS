@@ -21,6 +21,10 @@ class PageNotFound
         $page = Page::where("uid", $pageNotFoundUid)->get()->first();
 
         if(is_null($page)) {
+            if(Centauri::keepSiteAlive()) {
+                return redirect("/");
+            }
+
             throw new Exception("The 404-page with the UID '" . $pageNotFoundUid . "' doesn't exists!");
         }
 

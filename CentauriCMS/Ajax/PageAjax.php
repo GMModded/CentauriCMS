@@ -30,20 +30,20 @@ class PageAjax implements AjaxInterface
             }
 
             $url = $data["url"];
+            $page->lid = $data["language"];
 
             if($data["page_type"] == "rootpage") {
                 // if(!$request->has("language")) {
                 //     return response("Selected language is not available as a rootpage!", 500);
                 // }
 
-                $page->lid = $data["language"];
                 $page->slugs = $url;
             } else {
                 $parentPage = Page::where("uid", $parentuid)->get()->first();
 
                 $page->lid = $parentPage->lid;
                 $page->slugs = $data["url"] ?? "/";
-                $page->storage_id = $parentPage->uid;
+                // $page->storage_id = $parentPage->uid;
             }
 
             return $this->savePage($page);
@@ -225,6 +225,11 @@ class PageAjax implements AjaxInterface
         }
     }
 
+    /**
+     * Method which try to save a given Page Model and handles a properly json response.
+     * 
+     * @return json
+     */
     public function savePage($page)
     {
         if($page->save()) {
