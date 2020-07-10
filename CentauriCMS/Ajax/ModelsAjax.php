@@ -1,50 +1,66 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
-use Centauri\CMS\Abstracts\AjaxAbstract;
-use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Helper\ModelsHelper;
+use Centauri\CMS\Traits\AjaxTrait;
 use Illuminate\Http\Request;
 
-class ModelsAjax implements AjaxInterface
+class ModelsAjax
 {
-    public function request(Request $request, String $ajaxName)
+    use AjaxTrait;
+
+    /**
+     * Returns all CMEs Model-Configs.
+     * 
+     * @param Request $request The request object given by the request-method above.
+     * 
+     * @return json|response
+     */
+    public function getModelConfigsAjax(Request $request)
     {
-        if($ajaxName == "getModelConfigs") {
-            $CMEs = ModelsHelper::getAllCMEs();
+        $CMEs = ModelsHelper::getAllCMEs();
 
-            return view("Centauri::Backend.Modals.models", [
-                "CME" => $CMEs
-            ])->render();
-        }
+        return view("Centauri::Backend.Modals.models", [
+            "CME" => $CMEs
+        ])->render();
+    }
 
-        if($ajaxName == "newModel") {
-            $modelClassName = $request->input("model");
-            $datas = json_decode($request->input("datas"), true);
+    /**
+     * Record creation of a new model.
+     * 
+     * @param Request $request The request object given by the request-method above.
+     * 
+     * @return json|response
+     */
+    public function newModelAjax(Request $request)
+    {
+        $modelClassName = $request->input("model");
+        $datas = json_decode($request->input("datas"), true);
 
-            $model = new $modelClassName();
-            $model->lid = 1;
+        $model = new $modelClassName();
+        $model->lid = 1;
 
-            foreach($datas as $data) {
-                foreach($data as $uid => $dataArr) {
-                    foreach($dataArr as $id => $fieldArr) {
-                        $value = $fieldArr["value"];
-                        $model->$id = $value;
-                    }
+        foreach($datas as $data) {
+            foreach($data as $uid => $dataArr) {
+                foreach($dataArr as $id => $fieldArr) {
+                    $value = $fieldArr["value"];
+                    $model->$id = $value;
                 }
             }
+        }
 
-            $CME = config("centauri")["CME"];
+        $CME = config("centauri")["CME"];
+        $extensionsCME = $GLOBALS["Centauri"]["Models"];
 
-            $extensionsCME = $GLOBALS["Centauri"]["Models"];
-            foreach($extensionsCME as $extModelKey => $extModel) {
-                $fields = $extensionsCME[$extModelKey]["fields"];
-                $_HTML = "";
+        foreach($extensionsCME as $extModelKey => $extModel) {
+            $fields = $extensionsCME[$extModelKey]["fields"] ?? ($extensionsCME[$extModelKey]["config"]["fields"] ?? []);
+            $_HTML = "";
 
-                foreach($fields as $fieldKey => $field) {
-                    $fieldType = $field["type"];
-                    $fieldLabel = $field["label"];
+            foreach($fields as $fieldKey => $field) {
+                $fieldType = $field["type"];
+                $fieldLabel = $field["label"];
 
+                if($fieldType != "model") {
                     $_HTML .= view("Centauri::Backend.Modals.NewContentElement.Fields.$fieldType", [
                         "fieldConfig" => [
                             "uid" => "NEW",
@@ -53,23 +69,21 @@ class ModelsAjax implements AjaxInterface
                         ]
                     ])->render();
                 }
-
-                $extensionsCME[$extModelKey]["_HTML"] = $_HTML;
             }
 
-            $CME["models"] = array_merge($CME["models"], $extensionsCME);
+            $extensionsCME[$extModelKey]["_HTML"] = $_HTML;
+        }
 
-            $label = $CME["models"][$modelClassName]["label"];
+        $CME["models"] = array_merge($CME["models"], $extensionsCME);
 
-            if($model->save()) {
-                return json_encode([
-                    "type" => "success",
-                    "title" => "Models - $label",
-                    "description" => "This model has been created"
-                ]);
-            }
+        $label = $CME["models"][$modelClassName]["label"];
 
-            return AjaxAbstract::default($request, $ajaxName);
+        if($model->save()) {
+            return json_encode([
+                "type" => "success",
+                "title" => "Models - $label",
+                "description" => "This model has been created"
+            ]);
         }
     }
 }

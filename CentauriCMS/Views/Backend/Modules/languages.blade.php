@@ -21,11 +21,11 @@
                                 </th>
 
                                 <th>
-                                    Lang-Code
+                                    Language Code
                                 </th>
 
                                 <th>
-                                    URL
+                                    Slug
                                 </th>
 
                                 <th>

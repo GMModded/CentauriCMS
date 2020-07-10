@@ -1,6 +1,6 @@
 @extends("Centauri::Backend.Layouts.be_module")
 
-@section("moduleid"){{"models"}}@endsection
+@section("moduleid"){{"schedulers"}}@endsection
 
 @section("content")
     <div class="container">
@@ -60,6 +60,19 @@
                                     <td>
                                         @php
                                             $class = "success";
+
+                                            switch($scheduler->state) {
+                                                case "FAILED":
+                                                    $class = "danger";
+                                                    break;
+
+                                                case "UNKNOWN":
+                                                    $class = "info";
+                                                break;
+
+                                                default:
+                                                    break;
+                                            }
 
                                             if($scheduler->state == "FAILED") {
                                                 $class = "danger";

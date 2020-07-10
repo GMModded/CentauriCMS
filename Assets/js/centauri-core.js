@@ -10,14 +10,55 @@
  */
 function CentauriCoreFunctions() {
     /**
+     * Handles if the environment is on Development
+     * 
+     * @function isDev
+     * @return {boolean}
+     */
+    Centauri.isDev = function() {
+        return (Centauri.Env == "Dev" || Centauri.Env == "Development");
+    };
+
+    /**
+     * Handles if the environment is on Development
+     * 
+     * @function isDevelopment
+     * @return {boolean}
+     */
+    Centauri.isDevelopment = function() {
+        return (Centauri.Env == "Dev" || Centauri.Env == "Development");
+    };
+
+    /**
+     * Handles if the environment is on Production
+     * 
+     * @function isProd
+     * @return {boolean}
+     */
+    Centauri.isProd = function() {
+        return (Centauri.Env == "Prod" || Centauri.Env == "Production");
+    };
+
+    /**
+     * Handles if the environment is on Production
+     * 
+     * @function isProduction
+     * @return {boolean}
+     */
+    Centauri.isProduction = function() {
+        return (Centauri.Env == "Prod" || Centauri.Env == "Production");
+    };
+
+
+    /**
      * Handles conditions for variable if it's undefined
      * 
      * @function isUndefined
      * @param {mixin} variable The variable of this function
      * @return {boolean}
      */
-    Centauri.isUndefined = (variable) => {
-        return (typeof variable == undefined || typeof variable == "undefined");
+    Centauri.isUndefined = function(variable) {
+        return (typeof variable == undefined || typeof variable == "undefined" || variable == undefined || variable == "undefined");
     };
 
     /**
@@ -27,8 +68,8 @@ function CentauriCoreFunctions() {
      * @param {mixin} variable The variable of this function
      * @return {boolean}
      */
-    Centauri.isNotUndefined = (variable) => {
-        return (typeof variable != undefined && typeof variable != "undefined");
+    Centauri.isNotUndefined = function(variable) {
+        return (typeof variable != undefined && typeof variable != "undefined" && variable != undefined && variable != "undefined");
     };
 
     /**
@@ -38,7 +79,7 @@ function CentauriCoreFunctions() {
      * @param {mixin} variable The variable of this function
      * @return {boolean}
      */
-    Centauri.isNull = (variable) => {
+    Centauri.isNull = function(variable) {
         return (variable === null);
     };
 
@@ -49,8 +90,30 @@ function CentauriCoreFunctions() {
      * @param {mixin} variable The variable of this function
      * @return {boolean}
      */
-    Centauri.isNotNull = (variable) => {
+    Centauri.isNotNull = function(variable) {
         return (variable !== null);
+    };
+
+    /**
+     * Checks if the given variable is a function
+     * 
+     * @function isFunction
+     * @param {mixin} variable The variable of this function
+     * @return {boolean}
+     */
+    Centauri.isFunction = function(variable) {
+        return (typeof variable == "function");
+    };
+
+    /**
+     * Checks if the given variable is not a function
+     * 
+     * @function isNotFunction
+     * @param {mixin} variable The variable of this function
+     * @return {boolean}
+     */
+    Centauri.isNotFunction = function(variable) {
+        return (typeof variable !== "function");
     };
 
     /**
@@ -60,14 +123,14 @@ function CentauriCoreFunctions() {
      * @param {element} selector The selector for this function
      * @return {boolean}
      */
-    Centauri.elExists = (selector) => {
+    Centauri.elExists = function(selector) {
         if($(selector).hasClass("modal")) {
             if($(selector).hasClass("show")) {
                 return true;
             }
         }
 
-        return ($(selector).length === 1 ? true : false);
+        return ($(selector).length > 0 ? true : false);
     };
 
     /**
@@ -78,7 +141,7 @@ function CentauriCoreFunctions() {
      * @param {string} char
      * @return {boolean}
      */
-    Centauri.strContains = (string, char, ignoreCamelCase = false) => {
+    Centauri.strContains = function(string, char, ignoreCamelCase = false) {
         var parameter = "";
 
         if(Centauri.isUndefined(string)) {
@@ -108,7 +171,19 @@ function CentauriCoreFunctions() {
      * @param {string} replace
      * @return {string}
      */
-    Centauri.strReplace = (string, searchValue, replaceValue) => {
+    Centauri.strReplace = function(string, searchValue, replaceValue) {
         return string.replace(searchValue, replaceValue, string);
+    };
+
+    /**
+     * Returns whether an array has the given item
+     * 
+     * @function inArray
+     * @param {string|object} item
+     * @param {array} array
+     * @return {boolean}
+     */
+    Centauri.inArray = (item, array) => {
+        return (!!~$.inArray(item, array));
     };
 }

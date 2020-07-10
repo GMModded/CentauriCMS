@@ -3,36 +3,131 @@
  * 
  * @website https://centauricms.de/
  * @author m.sediqi@centauricms.de
- * @file Centauri Core JS file for FE
- * @copyright M. S. 2019-2020
+ * @file Centauri Core JS file for BE
+ * @copyright M.S. 2019-2020
  * 
  * © 2019-2020 All rights reserved.
  */
-var Centauri = {} || Centauri;
-CentauriCoreFunctions();
+var Centauri = {};
 
-Centauri.Event = {};
-Centauri.Component = {};
-Centauri.Section = {};
+/**
+ * Centauri Environment
+ */
+Centauri.Env = "Development";
+
+/**
+ * Centauri default ModuleID
+ * The default one which will be used when logging into the backend
+ */
+Centauri.defaultModule = "dashboard";
+
+
+/**
+ * Centauri Core
+ */
+Centauri.Init = {};
+
 Centauri.Service = {};
 Centauri.Utility = {};
 
-Centauri.Breakpoint = "";
+Centauri.Module = Centauri.defaultModule;
 
-Centauri.Utility.ContentElementUtility = (ceName) => {
-    return $("[data-contentelement='" + ceName + "']");
+Centauri.fn = {};
+
+Centauri.Helper = {};
+Centauri.Helper.VariablesHelper = {};
+
+Centauri.Events = {};
+Centauri.Lib = {};
+Centauri.Listener = {};
+Centauri.Components = {};
+Centauri.Modal = {};
+Centauri.View = {};
+
+
+/**
+ * Centauri Core registrations
+ * 
+ * @function Centauri.load
+ * @returns {void}
+ */
+Centauri.load = () => {
+    /**
+     * This function is 
+     */
+    CentauriCoreFunctions();
+
+    /**
+     * Condition whether CentauriEnv is defined - since it's for each environment maybe necessary, maybe not - therefor this condition
+     * to handle it properly in case CentauriEnv does not exists.
+     */
+    if(Centauri.isNotUndefined(CentauriEnv)) {
+        CentauriEnv();
+    }
+
+    /**
+     * Creating a new LocalStorage Object to fill in data which can hold temporary BE user values (e.g. fullscreen feature etc.)
+     */
+    Centauri.LocalStorage = new CentauriLocalStorageService();
+
+    /**
+     * Window related stuff (events etc.)
+     */
+    Centauri.Events.Window.OnLoadResize();
+
+    /**
+     * Utilities
+     */
+    Centauri.Utility.Ajax();
+
+    /**
+     * DAP - DynamicAjaxPushLoader
+     */
+    Centauri.DAPLoader();
+
+    /**
+     * Views
+     */
+    Centauri.View.LoginView();
+    Centauri.View.DashboardView();
+
+    /**
+     * Initialization of Components
+     */
+    Centauri.Components.ModulesComponent({type: "init"});
+    Centauri.Components.EditorComponent.init();
+
+    /**
+     * Listener handling the overlayer (for EditorComponent or ModalUtility)
+     */
+    Centauri.Listener.OverlayerListener();
+
+    /**
+     * Listener for EditorComponent and ModalUtility (when pressing buttons on keyboard while one of those is active)
+     */
+    Centauri.Listener.DocumentKeyUpListener();
 };
 
-window.onload = () => {
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content")
-        }
-    });
 
-    Centauri.Event.OnWindowLoadEvent();
+/**
+ * DOM ready - Initializing Centauri
+ * 
+ * @param {function} function - Self calling function by jQuery
+ * @returns {void}
+ */
+$(document).ready(function() {
+    /**
+     * Initializing Centauri Core Functions by this such as Centauri Core itself.
+     */
+    Centauri.load();
 
-    document.addEventListener("DOMContentLoaded", () => {
-        Centauri.Service.LazyLoadService();
-    });
-};
+    /**
+     * Initializing CentauriJS Core
+     */
+    CentauriJS.init();
+
+    /**
+     * Initializations - mainly for functions which should happen after Centauri.load() has been called (async).
+     */
+    Centauri.Init.HeaderInit();
+});

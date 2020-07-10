@@ -30,7 +30,7 @@ class CentauriLanguages extends Migration
             $table->string("title");
             $table->string("lang_code", 5);
             $table->string("slug", 50);
-            $table->tinyInteger("flagsrc");
+            $table->tinyInteger("flagsrc")->nullable();
         });
 
         $language = new Language;

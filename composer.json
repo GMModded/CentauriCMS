@@ -49,6 +49,7 @@
             "Centauri\\CMS\\Ajax\\": "CentauriCMS/Ajax/",
             "Centauri\\CMS\\Application\\": "CentauriCMS/Application/",
             "Centauri\\CMS\\BladeHelper\\": "CentauriCMS/BladeHelper/",
+            "Centauri\\CMS\\Bootstrapping\\": "CentauriCMS/Bootstrapping/",
             "Centauri\\CMS\\Caches\\": "CentauriCMS/Caches/",
             "Centauri\\CMS\\Component\\": "CentauriCMS/Component/",
             "Centauri\\CMS\\Controller\\": "CentauriCMS/Controller/",
@@ -62,15 +63,13 @@
             "Centauri\\CMS\\Resolver\\": "CentauriCMS/Resolver/",
             "Centauri\\CMS\\Scheduler\\": "CentauriCMS/Scheduler/",
             "Centauri\\CMS\\Service\\": "CentauriCMS/Service/",
-            "Centauri\\CMS\\SQL\\": "CentauriCMS/SQL/",
             "Centauri\\CMS\\Tracker\\": "CentauriCMS/Tracker/",
+            "Centauri\\CMS\\Traits\\": "CentauriCMS/Traits/",
             "Centauri\\CMS\\Utility\\": "CentauriCMS/Utility/",
             "Centauri\\CMS\\Validation\\": "CentauriCMS/Validation/",
 
             "Centauri\\Extension\\Frontend\\": "storage/Centauri/Extensions/centauri_frontend/Classes/",
-            "Centauri\\Extension\\News\\": "storage/Centauri/Extensions/centauri_news/Classes/",
-            "Centauri\\Extension\\Jobs\\": "storage/Centauri/Extensions/centauri_jobs/Classes/",
-            "Centauri\\Extension\\Cookie\\": "storage/Centauri/Extensions/centauri_cookie/Classes/"
+            "Centauri\\Extension\\Cookie\\": "storage/Centauri/Extensions/centauri_cookies/Classes/"
         }
     },
     "autoload-dev": {

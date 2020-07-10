@@ -27,13 +27,15 @@
 
                             <i class="fas fa-rocket"></i>
 
-                            <br/>
+                            <br>
 
                             <small>
-                                v1.0.1
+                                v{{ Centauri\CMS\Centauri::getVersion() }}
 
                                 <small>
-                                    <i>EA 1</i>
+                                    <i>
+                                        {{ Centauri\CMS\Centauri::getState() }}
+                                    </i>
                                 </small>
                             </small>
                         </h4>
@@ -41,68 +43,54 @@
 
                     <div id="modules" class="mt-5">
                         @foreach($data["modules"] as $moduleid => $module)
-                            <div class="module waves-effect waves-light{{ isset($data['moduleid']) ? ($data['moduleid'] == $moduleid ? ' active' : '') : '' }}" data-module-id="{{ $moduleid }}">
-                                <div class="icon-view">
-                                    @if($moduleid == "notifications")
-                                        <span>
-                                            {{ $module["data"] }}
-                                        </span>
-                                    @endif
+                            @if(isset($module["modules"]))
+                                <div class="my-4">
+                                    <span class="group">
+                                        {{ $module["label"] }}
+                                    </span>
 
-                                    {!! $module["icon"] !!}
-                                </div>
+                                    @foreach($module["modules"] as $groupedModuleid => $groupedModule)
+                                        <div 
+                                            class="module waves-effect waves-light{{ isset($data['moduleid']) ? ($data['moduleid'] == $groupedModuleid ? ' active' : '') : '' }}"
+                                            data-module-id="{{ $groupedModuleid }}"
+                                        >
+                                            <div class="icon-view">
+                                                @if($groupedModuleid == "notifications")
+                                                    <span>
+                                                        {{ $groupedModule["data"] }}
+                                                    </span>
+                                                @endif
 
-                                <div class="text-view">
-                                    {!! $module["title"] !!}
+                                                {!! $groupedModule["icon"] !!}
+                                            </div>
+
+                                            <div class="text-view">
+                                                {!! $groupedModule["title"] !!}
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            </div>
+                            @else
+                                <div 
+                                    class="module waves-effect waves-light{{ isset($data['moduleid']) ? ($data['moduleid'] == $moduleid ? ' active' : '') : '' }}"
+                                    data-module-id="{{ $moduleid }}"
+                                >
+                                    <div class="icon-view">
+                                        @if($moduleid == "notifications")
+                                            <span>
+                                                {{ $module["data"] }}
+                                            </span>
+                                        @endif
+
+                                        {!! $module["icon"] !!}
+                                    </div>
+
+                                    <div class="text-view">
+                                        {!! $module["title"] !!}
+                                    </div>
+                                </div>
+                            @endif
                         @endforeach
-                    </div>
-
-                    <div id="user">
-                        <div class="d-flex">
-                            <div class="avatar-view">
-                                <span>
-                                    A
-                                </span>
-                            </div>
-
-                            <div class="text-view">
-                                <p class="m-0">
-                                    Admin
-                                </p>
-
-                                <p class="m-0">
-                                    Administrator
-                                </p>
-
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                        </div>
-
-                        <div class="dropdown-view" style="display: none;">
-                            <div class="col mt-2">
-                                <div class="ci-field ci-select position-relative">
-                                    <label for="language">
-                                        @lang("backend/global.label_language")
-                                    </label>
-
-                                    <select name="language" id="language">
-                                        <option value="de" selected>
-                                            uff1
-                                        </option>
-
-                                        <option value="en">
-                                            uff2
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <a role="button" class="btn btn-danger btn-floating waves-effect m-0 center" href="{{ url('centauri/action/Backend/logout') }}">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </section>
             @endif
@@ -126,75 +114,77 @@
                     </div>
                 </div>
 
-                <section id="header">
-                    <div class="container position-relative">
-                        <div class="row h-100 align-items-center">
-                            <div class="col col-md-8">
-                                <div class="row">
-                                    <div class="col">
-                                        
-                                    </div>
+                @php
+                    $rootViewPath = "Centauri::Backend.Partials.Header";
 
-                                    <div class="row mx-0 text-right">
-                                        <div class="tool waves-effect waves-light" data-type="cache">
-                                            <div class="icon-view">
-                                                <i class="fas fa-bolt"></i>
-                                            </div>
-                                        </div>
+                    $items = [
+                        "caches",
+                        "settings"
+                    ];
 
-                                        <div class="tool waves-effect waves-light" data-type="fullscreen">
-                                            <div class="icon-view">
-                                                <i class="fas fa-compress"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                    $tabs = [];
+
+                    foreach($items as $item) {
+                        $tabs[$item] = [
+                            "tabContentHTML" => view("$rootViewPath.Items.$item")->render(),
+                            "dropdownContentHTML" => view("$rootViewPath.Content.$item")->render()
+                        ];
+                    }
+                @endphp
+
+                <section id="header" class="fancy-dropdown">
+                    <a href="#0" class="nav-trigger">
+                        Open Nav
+
+                        <span aria-hidden="true"></span>
+                    </a>
+
+                    <nav class="main-nav">
+                        <div class="row">
+                            @foreach($tabs as $key => $tab)
+                                <div class="col has-dropdown" data-content="{{ $key }}">
+                                    {!! $tab["tabContentHTML"] !!}
                                 </div>
-                            </div>
-
-                            <div class="col col-md-4">
-                                <div class="mt-2 ci-field">
-                                    <input id="global_search" class="form-control" type="text">
-
-                                    <label for="global_search">
-                                        Search
-                                    </label>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
-
-                        <div class="blocks z-depth-3">
-                            <div class="block" data-type="cache">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h5 class="m-0">
-                                            Caching
-                                        </h5>
+                    </nav>
+                    
+                    <div class="fancy-dropdown-wrapper">
+                        <div class="dropdown-list">
+                            <div class="row">
+                                @foreach($tabs as $key => $tab)
+                                    <div id="{{ $key }}" class="dropdown">
+                                        <div class="content">
+                                            {!! $tab["dropdownContentHTML"] !!}
+                                        </div>
                                     </div>
-                                </div>
+                                @endforeach
+                            </div>
 
-                                <div class="row">
-                                    <div class="col item py-3">
-                                        <a href="#" role="button" class="m-0 w-100 btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Cache" data-ajax-action="flushFrontend">
-                                            Flush Frontend Cache
-                                        </a>
-                                    </div>
+                            <div class="bg-layer" aria-hidden="true"></div>
+                        </div>
+                    </div>
+                </section>
 
-                                    <div class="col item py-3">
-                                        <a href="#" role="button" class="m-0 w-100 btn btn-success waves-effect waves-light" data-ajax="true" data-ajax-handler="Cache" data-ajax-action="flushBackend">
-                                            Flush Backend Cache
-                                        </a>
-                                    </div>
-                                </div>
+                {{-- <section id="header">
+                    <div class="container h-100">
+                        <div class="row h-100">
+                            
 
-                                <div class="col item px-0">
-                                    <a href="#" role="button" class="m-0 w-100 btn btn-danger waves-effect waves-light" data-ajax="true" data-ajax-handler="Cache" data-ajax-action="flushAll">
-                                        Flush All (System) Cache
+                            <div class="col-8">
+                                <div class="text-right">
+                                    <a role="button" class="btn btn-primary btn-floating fa-lg waves-effect waves-light" data-dropdown="tools">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+
+                                    <a role="button" class="btn btn-info btn-floating fa-lg waves-effect waves-light" data-dropdown="user">
+                                        {{ Str::ucfirst(Str::substr($data["beuser"]->getAttribute("username"), 0, 1)) }}                                        <i class="fas fa-user-circle"></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> --}}
 
                 <section id="content" class="h-100"></section>
             </section>
@@ -205,11 +195,8 @@
                 </div>
 
                 <div class="bottom">
-                    <div class="p-2">
-                        <form action="" method="POST"></form>
-                    </div>
-
-                    <div class="row"></div>
+                    <form action="" method="POST"></form>
+                    {{-- <div class="col-12"></div> --}}
                 </div>
 
                 <div class="footer ci-bs-1">

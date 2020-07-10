@@ -37,6 +37,11 @@ class CentauriElements extends Migration
             $table->string("file")->nullable();
             $table->string("plugin")->nullable();
 
+            $table->string("htag")->nullable();
+            $table->string("header")->nullable();
+            $table->string("subheader")->nullable();
+            $table->string("rte")->nullable();
+
             $table->tinyInteger("grids_sorting_rowpos")->nullable();
             $table->tinyInteger("grids_sorting_colpos")->nullable();
 

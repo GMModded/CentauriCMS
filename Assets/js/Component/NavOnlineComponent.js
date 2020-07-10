@@ -1,3 +1,0 @@
-Centauri.Component.NavOnlineComponent = () => {
-    
-};

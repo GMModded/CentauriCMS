@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS;
 
+use Centauri\CMS\Bootstrapping\CentauriBootstrapping;
 use Centauri\CMS\Component\ExtensionsComponent;
 use Centauri\CMS\Model\Scheduler;
 use Centauri\CMS\Service\ModulesService;
@@ -17,7 +18,21 @@ class Centauri extends ServiceProvider
      * 
      * @var string $version
      */
-    protected $version = "55.0;EA1";
+    protected static $version = "1.0";
+
+    /**
+     * Centauri Core state-version
+     * 
+     * @var string $state
+     */
+    protected static $state = "Early-Access";
+
+    /**
+     * Context of the application.
+     * 
+     * @var string $applicationContext
+     */
+    protected static $applicationContext = "";
 
     /**
      * Tables for initDB-method
@@ -85,6 +100,8 @@ class Centauri extends ServiceProvider
 
     /**
      * Initialization of the backend when an user logged into it
+     * 
+     * @return void
      */
     public function initBE()
     {
@@ -94,6 +111,8 @@ class Centauri extends ServiceProvider
 
         $this->modulesService->init();
         $this->pathService->init();
+
+        Centauri::makeInstance(CentauriBootstrapping::class);
     }
 
     /**
@@ -159,12 +178,50 @@ class Centauri extends ServiceProvider
     }
 
     /**
+     * Current version of Centauri's state.
+     * 
+     * @return string
+     */
+    public static function getState()
+    {
+        return self::$state;
+    }
+
+    /**
+     * Sets the context of the application.
+     * 
+     * @param string $applicationContext
+     * 
+     * @return void
+     */
+    public static function setApplicationContext($applicationContext)
+    {
+        self::$applicationContext = $applicationContext;
+    }
+
+    /**
+     * The context of the application.
+     * 
+     * @return string
+     */
+    public static function getApplicationContext()
+    {
+        return self::$applicationContext;
+    }
+
+    /**
      * Returns if sites, in case throwing an exception, should be tried to get annulated or redirect to the home page.
      * 
      * @return void
      */
     public static function keepSiteAlive()
     {
-        dd(config("centauri")["config"]);
+        $keepSiteAlive = config("centauri")["config"]["FE"]["keepSiteAlive"] ?? null;
+
+        if(!is_null($keepSiteAlive)) {
+            return $keepSiteAlive;
+        }
+
+        return false;
     }
 }

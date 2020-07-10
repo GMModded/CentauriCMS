@@ -43,5 +43,11 @@ return [
     "scheduler" => [
         "title" => "Planer"
     ],
+    "be_users" => [
+        "title" => "BE-Users"
+    ],
+    "user_permission_groups" => [
+        "title" => "Rechte-Gruppen"
+    ],
 
 ];

@@ -16,11 +16,35 @@ class DomainsUtility
             $content = file_get_contents($domainFile->getPathname());
             $domainFile->content = json_decode($content);
 
-            $rootpageuid = $domainFile->content->rootpageuid;
+            $rootpageuid = $domainFile->content->rootpageuid ?? null;
+
+            if(is_null($rootpageuid)) {
+                throw new \Exception("Rootpageuid inside Domain-Config: '" . $domainFile . "' couldn't be determined");
+            }
+
             $rootpage = Page::where("uid", $rootpageuid)->get()->first();
 
             if(!is_null($rootpage)) {
                 $language = Language::where("uid", $rootpage->lid)->get()->first();
+
+                if(is_null($language)) {
+                    throw new \Exception(
+                        "Language ID (#"
+                    .
+                        $rootpage->lid
+                    .
+                        ") for Rootpage '"
+                    .
+                        $rootpage->title
+                    .
+                        "' (UID: #"
+                    .
+                        $rootpage->uid
+                    .
+                        ") doesn't exists"
+                    );
+                }
+
                 $rootpage->language = $language;
                 $domainFile->content->rootpage = $rootpage;
             }

@@ -1,6 +1,6 @@
 @extends("Centauri::Backend.Layouts.be_module")
 
-@section("moduleid"){{"models"}}@endsection
+@section("moduleid"){{"system"}}@endsection
 
 @section("content")
     <div class="container">

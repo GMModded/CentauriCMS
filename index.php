@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CentauriCMS - Content Management System depending on Laravel 6.x
+ * CentauriCMS - Content Management System depending on Laravel 7.x
  * 
  * @package CentauriCMS
  * @author  M.S. <GMModded@centauricms.de>

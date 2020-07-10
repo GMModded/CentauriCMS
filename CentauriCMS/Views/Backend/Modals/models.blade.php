@@ -13,7 +13,7 @@
                 @if ($tabKey == $modelArr["tab"])
                     <div class="element ci-bs-1 mb-3" data-model="{{ $model }}">
                         <div class="top waves-effect p-3">
-                            @lang($modelArr['_NAMESPACE'] . "::backend/modals.models.$model")
+                            @lang($modelArr["_NAMESPACE"] . "::backend/modals.models.$model")
                         </div>
 
                         <div class="bottom" style="display: none;">

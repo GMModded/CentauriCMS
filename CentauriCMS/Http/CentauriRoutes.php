@@ -3,10 +3,12 @@
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Component\ExtensionsComponent;
 
-// Loading Extensions
+// Loading all extensions
 Centauri::makeInstance(ExtensionsComponent::class)->loadExtensions();
 
-$routes = $GLOBALS["Centauri"]["Handlers"]["routes"];
+// In case there's no extension which extends routing and/or adds custom routes setting
+// $routes to an empty array.
+$routes = $GLOBALS["Centauri"]["Handlers"]["routes"] ?? [];
 
 foreach($routes as $key => $routeFn) {
     if(is_array($routes[$key])) {

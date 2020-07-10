@@ -3,7 +3,14 @@
     $origPage = $page;
 
     $time = time();
-    $startId = $origPage->getDomain()->rootpageuid;
+
+    $domain = $origPage->getDomain();
+    if(!is_null($domain)) {
+        $startId = $origPage->getDomain()->rootpageuid;
+    } else {
+        $startId = 0;
+        dd($origPage);
+    }
 @endphp
 
 @if(empty($postParams))
@@ -102,7 +109,11 @@
 
                                 <p style="text-align: center;font-size: 20px;color: white;" class="mt-3 m-0">
                                     <small>
-                                        This site was built using CentauriCMS. - Version: 3.5.8
+                                        This site was built using CentauriCMS.<br>
+
+                                        Version: 
+                                        {{ Centauri\CMS\Centauri::getVersion() }} - 
+                                        {{ Centauri\CMS\Centauri::getState() }}
                                     </small>
                                 </p>
                             </div>

@@ -2,14 +2,16 @@
 namespace Centauri\CMS\Ajax;
 
 use Centauri\CMS\Abstracts\AjaxAbstract;
-use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\File;
+use Centauri\CMS\Traits\AjaxTrait;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
-class FileAjax implements AjaxInterface
+class FileAjax
 {
+    use AjaxTrait;
+
     protected $cropableArray = [
         "png",
         "jpg",

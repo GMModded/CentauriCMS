@@ -47,6 +47,7 @@ class CentauriApplication
             "Handlers" => [
                 "pageNotFound" => \Centauri\CMS\Http\PageNotFound::class,
 
+                // Extendable by extensions
                 "routes" => []
             ],
 

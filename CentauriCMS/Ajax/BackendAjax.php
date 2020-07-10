@@ -1,84 +1,77 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
-use Centauri\CMS\Abstracts\AjaxAbstract;
 use Illuminate\Http\Request;
-use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Model\BeUser;
-use Centauri\CMS\Service\SchedulerService;
+use Centauri\CMS\Traits\AjaxTrait;
 
-class BackendAjax implements AjaxInterface
+/**
+ * Backend Ajax class - handles login and Backend-specific settings for an User or similiar actions/stuff.
+ */
+class BackendAjax
 {
-    public function request(Request $request, String $ajaxName)
+    use AjaxTrait;
+
+    /**
+     * Login-Ajax method called by request-method above.
+     * Handles valid Backend-User logins and logs failed logins.
+     * 
+     * @param Request $request The request object given by the request-method above.
+     * 
+     * @return json|response
+     */
+    public function loginAjax(Request $request)
     {
-        if($ajaxName == "login") {
-            if(is_null(session()->get("CENTAURI_BE_LANGUAGE"))) {
-                session()->put("CENTAURI_BE_LANGUAGE", 1);
-            }
+        if(is_null(session()->get("CENTAURI_BE_LANGUAGE"))) {
+            session()->put("CENTAURI_BE_LANGUAGE", 1);
+        }
 
-            $username = $request->input("username");
-            $password = $request->input("password");
+        $username = $request->input("username");
+        $password = $request->input("password");
 
-            $user = BeUser::where([
-                "username" => $username,
-                "password" => $password
-            ])->get()->first();
+        $user = BeUser::where([
+            "username" => $username,
+            "password" => $password
+        ])->get()->first();
 
-            if(!is_null($user)) {
-                $request->session()->put("CENTAURI_BE_USER", true);
+        if(!is_null($user)) {
+            $request->session()->put("CENTAURI_BE_USER", $user);
 
-                // $Centauri->initBE();
-                $localizedArr = \Centauri\CMS\Service\Locales2JSService::getLocalizedArray();
+            // $Centauri->initBE();
+            $localizedArr = \Centauri\CMS\Service\Locales2JSService::getLocalizedArray();
 
-                $html = view("Centauri::Backend.centauri", [
-                    "data" => [
-                        "modules" => $GLOBALS["Centauri"]["Modules"],
-                        "localizedArr" => $localizedArr,
-                        "dashboard" => $_GET["dashboard"] ?? "1"
-                    ]
-                ])->render();
+            $html = view("Centauri::Backend.centauri", [
+                "data" => [
+                    "modules" => $GLOBALS["Centauri"]["Modules"],
+                    "localizedArr" => $localizedArr,
+                    "dashboard" => $_GET["dashboard"] ?? "1",
+                    "beuser" => $user
+                ]
+            ])->render();
 
-                $explodedHtml = explode("\n", $html);
-                
-                foreach($explodedHtml as $key => $value) {
-                    if(\Str::contains($value, "<script ")) {
-                        unset($explodedHtml[$key]);
-                    }
+            $explodedHtml = explode("\n", $html);
+            
+            foreach($explodedHtml as $key => $value) {
+                if(\Str::contains($value, "<script ")) {
+                    unset($explodedHtml[$key]);
                 }
-
-                $html = implode("\n", $explodedHtml);
-
-                return json_encode([
-                    "type" => "success",
-                    "title" => "Welcome back, $username",
-                    "description" => "Enjoy your session!",
-
-                    "headtags" => [
-                        ["title", "CentauriCMS"]
-                    ],
-
-                    "html" => $html
-                ]);
             }
 
-            return response("Username/Password is wrong!", 500);
+            $html = implode("\n", $explodedHtml);
+
+            return json_encode([
+                "type" => "success",
+                "title" => "Welcome back, $username",
+                "description" => "Enjoy your session!",
+
+                "headtags" => [
+                    ["title", "CentauriCMS"]
+                ],
+
+                "html" => $html
+            ]);
         }
 
-        if($ajaxName == "getBackendLayout") {
-            $pid = $request->input("pid");
-
-            $page = \Centauri\CMS\Model\Page::find($pid);
-            return null;
-            // $backendLayout = \Centauri\CMS\Model\BackendLayout::find($page->getAttribute("backend_layout"));
-
-            // $backendLayoutData = json_decode($backendLayout->getAttribute("data"));
-            // return $backendLayout->getAttribute("data");
-        }
-
-        if($ajaxName == "triggerscheduler") {
-            return SchedulerService::run("test_scheduler");
-        }
-
-        return AjaxAbstract::default($request, $ajaxName);
+        return response("Username/Password is wrong!", 500);
     }
 }

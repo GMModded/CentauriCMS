@@ -46,5 +46,11 @@ return [
     "scheduler" => [
         "title" => "Scheduler"
     ],
+    "be_users" => [
+        "title" => "BE-Users"
+    ],
+    "user_permission_groups" => [
+        "title" => "Permission-Groups"
+    ],
 
 ];

@@ -85,6 +85,10 @@ class StaticFileCache
      */
     public static function deleteAll()
     {
+        if(!is_dir(self::$cachedTempDirPath)) {
+            return;
+        }
+
         return unlink(self::$cachedTempDirPath . "\\*.html");
     }
 }

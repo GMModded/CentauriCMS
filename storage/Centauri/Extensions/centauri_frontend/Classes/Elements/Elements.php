@@ -99,7 +99,7 @@ class Elements
                                     "bgcolor",
                                 ]
                             ]
-                        ],
+                        ]
                     ]
                 ]
             ],

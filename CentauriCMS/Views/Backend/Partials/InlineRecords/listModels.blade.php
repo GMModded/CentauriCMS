@@ -1,5 +1,3 @@
-{{-- {{ dd(get_defined_vars()["__data"]) }} --}}
-
 <div class="models p-3" data-namespace="{{ $namespace }}">
     <div class="row mb-3">
         <div class="col align-items-center d-flex">

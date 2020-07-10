@@ -1,36 +1,48 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
-use Centauri\CMS\Abstracts\AjaxAbstract;
-use Centauri\CMS\Interfaces\AjaxInterface;
 use Centauri\CMS\Model\Notification;
+use Centauri\CMS\Traits\AjaxTrait;
 use Illuminate\Http\Request;
 
-class NotificationAjax implements AjaxInterface
+class NotificationAjax
 {
-    public function request(Request $request, String $ajaxName)
+    use AjaxTrait;
+
+    /**
+     * Deletes a notification-record by its uid.
+     * 
+     * @param Request $request The request object given by the request-method above.
+     * 
+     * @return json|response
+     */
+    public function deleteByUidAjax(Request $request)
     {
-        if($ajaxName == "deleteByUid") {
-            $uid = $request->input("uid");
-            Notification::destroy($uid);
+        $uid = $request->input("uid");
+        Notification::destroy($uid);
 
-            return json_encode([
-                "type" => "primary",
-                "title" => "Notifications",
-                "description" => "This notification has been deleted"
-            ]);
-        }
+        return json_encode([
+            "type" => "primary",
+            "title" => "Notifications",
+            "description" => "This notification has been deleted"
+        ]);
+    }
+    
+    /**
+     * Deletes all notification-records.
+     * 
+     * @param Request $request The request object given by the request-method above.
+     * 
+     * @return json|response
+     */
+    public function deleteAllAjax(Request $request)
+    {
+        Notification::truncate();
 
-        if($ajaxName == "deleteAll") {
-            Notification::truncate();
-
-            return json_encode([
-                "type" => "primary",
-                "title" => "Notifications",
-                "description" => "All notifications have been deleted"
-            ]);
-        }
-
-        return AjaxAbstract::default($request, $ajaxName);
+        return json_encode([
+            "type" => "primary",
+            "title" => "Notifications",
+            "description" => "All notifications have been deleted"
+        ]);
     }
 }

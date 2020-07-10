@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class SQLService
 {
-    public function createTable($table, $hasLid = true)
+    public static function createTable($table, $hasLid = true)
     {
         if(Schema::hasTable($table)) {
             return false;
@@ -30,7 +30,7 @@ class SQLService
         return true;
     }
 
-    public function createColumn($table, $column, $type, $options = [])
+    public static function createColumn($table, $column, $type, $options = [])
     {
         $_options = [];
 
@@ -61,10 +61,10 @@ class SQLService
         return true;
     }
 
-    public function createInlineRecordColumns($table)
+    public static function createInlineRecordColumns($table)
     {
-        $this->createColumn($table, "hidden", "integer", ["default" => 0]);
-        $this->createColumn($table, "sorting", "integer");
-        $this->createColumn($table, "parent_uid", "integer", ["nullable" => true]);
+        self::createColumn($table, "hidden", "integer", ["default" => 0]);
+        self::createColumn($table, "sorting", "integer");
+        self::createColumn($table, "parent_uid", "integer", ["nullable" => true]);
     }
 }

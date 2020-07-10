@@ -1,35 +1,45 @@
 /**
  * Packages
+ *
+ * Toastr (customized),
+ * Bootstrap v4.1.3,
+ * FontAwesome v5.12.0,
+ * cropperjs v1.0.1
+ * Waves 1.0.1
+ * pickr 1.6.0
  */
 @import "../../packages/toastr/toastr";
 
 @import "../../packages/bootstrap/scss/mixins";
 @import "../../packages/bootstrap/scss/functions";
 @import "../../packages/bootstrap/scss/variables";
-@import "../../packages/bootstrap/dist/css/bootstrap.min.css";
+@import "../../../packages/bootstrap/dist/css/bootstrap.min.css";
 
-@import "../../packages/mdb/css/mdb.min.css";
-@import "../../packages/slick/slick-theme.css";
-@import "../../packages/slick/slick.css";
+@import "../../../packages/waves/dist/waves.min.css";
+@import "../../packages/pickr/dist/themes/classic.min.css";
 
-@import "../../packages/fontawesome5.12.0/css/fontawesome.min.css";
-@import "../../packages/fontawesome5.12.0/css/solid.min.css";
-@import "../../packages/fontawesome5.12.0/css/brands.min.css";
+@import "../../../packages/fontawesome5.12.0/css/fontawesome.min.css";
+@import "../../../packages/fontawesome5.12.0/css/solid.min.css";
+@import "../../../packages/fontawesome5.12.0/css/brands.min.css";
+
+@import "../../../packages/cropperjs/dist/cropper.min.css";
+
 
 /**
- * Colors
+ * Centauri-Bootstrap
+ * ci-bs
  */
-@import "colors";
+@import "Centauri/Bootstrap/main";
 
 /**
+ * Overrides
+ */
+@import "overrides";
+
+/*
  * Fonts
  */
-@import "font";
-
-/**
- * Variables
- */
-@import "variables";
+@import "fonts";
 
 /**
  * Global
@@ -37,58 +47,57 @@
 @import "global";
 
 /**
- * Custom
- */
-@import "custom";
-
-/**
  * Sections
  */
-@import "Sections/Header";
-@import "Sections/Content";
+@import "Sections/dashboard";
+@import "Sections/content";
+@import "Sections/header";
 
 /**
- * Functions
+ * Components
  */
-@import "Functions/ContentElements";
+@import "Components/inline";
+@import "Components/editor";
+@import "Components/Editor/Custom/radio";
+@import "Components/file-selector";
+@import "Components/dropdowns";
 
 /**
- * Content Elements
+ * Modules
  */
-@import "ContentElements/Slider";
-@import "ContentElements/HeaderDescription";
-@import "ContentElements/HeaderImage";
-@import "ContentElements/Boxitems";
+@import "Modules/_modules-view";
+@import "Modules/dashboard";
+@import "Modules/pages";
+@import "Modules/forms";
 
+/**
+ * Services
+ */
+@import "Service/cesorting";
+
+/**
+ * Centauri
+ */
+@import "Centauri/loader";
+
+/**
+ * Modals
+ */
+ @import "Modals/newContentElement";
+ @import "Modals/newDomain";
 
 /**
  * Utilities
  */
-@import "Utilities/PlaceholderUtility";
+ @import "Utility/tablewrapper";
+ @import "Utility/modal";
 
+/**
+ * Libs
+ */
+@import "Lib/globalNavDropdowns";
 
-@media (max-width: 767px) {
-    #header {
-        position: unset !important;
-    }
-
-    #content .item .text-view h4 {
-        font-size: 30px;
-        white-space: nowrap;
-    }
-
-    .button-view {
-        white-space: nowrap;
-    }
-}
-
-.progress {
-    &.inactive {
-        background-color: white !important;
-
-        &:before,
-        &:after {
-            animation: none !important;
-        }
-    }
-}
+/**
+ * Customizations
+ */
+@import "custom";

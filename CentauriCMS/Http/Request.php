@@ -48,7 +48,7 @@ class Request
         $domainConfigJSON = json_decode(file_get_contents($domain));
 
         if($nodes == "centauri") {
-            if(request()->session()->get("CENTAURI_BE_USER")) {
+            if(!is_null(request()->session()->get("CENTAURI_BE_USER"))) {
                 $Centauri->initBE();
                 $localizedArr = \Centauri\CMS\Service\Locales2JSService::getLocalizedArray();
 
@@ -56,7 +56,8 @@ class Request
                     "data" => [
                         "modules" => $GLOBALS["Centauri"]["Modules"],
                         "localizedArr" => $localizedArr,
-                        "dashboard" => $_GET["dashboard"] ?? "1"
+                        "dashboard" => $_GET["dashboard"] ?? "1",
+                        "beuser" => request()->session()->get("CENTAURI_BE_USER")
                     ]
                 ]);
             }
@@ -68,7 +69,7 @@ class Request
             $nnodes = explode("/", $nodes);
 
             if($nnodes[0] == "centauri") {
-                if(!request()->session()->get("CENTAURI_BE_USER")) {
+                if(is_null(request()->session()->get("CENTAURI_BE_USER"))) {
                     if($nodes != "centauri/ajax/Backend/login" && $nodes != "centauri/action/Backend/login") {
                         return redirect("/centauri");
                     }
@@ -128,6 +129,7 @@ class Request
 
                     $data["localizedArr"] = \Centauri\CMS\Service\Locales2JSService::getLocalizedArray();
                     $data["dashboard"] = $_GET["dashboard"] ?? "1";
+                    $data["beuser"] = request()->session()->get("CENTAURI_BE_USER");
 
                     return view("Centauri::Backend.centauri", [
                         "title" => $title,
@@ -169,6 +171,10 @@ class Request
                             "slugs" => "/" . $slugs
                         ])->get()->first();
                     }
+
+                    if(is_null($page)) {
+                        $page = Page::where("slugs", $slugs)->orWhere("slugs", "/" . $slugs)->get()->first();
+                    }
                 } else {
                     $page = Page::where("uid", $domain->content->rootpageuid)->get()->first();
                 }
@@ -179,8 +185,11 @@ class Request
 
         $notFoundData = self::throwNotFound(false, $page);
         if(
-            !is_null($notFoundData) &&
-            $notFoundData->getStatusCode() == 404
+            (!is_null($notFoundData) && (
+                $notFoundData->getStatusCode() == 301 ||
+                $notFoundData->getStatusCode() == 302 ||
+                $notFoundData->getStatusCode() == 404
+            ))
         ) {
             return $notFoundData;
         }

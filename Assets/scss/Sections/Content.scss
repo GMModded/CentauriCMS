@@ -1,7 +1,0 @@
-#content {
-    padding-top: 100px;
-
-    @include media-breakpoint-down(lg) {
-        padding-top: 75px;
-    }
-}

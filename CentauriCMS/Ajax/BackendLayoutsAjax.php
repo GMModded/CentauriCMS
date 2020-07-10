@@ -1,28 +1,32 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
-use Centauri\CMS\Abstracts\AjaxAbstract;
 use \Illuminate\Http\Request;
-use Centauri\CMS\Interfaces\AjaxInterface;
+use Centauri\CMS\Traits\AjaxTrait;
 
-class BackendLayoutsAjax implements AjaxInterface
+class BackendLayoutsAjax
 {
-    public function request(Request $request, string $ajaxName)
+    use AjaxTrait;
+
+    /**
+     * Finds all Backend-Layouts and returns them when e.g. creating a new page or editing a specific be-layout.
+     * 
+     * @param Request $request The request object given by the request-method above.
+     * 
+     * @return json|response
+     */
+    public function findAllAjax(Request $request)
     {
-        if($ajaxName == "findAll") {
-            $beLayouts = config("centauri")["beLayouts"];
-            $layouts = [];
+        $beLayouts = config("centauri")["beLayouts"];
+        $layouts = [];
 
-            foreach($beLayouts as $key => $beLayout) {
-                $layouts[] = [
-                    "name" => trans($beLayout["label"]),
-                    "value" => lcfirst($key)
-                ];
-            }
-
-            return json_encode($layouts);
+        foreach($beLayouts as $key => $beLayout) {
+            $layouts[] = [
+                "name" => trans($beLayout["label"]),
+                "value" => lcfirst($key)
+            ];
         }
 
-        return AjaxAbstract::default($request, $ajaxName);
+        return json_encode($layouts);
     }
 }

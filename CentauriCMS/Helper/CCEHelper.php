@@ -17,6 +17,12 @@ class CCEHelper
             }
         }
 
+        $extensionsCME = $GLOBALS["Centauri"]["Models"];
+
+        foreach($extensionsCME as $key => $extCMEArr) {
+            $_fields[$extCMEArr["namespace"]] = $extCMEArr;
+        }
+
         $CCEfields = array_merge($_fields, $CCEfields);
         return $CCEfields;
     }

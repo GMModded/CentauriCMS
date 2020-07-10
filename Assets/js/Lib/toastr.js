@@ -14,12 +14,12 @@
  /**
   * Centauri CMS
   * 
-  * Modified by:   M.S.
+  * Modified by:   M. Sediqi
   * Copyright:     2019-2020
   * 
   * Changes:
-  *  > Mainly its styling (background colors to MDBootstrap-theme'ish)
-  *  > Switched the function of the title- and description-params
+  *  > Mainly its styling (background colors to Centauri's Boostrap-theme'ish)
+  *  > Switched the function of the title- and description-params order
   */
  
 /* global define */

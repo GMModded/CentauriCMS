@@ -8,6 +8,7 @@ use Centauri\CMS\Model\Language;
 use Centauri\CMS\Model\Notification;
 use Centauri\CMS\Component\ExtensionsComponent;
 use Centauri\CMS\Helper\PageTreeHelper;
+use Centauri\CMS\Model\BeUser;
 use Centauri\CMS\Model\File;
 use Centauri\CMS\Model\Form;
 use Centauri\CMS\Model\Scheduler;
@@ -30,76 +31,125 @@ class ModulesService
                 "icon" => "fas fa-tachometer-alt"
             ],
 
-            "pages" => [
-                "title" => trans("backend/modules.pages.title"),
-                "icon" => "fas fa-file-alt"
+            "content" => [
+                "label" => "Content",
+
+                "modules" => [
+                    "pages" => [
+                        "title" => trans("backend/modules.pages.title"),
+                        "icon" => "fas fa-file-alt"
+                    ],
+
+                    "domains" => [
+                        "title" => "Domains",
+                        "icon" => "fas fa-globe"
+                    ],
+
+                    "languages" => [
+                        "title" => trans("backend/modules.languages.title"),
+                        "icon" => "fas fa-language"
+                    ],
+
+                    "models" => [
+                        "title" => trans("backend/modules.models.title"),
+                        "icon" => "fas fa-plus"
+                    ]
+                ]
             ],
 
-            "domains" => [
-                "title" => "Domains",
-                "icon" => "fas fa-globe"
+            "tools" => [
+                "label" => "Tools",
+
+                "modules" => [
+                    "filelist" => [
+                        "title" => trans("backend/modules.filelist.title"),
+                        "icon" => "fas fa-cloud-upload-alt"
+                    ],
+
+                    "forms" => [
+                        "title" => "Forms",
+                        "icon" => "fab fa-wpforms"
+                    ]
+                ]
             ],
 
-            "languages" => [
-                "title" => trans("backend/modules.languages.title"),
-                "icon" => "fas fa-language"
+            "administration" => [
+                "label" => "Administration",
+
+                "modules" => [
+                    "notifications" => [
+                        "title" => trans("backend/modules.notifications.title"),
+                        "icon" => "fas fa-bell",
+                        "data" => Notification::get()->count()
+                    ],
+
+                    "extensions" => [
+                        "title" => trans("backend/modules.extensions.title"),
+                        "icon" => "fas fa-boxes"
+                    ],
+
+                    "system" => [
+                        "title" => trans("backend/modules.system.title"),
+                        "icon" => "fas fa-server"
+                    ],
+
+                    "schedulers" => [
+                        "title" => trans("backend/modules.scheduler.title"),
+                        "icon" => "fas fa-clock"
+                    ]
+                ]
             ],
 
-            "models" => [
-                "title" => trans("backend/modules.models.title"),
-                "icon" => "fas fa-plus"
-            ],
+            "user_and_permissions" => [
+                "label" => "Users & Groups-Permissions",
 
-            /*
-            "forms" => [
-                "title" => "Forms",
-                "icon" => "fab fa-wpforms"
-            ],
-            */
+                "modules" => [
+                    "be_users" => [
+                        "title" => trans("backend/modules.be_users.title"),
+                        "icon" => "fas fa-users"
+                    ],
 
-            /*
-            "filelist" => [
-                "title" => trans("backend/modules.filelist.title"),
-                "icon" => "fas fa-cloud-upload-alt"
-            ],
-            */
-
-            "extensions" => [
-                "title" => trans("backend/modules.extensions.title"),
-                "icon" => "fas fa-boxes"
-            ],
-
-            "notifications" => [
-                "title" => trans("backend/modules.notifications.title"),
-                "icon" => "fas fa-bell"
-            ],
-
-            "system" => [
-                "title" => trans("backend/modules.system.title"),
-                "icon" => "fas fa-server"
-            ],
-
-            "schedulers" => [
-                "title" => trans("backend/modules.scheduler.title"),
-                "icon" => "fas fa-clock"
-            ],
+                    "user_permission_groups" => [
+                        "title" => trans("backend/modules.user_permission_groups.title"),
+                        "icon" => "fas fa-stream"
+                    ]
+                ]
+            ]
         ];
 
         foreach($modules as $moduleid => $data) {
-            $icon = "fas fa-box";
+            $isGrouped = isset($data["modules"]) ?? true;
 
-            if(!isset($data["icon"])) {
-                if(Storage::exists("icon-" . $moduleid)) {
-                    $icon = Storage::get("icon_" . $moduleid);
+            if($isGrouped) {
+                foreach($data["modules"] as $groupedModuleid => $groupedModuleData) {
+                    if($groupedModuleid != "type") {
+                        $icon = "fas fa-box";
+
+                        if(!isset($groupedModuleData["icon"])) {
+                            if(Storage::exists("icon-" . $groupedModuleid)) {
+                                $icon = Storage::get("icon_" . $groupedModuleid);
+                            }
+                        } else {
+                            $icon = "<i class='" . $groupedModuleData["icon"] . "'></i>";
+                        }
+
+                        $modules[$moduleid]["modules"][$groupedModuleid]["icon"] = $icon;
+                    }
                 }
             } else {
-                $icon = "<i class='" . $data["icon"] . "'></i>";
+                $icon = "fas fa-box";
+
+                if(!isset($data["icon"])) {
+                    if(Storage::exists("icon-" . $moduleid)) {
+                        $icon = Storage::get("icon_" . $moduleid);
+                    }
+                } else {
+                    $icon = "<i class='" . $data["icon"] . "'></i>";
+                }
+
+                $modules[$moduleid]["icon"] = $icon;
             }
-
-            $modules[$moduleid]["icon"] = $icon;
         }
-
-        $modules["notifications"]["data"] = Notification::get()->count();
 
         $extensionModules = $GLOBALS["Centauri"]["Modules"] ?? [];
         $GLOBALS["Centauri"]["Modules"] = array_merge($modules, $extensionModules);
@@ -163,15 +213,15 @@ class ModulesService
             $models = [];
 
             foreach($GLOBALS["Centauri"]["Models"] as $key => $model) {
-                $items = $key::get()->count();
+                if(isset($model["isChild"]) && (!($model["isChild"])) || !isset($model["isChild"])) {
+                    $items = $key::get()->count();
 
-                dd($key, $items);
-
-                $models[$key] = [
-                    "label" => $model["label"],
-                    "loaded" => (class_exists($key)),
-                    "items" => collect()
-                ];
+                    $models[$key] = [
+                        "label" => $model["label"],
+                        "loaded" => class_exists($key),
+                        "items" => $items
+                    ];
+                }
             }
 
             $data = [
@@ -290,6 +340,14 @@ class ModulesService
 
             $data = [
                 "schedulers" => $schedulers
+            ];
+        }
+
+        if($moduleid == "be_users") {
+            $beusers = BeUser::get()->all();
+
+            $data = [
+                "beusers" => $beusers
             ];
         }
 
