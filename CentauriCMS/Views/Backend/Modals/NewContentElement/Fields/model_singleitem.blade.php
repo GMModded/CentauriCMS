@@ -1,6 +1,8 @@
 <div class="accordion ci-bs-1 mb-2" data-uid="{{ $model->uid }}" data-sorting="{{ $model->sorting }}">
     <div class="top position-relative">
-        ###MODEL_CONTENT_TOP###
+        <span class="title">
+            ###MODEL_CONTENT_TOP###
+        </span>
 
         <div class="buttons-center">
             @if(!$model->hidden)

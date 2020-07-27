@@ -14,4 +14,11 @@ class PluginAdditionalDatas implements \Centauri\CMS\Interfaces\AdditionalDataIn
     {
         //
     }
+
+    public function getAdditionalData($data)
+    {
+        return [
+            "plugins" => $GLOBALS["Centauri"]["Plugins"]
+        ];
+    }
 }

@@ -13,10 +13,6 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th>
-                                    UID
-                                </th>
-
-                                <th>
                                     Preview
                                 </th>
 
@@ -33,10 +29,6 @@
                                 </th>
 
                                 <th>
-                                    Size
-                                </th>
-
-                                <th>
                                     Actions
                                 </th>
                             </tr>
@@ -45,13 +37,9 @@
                         <tbody>
                             @foreach($data["files"] as $file)
                                 <tr>
-                                    <td data-type="uid">
-                                        # {{ $file["uid"] }}
-                                    </td>
-
                                     <td style="max-width: 200px;">
                                         @if($file["cropable"])
-                                            <img src="{{ $file["URLpath"] }}" class="img-fluid" />
+                                            <img src="{{ $file["path"] }}" class="img-fluid" />
                                         @endif
                                     </td>
 
@@ -63,12 +51,8 @@
                                         {{ $file["type"] }}
                                     </td>
 
-                                    <td data-type="path">
+                                    <td title="UID # {{ $file->uid }}" data-type="path">
                                         {{ $file["path"] }}
-                                    </td>
-
-                                    <td>
-                                        {{ $file["size"] }}
                                     </td>
 
                                     <td>

@@ -45,7 +45,7 @@ Centauri.Helper.findByPidHelper = (pid, $container = $("#pagecontent"), rootpage
                 /**
                  * Sorting-Service for the rendered Content-Elements in the EditorComponent
                  */
-                Centauri.Service.CESortingService();
+                // Centauri.Service.CESortingService();
 
                 /**
                  * Callback

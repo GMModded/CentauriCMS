@@ -20,6 +20,20 @@ class FrontendRenderingHandler
         return $additionalHeadTagContent;
     }
 
+    public static function getAdditonalBodyTagContent()
+    {
+        $additionalBodyTagContent = "";
+
+        if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]) && (is_array($GLOBALS["Centauri"]["AdditionalDataFuncs"]))) {
+            foreach($GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Body"] as $bodyClass) {
+                $instance = Centauri::makeInstance($bodyClass);
+                $additionalBodyTagContent .= $instance->fetch();
+            }
+        }
+
+        return $additionalBodyTagContent;
+    }
+
     public static function getSEOHeadTags($page, $additionalHeadTagContent)
     {
         $seoHeadTags = "";
@@ -41,10 +55,9 @@ class FrontendRenderingHandler
         return $additionalHeadTagContent;
     }
 
-    public static function getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent)
+    public static function getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent, $additionalBodyTagContent = "")
     {
-        $ViewResolver = Centauri::makeInstance(ViewResolver::class);
-        $ViewResolver->register("Centauri", "CentauriCMS/Views");
+        ViewResolver::register("Centauri", "CentauriCMS/Views");
 
         $additionalHeadTagContent = self::getSEOHeadTags($page, $additionalHeadTagContent);
 
@@ -70,6 +83,7 @@ class FrontendRenderingHandler
             "domain" => $page->getDomain(),
             "content" => $renderedHTML,
             "additionalHeadTagContent" => $additionalHeadTagContent,
+            "additionalBodyTagContent" => $additionalBodyTagContent,
             "postParams" => $postParams
         ])->render();
 
@@ -82,7 +96,9 @@ class FrontendRenderingHandler
     public static function renderFrontendWithContent($page, $content)
     {
         $additionalHeadTagContent = self::getAdditonalHeadTagContent();
-        $frontendHtml = self::getPreparedFrontendHtml($page, $content, $additionalHeadTagContent);
+        $additionalBodyTagContent = self::getAdditonalBodyTagContent();
+
+        $frontendHtml = self::getPreparedFrontendHtml($page, $content, $additionalHeadTagContent, $additionalBodyTagContent);
 
         return $frontendHtml;
     }

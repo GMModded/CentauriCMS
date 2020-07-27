@@ -68,7 +68,7 @@ class PageAjax
      * 
      * @return json|response
      */
-    public function updateAjax(Request $request)
+    public function updatePageAjax(Request $request)
     {
         $params = $request->input();
 

@@ -86,7 +86,7 @@ class ModelsHelper
                         ])->render();
 
                         $existingItemLabel = $field["existingItemLabel"];
-                        $top = $model->$existingItemLabel ?? $field["newItemLabel"] ?? "Item";
+                        $top = $model->$existingItemLabel ?? $field["listLabel"] ?? "Item";
 
                         $bottom = "";
 
@@ -94,7 +94,25 @@ class ModelsHelper
                             $bottom .= $ContentElementsAjax->renderField((is_int($_key) ? $_field : $_key), $model, $modelNamespace);
                         }
 
-                        $_modelsHtml = str_replace("###MODEL_CONTENT_TOP###", $top, $_modelsHtml);
+                        $splittedTop = explode(" ", $top);
+                        $nSpittedTop = "";
+
+                        foreach($splittedTop as $topItem) {
+                            if(\Str::contains($topItem, "{") && \Str::contains($topItem, "}")) {
+                                $topItem = str_replace("{", "", $topItem);
+                                $topItem = str_replace("}", "", $topItem);
+
+                                if(isset($model->$topItem)) {
+                                    $nSpittedTop .= $model->$topItem . " ";
+                                }
+                            }
+                        }
+
+                        if($nSpittedTop == "") {
+                            $nSpittedTop = $field["listLabel"];
+                        }
+
+                        $_modelsHtml = str_replace("###MODEL_CONTENT_TOP###", $nSpittedTop, $_modelsHtml);
                         $_modelsHtml = str_replace("###MODEL_CONTENT_BOTTOM###", $bottom, $_modelsHtml);
 
                         $modelsHtml .= $_modelsHtml;

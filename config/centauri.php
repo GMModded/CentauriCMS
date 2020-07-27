@@ -1,37 +1,44 @@
 <?php
 
+$gridLayoutFieldsDefaultConfig = [
+    "grid_fullsize;grid_space_top;grid_space_bottom"
+];
+
+/** Centauri Core/Main Configuration */
 return [
-    /**
-     * Centauri Core/Main Configuration
-     */
+
+    /** @see https://docs.centauricms.de/config/caching */
     "config" => [
+
+        /** @see https://docs.centauricms.de/config/caching */
         "Caching" => [
             "state" => true,
-            "type" => "STATIC_FILE_CACHE" # DEFAULT or STATIC_FILE_CACHE
+            "type" => "STATIC_FILE_CACHE", # DEFAULT or STATIC_FILE_CACHE
+            "imagesToBase64" => true
         ],
 
+        /** @see https://docs.centauricms.de/config/frontend */
         "FE" => [
             # "Default" in case a beLayout has no "template"-definition so it will use this one as default.
             "DefaultMainTemplate" => "centauri_frontend::Frontend.Templates.frontend",
-            "keepSiteAlive" => false
+            "keepSiteAlive" => true
         ]
     ],
 
-    /**
-     * Backend Layouts
-     */
+    /** Backend Layouts */
     "beLayouts" => [
         "default" => [
+            /** NOTE: When using AdditionalDatas within the same class here, those additionaldata calls has to be moved into the static rendering method! */
             "rendering" => \Centauri\Extension\Frontend\Frontend::class,
             "template" => "centauri_frontend::Frontend.Templates.Page.frontend",
             "label" => "backend/be_layout.layouts.default.label",
 
             "config" => [
-                // rowPos - will be saved into the DB as key
+                /** rowPos - will be saved into the DB as key */
                 0 => [
-                    // "cols" => Array
+                    /** "cols" => Array */
                     "cols" => [
-                        // colPositions - will be saved into the DB as key
+                        /** colPositions - will be saved into the DB as key */
                         0 => [
                             "label" => "backend/be_layout.layouts.default.cols.content"
                         ]
@@ -41,73 +48,32 @@ return [
         ]
     ],
 
-    /**
-     * Grids
-     */
+    /** Grids */
     "grids" => [
         "config" => [
             "templateRootPath" => "EXT:centauri_frontend"
-        ],
-
-        "layouts" => [
-            "onecol" => [
-                "label" => " » One Column Container",
-
-                "config" => [
-                    // rowPos - will be saved into the DB as key
-                    0 => [
-                        // "cols" => Array
-                        "cols" => [
-                            // colPositions - will be saved into the DB as key
-                            0 => [
-                                "label" => "backend/be_layout.layouts.default.cols.content"
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-
-            "twocol" => [
-                "label" => " » Two Column Container",
-
-                "config" => [
-                    0 => [
-                        "cols" => [
-                            0 => [
-                                "col" => "6",
-                                "label" => "Left"
-                            ],
-
-                            1 => [
-                                "col" => "6",
-                                "label" => "Right"
-                            ]
-                        ]
-                    ]
-                ]
-            ]
         ]
     ],
 
-    /**
-     * Grid-Layouts
-     */
+    /** Grid-Layouts */
     "gridLayouts" => [
         "onecol" => [
             "label" => " » One Column Container",
 
             "config" => [
-                // rowPos - will be saved into the DB as key
+                /** rowPos - will be saved into the DB as key */
                 0 => [
-                    // "cols" => Array
+                    /** "cols" => Array */
                     "cols" => [
-                        // colPositions - will be saved into the DB as key
+                        /** colPositions - will be saved into the DB as key */
                         0 => [
                             "label" => "backend/be_layout.layouts.default.cols.content"
                         ]
                     ]
                 ]
-            ]
+            ],
+
+            "gridFieldsConfig" => $gridLayoutFieldsDefaultConfig
         ],
 
         "twocol" => [
@@ -127,13 +93,13 @@ return [
                         ]
                     ]
                 ]
-            ]
+            ],
+
+            "gridFieldsConfig" => $gridLayoutFieldsDefaultConfig
         ]
     ],
 
-    /**
-     * CentauriContentElements - CCE
-     */
+    /** CentauriContentElements - CCE */
     "CCE" => [
         "fields" => [
             "htag" => [
@@ -180,6 +146,7 @@ return [
                     ]
                 ]
             ],
+
             "header" => [
                 "label" => "Header",
                 "type" => "input",
@@ -188,24 +155,29 @@ return [
                     "required" => 1
                 ]
             ],
+
             "subheader" => [
                 "label" => "Subheader",
                 "type" => "input"
             ],
+
             "RTE" => [
                 "label" => "RTE",
                 "type" => "RTE"
             ],
+
             "plugin" => [
                 "label" => "Plugin",
                 "type" => "plugin"
             ],
+
             "grid" => [
                 "label" => "Container (Full)",
                 "type" => "grid",
                 "additionalType" => "grid",
                 "return_statement" => "MERGE"
             ],
+
             "image" => [
                 "label" => "Image",
                 "type" => "image",
@@ -213,10 +185,11 @@ return [
                 "config" => [
                     "required" => 1,
                     "minItems" => 1,
-                    "maxItems" => 1,
+                    "maxItems" => 2,
                     "validation" => \Centauri\CMS\Validation\FileValidation::class
                 ]
             ],
+
             "file" => [
                 "label" => "File",
                 "type" => "file",
@@ -226,11 +199,48 @@ return [
                     "maxItems" => 1
                 ]
             ],
+
             "colorpicker" => [
                 "label" => "Color",
                 "type" => "input",
                 "renderAs" => "colorpicker"
             ],
+
+            "grid_fullsize" => [
+                "label" => "Container Fullsize?",
+                "type" => "checkbox",
+                "colAdditionalClasses" => "d-flex align-items-center"
+            ],
+
+            "grid_space_top" => [
+                "label" => "Top Space",
+                "type" => "select",
+
+                "config" => [
+                    "items" => [
+                        ["MT-1", "mt-1"],
+                        ["MT-2", "mt-2"],
+                        ["MT-3", "mt-3"],
+                        ["MT-4", "mt-4"],
+                        ["MT-5", "mt-5"]
+                    ]
+                ]
+            ],
+
+            "grid_space_bottom" => [
+                "label" => "Bottom Space",
+                "type" => "select",
+
+                "config" => [
+                    "items" => [
+                        ["MB-1", "mb-1"],
+                        ["MB-2", "mb-2"],
+                        ["MB-3", "mb-3"],
+                        ["MB-4", "mb-4"],
+                        ["MB-5", "mb-5"]
+                    ]
+                ]
+            ]
         ],
 
         "elements" => [
@@ -284,9 +294,7 @@ return [
         // ]
     ],
 
-    /**
-     * CentauriModelElements - CME
-     */
+    /** CentauriModelElements - CME */
     "CME" => [
         "models" => [],
 
@@ -385,9 +393,7 @@ return [
     //     ]
     // ],
 
-    /**
-     * SQL Files
-     */
+    /** SQL Files */
     "SQLFiles" => [
         // \Centauri\CMS\SQL\PagesSQL::class,
         \Centauri\CMS\SQL\TestSQL::class

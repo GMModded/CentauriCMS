@@ -1,0 +1,153 @@
+/** Cookie Overlayer */
+#cookiepopupoverlayer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .6);
+    z-index: 100;
+    transition: .66s cubic-bezier(1, -.1, 0, 1.15);
+}
+
+
+/** General Cookie Design / Style */
+#cookiepopup {
+    position: fixed;
+    top: 0;
+    background-color: #fff;
+    width: 20%;
+    height: 100%;
+    overflow: auto;
+    z-index: 1000;
+    box-shadow: 0 0 15px #1f1f11;
+    max-height: 100vh;
+    min-width: 320px;
+    animation-name: slidefromleft;
+    animation-duration: 1s;
+    transition: .66s cubic-bezier(1, -.1, 0, 1.15);
+}
+
+@keyframes slidefromleft {
+    0% {
+        left: -640px;
+    }
+
+    100% {
+        left: 0;
+    }
+}
+
+
+/** Wrapper adjustments for the cookiepopup */
+#cookiepopup .wrapper {
+    height: calc(100% - 30px);
+    padding: 15px 15px 0 15px;
+    overflow-y: auto;
+}
+
+#cookiepopup .wrapper [data-contentelement="headerdescription"] p {
+    font-size: 16px;
+}
+
+
+/** The row of and the buttons themselves to decline/accept the cookie consent */
+#cookiepopup .wrapper .row.bottom-row {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    background-color: #fff;
+    box-shadow: 0 0 15px #1f1f1f;
+}
+
+#cookiepopup .wrapper button#cookiepopup_cookies_acceptselected {
+    width: 100%;
+    height: 100%;
+    border: 1px solid gold;
+    opacity: .9;
+    border-radius: 0;
+    outline: none;
+    box-shadow: none;
+    height: 75px;
+}
+
+#cookiepopup .wrapper button#cookiepopup_cookies_acceptall {
+    background-color: gold;
+    border: 1px solid gold;
+    color: black;
+    font-weight: bold;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    outline: none;
+    box-shadow: none;
+    height: 75px;
+}
+
+
+/** Making the "more detail"-text absolute right positionated */
+#cookiepopup .wrapper small {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+}
+
+
+/** Custom Checkboxes */
+#cookiepopup .ci-switch {
+    position: relative;
+}
+
+#cookiepopup .ci-switch label {
+    cursor: pointer;
+}
+
+#cookiepopup .ci-switch label input[type="checkbox"] {
+    display: none;
+}
+
+#cookiepopup .ci-switch label input[type="checkbox"]:checked:disabled + span {
+    background-color: black;
+    cursor: not-allowed;
+}
+
+#cookiepopup .ci-switch label.is-state {
+    cursor: not-allowed;
+    opacity: .9;
+}
+
+#cookiepopup .ci-switch label input[type="checkbox"]:checked + span {
+    background-color: gold;
+}
+
+#cookiepopup .ci-switch label input[type="checkbox"]:checked + span:after {
+    background: #fefefe !important;
+    left: calc(100% - 15px);
+}
+
+#cookiepopup .ci-switch label span {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    background-color: #7f7f7f;
+    vertical-align: middle;
+    border-radius: 15px;
+    width: 40px;
+    height: 15px;
+    margin-right: 15px;
+    transition: background .3s ease;
+}
+
+#cookiepopup .ci-switch label span:after {
+    content: " ";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background-color: #f1f1f1;
+    border-radius: 20px;
+    box-shadow: 0 1px 5px 1px rgba(0, 0, 0, .5);
+    width: 20px;
+    height: 20px;
+    transition: left .3s ease, background .3s ease, box-shadow 1s ease;
+}

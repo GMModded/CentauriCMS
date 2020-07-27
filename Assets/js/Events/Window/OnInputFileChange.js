@@ -58,10 +58,6 @@ Centauri.Events.Window.OnInputFileChange = (element) => {
                                     type: "load",
                                     module: "filelist"
                                 });
-                            },
-
-                            error: (data) => {
-                                console.error(data);
                             }
                         });
                     }

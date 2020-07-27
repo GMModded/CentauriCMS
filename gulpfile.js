@@ -37,7 +37,9 @@ var gulp     = require("gulp");
 		"ckeditor5/build/ckeditor.js",
 
 		"cropperjs/dist/cropper.min.js",
-		"jquery-cropper/dist/jquery-cropper.js"
+		"jquery-cropper/dist/jquery-cropper.js",
+
+		"jquery-focuspoint/js/jquery.focuspoint.min.js"
 	];
 
 	let m = 0;

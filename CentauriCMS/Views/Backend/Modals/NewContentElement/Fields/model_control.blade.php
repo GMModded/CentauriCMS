@@ -8,7 +8,13 @@
     </label>
 
     @if(!isset($noModelContent))
-        <a href="#" role="button" class="btn btn-default waves-effect waves-light create-new-inline px-4" data-name="{{ $modelType }}" data-parentuid="{{ $modelParentUid }}">
+        <a 
+            href="#"
+            role="button"
+            class="btn btn-default waves-effect waves-light create-new-inline px-4"
+            data-name="{{ $modelType }}"
+            data-parentuid="{{ $modelParentUid }}"
+        >
             <i class="fas fa-plus mr-1"></i>
 
             @if(isset($modelCreateNewButtonName) && !is_null($modelCreateNewButtonName))

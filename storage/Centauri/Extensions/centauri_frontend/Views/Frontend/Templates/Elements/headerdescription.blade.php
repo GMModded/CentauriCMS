@@ -11,9 +11,9 @@
         </h3>
     @endif
 
-    @if($element->rte)
+    @if($element->RTE)
         <div class="rte-view">
-            {!! $element->rte !!}
+            {!! $element->RTE !!}
         </div>
     @endif
 </div>

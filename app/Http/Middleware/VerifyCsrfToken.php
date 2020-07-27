@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Centauri\Extension\Cookie\Helper\CookiesHelper;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 
 class VerifyCsrfToken extends Middleware
@@ -21,4 +22,14 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
     ];
+
+    /**
+     * Determine if the cookie should be added to the response.
+     *
+     * @return bool
+     */
+    public function shouldAddXsrfTokenCookie()
+    {
+        return ($this->addHttpCookie == CookiesHelper::getConsentState());
+    }
 }

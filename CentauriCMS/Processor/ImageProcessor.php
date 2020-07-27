@@ -8,7 +8,6 @@ class ImageProcessor
     public static function process($data)
     {
         $value = $data["value"];
-        return $value;
 
         if(Str::contains($value, ",")) {
             $value = explode(",", $value);

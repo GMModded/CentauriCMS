@@ -1,11 +1,11 @@
 Centauri.Events.OnOverlayerHiddenEvent = (closer) => {
     let $overlayer = $(".overlayer");
 
-    $overlayer.addClass("hidden");
-
     if($overlayer.hasClass("overlay-modal")) {
         $overlayer.removeClass("overlay-modal");
     }
+
+    let hide = true;
 
     switch(closer) {
         case "EditorComponent":
@@ -22,6 +22,11 @@ Centauri.Events.OnOverlayerHiddenEvent = (closer) => {
             break;
 
         default:
+            hide = false;
             break;
+    }
+
+    if(hide) {
+        $overlayer.addClass("hidden");
     }
 };

@@ -244,25 +244,12 @@ class ModulesService
         }
 
         if($moduleid == "filelist") {
-            $files = File::get()->all();
+            $files = Storage::disk("centauri_filelist")->allFiles();
 
-            $nFiles = [];
-            foreach($files as $file) {
-                $path = storage_path("Centauri\\Filelist\\" . $file->name);
+            foreach($files as $key => $file) {
+                $path = Storage::disk("centauri_filelist")->url($file);
 
-                if(file_exists($path)) {
-                    $nFile = [
-                        "uid" => $file->uid,
-                        "name" => $file->name,
-                        "cropable" => $file->cropable,
-                        "path" => env("APP_URL") . "/storage/Centauri/Filelist/" . $file->name,
-                        "URLpath" => env("APP_URL") . "/storage/Centauri/Filelist/" . $file->name,
-                        "type" => $file->type,
-                        "size" => filesize($path)
-                    ];
-    
-                    $nFiles[] = $nFile;
-                } else {
+                if(!Storage::disk("centauri_filelist")->exists($file)) {
                     $notification = new Notification;
 
                     $notification->severity = "ERROR";
@@ -290,11 +277,21 @@ class ModulesService
                             $('script#_').remove();
                         }, 500);
                     </script>";
+
+                    break;
                 }
+
+                $relPath = storage_path("Centauri/Filelist/$file");
+                $relPath = str_replace("/app", "", $relPath);
+                $relPath = str_replace("/", "\\", $relPath);
+
+                $fileModel = File::where("path", $relPath)->get()->first();
+
+                $files[$key] = $fileModel;
             }
 
             $data = [
-                "files" => $nFiles
+                "files" => $files
             ];
         }
 

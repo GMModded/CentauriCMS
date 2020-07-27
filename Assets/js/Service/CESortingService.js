@@ -1,4 +1,9 @@
-Centauri.Service.CESortingService = () => {
+Centauri.Service.CESortingService = (state = true) => {
+    if(!state && $(".sortable-elements").hasClass("ui-sortable")) {
+        $(".sortable-elements.ui-sortable").sortable("disable").removeClass("ui-sortable");
+        return true;
+    }
+
     $(".sortable-elements").each(function() {
         let $this = $(this);
     
@@ -12,17 +17,17 @@ Centauri.Service.CESortingService = () => {
     $(".sortable-elements").sortable({
         connectWith: ".sortable-elements",
         dropOnEmpty: false,
-        cancel: ":input, button, .ck-content, .accordion, a[role='button'], span, label, .pcr-app, .pcr-color-palette, .pcr-color-chooser, .pcr-color-opacity, .pcr-current-color, .pcr-last-color",
+        cancel: ":input, button, .ck-content, .accordion, a[role='button'], span, label, .pcr-app, .pcr-color-palette, .pcr-color-chooser, .pcr-color-opacity, .pcr-current-color, .pcr-last-color, :focus",
 
-        start: function(e, ui) {
+        start: (e, ui) => {
             $(".sortable-elements button[data-action='newContentElement'").hide();
         },
 
-        stop: function(e, ui) {
+        stop: (e, ui) => {
             $(".sortable-elements button[data-action='newContentElement'").show();
         },
 
-        update: function(e, ui) {
+        update: (e, ui) => {
             let data = [];
             let pid = Centauri.Components.PagesComponent.uid;
             let $this = $(this);
@@ -71,7 +76,16 @@ Centauri.Service.CESortingService = () => {
                     success: (data) => {
                         data = JSON.parse(data);
                         Centauri.Notify(data.type, data.title, data.description);
-                        Centauri.Helper.findByPidHelper(Centauri.Components.PagesComponent.uid);
+
+                        Centauri.Helper.findByPidHelper(
+                            Centauri.Components.PagesComponent.uid,
+                            $("#pagecontent"),
+                            Centauri.Components.PagesComponent.uid,
+                        () => {
+                            Centauri.Events.OnModuleLoadEvent.Pages.RegisterPageDetailButtons();
+                            Centauri.Service.CESortingService();
+                            // $("i", $("#pagecontent .header .right button.sort")).css("transform", "rotate(135deg)");
+                        });
                     },
 
                     error: (data) => {

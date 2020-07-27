@@ -17,6 +17,17 @@ class PageNotFound
         $domainCfg = $domainFile->content;
 
         $pageNotFoundUid = $domainCfg->pageNotFound ?? null;
+
+        if(is_null($pageNotFoundUid)) {
+            if(!Centauri::keepSiteAlive()) {
+                throw new \Exception("There's no configured pageNotFound uid for the given domain!");
+            } else {
+                return redirect("/", 301, [
+                    "Centauri-Redirect" => "pageNotFound-uid"
+                ]);
+            }
+        }
+
         $page = Page::where("uid", $pageNotFoundUid)->get()->first();
 
         if($domainCfg->domain != $crtServerHTTPHost) {
@@ -40,16 +51,19 @@ class PageNotFound
         }
 
         if(is_null($page) && Centauri::keepSiteAlive()) {
-            return redirect("/", 302, [
+            return redirect("/", 301, [
                 "Centauri-Redirect" => "404-page-not-found"
             ]);
+        } else if(is_null($page)) {
+            dd("RI");
         }
 
         $additionalHeadTagContent = FrontendRenderingHandler::getAdditonalHeadTagContent();
+        $additionalBodyTagContent = FrontendRenderingHandler::getAdditonalBodyTagContent();
 
         $beLayoutCfg = $page->getBackendLayoutConfig();
         $renderedHTML = Centauri::makeInstance($beLayoutCfg["rendering"])::rendering($page);
-        $frontendHtml = FrontendRenderingHandler::getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent);
+        $frontendHtml = FrontendRenderingHandler::getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent, $additionalBodyTagContent);
 
         $frontendHtml = view("centauri_frontend::Frontend.Templates.pageNotFound", [
             "renderedHTML" => $frontendHtml

@@ -1,7 +1,7 @@
 <?php
 namespace Centauri\CMS\AdditionalDatas;
 
-class HeadTagAdditionalDatas implements \Centauri\CMS\Interfaces\AdditionalDataInterface
+class HeadTagAdditionalDatas
 {
     public function fetch()
     {
@@ -19,10 +19,5 @@ class HeadTagAdditionalDatas implements \Centauri\CMS\Interfaces\AdditionalDataI
         ];
 
         return implode("\r\n", $metaTags);
-    }
-
-    public function onEditListener($element)
-    {
-        // 
     }
 }

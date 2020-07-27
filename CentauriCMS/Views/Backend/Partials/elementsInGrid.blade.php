@@ -1,14 +1,12 @@
 @php
-    if(is_null($data["gridConfig"])) {
-        $data["gridConfig"] = [
-            "config" => [
-                0 => [
-                    "cols" => [
-                        0 => [
-                            "label" => "backend/be_layout.layouts.default.cols.content"
-                        ]
+    if(is_null($data["gridConfig"]["config"])) {
+        $data["gridConfig"]["config"] = [
+            0 => [
+                "cols" => [
+                    0 => [
+                        "label" => "backend/be_layout.layouts.default.cols.content"
                     ]
-                ],
+                ]
             ]
         ];
     }
@@ -35,7 +33,7 @@
 
                         <div class="sortable-elements">
                             @foreach($data["elements"][$colPos]["elements"] as $element)
-                                <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="before" data-type="ingrid" data-gridsparent="{{ $data['gridelement']->uid }}" data-grid-sorting-rowpos="{{ $rowPos }}" data-grid-sorting-colpos="{{ $colPos }}">
+                                <button class="new-content-element btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="before" data-type="ingrid" data-gridsparent="{{ $data['gridelement']->uid }}" data-grid-sorting-rowpos="{{ $rowPos }}" data-grid-sorting-colpos="{{ $colPos }}">
                                     <i class="fas fa-plus"></i>
                                     Content
                                 </button>
@@ -55,14 +53,13 @@
                                 </div>
                             @endforeach
 
-                            <button class="btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="after" data-type="ingrid" data-gridsparent="{{ $data['gridelement']->uid }}" data-grid-sorting-rowpos="{{ $rowPos }}" data-grid-sorting-colpos="{{ $colPos }}">
+                            <button class="new-content-element btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="after" data-type="ingrid" data-gridsparent="{{ $data['gridelement']->uid }}" data-grid-sorting-rowpos="{{ $rowPos }}" data-grid-sorting-colpos="{{ $colPos }}">
                                 <i class="fas fa-plus"></i>
                                 Content
                             </button>
                         </div>
                     </div>
                 @endforeach
-            </div>
         </div>
 
         @if(isset($data["fieldsAfterElements"]))

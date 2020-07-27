@@ -30,6 +30,7 @@ class CentauriElements extends Migration
             $table->integer("lid");
             $table->integer("rowPos");
             $table->integer("colPos");
+            $table->integer("hidden");
             $table->integer("sorting");
             $table->string("ctype");
 
@@ -40,12 +41,15 @@ class CentauriElements extends Migration
             $table->string("htag")->nullable();
             $table->string("header")->nullable();
             $table->string("subheader")->nullable();
-            $table->string("rte")->nullable();
+            $table->longText("RTE")->nullable();
 
-            $table->tinyInteger("grids_sorting_rowpos")->nullable();
-            $table->tinyInteger("grids_sorting_colpos")->nullable();
-
-            $table->integer("hidden");
+            $table->string("grid")->nullable();
+            $table->string("grid_fullsize")->nullable();
+            $table->string("grid_space_top")->nullable();
+            $table->string("grid_space_bottom")->nullable();
+            $table->integer("grids_parent")->nullable();
+            $table->integer("grids_sorting_rowpos")->nullable();
+            $table->integer("grids_sorting_colpos")->nullable();
         });
     }
 

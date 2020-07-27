@@ -26,7 +26,10 @@ class CentauriFiles extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+            $table->string("name");
             $table->string("path");
+            $table->tinyInteger("cropable");
+            $table->string("type", 15);
         });
     }
 

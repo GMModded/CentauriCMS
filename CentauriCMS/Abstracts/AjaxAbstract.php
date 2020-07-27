@@ -11,8 +11,9 @@ class AjaxAbstract
      * 
      * @return response
      */
-    public static function default($request, $ajaxName)
+    public static function default($request, $ajaxName, $message = "There's no AJAX-handling for the action <b><u>{AJAX_NAME}</u></b>")
     {
-        return response("There's no AJAX-handling for the action <b><u>" . $ajaxName . "</u></b>", 500);
+        $message = str_replace("{AJAX_NAME}", $ajaxName, $message);
+        return response($message, 500);
     }
 }

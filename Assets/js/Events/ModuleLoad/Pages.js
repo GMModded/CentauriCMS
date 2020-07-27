@@ -2,6 +2,8 @@ Centauri.Events.OnModuleLoadEvent.Pages = () => {
     /**
      * Pagetree
      */
+    $("#pagetree div[data-type]").off("click");
+
     $("#pagetree div[data-type]").each(function() {
         let $this = $(this);
 
@@ -54,302 +56,12 @@ Centauri.Events.OnModuleLoadEvent.Pages = () => {
                             Centauri.Utility.PathsUtility.root + "centauri/" + module// + "/" + uid
                         );
 
-                        Centauri.Helper.findByPidHelper(Centauri.Components.PagesComponent.uid, $("#pagecontent"), rootpageid, () => {
-                            $("#pagecontent .right button").each(function() {
-                                let $btn = $(this);
-
-                                $btn.on("click", this, function() {
-                                    let action = $(this).data("action");
-
-                                    if(action == "edit") {
-                                        Centauri.fn.Ajax(
-                                            "Page",
-                                            "findByUid",
-
-                                            {
-                                                uid: uid
-                                            },
-
-                                            {
-                                                success: (data) => {
-                                                    let page = JSON.parse(data);
-                                                    let flagsrc = "";
-
-                                                    Centauri.fn.Ajax(
-                                                        "BackendLayouts",
-                                                        "findAll",
-
-                                                        {},
-
-                                                        {
-                                                            success: (data) => {
-                                                                data = JSON.parse(data);
-                                                                let beLayouts = data;
-
-                                                                Centauri.Components.EditorComponent("show", {
-                                                                    id: "EditPage-" + Centauri.Components.PagesComponent.uid,
-                                                                    title: "Page-Editor - Edit",
-                                                                    size: "fluid-lg",
-
-                                                                    tabs: [
-                                                                        {
-                                                                            title: Centauri__trans.global.label_page,
-
-                                                                            form: [
-                                                                                {
-                                                                                    id: "title",
-                                                                                    label: Centauri__trans.global.label_title,
-                                                                                    type: "text",
-                                                                                    value: page.title,
-                                                                                    required: true
-                                                                                },
-
-                                                                                {
-                                                                                    id: "slugs",
-                                                                                    label: "Slug",
-                                                                                    type: "text",
-                                                                                    value: page.slugs
-                                                                                },
-
-                                                                                {
-                                                                                    id: "backend_layout",
-                                                                                    type: "custom",
-                                                                                    custom: "select",
-
-                                                                                    data: {
-                                                                                        selectedOptionValue: page.backend_layout,
-                                                                                        label: "Choose a layout",
-                                                                                        options: beLayouts
-                                                                                    }
-                                                                                },
-
-                                                                                {
-                                                                                    id: "hidden_inpagetree",
-                                                                                    type: "custom",
-                                                                                    custom: "switch",
-
-                                                                                    data: {
-                                                                                        label: Centauri__trans.others.EditorComponent.hidden_inpagetree,
-                                                                                        isChecked: page.hidden_inpagetree
-                                                                                    }
-                                                                                }
-                                                                            ]
-                                                                        },
-
-                                                                        {
-                                                                            title: "SEO",
-
-                                                                            form: [
-                                                                                {
-                                                                                    id: "seo_keywords",
-                                                                                    label: Centauri__trans.EditorComponent.SEO.keywords,
-                                                                                    type: "text",
-                                                                                    value: page.seo_keywords
-                                                                                },
-
-                                                                                {
-                                                                                    id: "seo_description",
-                                                                                    type: "custom",
-                                                                                    custom: "textarea",
-
-                                                                                    data: {
-                                                                                        label: Centauri__trans.global.label_description,
-                                                                                        value: page.seo_description,
-                                                                                        required: true
-                                                                                    }
-                                                                                },
-
-                                                                                [
-                                                                                    {
-                                                                                        config: true,
-
-                                                                                        row: {
-                                                                                            title: "Robots"
-                                                                                        }
-                                                                                    },
-
-                                                                                    {
-                                                                                        id: "seo_robots_indexpage",
-                                                                                        type: "custom",
-                                                                                        custom: "switch",
-
-                                                                                        data: {
-                                                                                            label: Centauri__trans.EditorComponent.SEO.robots_indexpage,
-                                                                                            isChecked: page.seo_robots_indexpage
-                                                                                        }
-                                                                                    },
-
-                                                                                    {
-                                                                                        id: "seo_robots_followpage",
-                                                                                        type: "custom",
-                                                                                        custom: "switch",
-
-                                                                                        data: {
-                                                                                            label: Centauri__trans.EditorComponent.SEO.robots_followpage,
-                                                                                            isChecked: page.seo_robots_followpage
-                                                                                        }
-                                                                                    }
-                                                                                ]
-                                                                            ]
-                                                                        },
-
-                                                                        {
-                                                                            title: "Info",
-
-                                                                            form: [
-                                                                                [
-                                                                                    {
-                                                                                        config: true,
-
-                                                                                        row: {
-                                                                                            title: "Page-Infos",
-                                                                                            titleClass: "title",
-                                                                                            colClasses: "col-lg-6"
-                                                                                        }
-                                                                                    },
-
-                                                                                    {
-                                                                                        id: "language",
-                                                                                        type: "custom",
-                                                                                        custom: "image",
-                                                                                        colClasses: "col-lg-12",
-
-                                                                                        data: {
-                                                                                            label: Centauri__trans.global.label_language,
-                                                                                            src: flagsrc
-                                                                                        }
-                                                                                    },
-
-                                                                                    {
-                                                                                        id: "uid",
-                                                                                        label: "UID",
-                                                                                        type: "text",
-                                                                                        value: page.uid,
-                                                                                        extraAttr: "disabled"
-                                                                                    },
-
-                                                                                    {
-                                                                                        id: "pid",
-                                                                                        label: "PID",
-                                                                                        type: "text",
-                                                                                        value: page.pid,
-                                                                                        extraAttr: "disabled"
-                                                                                    },
-
-                                                                                    {
-                                                                                        id: "created_at",
-                                                                                        label: Centauri__trans.global.label_createdat,
-                                                                                        type: "text",
-                                                                                        value: page.created_at,
-                                                                                        extraAttr: "disabled"
-                                                                                    },
-
-                                                                                    {
-                                                                                        id: "updated_at",
-                                                                                        label: Centauri__trans.global.label_modifiedat,
-                                                                                        type: "text",
-                                                                                        value: page.updated_at,
-                                                                                        extraAttr: "disabled"
-                                                                                    }
-                                                                                ]
-                                                                            ]
-                                                                        }
-                                                                    ],
-
-                                                                    callbacks: {
-                                                                        save: (formData) => {
-                                                                            Centauri.fn.Ajax(
-                                                                                "Page",
-                                                                                "updatePage",
-
-                                                                                {
-                                                                                    uid: Centauri.Components.PagesComponent.uid,
-                                                                                    data: formData
-                                                                                },
-
-                                                                                {
-                                                                                    success: (data) => {
-                                                                                        data = JSON.parse(data);
-                                                                                        Centauri.Notify(data.type, data.title, data.description);
-
-                                                                                        Centauri.Components.EditorComponent("close");
-
-                                                                                        // Centauri.Components.ModulesComponent({
-                                                                                        //     type: "load",
-                                                                                        //     module: "pages"
-                                                                                        // });
-                                                                                    }
-                                                                                }
-                                                                            );
-                                                                        }
-                                                                    }
-                                                                });
-                                                            }
-                                                        }
-                                                    );
-                                                }
-                                            }
-                                        );
-                                    }
-
-                                    if(action == "delete") {
-                                        Centauri.fn.Modal(
-                                            Centauri__trans.modals.deletePage_title,
-                                            Centauri__trans.modals.deletePage_body,
-
-                                            {
-                                                id: "areyousure_deletepage",
-
-                                                close: {
-                                                    label: Centauri__trans.modals.btn_cancel,
-                                                    class: "warning"
-                                                },
-
-                                                save: {
-                                                    label: Centauri__trans.modals.btn_delete,
-                                                    class: "danger"
-                                                }
-                                            },
-
-                                            {
-                                                save() {
-                                                    Centauri.fn.Ajax(
-                                                        "Page",
-                                                        "deletePage",
-
-                                                        {
-                                                            uid: Centauri.Components.PagesComponent.uid
-                                                        },
-
-                                                        {
-                                                            success: function(data) {
-                                                                data = JSON.parse(data);
-
-                                                                if(Centauri.isNotUndefined(data.request)) {
-                                                                    Centauri.Notify("error", "An error occurred!", "Please contact an administrator to handle this internal error.\nError: " + data.request, {
-                                                                        timeOut: -1
-                                                                    });
-                                                                } else {
-                                                                    Centauri.Notify(data.type, data.title, data.description);
-                                                                }
-
-                                                                Centauri.Components.ModulesComponent({
-                                                                    type: "load",
-                                                                    module: "pages"
-                                                                });
-                                                            },
-
-                                                            error: function(data) {
-                                                                console.error(data);
-                                                            }
-                                                        }
-                                                    );
-                                                }
-                                            }
-                                        );
-                                    }
-                                });
-                            });
+                        Centauri.Helper.findByPidHelper(
+                            Centauri.Components.PagesComponent.uid,
+                            $("#pagecontent"),
+                            rootpageid,
+                        () => {
+                            Centauri.Events.OnModuleLoadEvent.Pages.RegisterPageDetailButtons();
                         });
                     }
                 }
@@ -360,6 +72,8 @@ Centauri.Events.OnModuleLoadEvent.Pages = () => {
     /**
      * Module:pages Buttons
      */
+    $("#pagemodule_buttons button").off("click");
+
     $("#pagemodule_buttons button").each(function() {
         $button = $(this);
 
@@ -603,4 +317,315 @@ Centauri.Events.OnModuleLoadEvent.Pages = () => {
      * Module:pages Actions
      */
     Centauri.Events.OnModuleLoadEvent.Pages.RegisterActions();
+};
+
+Centauri.Events.OnModuleLoadEvent.Pages.RegisterPageDetailButtons = () => {
+    $("#pagecontent .right button").each(function() {
+        let $btn = $(this);
+
+        $btn.on("click", this, function() {
+            let action = $(this).data("action");
+            let uid = Centauri.Components.PagesComponent.uid;
+
+            if(action == "edit") {
+                Centauri.fn.Ajax(
+                    "Page",
+                    "findByUid",
+
+                    {
+                        uid: uid
+                    },
+
+                    {
+                        success: (data) => {
+                            let page = JSON.parse(data);
+                            let flagsrc = "";
+
+                            Centauri.fn.Ajax(
+                                "BackendLayouts",
+                                "findAll",
+
+                                {},
+
+                                {
+                                    success: (data) => {
+                                        data = JSON.parse(data);
+                                        let beLayouts = data;
+
+                                        Centauri.Components.EditorComponent("show", {
+                                            id: "EditPage-" + Centauri.Components.PagesComponent.uid,
+                                            title: "Page-Editor - Edit",
+                                            size: "fluid-lg",
+
+                                            tabs: [
+                                                {
+                                                    title: Centauri__trans.global.label_page,
+
+                                                    form: [
+                                                        {
+                                                            id: "title",
+                                                            label: Centauri__trans.global.label_title,
+                                                            type: "text",
+                                                            value: page.title,
+                                                            required: true
+                                                        },
+
+                                                        {
+                                                            id: "slugs",
+                                                            label: "Slug",
+                                                            type: "text",
+                                                            value: page.slugs
+                                                        },
+
+                                                        {
+                                                            id: "backend_layout",
+                                                            type: "custom",
+                                                            custom: "select",
+
+                                                            data: {
+                                                                selectedOptionValue: page.backend_layout,
+                                                                label: "Choose a layout",
+                                                                options: beLayouts
+                                                            }
+                                                        },
+
+                                                        {
+                                                            id: "hidden_inpagetree",
+                                                            type: "custom",
+                                                            custom: "switch",
+
+                                                            data: {
+                                                                label: Centauri__trans.others.EditorComponent.hidden_inpagetree,
+                                                                isChecked: page.hidden_inpagetree
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+
+                                                {
+                                                    title: "SEO",
+
+                                                    form: [
+                                                        {
+                                                            id: "seo_keywords",
+                                                            label: Centauri__trans.EditorComponent.SEO.keywords,
+                                                            type: "text",
+                                                            value: page.seo_keywords
+                                                        },
+
+                                                        {
+                                                            id: "seo_description",
+                                                            type: "custom",
+                                                            custom: "textarea",
+
+                                                            data: {
+                                                                label: Centauri__trans.global.label_description,
+                                                                value: page.seo_description,
+                                                                required: true
+                                                            }
+                                                        },
+
+                                                        [
+                                                            {
+                                                                config: true,
+
+                                                                row: {
+                                                                    title: "Robots"
+                                                                }
+                                                            },
+
+                                                            {
+                                                                id: "seo_robots_indexpage",
+                                                                type: "custom",
+                                                                custom: "switch",
+
+                                                                data: {
+                                                                    label: Centauri__trans.EditorComponent.SEO.robots_indexpage,
+                                                                    isChecked: page.seo_robots_indexpage
+                                                                }
+                                                            },
+
+                                                            {
+                                                                id: "seo_robots_followpage",
+                                                                type: "custom",
+                                                                custom: "switch",
+
+                                                                data: {
+                                                                    label: Centauri__trans.EditorComponent.SEO.robots_followpage,
+                                                                    isChecked: page.seo_robots_followpage
+                                                                }
+                                                            }
+                                                        ]
+                                                    ]
+                                                },
+
+                                                {
+                                                    title: "Info",
+
+                                                    form: [
+                                                        [
+                                                            {
+                                                                config: true,
+
+                                                                row: {
+                                                                    title: "Page-Infos",
+                                                                    titleClass: "title",
+                                                                    colClasses: "col-lg-6"
+                                                                }
+                                                            },
+
+                                                            {
+                                                                id: "language",
+                                                                type: "custom",
+                                                                custom: "image",
+                                                                colClasses: "col-lg-12",
+
+                                                                data: {
+                                                                    label: Centauri__trans.global.label_language,
+                                                                    src: flagsrc
+                                                                }
+                                                            },
+
+                                                            {
+                                                                id: "uid",
+                                                                label: "UID",
+                                                                type: "text",
+                                                                value: page.uid,
+                                                                extraAttr: "disabled"
+                                                            },
+
+                                                            {
+                                                                id: "pid",
+                                                                label: "PID",
+                                                                type: "text",
+                                                                value: page.pid,
+                                                                extraAttr: "disabled"
+                                                            },
+
+                                                            {
+                                                                id: "created_at",
+                                                                label: Centauri__trans.global.label_createdat,
+                                                                type: "text",
+                                                                value: page.created_at,
+                                                                extraAttr: "disabled"
+                                                            },
+
+                                                            {
+                                                                id: "updated_at",
+                                                                label: Centauri__trans.global.label_modifiedat,
+                                                                type: "text",
+                                                                value: page.updated_at,
+                                                                extraAttr: "disabled"
+                                                            }
+                                                        ]
+                                                    ]
+                                                }
+                                            ],
+
+                                            callbacks: {
+                                                save: (formData) => {
+                                                    Centauri.fn.Ajax(
+                                                        "Page",
+                                                        "updatePage",
+
+                                                        {
+                                                            uid: Centauri.Components.PagesComponent.uid,
+                                                            data: formData
+                                                        },
+
+                                                        {
+                                                            success: (data) => {
+                                                                data = JSON.parse(data);
+                                                                Centauri.Notify(data.type, data.title, data.description);
+
+                                                                Centauri.Components.EditorComponent("close");
+
+                                                                // Centauri.Components.ModulesComponent({
+                                                                //     type: "load",
+                                                                //     module: "pages"
+                                                                // });
+                                                            }
+                                                        }
+                                                    );
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+
+            if(action == "sort") {
+                if(Centauri.Helper.VariablesHelper.__CE_SORTING) {
+                    Centauri.Helper.VariablesHelper.__CE_SORTING = false;
+                    Centauri.Service.CESortingService(false);
+                    $("i", $(this)).css("transform", "none");
+                } else {
+                    Centauri.Helper.VariablesHelper.__CE_SORTING = true;
+                    Centauri.Service.CESortingService();
+                    $("i", $(this)).css("transform", "rotate(135deg)");
+                }
+            }
+
+            if(action == "delete") {
+                Centauri.fn.Modal(
+                    Centauri__trans.modals.deletePage_title,
+                    Centauri__trans.modals.deletePage_body,
+
+                    {
+                        id: "areyousure_deletepage",
+
+                        close: {
+                            label: Centauri__trans.modals.btn_cancel,
+                            class: "warning"
+                        },
+
+                        save: {
+                            label: Centauri__trans.modals.btn_delete,
+                            class: "danger"
+                        }
+                    },
+
+                    {
+                        save() {
+                            Centauri.fn.Ajax(
+                                "Page",
+                                "deletePage",
+
+                                {
+                                    uid: Centauri.Components.PagesComponent.uid
+                                },
+
+                                {
+                                    success: function(data) {
+                                        data = JSON.parse(data);
+
+                                        if(Centauri.isNotUndefined(data.request)) {
+                                            Centauri.Notify("error", "An error occurred!", "Please contact an administrator to handle this internal error.\nError: " + data.request, {
+                                                timeOut: -1
+                                            });
+                                        } else {
+                                            Centauri.Notify(data.type, data.title, data.description);
+                                        }
+
+                                        Centauri.Components.ModulesComponent({
+                                            type: "load",
+                                            module: "pages"
+                                        });
+                                    },
+
+                                    error: function(data) {
+                                        console.error(data);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+        });
+    });
 };

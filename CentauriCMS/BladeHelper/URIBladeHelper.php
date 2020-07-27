@@ -1,8 +1,6 @@
 <?php
 namespace Centauri\CMS\BladeHelper;
 
-use Centauri\CMS\Centauri;
-use Centauri\CMS\Utility\PathUtility;
 use Exception;
 
 /**
@@ -51,10 +49,12 @@ class URIBladeHelper
 
             $action = str_replace("Action", "", $action);
 
-            $slug = $baseURL . "/" . $controllerName . "/" . $action;
+            // $slug = $baseURL . "/" . $controllerName . "/" . $action;
+            $slug = "$controllerName/$action";
         }
 
-        $url = strtolower(url(url()->current() . "/$slug"));
+        $url = strtolower(url($baseURL . "/$slug"));
+
         return $url;
 
         return call_user_func([

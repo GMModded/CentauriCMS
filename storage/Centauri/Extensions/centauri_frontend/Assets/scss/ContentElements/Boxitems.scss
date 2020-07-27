@@ -1,0 +1,46 @@
+#{ce("boxitems")} {
+    & > .row {
+        @include media-breakpoint-down(lg) {
+            box-shadow: none !important;
+        }
+
+        .slick-list {
+            .slick-track {
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        .boxitem {
+            position: relative;
+            color: white;
+            border-radius: 5px;
+            padding: 20px 15px;
+
+            .rte-view {
+                height: calc(100% - 30px) !important;
+                padding-bottom: 50px;
+
+                h1, h2, h3, h4, h5, h6, p {
+                    &:last-child {
+                        &:not(:first-child) {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+
+            .btn-link-view {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+
+                a {
+                    border-radius: 5px;
+                    color: white !important;
+                }
+            }
+        }
+    }
+}

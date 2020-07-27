@@ -3,7 +3,7 @@ namespace Centauri\CMS;
 
 use Centauri\CMS\Bootstrapping\CentauriBootstrapping;
 use Centauri\CMS\Component\ExtensionsComponent;
-use Centauri\CMS\Model\Scheduler;
+use Centauri\CMS\Exception\CentauriException;
 use Centauri\CMS\Service\ModulesService;
 use Centauri\CMS\Service\PathService;
 use Centauri\CMS\Service\SchedulerService;
@@ -33,6 +33,13 @@ class Centauri extends ServiceProvider
      * @var string $applicationContext
      */
     protected static $applicationContext = "";
+
+    /**
+     * An optional setting whether throwing an exception when performing an ajax-call (from BE).
+     * 
+     * @var boolean
+     */
+    protected static $throwExceptionOnAjax = true;
 
     /**
      * Tables for initDB-method
@@ -212,7 +219,7 @@ class Centauri extends ServiceProvider
     /**
      * Returns if sites, in case throwing an exception, should be tried to get annulated or redirect to the home page.
      * 
-     * @return void
+     * @return boolean
      */
     public static function keepSiteAlive()
     {
@@ -223,5 +230,28 @@ class Centauri extends ServiceProvider
         }
 
         return false;
+    }
+
+    public function throwException($message, $forceException = false)
+    {
+        return Centauri::makeInstance(CentauriException::class)->throw($message, $forceException);
+    }
+
+    public static function throwStaticException($message, $forceException = false)
+    {
+        return Centauri::makeInstance(CentauriException::class)->throw($message, $forceException);
+    }
+
+    /**
+     * @return boolean
+     */
+    public static function throwExceptionOnAjax()
+    {
+        return self::$throwExceptionOnAjax;
+    }
+
+    public static function FrontendUser()
+    {
+        return Centauri::makeInstance(FrontendUser::class);
     }
 }

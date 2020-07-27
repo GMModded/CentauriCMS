@@ -6,3 +6,7 @@
 // $.fn.centauri.getData = (name, value) => {
 //     return $(this).data(name);
 // };
+
+$.fn.hasAttr = (name) => {
+    return this.attr(name) !== undefined;
+};

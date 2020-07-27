@@ -1,24 +1,50 @@
 <?php
 namespace Centauri\CMS\AdditionalDatas;
 
+use Centauri\CMS\Ajax\ContentElementsAjax;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Helper\GridHelper;
 
-class GridAdditionalDatas implements \Centauri\CMS\Interfaces\AdditionalDataInterface
+class GridAdditionalDatas
 {
+    /**
+     * This fetch-method will be used inside the core for AdditionalDatas.
+     * 
+     * @return array
+     */
     public function fetch()
     {
+        $gridLayouts = config("centauri")["gridLayouts"];
+
         return [
             "grids" => [
-                "One-Column Container" => "onecol",
-                "Two-Column Container" => "twocol",
-                "Three-Column Container" => "threecol",
-                "Four-Column Container" => "fourcol"
+                "One-Column Container" => [
+                    "config" => $gridLayouts["onecol"]["gridFieldsConfig"] ?? []
+                ],
+
+                "Two-Column Container" => [
+                    "config" => $gridLayouts["twocol"]["gridFieldsConfig"] ?? []
+                ],
+
+                "Three-Column Container" => [
+                    "config" => $gridLayouts["threecol"]["gridFieldsConfig"] ?? []
+                ],
+
+                "Four-Column Container" => [
+                    "config" => $gridLayouts["fourcol"]["gridFieldsConfig"] ?? []
+                ]
             ]
         ];
     }
 
-    public function onEditListener($gridelement)
+    /**
+     * Edit-Listener - called whenever this additional-data-type element gets edited in the BE.
+     * 
+     * @param object $gridelement
+     * 
+     * @return string|void
+     */
+    public function onEditListener(object $gridelement)
     {
         $GridHelper = Centauri::makeInstance(GridHelper::class);
 
@@ -28,7 +54,7 @@ class GridAdditionalDatas implements \Centauri\CMS\Interfaces\AdditionalDataInte
         if(!is_null($gridelement->grid)) {
             $gridConfig = config("centauri")["gridLayouts"][$gridelement->grid] ?? null;
         } else {
-            return response("Grid-Layout '" . $gridelement->grid . "' not found for Grid with UID: " . $gridUid . " in Grid-Layouts configuration", 500);
+            return Centauri::throwStaticException("Grid-Layout '" . $gridelement->grid . "' not found for Grid with UID: " . $gridUid . " in Grid-Layouts configuration");
         }
 
         $elements = [];
@@ -51,5 +77,67 @@ class GridAdditionalDatas implements \Centauri\CMS\Interfaces\AdditionalDataInte
         ];
 
         return view("Centauri::Backend.Partials.elementsInGrid", $data)->render();
+    }
+
+    public function getAdditionalData($data)
+    {
+        $gridelement = $data["element"];
+
+        if(is_null($gridelement)) {
+            return;
+        }
+
+        $gridUid = $gridelement->uid;
+        $gridConfig = null;
+
+        if(!is_null($gridelement->grid)) {
+            $gridConfig = config("centauri")["gridLayouts"][$gridelement->grid] ?? null;
+        } else {
+            return Centauri::throwStaticException("Grid-Layout '" . $gridelement->grid . "' not found for Grid with UID: " . $gridUid . " in Grid-Layouts configuration");
+        }
+        
+        $cfgHtml = "";
+        $ContentElementsAjax = Centauri::makeInstance(ContentElementsAjax::class);
+
+        foreach($gridConfig["gridFieldsConfig"] ?? [] as $field) {
+            $cfgHtml .= $ContentElementsAjax->renderField($field, $gridelement);
+        }
+
+        $data = $this->onEditListener($gridelement);
+
+        return [
+            "elementsInGridHTML" => $data,
+            "gridConfigHTML" => $cfgHtml
+        ];
+    }
+
+    public function findFieldsByUid($data)
+    {
+        $gridelement = $data["element"];
+
+        $gridUid = $gridelement->uid;
+        $gridConfig = null;
+
+        if(!is_null($gridelement->grid)) {
+            $gridConfig = config("centauri")["gridLayouts"][$gridelement->grid] ?? null;
+        } else {
+            return Centauri::throwStaticException("Grid-Layout '" . $gridelement->grid . "' not found for Grid with UID: " . $gridUid . " in Grid-Layouts configuration");
+        }
+
+        $cfgHtml = "";
+        $ContentElementsAjax = Centauri::makeInstance(ContentElementsAjax::class);
+
+        foreach($gridConfig["gridFieldsConfig"] ?? [] as $field) {
+            $cfgHtml .= $ContentElementsAjax->renderField($field, $gridelement);
+        }
+
+        $data = $this->onEditListener($gridelement);
+
+        return view("Centauri::Backend.Modals.NewContentElement.Fields.AdditionalTypes.grid", [
+            "additionalData" => [
+                "elementsInGridHTML" => $data,
+                "gridConfigHTML" => $cfgHtml
+            ]
+        ])->render();
     }
 }

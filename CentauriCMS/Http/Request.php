@@ -210,7 +210,6 @@ class Request
             if($cachingType == "STATIC_FILE_CACHE") {
                 if(StaticFileCache::hasCache($uniqid)) {
                     $renderedHTML = StaticFileCache::getCache($uniqid);
-                    dd($renderedHTML);
                 }
             } else {
                 $customCacheCfg = true;
@@ -236,6 +235,8 @@ class Request
         $beLayout = config("centauri")["beLayouts"][$page->backend_layout] ?? null;
         $ElementComponent = Centauri::makeInstance(ElementComponent::class);
 
+        define("CENTAURI_END", microtime(true));
+
         if($renderedHTML != "") {
             $renderedHTML = "";
 
@@ -259,13 +260,15 @@ class Request
         $renderedHTML = str_replace("\r\n", "", $renderedHTML);
 
         $additionalHeadTagContent = FrontendRenderingHandler::getAdditonalHeadTagContent();
-        $frontendHtml = FrontendRenderingHandler::getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent);
+        $additionalBodyTagContent = FrontendRenderingHandler::getAdditonalBodyTagContent();
+
+        $frontendHtml = FrontendRenderingHandler::getPreparedFrontendHtml($page, $renderedHTML, $additionalHeadTagContent, $additionalBodyTagContent);
 
         // Caching only if it's set in Centauri's config array (which gets by default cached from Laravel)
         if(isset(config("centauri")["config"]["Caching"]) && (config("centauri")["config"]["Caching"])) {
             // Caching before returning the outputted frontend html for 24 hours (86400 seconds)
             if($renderedHTML != "" && $cacheState) {
-                if($customCacheCfg) {
+                if(!$customCacheCfg) {
                     if($cachingType == "STATIC_FILE_CACHE") {
                         StaticFileCache::setCache($uniqid, $renderedHTML);
                     }
@@ -273,6 +276,10 @@ class Request
                     Cache::put($uniqid, $renderedHTML, 86400);
                 }
             }
+        }
+
+        if(!CENTAURI_END) {
+            define("CENTAURI_END", microtime(true));
         }
 
         return $frontendHtml;
@@ -289,8 +296,17 @@ class Request
         }
 
         if($throwNotFound) {
+            $additionalHeadTagContent = FrontendRenderingHandler::getAdditonalHeadTagContent();
+            $additionalBodyTagContent = FrontendRenderingHandler::getAdditonalBodyTagContent();
+
             $class = Centauri::makeInstance($GLOBALS["Centauri"]["Handlers"]["pageNotFound"]);
-            return $class::handle();
+
+            return $class::handle([
+                "additionalTagContents" => [
+                    "head" => $additionalHeadTagContent,
+                    "body" => $additionalBodyTagContent
+                ]
+            ]);
         }
     }
 }

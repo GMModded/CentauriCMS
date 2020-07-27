@@ -27,6 +27,7 @@ class FileAjax
 
             $file = $request->file;
             $name = $request->input("name");
+
             $mimeType = $file->getClientMimeType();
             $fileExtension = $fileMimeTypeUtil->getExtByMimeType($mimeType);
 

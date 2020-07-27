@@ -50,4 +50,28 @@ class ParentCookieModel extends Model
     protected $attributes = [
         "hidden" => 0
     ];
+
+    /**
+     * Getter for the child cookies of this parent cookie item.
+     * 
+     * @return array|void
+     */
+    public function getChildCookies()
+    {
+        return
+            $this->hasMany(
+                ChildCookieModel::class,
+                "parent_uid",
+                "uid"
+            )
+            ->where("hidden", 0)
+            ->orderBy("sorting", "asc")
+            ->get()
+        ->all();
+
+        // return ChildCookieModel::where([
+        //     "hidden" => 0,
+        //     "parent_uid" => $this->getAttribute("uid")
+        // ])->get()->all();
+    }
 }

@@ -28,6 +28,15 @@ Centauri.Components.CreateNewInlineComponent = () => {
                     Centauri.Components.AccordionComponent();
 
                     Centauri.View.ContentElementsView();
+
+                    /**
+                     * @todo
+                     * 
+                     * Read an element-attribute whether it should auto-slidedown the new created inline-record.
+                     * For now it's disabled by default.
+                     * 
+                     * $(".bottom", $this.parent().find(".accordion:last-child")).slideDown();
+                     */
                 },
 
                 error: (data) => {

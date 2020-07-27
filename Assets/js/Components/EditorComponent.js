@@ -28,8 +28,6 @@ Centauri.Components.EditorComponent = (type, data) => {
 
         $(".top > p", $editor).html(title);
 
-        console.log(Centauri.elExists($("> .bottom > form", $editor)));
-
         if(!Centauri.elExists($("> .bottom > form", $editor))) {
             $(".bottom", $editor).append("<form method='POST'></form>");
         }

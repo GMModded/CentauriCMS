@@ -1,13 +1,13 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
-use Exception;
-use Centauri\CMS\Abstracts\AjaxAbstract;
 use Illuminate\Http\Request;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Event\OnNewElementEvent;
+use Centauri\CMS\Exception\CentauriException;
 use Centauri\CMS\Helper\CCEHelper;
 use Centauri\CMS\Model\Element;
+use Centauri\CMS\Model\FileReference;
 use Centauri\CMS\Traits\AjaxTrait;
 use Centauri\CMS\Utility\DomainsUtility;
 use Illuminate\Support\Str;
@@ -16,21 +16,17 @@ class ContentElementsAjax
 {
     use AjaxTrait;
 
-    // public $excludedFields = [
-    //     "uid",
-    //     "parent_uid",
-    //     "pid",
-    //     "lid",
+    /**
+     * Centauri Core class.
+     * 
+     * @var Centauri
+     */
+    protected $Centauri;
 
-    //     "rowPos",
-    //     "colPos",
-    //     "sorting",
-    //     "ctype",
-
-    //     "created_at",
-    //     "updated_at",
-    //     "deleted_at"
-    // ];
+    public function __construct()
+    {
+        $this->Centauri = Centauri::makeInstance(Centauri::class);
+    }
 
     /**
      * Renders the backend-view of a page if found, else throwing a toast-error notification with given description.
@@ -56,9 +52,11 @@ class ContentElementsAjax
             $domainConfig = DomainsUtility::findDomainConfigByPageUid($page->uid);
         }
 
-        if(is_null($domainConfig)) {
+        if(is_null($domainConfig) && $page->page_type == "rootpage") {
             return response("This root-page (UID: '" . $page->uid . "') seems to have no configured Domain - fix this issue by creating a domain record for this page.", 500);
         }
+
+        // dd($domainConfig);
 
         $host = DomainsUtility::getUriByConfig($domainConfig);
         if($domainConfig->domain != $page->slugs) {
@@ -169,11 +167,7 @@ class ContentElementsAjax
                 }
             }
 
-            /**
-             * Overwrites of $field by $fieldConfiguration
-             * 
-             * @todo ?
-             */
+            /** Overwrites of $field by $fieldConfiguration */
             if(!is_null($fieldConfiguration) && !$isModel) {
                 if(isset($fieldConfiguration["label"])) {
                     $field["label"] = $fieldConfiguration["label"];
@@ -192,7 +186,11 @@ class ContentElementsAjax
                 }
             }
 
-            $additionalData = $this->findAdditionalDataByType($type);
+            if(!$type) {
+                $additionalData = $this->findAdditionalDataByType([
+                    "type" => $type
+                ]);
+            }
 
             if(!$isModel) {
                 // Model (Inline) Stuff
@@ -418,9 +416,78 @@ class ContentElementsAjax
                     $element = Element::where("uid", $uid)->get()->first();
 
                     foreach($fieldsValues as $field => $fieldDataArr) {
-                        $value = $fieldDataArr["value"];
-                        $element->setAttribute($field, $value);
+                        if(
+                            (\Str::contains($field, "image_")
+                        ||
+                            \Str::contains($field, "file_"))
+                        && 
+                            \Str::contains($field, ":")
+                        ) {
+                            $field = str_replace("file_", "", $field);
+                            $field = str_replace("image_", "", $field);
+
+                            $explField = explode(":", $field);
+
+                            $imageColumn = $explField[0];
+                            $elementUid = $explField[1];
+                            $fileReferenceUid = $explField[2];
+
+                            $fileReference = FileReference::where("uid", $fileReferenceUid)->get()->first();
+                            $fileReference->$imageColumn = $fieldDataArr["value"];
+                            $fileReference->save();
+                        } else {
+                            $value = $fieldDataArr["value"];
+
+                            $values = [];
+
+                            if($CCEfields[$field]["type"] == "file" || $CCEfields[$field]["type"] == "image") {
+                                if(\Str::contains($value, ",")) {
+                                    $values = explode(",", $value);
+                                } else {
+                                    $values = [$value];
+                                }
+
+                                foreach($values as $imgUid) {
+                                    $fileReference = FileReference::where("uid_element", $element->uid)->get()->first();
+
+                                    if(is_null($fileReference)) {
+                                        $fileReference = new FileReference;
+
+                                        $fileReference->uid_element = $element->uid;
+                                        $fileReference->uid_image = $imgUid;
+
+                                        $fileReference->fieldname = $field;
+                                        $fileReference->tablename = "elements";
+
+                                        $fileReference->save();
+                                    }
+                                }
+                            }
+
+                            if(isset($CCEfields[$field]["config"]["validation"])) {
+                                $class = $CCEfields[$field]["config"]["validation"];
+
+                                $validation = $class::validate([
+                                    "field" => $field,
+                                    "value" => $value,
+                                    "CCE_FIELD" => $CCEfields[$field]
+                                ]);
+
+                                if(!$validation["state"]) {
+                                    return $validation["result"];
+                                } else {
+                                    $element->setAttribute($field, $value);
+                                }
+                            } else {
+                                $element->setAttribute($field, $value);
+                            }
+                        }
                     }
+
+                    // foreach($fieldsValues as $field => $fieldDataArr) {
+                    //     $value = $fieldDataArr["value"];
+                    //     $element->setAttribute($field, $value);
+                    // }
 
                     $element->save();
                 } else {
@@ -598,7 +665,7 @@ class ContentElementsAjax
     }
 
     /**
-     * Helper-method for this class itself when rendering HTML fields.
+     * Helper-method for this class itself when rendering a field by its config, data and optional parent.
      * 
      * @param array $fieldConfig The configuration-array of a field.
      * @param array $data The data-array of a field.
@@ -639,14 +706,32 @@ class ContentElementsAjax
                 ])->render();
 
                 $existingItemLabel = $fieldConfig["existingItemLabel"];
-                $top = $model->$existingItemLabel ?? $fieldConfig["newItemLabel"] ?? "Item";
+                $top = $model->$existingItemLabel ?? $fieldConfig["listLabel"] ?? "Item";
 
                 $bottom = "";
                 foreach($fieldConfig["config"]["fields"] as $_key => $_field) {
                     $bottom .= $this->renderField((is_int($_key) ? $_field : $_key), $model, $fieldConfig["id"]);
                 }
 
-                $_modelsHtml = str_replace("###MODEL_CONTENT_TOP###", $top, $_modelsHtml);
+                $splittedTop = explode(" ", $top);
+                $nSpittedTop = "";
+
+                foreach($splittedTop as $topItem) {
+                    if(\Str::contains($topItem, "{") && \Str::contains($topItem, "}")) {
+                        $topItem = str_replace("{", "", $topItem);
+                        $topItem = str_replace("}", "", $topItem);
+
+                        if(isset($model->$topItem)) {
+                            $nSpittedTop .= $model->$topItem . " ";
+                        }
+                    }
+                }
+
+                if($nSpittedTop == "") {
+                    $nSpittedTop = $fieldConfig["listLabel"];
+                }
+
+                $_modelsHtml = str_replace("###MODEL_CONTENT_TOP###", $nSpittedTop, $_modelsHtml);
                 $_modelsHtml = str_replace("###MODEL_CONTENT_BOTTOM###", $bottom, $_modelsHtml);
 
                 $modelsHtml .= $_modelsHtml;
@@ -661,8 +746,12 @@ class ContentElementsAjax
             if(isset($fieldConfig["additionalType"])) {
                 $additionalType = $fieldConfig["additionalType"];
 
-                $additionalData = $this->findAdditionalDataByType($additionalType);
                 $element = Element::where("uid", $data["uid"])->get()->first();
+                $additionalData = $this->findAdditionalDataByType([
+                    "type" => $additionalType,
+                    "additionalType" => $additionalType,
+                    "element" => $element
+                ]);
 
                 $html = view("Centauri::Backend.Modals.NewContentElement.Fields.AdditionalTypes." . $additionalType, [
                     "fieldConfig" => $fieldConfig,
@@ -672,9 +761,9 @@ class ContentElementsAjax
             } else {
                 $type = $fieldConfig["type"];
 
-                if($type == "RTE") dd($fieldConfig, $data, $parent);
-
-                $additionalData = $this->findAdditionalDataByType($type);
+                $additionalData = $this->findAdditionalDataByType([
+                    "type" => $type
+                ]);
 
                 $html = view("Centauri::Backend.Modals.NewContentElement.Fields." . $type, [
                     "fieldConfig" => $fieldConfig,
@@ -715,7 +804,7 @@ class ContentElementsAjax
                         $msg = "CCE - The configuration for child-field '" . $field . "' of parent '" . $parent . "' could not be found.";
                     }
 
-                    throw new Exception($msg);
+                    return $this->Centauri->throwException($msg, true);
                 }
 
                 if($parent != "") {
@@ -724,7 +813,7 @@ class ContentElementsAjax
                     $fieldConfig = $CCEfields[$_field];
                 }
 
-                $html .= "<div class='col'>" . $this->renderHtmlByField($fieldConfig, [
+                $html .= "<div class='col" . (isset($fieldConfig["colAdditionalClasses"]) ? " " . $fieldConfig["colAdditionalClasses"] : "") . "'>" . $this->renderHtmlByField($fieldConfig, [
                     "id" => $_field,
                     "value" => $element->$_field ?? "",
                     "uid" => $element->uid
@@ -740,7 +829,7 @@ class ContentElementsAjax
                     $msg = "CCE - The configuration for child-field '" . $field . "' of parent '" . $parent . "' could not be found.";
                 }
 
-                throw new Exception($msg);
+                return $this->Centauri->throwException($msg, true);
             }
 
             $fieldConfig = [];
@@ -751,9 +840,12 @@ class ContentElementsAjax
                 $fieldConfig = $CCEfields[$field];
             }
 
-            dd($CCEfields[$field]);
-
-            $additionalData = $this->findAdditionalDataByType($fieldConfig["type"], "grid", $element);
+            $additionalData = $this->findAdditionalDataByType([
+                "type" => $fieldConfig["type"],
+                "ctype" => "grid",
+                "method" => "findFieldsByUid",
+                "element" => $element
+            ]);
 
             $html .= $this->renderHtmlByField($fieldConfig, [
                 "id" => $field,
@@ -762,7 +854,7 @@ class ContentElementsAjax
                 "isInlineRecord" => ($parent != "")
             ], $parent);
 
-            if(isset($fieldConfig["return_statement"])) {
+            if(isset($fieldConfig["dd(return_statement"])) {
                 switch($fieldConfig["return_statement"]) {
                     case "RETURN":
                         return $additionalData;
@@ -784,39 +876,31 @@ class ContentElementsAjax
     /**
      * Helper-method for this class itself when finding AdditionalData by its type.
      * 
-     * @param null|string $type
-     * @param null|string $ctype
-     * @param null\Centauri\CMS\Model\Element $element
+     * @param array $type
      * 
      * @return void
      */
-    public function findAdditionalDataByType($type = null, $ctype = null, $element = null)
+    public function findAdditionalDataByType($data)
     {
-        if(is_null($type) && !is_null($ctype)) {
-            $type = $ctype;
+        $type = ($data["type"] ?? false);
+
+        if(!$type) {
+            return;
         }
 
         if(isset($GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type])) {
             $additionalDataClassName = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$type]["class"];
             $additionalDataClass = Centauri::makeInstance($additionalDataClassName);
 
-            if(!method_exists($additionalDataClass, "fetch")) {
-                throw new Exception("Could not find 'fetch'-method in AdditionalData class of '" . $additionalDataClassName . "'!");
+            $method = $data["method"] ?? "getAdditionalData";
+
+            $adtData = $additionalDataClass->$method($data);
+
+            if($adtData instanceof \Illuminate\Http\Response) {
+                Centauri::makeInstance(CentauriException::class)->throw($adtData->getContent(), true);
             }
 
-            if(!is_null($ctype) && !is_null($element)) {
-                if(method_exists($additionalDataClass, "onEditListener")) {
-                    $returns = $GLOBALS["Centauri"]["AdditionalDataFuncs"]["ContentElements"][$ctype]["return_statement"] ?? 0;
-
-                    if($returns) {
-                        return $additionalDataClass->onEditListener($element);
-                    }
-
-                    $additionalDataClass->onEditListener($element);
-                }
-            }
-
-            return $additionalDataClass->fetch();
+            return $adtData;
         }
 
         return null;

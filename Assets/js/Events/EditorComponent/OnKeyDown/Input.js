@@ -1,37 +1,44 @@
-Centauri.Events.EditorComponent.Input.OnKeyDown = function(input, e) {
+Centauri.Events.EditorComponent.Input.OnKeyDown = (input, e) => {
     let dataID = $editor.attr("data-id");
     let id = $(input).attr("id");
 
-    let value = $("form #" + id, $editor).val();
+    let parentSelector = "> form";
+    if(!Centauri.elExists($(parentSelector, $editor))) {
+        parentSelector = "> .bottom > div";
+    }
 
-    console.log(dataID);
+    Centauri.Events.EditorComponent.Helpers.selector = parentSelector;
+
+    let value = Centauri.Events.EditorComponent.Helpers.getElById(id).val();
 
     if(dataID == "CreateNewPage") {
+        let $slug = Centauri.Events.EditorComponent.getElById("slug");
+
         if(id == "title") {
             if(e.which == 9 && value.length >= 2) {
                 let slugs = value;
                     slugs = slugs[0] + slugs[1];
 
-                $("form #langcode", $editor).focus();
-                $("form #langcode", $editor).val(slugs + "-" + slugs.toUpperCase());
+                Centauri.Events.EditorComponent.Helpers.getElById("langcode").focus();
+                Centauri.Events.EditorComponent.Helpers.getElById("langcode").val(slugs + "-" + slugs.toUpperCase());
 
-                $("form #slug", $editor).focus();
-                $("form #slug", $editor).val(slugs);
+                $slug.focus();
+                $slug.val(slugs);
 
-                $("form #langcode", $editor).focus();
+                Centauri.Events.EditorComponent.Helpers.getElById("langcode").focus();
 
-                $("form #url", $editor).val("/" + Centauri.Utility.SeoUrlUtility(value));
+                Centauri.Events.EditorComponent.Helpers.getElById("url").val("/" + Centauri.Utility.SeoUrlUtility(value));
             }
         }
 
         if(id == "langcode") {
             if(e.which == 9 && value.length >= 2) {
-                let slugs = $("form #langcode", $editor).val().split("-")[0].toLowerCase();
+                let slugs = Centauri.Events.EditorComponent.Helpers.getElById("langcode").val().split("-")[0].toLowerCase();
 
-                $("form #slug", $editor).focus();
-                $("form #slug", $editor).val(slugs);
+                $slug.focus();
+                $slug.val(slugs);
 
-                $("form #slug", $editor).focus();
+                $slug.focus();
             }
         }
     }

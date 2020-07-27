@@ -37,7 +37,9 @@
         "classmap": [
             "database/seeds",
             "database/factories",
-            "database/migrations"
+            "database/migrations",
+
+            "storage/Centauri/Extensions/centauri_cookies/Classes"
         ],
 
         "psr-4": {
@@ -68,8 +70,7 @@
             "Centauri\\CMS\\Utility\\": "CentauriCMS/Utility/",
             "Centauri\\CMS\\Validation\\": "CentauriCMS/Validation/",
 
-            "Centauri\\Extension\\Frontend\\": "storage/Centauri/Extensions/centauri_frontend/Classes/",
-            "Centauri\\Extension\\Cookie\\": "storage/Centauri/Extensions/centauri_cookies/Classes/"
+            "Centauri\\Extension\\Frontend\\": "storage/Centauri/Extensions/centauri_frontend/Classes/"
         }
     },
     "autoload-dev": {

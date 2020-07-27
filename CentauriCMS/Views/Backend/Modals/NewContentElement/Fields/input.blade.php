@@ -2,6 +2,7 @@
     $jsonData = "";
     $renderAs = [];
     $dataRenderAsStr = "";
+    $additionalClasses = "";
     $ciFieldAdditionalClasses = "";
 
     if(isset($fieldConfig["renderAs"]) && !empty($fieldConfig["renderAs"])) {
@@ -17,9 +18,13 @@
         }
     }
 
-    if(isset($fieldConfig["ciFieldAdditionalClasses"])) {
-        $ciFieldAdditionalClasses .= " " . $fieldConfig["ciFieldAdditionalClasses"];
-    }
+if(isset($fieldConfig["ciFieldAdditionalClasses"])) {
+    $ciFieldAdditionalClasses .= " " . $fieldConfig["ciFieldAdditionalClasses"];
+}
+
+if(isset($fieldConfig["additionalClasses"])) {
+    $additionalClasses .= " " . $fieldConfig["additionalClasses"];
+}
 @endphp
 
 <div class="ci-field{{ $ciFieldAdditionalClasses }}"{{ $dataRenderAsStr }}>
@@ -42,8 +47,8 @@
         @endswitch
     @endif
 
-    <input
-        class="form-control"
+    <input 
+        class="form-control{{ $additionalClasses }}"
         type="text"
         data-id="{{ $fieldConfig['id'] }}"
         value="{{ $fieldConfig['value'] ?? '' }}"

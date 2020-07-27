@@ -19,10 +19,13 @@ class ExtensionsComponent
         foreach($extensions as $extension) {
             if(!Str::contains($extension, "/")) {
                 $extName = $extension;
-                $extConfigFilePath = storage_path("Centauri/Extensions/$extName/ext_config.php");
 
-                if(!file_exists($extConfigFilePath)) {
-                    throw new Exception("Extension: '$extName' error - the $extConfigFilePath configuration file for the extension itself is missing by CentauriCMS.");
+                $extConfigFilePath = Storage::disk("centauri_extensions")->getAdapter()->getPathPrefix() . "$extName/ext_config.php";
+
+                $exists = Storage::disk("centauri_extensions")->get("$extName/ext_config.php");
+
+                if(!$exists) {
+                    throw new Exception("Extension: '$extName' error - path: '$extConfigFilePath' configuration file for the extension itself is missing");
                 } else {
                     $config = include $extConfigFilePath;
 
@@ -35,19 +38,21 @@ class ExtensionsComponent
                             }
                         }
 
-                        if($loadExtension) {
-                            $mainclass = $config["mainclass"];
+                        if(!isset($GLOBALS["Centauri"]["Extensions"][$extName])) {
+                            if($loadExtension) {
+                                $mainclass = $config["mainclass"];
 
-                            if(!class_exists($mainclass)) {
-                                if(Centauri::isProduction()) {
-                                    $errMsg = "The class $mainclass could not be found while loading all extensions!";
-                                    NotificationUtility::create("ERROR", "Centauri Extensions-Component", $errMsg, "error");
-                                    continue;
+                                if(!class_exists($mainclass)) {
+                                    if(Centauri::isProduction()) {
+                                        $errMsg = "The class $mainclass could not be found while loading all extensions!";
+                                        NotificationUtility::create("ERROR", "Centauri Extensions-Component", $errMsg, "error");
+                                        continue;
+                                    }
                                 }
-                            }
 
-                            Centauri::makeInstance($mainclass);
-                            $GLOBALS["Centauri"]["Extensions"][$extName] = $config;
+                                Centauri::makeInstance($mainclass);
+                                $GLOBALS["Centauri"]["Extensions"][$extName] = $config;
+                            }
                         }
                     }
                 }
@@ -58,5 +63,10 @@ class ExtensionsComponent
     public static function getExtensions()
     {
         return $GLOBALS["Centauri"]["Extensions"];
+    }
+
+    public static function extPath($extension)
+    {
+        return asset("storage/Centauri/Extensions/$extension");
     }
 }

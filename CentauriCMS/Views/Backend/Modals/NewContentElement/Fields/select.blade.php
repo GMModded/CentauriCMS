@@ -1,9 +1,5 @@
 <div class="ci-field">
-    <label for="{{ $fieldConfig['id'] }}"{{ ((isset($fieldConfig["value"]) || isset($fieldConfig["config"]["default"]) || (!empty($fieldConfig["config"]["items"]))) ? " class=active" : "") }}>
-        {{ $fieldConfig["label"] }}
-    </label>
-
-    <select data-id="{{ $fieldConfig['id'] }}"{{ $fieldConfig["config"]["required"] ? " required" : ""}} data-uid="{{ $fieldConfig['uid'] }}">
+    <select class="ci-select" id="{{ $fieldConfig['id'] }}"{{ isset($fieldConfig["config"]["required"]) ? " required" : ""}} data-uid="{{ $fieldConfig['uid'] }}">
         @if(isset($fieldConfig["config"]["default"]))
             <option value="{{ $fieldConfig["config"]["default"][1] }}" selected disabled>
                 {{ $fieldConfig["config"]["default"][0] }}
@@ -22,4 +18,18 @@
             @endif
         @endforeach
     </select>
+
+    <label>
+        {{ $fieldConfig["label"] }}
+    </label>
+
+    <i class="fas fa-chevrolet-down"></i>
+
+    <label class="sel-label" for="{{ $fieldConfig['id'] }}">
+        @if(isset($fieldConfig["value"]) && ($fieldConfig["value"] != ""))
+            {{ $fieldConfig["value"] }}
+        @else
+            {{ $fieldConfig["defaultLabel_noValue"] ?? "Choose an option" }}
+        @endif
+    </label>
 </div>

@@ -45,10 +45,17 @@ Centauri.Listener.DocumentKeyUpListener = () => {
                     fields = ".fields";
                 }
 
-                let dataFields = Centauri.Helper.FieldsHelper($(selector), fields);
+                let dataFields = null;
 
                 if(type == "MODEL") {
-                    console.log(dataFields);
+                    dataFields = Centauri.Helper.FieldsHelper($(selector), fields, false);
+
+                    let tableArrData = {};
+                    Object.keys(dataFields).forEach((data) => {
+                        tableArrData[data] = dataFields[data];
+                    });
+
+                    dataFields = tableArrData;
 
                     let namespace = $(selector).parents(".models").data("namespace");
                     let uid = $(selector).data("uid");
@@ -67,6 +74,7 @@ Centauri.Listener.DocumentKeyUpListener = () => {
                             success: (data) => {
                                 data = JSON.parse(data);
                                 Centauri.Notify(data.type, data.title, data.description);
+                                $(".models .title s").remove();
                             }
                         }
                     );
@@ -103,6 +111,10 @@ Centauri.Listener.DocumentKeyUpListener = () => {
                             }
                         }
                     );
+                }
+
+                if(Centauri.isNull(dataFields)) {
+                    dataFields = Centauri.Helper.FieldsHelper($(selector), fields);
                 }
             }
 

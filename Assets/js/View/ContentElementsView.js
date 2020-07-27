@@ -11,8 +11,7 @@ Centauri.View.ContentElementsView = ($contentelement) => {
 
         let $btn = $(this);
 
-        let data = $btn.data("centauri-btn");
-        let type = data.type;
+        let type = $btn.data("centauri-btn");
 
         if(type == "addfile" || type == "addimage") {
             let fileListType = "file";
@@ -27,11 +26,6 @@ Centauri.View.ContentElementsView = ($contentelement) => {
             let id = $input.attr("data-id");
 
             let value = $input.val();
-
-            // For validation
-            let required = $(this).data("required");
-            let minItems = $(this).data("minitems");
-            let maxItems = $(this).data("maxitems");
 
             let $accordions = $("> .accordions", $input.parent());
 
@@ -89,7 +83,11 @@ Centauri.View.ContentElementsView = ($contentelement) => {
                                 {
                                     success: (data) => {
                                         $accordions.html(data);
+
+                                        CentauriJS.Utilities.Form.FieldHasValueUtility();
+
                                         Centauri.Components.AccordionComponent();
+                                        Centauri.Components.CreateNewInlineComponent();
                                     }
                                 }
                             );
@@ -113,6 +111,64 @@ Centauri.View.ContentElementsView = ($contentelement) => {
             } else {
                 console.warn("Centauri.View.ContentElementsView: There's no condition-handling for the action: '" + action + "'");
             }
+        }
+
+        if(type == "cropimage") {
+            let $img = $(this).parents(".bottom").find("img");
+            let fileReferenceUid = $img.data("uid");
+
+            Centauri.fn.Ajax(
+                "Image",
+                "cropByUid",
+
+                {
+                    fileReferenceUid: fileReferenceUid
+                },
+
+                {
+                    success: (data) => {
+                        $("section#module_pages").append(data);
+
+                        /** Callback when crop image has been clicked */
+                        Centauri.Helper.VariablesHelper.__FN_CROP = (cropper) => {
+                            let cropBoxData = cropper.getCropBoxData();
+                            let base64 = cropper.getCroppedCanvas().toDataURL();
+
+                            Centauri.Helper.VariablesHelper.__BASE_64 = base64;
+
+                            let contentType = base64.split(";")[0];
+                                contentType = contentType.replace("data:", "");
+
+                            $img.attr("src", base64);
+
+                            let data = {
+                                cropBoxData: cropBoxData,
+                                base64: base64,
+                                contentType: contentType
+                            };
+
+                            Centauri.fn.Ajax(
+                                "Image",
+                                "saveCroppedDataByUid",
+
+                                {
+                                    fileReferenceUid: fileReferenceUid,
+                                    data: data
+                                },
+
+                                {
+                                    success: (data) => {
+                                        data = JSON.parse(data);
+                                        Centauri.Notify(data.type, data.title, data.description);
+                                    }
+                                }
+                            )
+
+                            $("section#content > section > #cropper").remove();
+                        };
+                    }
+                }
+            );
         }
 
         else {

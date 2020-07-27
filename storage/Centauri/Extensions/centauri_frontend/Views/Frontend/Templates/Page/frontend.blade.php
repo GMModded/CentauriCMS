@@ -9,7 +9,7 @@
         $startId = $origPage->getDomain()->rootpageuid;
     } else {
         $startId = 0;
-        dd($origPage);
+        dd("HH PRANK YA BRO", $origPage);
     }
 @endphp
 
@@ -19,7 +19,6 @@
         <head>
             {!! $additionalHeadTagContent !!}
             <title>{{ $title }}</title>
-            <link rel="stylesheet" href="{{ asset('public/frontend/css/centauri.min.css') }}">
         </head>
 
         <body data-version="{{ $time }}">
@@ -63,7 +62,7 @@
                                                     )
                                                 !!}"
                                                 style="font-size: 16px; text-transform: capitalize; border-radius: 0;"
-                                                class="nav-item btn btn-info px-3 py-2 waves-effect waves-light"
+                                                class="nav-item btn btn-info px-3 py-2 ml-3 waves-effect waves-light"
                                             >
                                                 Login
                                             </a>
@@ -107,13 +106,10 @@
                                     @endforeach
                                 </ul>
 
-                                <p style="text-align: center;font-size: 20px;color: white;" class="mt-3 m-0">
+                                <p class="mt-3 m-0" style="text-align: center;font-size: 20px;color: white;">
                                     <small>
                                         This site was built using CentauriCMS.<br>
-
-                                        Version: 
-                                        {{ Centauri\CMS\Centauri::getVersion() }} - 
-                                        {{ Centauri\CMS\Centauri::getState() }}
+                                        Version: {{ Centauri\CMS\Centauri::getVersion() }}
                                     </small>
                                 </p>
                             </div>
@@ -122,7 +118,7 @@
                 </div>
             </section>
 
-            <script src="{{ asset('public/frontend/js/centauri.min.js') }}" async defer></script>
+            {!! $additionalBodyTagContent !!}
         </body>
     </html>
 @else

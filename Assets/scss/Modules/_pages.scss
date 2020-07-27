@@ -60,19 +60,33 @@ table {
 }
 
 #pagecontent {
+    .sortable-elements {
+        &.ui-sortable {
+            .content-element {
+                cursor: move !important;
+            }
+        }
+    }
+
     .content-element {
         background-color: white;
         margin-top: 15px;
 
         .top {
-            height: 60px;
+            display: flex;
+            width: 100%;
 
-            .title {
+            &.title {
                 cursor: pointer;
                 text-transform: capitalize;
                 font-size: 20px;
-                display: inline-block;
-                padding: 15px;
+                padding: 20px 15px;
+            }
+
+            .button-view {
+                position: absolute;
+                top: 0;
+                right: 0;
             }
         }
 

@@ -25,6 +25,8 @@ class InlineRecordsAjax
      */
     public function listAjax(Request $request)
     {
+        dd("LEL");
+
         $type = $request->input("type");
 
         if($type == "files") {
@@ -129,7 +131,27 @@ class InlineRecordsAjax
                 "model" => $model
             ])->render();
 
-            $modelHtml = str_replace("###MODEL_CONTENT_TOP###", ($modelConfig["newItemLabel"] ?? "Item"), $modelHtml);
+            $newItemLabel = $modelConfig["newItemLabel"] ?? "Item";
+
+            $splittedTop = explode(" ", $newItemLabel);
+            $nSpittedTop = "";
+
+            foreach($splittedTop as $topItem) {
+                if(\Str::contains($topItem, "{") && \Str::contains($topItem, "}")) {
+                    $topItem = str_replace("{", "", $topItem);
+                    $topItem = str_replace("}", "", $topItem);
+
+                    if(isset($model->$topItem)) {
+                        $nSpittedTop .= $model->$topItem . " ";
+                    }
+                }
+            }
+
+            if($nSpittedTop == "") {
+                $nSpittedTop = $modelConfig["listLabel"];
+            }
+
+            $modelHtml = str_replace("###MODEL_CONTENT_TOP###", $nSpittedTop, $modelHtml);
 
             $bottom = "";
             foreach($modelConfig["config"]["fields"] as $_key => $_field) {
@@ -258,15 +280,15 @@ class InlineRecordsAjax
         $data = $request->input("data");
 
         $uid = $data["uid"];
-        $parenttype = $data["parenttype"];
+        $type = $data["type"];
 
-        $model = $parenttype::where("uid", $uid)->get()->first();
+        $model = $type::where("uid", $uid)->get()->first();
         $model->delete();
 
         return json_encode([
             "type" => "warning",
             "title" => "Inline-Record deleted",
-            "description" => "This record has been deleted successfully."
+            "description" => "This record has been deleted."
         ]);
     }
 
@@ -320,10 +342,6 @@ class InlineRecordsAjax
      */
     public function saveModelByUidAjax(Request $request)
     {
-        // dd(request()->input());
-
-        $namespace = $request->input("namespace");
-        $uid = $request->input("uid");
         $data = $request->input("data");
 
         $failed = false;
@@ -335,6 +353,14 @@ class InlineRecordsAjax
 
                 foreach($modelFieldsArr as $columnFieldName => $field) {
                     $value = $field["value"];
+
+                    /** @todo Find a better way to achieve the same goal here? */
+                    if($value === "false") {
+                        $value = 0;
+                    } else if($value === "true") {
+                        $value = 1;
+                    }
+
                     $model->$columnFieldName = $value;
                 }
 
@@ -348,7 +374,7 @@ class InlineRecordsAjax
             return json_encode([
                 "type" => "success",
                 "title" => "Inline-Record",
-                "description" => "This record has been saved"
+                "description" => "This record has been saved."
             ]);
         }
 

@@ -1,7 +1,7 @@
 @php
     $class = "container";
 
-    if($grid->grid_container_fullwidth) {
+    if($grid->grid_fullsize) {
         $class .= "-fluid";
     }
 

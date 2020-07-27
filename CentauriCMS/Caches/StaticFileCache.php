@@ -1,13 +1,16 @@
 <?php
 namespace Centauri\CMS\Caches;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 /**
  * This caching class will either cache a specific page (frontend only) if it has not been found as static file
  * or will create a cached file of the outputted/rendered page.
  */
 class StaticFileCache
 {
-    public static $cachedTempDirPath = "";
+    public static $cachedTempDirPath = null;
 
     /**
      * The constructor for the StaticFileCache class.
@@ -17,12 +20,22 @@ class StaticFileCache
      */
     public function __construct()
     {
-        $this->cachedTempDirPath = realpath(__DIR__ . "\\..\\temp\\Cache");
+        self::$cachedTempDirPath = self::getCachedTempDirPath();
     }
 
     /**
-     * Sets a static file cache by a given id with optional data (which will be saved into this cache file)
-     * (Should) return true if the fopen, fwrite and the fclose functions has been executed without any error by php itself.
+     * This method will set the cached temporary directory path.
+     * 
+     * @return string
+     */
+    public static function getCachedTempDirPath()
+    {
+        return base_path("../storage/Centauri/temp/Cache");
+    }
+
+    /**
+     * Sets a static file cache by the given $id with given $data (which will be saved into this cache file).
+     * Optional if the centauri-config file has enabled imagesToBase64 it will convert images to base64 format.
      * 
      * @param string $id - The uniqid generated in the context when using hasCache static method
      * @param string $data - The data (string) which should get cached
@@ -31,10 +44,44 @@ class StaticFileCache
      */
     public static function setCache(string $id, string $data): bool
     {
-        $cachedFile = fopen(self::$cachedTempDirPath . "\\$id.html", "w+");
-        fwrite($cachedFile, $data);
-        fclose($cachedFile);
+        if(isset(config("centauri")["config"]["Caching"]["imagesToBase64"]) && (config("centauri")["config"]["Caching"]["imagesToBase64"])) {
+            $explDataLines = explode("\n", $data);
 
+            foreach($explDataLines as $key => $line) {
+                $explLine = explode(" ", $line);
+
+                if(Str::contains($line, "image-view placeholder")) {
+                    $explDataLines[$key] = str_replace("image-view placeholder", "image-view", $explDataLines[$key]);
+                }
+
+                if(Str::contains($line, "<img") && Str::contains($line, "data-src")) {
+                    foreach($explLine as $subKey => $exLine) {
+                        $_exLine = $exLine;
+
+                        if(Str::contains($exLine, "data-src")) {
+                            $exLine = str_replace("data-src=", "", $exLine);
+                            $exLine = str_replace('"', "", $exLine);
+                            $exLine = str_replace("/storage/Centauri/Filelist/", "", $exLine);
+
+                            $content = Storage::disk("centauri_filelist")->get($exLine);
+                            $content = "data:image/png;base64," . base64_encode($content);
+
+                            $_exLine = "src='" . $content . "'";
+                            $explLine[$subKey] = $_exLine;
+                        }
+                    }
+
+                    $explDataLines[$key] = implode(" ", $explLine);
+                }
+            }
+
+            $data = implode(" ", $explDataLines);
+
+            $data = str_replace("> <", "><", $data);
+            $data = str_replace(">  <", "><", $data);
+        }
+
+        Storage::disk("centauri_temp_cache")->put("$id.html", $data);
         return true;
     }
 
@@ -48,10 +95,11 @@ class StaticFileCache
     public static function getCache($id)
     {
         if(!self::hasCache($id)) {
-            return;
+            return false;
         }
 
-        return file_get_contents(self::$cachedTempDirPath . "\\$id.html");
+        $contents = Storage::disk("centauri_temp_cache")->get("$id.html");
+        return $contents;
     }
 
     /**
@@ -63,7 +111,10 @@ class StaticFileCache
      */
     public static function hasCache($id)
     {
-        return file_exists(self::$cachedTempDirPath . "\\$id.html");
+        self::$cachedTempDirPath = self::getCachedTempDirPath();
+
+        $exists = Storage::disk("centauri_temp_cache")->exists("$id.html");
+        return $exists;
     }
 
     /**
@@ -75,7 +126,8 @@ class StaticFileCache
      */
     public static function deleteCache($id)
     {
-        return unlink(self::$cachedTempDirPath . "\\$id.html");
+        Storage::disk("centauri_temp_cache")->delete("$id.html");
+        return true;
     }
 
     /**
@@ -85,10 +137,9 @@ class StaticFileCache
      */
     public static function deleteAll()
     {
-        if(!is_dir(self::$cachedTempDirPath)) {
-            return;
-        }
+        $cachedFiles = Storage::disk("centauri_temp_cache")->files("./");
+        Storage::disk("centauri_temp_cache")->delete($cachedFiles);
 
-        return unlink(self::$cachedTempDirPath . "\\*.html");
+        return true;
     }
 }

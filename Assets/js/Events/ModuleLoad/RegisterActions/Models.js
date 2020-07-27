@@ -36,9 +36,7 @@ Centauri.Events.OnModuleLoadEvent.Models.RegisterActions = () => {
 
                             callbacks: {
                                 htmlAppended: ($editor) => {
-                                    /**
-                                     * Models Search-Filter
-                                     */
+                                    /** Models Search-Filter */
                                     $("input#filter_modelitems", $editor).on("keyup", function(e) {
                                         let value = $(this).val();
 
@@ -58,9 +56,7 @@ Centauri.Events.OnModuleLoadEvent.Models.RegisterActions = () => {
                                         }
                                     });
 
-                                    /**
-                                     * Model Edit Function
-                                     */
+                                    /** Model Edit Function */
                                     $(".model", $editor).each(function() {
                                         let $model = $(this);
 
@@ -89,12 +85,46 @@ Centauri.Events.OnModuleLoadEvent.Models.RegisterActions = () => {
                                                         success: (data) => {
                                                             $originModelEl.append(data);
 
+                                                            CentauriJS.Utilities.Form.FieldHasValueUtility();
+
                                                             Centauri.View.ContentElementsView();
+                                                            Centauri.Components.CreateNewInlineComponent();
                                                             Centauri.Service.CKEditorInitService();
                                                             Centauri.Listener.DocumentKeyUpListener();
 
                                                             $(".spinner-grow", $this).remove();
                                                             $("i", $this).removeClass("d-none");
+
+                                                            /** Parent-Models Input Preview */
+                                                            $(".models .model .bottom .ci-field > input").on(
+                                                                "keydown",
+                                                                this,
+                                                            function(e) {
+                                                                Centauri.Events.EditorComponent.Input.OnKeyUp($(this), e);
+                                                            });
+
+                                                            $(".models .model .bottom .ci-field > input").on(
+                                                                "keyup",
+                                                                this,
+                                                            function(e) {
+                                                                Centauri.Events.EditorComponent.Input.OnKeyUp($(this), e);
+                                                            });
+
+
+                                                            /** Child-Accordions Input Preview */
+                                                            $(".accordions.inline-records .accordion .bottom .ci-field > input").on(
+                                                                "keydown",
+                                                                this,
+                                                            function(e) {
+                                                                Centauri.Events.EditorComponent.Input.OnKeyUp($(this), e);
+                                                            });
+
+                                                            $(".accordions.inline-records .accordion .bottom .ci-field > input").on(
+                                                                "keyup",
+                                                                this,
+                                                            function(e) {
+                                                                Centauri.Events.EditorComponent.Input.OnKeyUp($(this), e);
+                                                            });
 
                                                             setTimeout(() => {
                                                                 $("> .bottom", $originModelEl).slideDown(function() {
@@ -113,8 +143,6 @@ Centauri.Events.OnModuleLoadEvent.Models.RegisterActions = () => {
                                                                     let trigger = $this.data("trigger");
 
                                                                     let datas = {
-                                                                        namespace: _namespace,
-                                                                        uid: uid,
                                                                         trigger: trigger
                                                                     };
 
@@ -139,6 +167,7 @@ Centauri.Events.OnModuleLoadEvent.Models.RegisterActions = () => {
                                                                             success: (data) => {
                                                                                 data = JSON.parse(data);
                                                                                 Centauri.Notify(data.type, data.title, data.description);
+                                                                                $(".models .title s").remove();
                                                                             }
                                                                         }
                                                                     );

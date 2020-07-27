@@ -1,12 +1,12 @@
 <?php
 
 /**
- * CentauriCMS - Content Management System depending on Laravel 7.x
+ * CentauriCMS - Content Management System made using Laravel +7.x
  * 
  * @package CentauriCMS
  * @author  M.S. <GMModded@centauricms.de>
  */
-require_once __DIR__ . "/CentauriCMS/Application/CentauriApplication.php";
+include_once __DIR__ . "/CentauriCMS/Application/CentauriApplication.php";
 $Centauri = new \Centauri\CMS\Application\CentauriApplication();
 $Centauri = $Centauri->Centauri;
 
@@ -19,14 +19,14 @@ $Centauri = $Centauri->Centauri;
  */
 
 $uri = urldecode(
-    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
+    parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH)
 );
 
 // This file allows us to emulate Apache's "mod_rewrite" functionality from the
 // built-in PHP web server. This provides a convenient way to test a Laravel
 // application without having installed a "real" web server software here.
-if ($uri !== '/' && file_exists(__DIR__.'/public'.$uri)) {
+if($uri !== "/" && file_exists(__DIR__ . "/public" . $uri)) {
     return false;
 }
 
-require_once __DIR__.'/public/index.php';
+require_once __DIR__ . "/public/index.php";

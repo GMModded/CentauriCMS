@@ -50,4 +50,12 @@ class ChildCookieModel extends Model
     protected $attributes = [
         "hidden" => 0
     ];
+
+    // /**
+    //  * Get the slider item that owns the button.
+    //  */
+    // public function cookies()
+    // {
+    //     return $this->belongsTo("\Centauri\Extension\Cookie\Models\ParentCookieModel");
+    // }
 }

@@ -1,30 +1,63 @@
 <?php
 namespace Centauri\CMS\BladeHelper;
 
-use Centauri\CMS\Model\File;
+use Centauri\CMS\Model\FileReference;
 
 class ImageBladeHelper
 {
     public static function get($uid)
     {
-        $file = File::where("uid", $uid)->get()->first() ?? false;
+        return;
+        $fileReference = FileReference::where("uid", $uid)->get()->first() ?? false;
 
-        if(!$file) {
-            return;
+        if(is_null($fileReference)) {
+            return null;
         }
 
-        $file->relativePath = "/storage/Centauri/Filelist/" . $file->name;
+        // dd($fileReference);
+
+        $fileReference->relativePath = "/storage/Centauri/Filelist/" . $file->name;
         return $file;
     }
 
     public static function getPath($uid)
     {
+        $file = \Centauri\CMS\Model\File::where("uid", $uid)->get()->first();
+        $file->relativePath = "/storage/Centauri/Filelist/" . $file->name;
+
+        /*
+        if(is_array($uid)) {
+            $files = [];
+
+            foreach($uid as $id) {
+                $files[] = self::get($id)->relativePath ?? null;
+            }
+
+            if(sizeof($files) == 1) {
+                return $files[0];
+            }
+
+            return $files;
+        }
+
         $file = self::get($uid);
 
         if(!$file) {
-            return;
-        }
+            return "Couldn't get the path of image with uid '$uid'";
+        }*/
 
         return $file->relativePath;
+    }
+
+    public static function findReferenceByElement($element)
+    {
+        foreach($element->image as $imageUid) {
+            $fileReference = FileReference::where([
+                "uid_image" => $imageUid,
+                "uid_element" => $element->uid
+            ])->get()->first();
+
+            dd($fileReference, $imageUid);
+        }
     }
 }

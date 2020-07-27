@@ -1,0 +1,95 @@
+/**
+ * Packages
+ */
+@import "../packages/toastr/toastr";
+
+@import "../packages/bootstrap/scss/mixins";
+@import "../packages/bootstrap/scss/functions";
+@import "../packages/bootstrap/scss/variables";
+@import "../packages/bootstrap/dist/css/bootstrap.min.css";
+
+@import "../packages/slick/slick-theme.css";
+@import "../packages/slick/slick.css";
+
+@import "../packages/fontawesome5.12.0/css/fontawesome.min.css";
+@import "../packages/fontawesome5.12.0/css/solid.min.css";
+@import "../packages/fontawesome5.12.0/css/brands.min.css";
+
+@import "../packages/waves/dist/waves.min.css";
+
+/**
+ * Colors
+ */
+@import "colors";
+
+/**
+ * Fonts
+ */
+@import "font";
+
+/**
+ * Variables
+ */
+@import "variables";
+
+/**
+ * Global
+ */
+@import "global";
+
+/**
+ * Custom
+ */
+@import "custom";
+
+/**
+ * Sections
+ */
+@import "Sections/Header";
+@import "Sections/Content";
+
+/**
+ * Functions
+ */
+@import "Functions/ContentElements";
+
+/**
+ * Content Elements
+ */
+@import "ContentElements/Slider";
+@import "ContentElements/HeaderDescription";
+@import "ContentElements/HeaderImage";
+@import "ContentElements/Boxitems";
+
+
+/**
+ * Utilities
+ */
+@import "Utilities/PlaceholderUtility";
+
+
+@media (max-width: 767px) {
+    #header {
+        position: unset !important;
+    }
+
+    #content .item .text-view h4 {
+        font-size: 30px;
+        white-space: nowrap;
+    }
+
+    .button-view {
+        white-space: nowrap;
+    }
+}
+
+.progress {
+    &.inactive {
+        background-color: white !important;
+
+        &:before,
+        &:after {
+            animation: none !important;
+        }
+    }
+}

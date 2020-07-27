@@ -64,35 +64,49 @@ return [
             'url' => env('AWS_URL'),
         ],
 
-        /**
-         * Centauri local drivers for Storage
-         */
+
+        /** Centauri local drivers for Storage */
         "centauri" => [
             "driver" => "local",
             "root" => storage_path("Centauri"),
             "url" => env("APP_URL") . "/storage/Centauri",
         ],
+
         "centauri_core" => [
             "driver" => "local",
             "root" => base_path("CentauriCMS"),
             "url" => env("APP_URL") . "/CentauriCMS",
         ],
+
         "centauri_core_sql" => [
             "driver" => "local",
             "root" => base_path("CentauriCMS/SQL"),
             "url" => env("APP_URL") . "/CentauriCMS/SQL",
         ],
+
         "centauri_extensions" => [
             "driver" => "local",
             "root" => storage_path("Centauri/Extensions"),
             "url" => env("APP_URL") . "/storage/Centauri/Extensions",
         ],
+
         "centauri_filelist" => [
             "driver" => "local",
             "root" => storage_path("Centauri/Filelist"),
             "url" => env("APP_URL") . "/storage/Centauri/Filelist",
         ],
 
-    ],
+        "centauri_temp" => [
+            "driver" => "local",
+            "root" => storage_path("Centauri/temp"),
+            "url" => env("APP_URL") . "/storage/Centauri/temp",
+        ],
 
+        "centauri_temp_cache" => [
+            "driver" => "local",
+            "root" => storage_path("Centauri/temp/Cache"),
+            "url" => env("APP_URL") . "/storage/Centauri/temp/Cache",
+        ]
+
+    ]
 ];

@@ -19,13 +19,25 @@
             </small>
 
             <div class="right" style="position: absolute; top: -17.5px; right: 15px;">
-                <button class="btn btn-primary btn-floating fa-lg edit mr-0 waves-effect" data-action="edit">
+                <button class="btn btn-primary btn-floating fa-lg edit mx-1 waves-effect" data-action="edit">
                     <i class="fas fa-pen"></i>
                 </button>
 
-                <button class="btn btn-danger btn-floating fa-lg delete waves-effect"  data-action="delete">
+                <button class="btn btn-info btn-floating fa-lg sort mx-1 waves-effect" data-action="sort">
+                    <i class="fas fa-arrows-alt"></i>
+                </button>
+
+                <button class="btn btn-danger btn-floating fa-lg delete mx-1 waves-effect"  data-action="delete">
                     <i class="fas fa-trash-alt"></i>
                 </button>
+
+                <script id="elementsbladescript">
+                    if(Centauri.Helper.VariablesHelper.__CE_SORTING) {
+                        $("#pagecontent .header button.sort i").css("transform", "rotate(135deg)");
+                    }
+
+                    $("#elementsbladescript").remove();
+                </script>
             </div>
         </div>
     </div>
@@ -51,14 +63,24 @@
                         @foreach($data["elements"] as $element)
                             @if(is_null($element->grids_parent))
                                 @if($element->colPos == $colPos)
-                                    <button class="fixed btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="before">
+                                    <button 
+                                        class="new-content-element fixed btn btn-default m-0 py-2 px-2 waves-effect waves-light"
+                                        data-action="newContentElement"
+                                        data-insert="before"
+                                    >
                                         <i class="fas fa-plus"></i>
+
                                         Content
                                     </button>
 
-                                    <div class="content-element{{ ($element->hidden ? ' hidden' : '') }} ci-bs-1 my-3" data-uid="{{ $element->uid }}" data-sorting="{{ $element->sorting }}" data-ctype="{{ $element->ctype }}">
-                                        <div class="top">
-                                            <span class="title waves-effect">
+                                    <div 
+                                        class="content-element{{ ($element->hidden ? ' hidden' : '') }} ci-bs-1 my-3"
+                                        data-uid="{{ $element->uid }}"
+                                        data-sorting="{{ $element->sorting }}"
+                                        data-ctype="{{ $element->ctype }}"
+                                    >
+                                        <div class="top title waves-effect">
+                                            <span>
                                                 @if(isset($element->customTitle))
                                                     {{ $element->customTitle }}
                                                 @else
@@ -77,8 +99,13 @@
                             @endif
                         @endforeach
 
-                        <button class="fixed btn btn-default m-0 py-2 px-2 waves-effect waves-light" data-action="newContentElement" data-insert="after">
+                        <button 
+                            class="new-content-element fixed btn btn-default m-0 py-2 px-2 waves-effect waves-light"
+                            data-action="newContentElement"
+                            data-insert="after"
+                        >
                             <i class="fas fa-plus"></i>
+
                             Content
                         </button>
                     </div>

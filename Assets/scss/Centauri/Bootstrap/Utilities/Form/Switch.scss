@@ -1,5 +1,9 @@
 .ci-switch {
-    margin-bottom: 32.5px !important;
+    position: relative;
+    margin: {
+        top: 25px;
+        bottom: 25px;
+    }
 
     label {
         cursor: pointer;

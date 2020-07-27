@@ -386,19 +386,19 @@ button.toast-close-button {
     .ci-field textarea[readonly] {
       padding-left: 5px;
       background-color: #eee; }
-      .ci-field input[disabled] + label:not(.def-label), .ci-field input[readonly] + label:not(.def-label),
-      .ci-field textarea[disabled] + label:not(.def-label),
-      .ci-field textarea[readonly] + label:not(.def-label) {
+      .ci-field input[disabled]:not(.ci-select-toggler) + label:not(.def-label), .ci-field input[readonly]:not(.ci-select-toggler) + label:not(.def-label),
+      .ci-field textarea[disabled]:not(.ci-select-toggler) + label:not(.def-label),
+      .ci-field textarea[readonly]:not(.ci-select-toggler) + label:not(.def-label) {
         transform: translateY(-25px) scale(0.8); }
-    .ci-field input:focus, .ci-field input:active, .ci-field input:hover,
-    .ci-field textarea:focus,
-    .ci-field textarea:active,
-    .ci-field textarea:hover {
+    .ci-field input:focus:not(.ci-select-toggler):not([type="checkbox"]), .ci-field input:active:not(.ci-select-toggler):not([type="checkbox"]), .ci-field input:hover:not(.ci-select-toggler):not([type="checkbox"]),
+    .ci-field textarea:focus:not(.ci-select-toggler):not([type="checkbox"]),
+    .ci-field textarea:active:not(.ci-select-toggler):not([type="checkbox"]),
+    .ci-field textarea:hover:not(.ci-select-toggler):not([type="checkbox"]) {
       box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important; }
-      .ci-field input:focus + label:not(.def-label), .ci-field input:active + label:not(.def-label), .ci-field input:hover + label:not(.def-label),
-      .ci-field textarea:focus + label:not(.def-label),
-      .ci-field textarea:active + label:not(.def-label),
-      .ci-field textarea:hover + label:not(.def-label) {
+      .ci-field input:focus:not(.ci-select-toggler):not([type="checkbox"]) + label:not(.def-label), .ci-field input:active:not(.ci-select-toggler):not([type="checkbox"]) + label:not(.def-label), .ci-field input:hover:not(.ci-select-toggler):not([type="checkbox"]) + label:not(.def-label),
+      .ci-field textarea:focus:not(.ci-select-toggler):not([type="checkbox"]) + label:not(.def-label),
+      .ci-field textarea:active:not(.ci-select-toggler):not([type="checkbox"]) + label:not(.def-label),
+      .ci-field textarea:hover:not(.ci-select-toggler):not([type="checkbox"]) + label:not(.def-label) {
         transform: translateY(-25px) scale(0.8); }
     .ci-field input:focus, .ci-field input:active,
     .ci-field textarea:focus,
@@ -408,6 +408,10 @@ button.toast-close-button {
       .ci-field textarea:focus + label:not(.def-label),
       .ci-field textarea:active + label:not(.def-label) {
         color: #4285f4 !important; }
+    .ci-field input.ci-select-toggler + label:hover,
+    .ci-field textarea.ci-select-toggler + label:hover {
+      cursor: pointer;
+      transform: translateY(12.5px); }
     .ci-field input[type="checkbox"],
     .ci-field textarea[type="checkbox"] {
       box-shadow: none !important;
@@ -477,8 +481,7 @@ input.ci-select-toggler {
     transform: translateY(-25px) scale(0.8) !important; }
 
 input.ci-select-toggler ~ label {
-  cursor: pointer;
-  padding: 0 5px; }
+  cursor: pointer; }
 
 .ci-field.ci-colorpicker-field .pickr {
   width: 100%;
@@ -488,7 +491,9 @@ input.ci-select-toggler ~ label {
     height: 100%; }
 
 .ci-switch {
-  margin-bottom: 32.5px !important; }
+  position: relative;
+  margin-top: 25px;
+  margin-bottom: 25px; }
   .ci-switch label {
     cursor: pointer; }
     .ci-switch label input[type="checkbox"] {
@@ -519,6 +524,10 @@ input.ci-select-toggler ~ label {
         width: 21px;
         height: 21px;
         transition: left .3s ease, background .3s ease, box-shadow 1s ease; }
+
+.ci-field > input[type="checkbox"] {
+  margin: 0 10px 0 0;
+  box-shadow: none !important; }
 
 .blue-gradient {
   background: linear-gradient(40deg, #45cafc, #303f9f) !important; }
@@ -776,6 +785,11 @@ body {
     border-radius: 0;
     background-color: #252c3b; }
 
+.ci-textarea {
+  cursor: text !important; }
+  .ci-textarea + label {
+    transform: translateY(-27.5px) scale(0.8) !important; }
+
 /**
  * Sections
  */
@@ -946,39 +960,40 @@ section#header {
   margin-left: 0;
   margin-bottom: 10px; }
 
-.accordions.inline-records .accordion {
+.accordions.inline-records .accordion:not(.active) > .top {
+  overflow: hidden; }
+
+.accordions.inline-records .accordion > .top {
+  position: relative;
+  padding: 1rem;
   background-color: #fff;
   cursor: pointer; }
-  .accordions.inline-records .accordion:not(.active) > .top {
-    overflow: hidden; }
-  .accordions.inline-records .accordion > .top {
-    position: relative;
-    padding: 1rem; }
-    .accordions.inline-records .accordion > .top .buttons-center,
-    .accordions.inline-records .accordion > .top .buttons-right {
-      position: absolute;
-      right: 0;
-      top: 0;
-      height: 100%;
-      align-items: center;
-      display: flex;
-      transition: 0.66s cubic-bezier(1, -0.09, 0, 1.16); }
-      .accordions.inline-records .accordion > .top .buttons-center button.btn-floating,
-      .accordions.inline-records .accordion > .top .buttons-right button.btn-floating {
-        width: 40px;
-        height: 40px; }
-        .accordions.inline-records .accordion > .top .buttons-center button.btn-floating[data-trigger="sortInlineElementBySorting"],
-        .accordions.inline-records .accordion > .top .buttons-right button.btn-floating[data-trigger="sortInlineElementBySorting"] {
-          cursor: move; }
-        .accordions.inline-records .accordion > .top .buttons-center button.btn-floating i,
-        .accordions.inline-records .accordion > .top .buttons-right button.btn-floating i {
-          width: 100%;
-          line-height: inherit; }
-    .accordions.inline-records .accordion > .top .buttons-center {
-      right: 0;
-      justify-content: center; }
-  .accordions.inline-records .accordion > .bottom {
-    padding: 0 1rem 1rem; }
+  .accordions.inline-records .accordion > .top .buttons-center,
+  .accordions.inline-records .accordion > .top .buttons-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    transition: 0.66s cubic-bezier(1, -0.09, 0, 1.16); }
+    .accordions.inline-records .accordion > .top .buttons-center button.btn-floating,
+    .accordions.inline-records .accordion > .top .buttons-right button.btn-floating {
+      width: 40px;
+      height: 40px; }
+      .accordions.inline-records .accordion > .top .buttons-center button.btn-floating[data-trigger="sortInlineElementBySorting"],
+      .accordions.inline-records .accordion > .top .buttons-right button.btn-floating[data-trigger="sortInlineElementBySorting"] {
+        cursor: move; }
+      .accordions.inline-records .accordion > .top .buttons-center button.btn-floating i,
+      .accordions.inline-records .accordion > .top .buttons-right button.btn-floating i {
+        width: 100%;
+        line-height: inherit; }
+  .accordions.inline-records .accordion > .top .buttons-center {
+    right: 0;
+    justify-content: center; }
+
+.accordions.inline-records .accordion > .bottom {
+  padding: 0 1rem 1rem; }
 
 #editor {
   position: fixed;
@@ -1355,17 +1370,24 @@ table#pages tr.subpage td:first-child {
     left: 0;
     bottom: 10px; }
 
+#pagecontent .sortable-elements.ui-sortable .content-element {
+  cursor: move !important; }
+
 #pagecontent .content-element {
   background-color: white;
   margin-top: 15px; }
   #pagecontent .content-element .top {
-    height: 60px; }
-    #pagecontent .content-element .top .title {
+    display: flex;
+    width: 100%; }
+    #pagecontent .content-element .top.title {
       cursor: pointer;
       text-transform: capitalize;
       font-size: 20px;
-      display: inline-block;
-      padding: 15px; }
+      padding: 20px 15px; }
+    #pagecontent .content-element .top .button-view {
+      position: absolute;
+      top: 0;
+      right: 0; }
   #pagecontent .content-element .fields {
     width: 100%;
     padding: 0 15px 15px; }
@@ -1460,18 +1482,50 @@ table#pages tr.subpage td:first-child {
  */
 .loader {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -5rem;
-  margin-top: -5rem; }
-  @media (max-width: 991.98px) {
-    .loader {
-      margin: 0 0 0 -1.5rem; } }
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: .3s; }
   .loader.hidden {
     opacity: 0;
-    visibility: hidden; }
-  .loader .spinner-layer {
-    border-color: #fff !important; }
+    visibility: hidden;
+    pointer-events: none; }
+  .loader .circular {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    animation: rotate 2s linear infinite; }
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+  .loader .path {
+    stroke-dasharray: 1,200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+    stroke: #fff; }
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1,200;
+    stroke-dashoffset: 0; }
+  50% {
+    stroke-dasharray: 89,200;
+    stroke-dashoffset: -35; }
+  100% {
+    stroke-dasharray: 89,200;
+    stroke-dashoffset: -124; } }
+
+@keyframes color {
+  0% {
+    stroke: #fff; } }
 
 /**
  * Modals

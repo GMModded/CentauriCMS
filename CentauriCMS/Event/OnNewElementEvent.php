@@ -18,6 +18,7 @@ class OnNewElementEvent implements ShouldBroadcast
 
     public function __construct($dataArr)
     {
+        return;
         $pageUid = $dataArr["uid"];
         $page = Page::where("uid", $pageUid)->get()->first();
 

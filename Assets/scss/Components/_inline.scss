@@ -19,9 +19,6 @@
         }
 
         .accordion {
-            background-color: #fff;
-            cursor: pointer;
-
             &:not(.active) {
                 & > .top {
                     overflow: hidden;
@@ -31,6 +28,8 @@
             & > .top {
                 position: relative;
                 padding: 1rem;
+                background-color: #fff;
+                cursor: pointer;
 
                 .buttons-center,
                 .buttons-right {

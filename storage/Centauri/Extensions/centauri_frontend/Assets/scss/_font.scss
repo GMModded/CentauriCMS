@@ -1,0 +1,31 @@
+$primaryFont: "Raleway";
+$primaryFontBold: $primaryFont + "-Bold";
+
+@font-face {
+    font-family: $primaryFont;
+    src: url("/public/fonts/Raleway/Raleway-Regular.ttf");
+}
+
+@font-face {
+    font-family: $primaryFont + "-Bold";
+    src: url("/public/fonts/Raleway/Raleway-Bold.ttf");
+}
+
+h1, h2, h3, h4, h5, h6,
+p, span, label, button, a, ul li {
+    font-family: $primaryFont;
+}
+
+p {
+    font-size: 16px;
+}
+
+strong,
+b {
+    font-family: $primaryFontBold;
+}
+
+a {
+    color: $primaryColor;
+    text-decoration: underline;
+}

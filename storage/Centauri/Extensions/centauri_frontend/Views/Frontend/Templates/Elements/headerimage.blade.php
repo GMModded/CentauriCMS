@@ -1,3 +1,5 @@
+{{-- {!! Centauri\CMS\BladeHelper\ImageBladeHelper::findReferenceByElement($element) !!} --}}
+
 <div id="headerimage-{{ $element->uid }}" data-contentelement="headerimage">
     @if($element->image)
         <div class="image-view placeholder">

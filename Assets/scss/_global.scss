@@ -245,3 +245,12 @@ body {
         background-color: #252c3b;
     }
 }
+
+.ci-textarea {
+    cursor: text !important;
+    // padding: 0 22.5px !important;
+
+    & + label {
+        transform: translateY(-27.5px) scale(.8) !important;
+    }
+}

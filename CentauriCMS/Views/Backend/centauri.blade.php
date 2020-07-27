@@ -97,20 +97,10 @@
 
             <section id="maincontent" class="w-100 h-100">
                 <div class="overlayer">
-                    <div class="preloader-wrapper active loader hidden">
-                        <div class="spinner-layer spinner-blue-only">
-                            <div class="circle-clipper left">
-                                <div class="circle"></div>
-                            </div>
-
-                            <div class="gap-patch">
-                                <div class="circle"></div>
-                            </div>
-
-                            <div class="circle-clipper right">
-                                <div class="circle"></div>
-                            </div>
-                        </div>
+                    <div class="loader">
+                        <svg class="circular" height="50" width="50">
+                            <circle class="path" cx="25" cy="25.2" r="19.9" fill="none" stroke-width="6" stroke-miterlimit="10" />
+                        </svg>
                     </div>
                 </div>
 

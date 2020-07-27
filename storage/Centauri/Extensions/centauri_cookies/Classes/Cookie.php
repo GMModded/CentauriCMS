@@ -1,20 +1,22 @@
 <?php
 namespace Centauri\Extension\Cookie;
 
-use Centauri\CMS\Centauri;
 use Centauri\CMS\Resolver\ViewResolver;
+use Exception;
 
 class Cookie
 {
+    private $extKey = "centauri_cookies";
+
     /**
-     * The model namespace.
+     * The (parent) model namespace.
      * 
      * @var string
      */
     private $parentModelNamespace = "\Centauri\Extension\Cookie\Models\ParentCookieModel";
 
     /**
-     * The model namespace.
+     * The (child) model namespace.
      * 
      * @var string
      */
@@ -27,9 +29,15 @@ class Cookie
      */
     public function __construct()
     {
-        /**
-         * Parent-Cookie Model
-         */
+        /** Views registration for this extension */
+        ViewResolver::register($this->extKey, "EXT:" . $this->extKey . "/Views");
+
+        /** Cookies Plugin */
+        $GLOBALS["Centauri"]["Plugins"][$this->extKey . "_pi1"] = [
+            "Cookies Plugin" => "\Centauri\Extension\Cookie\Plugins\CookiePlugin"
+        ];
+
+        /** Parent-Cookie Model */
         $GLOBALS["Centauri"]["Models"][$this->parentModelNamespace] = [
             "namespace" => $this->parentModelNamespace,
             "id" => "centauri_cookie_parent",
@@ -40,7 +48,8 @@ class Cookie
             "fields" => [
                 "name" => [
                     "type" => "input",
-                    "label" => trans("centauri_cookie::backend/global.label.name")
+                    "label" => trans($this->extKey . "::backend/global.label.name"),
+                    "additionalClasses" => "preview-update-title"
                 ],
 
                 "teaser" => [
@@ -55,7 +64,8 @@ class Cookie
 
                 $this->childModelNamespace => [
                     "label" => "Cookies",
-                    "newItemLabel" => "Cookie",
+                    "listLabel" => "{name}",
+                    "newItemLabel" => "Create new Cookie",
                     "existingItemLabel" => "{label}",
                     "type" => "model",
 
@@ -65,10 +75,6 @@ class Cookie
 
                         "fields" => [
                             "name",
-                            "host",
-                            "duration",
-                            "type",
-                            "category",
                             "description"
                         ]
                     ]
@@ -76,55 +82,34 @@ class Cookie
             ]
         ];
 
-        /**
-         * Child-Cookie Model
-         */
+        /** Child-Cookie Model */
         $GLOBALS["Centauri"]["Models"][$this->childModelNamespace] = [
             "namespace" => $this->childModelNamespace,
             "id" => "centauri_cookie_child",
             "label" => "Cookies",
             "listLabel" => "{name}",
-            "newItemLabel" => "Cookie",
+            "newItemLabel" => "Create new Cookie",
             "existingItemLabel" => "{title}",
             "isChild" => true,
 
             "fields" => [
                 "name" => [
                     "type" => "input",
-                    "label" => "Name"
-                ],
-
-                "host" => [
-                    "type" => "input",
-                    "label" => "Host"
-                ],
-
-                "duration" => [
-                    "type" => "input",
-                    "label" => "Host"
-                ],
-
-                "type" => [
-                    "type" => "input",
-                    "label" => "Type"
-                ],
-
-                "category" => [
-                    "type" => "input",
-                    "label" => "Category"
+                    "label" => "Name",
+                    "additionalClasses" => "preview-update-title"
                 ],
 
                 "description" => [
                     "type" => "RTE",
-                    "label" => "Host"
+                    "label" => "Description"
                 ]
             ]
         ];
 
-        /**
-         * Views registration via ViewResolver class
-         */
-        $ViewResolver = Centauri::makeInstance(ViewResolver::class);
-        $ViewResolver->register("centauri_cookie", "EXT:centauri_cookie/Views");
+        /** Registration of additional head tag for CSS file */
+        $GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Head"][] = \Centauri\Extension\Cookie\AdditionalDatas\HeadTagAdditionalDatas::class;
+
+        /** Registration of additional body tag for JS file */
+        $GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Body"][] = \Centauri\Extension\Cookie\AdditionalDatas\BodyTagAdditionalDatas::class;
     }
 }

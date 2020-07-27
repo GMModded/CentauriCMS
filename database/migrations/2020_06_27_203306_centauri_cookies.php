@@ -40,7 +40,6 @@ class CentauriCookies extends Migration
             $table->string("name", 100);
             $table->text("teaser");
             $table->tinyInteger("state")->default(0);
-            $table->integer("cookies")->nullable();
         });
 
         Schema::create($this->childTable, function(Blueprint $table) {
@@ -49,17 +48,14 @@ class CentauriCookies extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+            $table->integer("parent_uid")->nullable();
+
             $table->integer("lid");
             $table->integer("hidden");
             $table->integer("sorting")->default(0);
 
             $table->string("name", 100)->nullable();
-            $table->string("host", 100)->nullable();
-            $table->string("duration", 50)->nullable();
-            $table->string("type", 50)->nullable();
-            $table->string("category", 50)->nullable();
             $table->text("description")->nullable();
-            $table->integer("parent_uid")->nullable();
         });
     }
 

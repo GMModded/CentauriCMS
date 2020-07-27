@@ -24,12 +24,20 @@ trait AjaxTrait
         try {
             return $this->$ajaxName($request);
         } catch(ErrorException $e) {
-            if(!Centauri::keepSiteAlive()) {
+            if(!Centauri::keepSiteAlive() && !$request->ajax()) {
                 throw $e;
+            } else {
+                if($request->ajax()) {
+                    return AjaxAbstract::default($request, $ajaxName, $e->getMessage() . "<br><br>File: " . $e->getFile() . " - Line: " . $e->getLine());
+                } else {
+                    throw $e;
+                }
             }
         } catch(Error $e) {
-            if(!Centauri::keepSiteAlive()) {
+            if(!Centauri::keepSiteAlive() && !$request->ajax()) {
                 throw $e;
+            } else {
+                return AjaxAbstract::default($request, $ajaxName, $e->getMessage() . "<br><br>File: " . $e->getFile() . " - Line: " . $e->getLine());
             }
         }
 

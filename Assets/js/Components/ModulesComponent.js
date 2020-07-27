@@ -76,7 +76,7 @@ Centauri.Components.ModulesComponent = (data) => {
             },
 
             {
-                success: function(data) {
+                success: (data) => {
                     $("#dashboard #modules .module.active").removeClass("active");
                     $module.addClass("active");
 
@@ -86,7 +86,7 @@ Centauri.Components.ModulesComponent = (data) => {
                     Centauri.Events.OnModuleLoadEvent(moduleID);
                 },
 
-                error: function(data) {
+                error: (data) => {
                     $(".overlayer").addClass("hidden");
                 }
             }

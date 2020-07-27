@@ -7,15 +7,17 @@ Centauri.Helper.FieldsHelper = (element, parentSelector, returnAsJson = true, se
     ) {
         datas = Centauri.Helper.FieldsHelper.findDatasBySelectors([
             $(parentSelector + " .ci-field > input", $(element)),
-            $(parentSelector + " .ci-switch > input[type='checkbox']", $(element)),
+            $(parentSelector + " .ci-switch input[type='checkbox']", $(element)),
             $(parentSelector + " .ci-field > .ci-textarea", $(element)),
+            $(parentSelector + " .ci-field > textarea", $(element)),
             $(parentSelector + " .ci-field > select", $(element))
         ]);
     } else {
         datas = Centauri.Helper.FieldsHelper.findDatasBySelectors([
             $(parentSelector + " .ci-field > input"),
-            $(parentSelector + " .ci-switch > input[type='checkbox']"),
+            $(parentSelector + " .ci-switch input[type='checkbox']"),
             $(parentSelector + " .ci-field > .ci-textarea"),
+            $(parentSelector + " .ci-field > textarea"),
             $(parentSelector + " .ci-field > select")
         ]);
     }
@@ -43,7 +45,6 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
     selectors.forEach(selector => {
         $(selector).each(function() {
             let id = $(this).data("id");
-            // console.log($(this));
 
             if(Centauri.isNotUndefined(id)) {
                 let val = $(this).val();
@@ -52,11 +53,12 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
                 let table = "elements";
                 let parentuid = null;
 
-                /**
-                 * Handling for specific elements (by checking their classes) the correct way of fetching its current/changed value
-                 */
+                /** Handling for specific elements (by checking their classes) the correct way of fetching its current/changed value */
                 if($(this).hasClass("ci-textarea")) {
                     val = $(this).html();
+                }
+                if($(this).is("textarea")) {
+                    val = $(this).val();
                 }
 
                 if($(this).hasClass("image-input")) {
@@ -73,16 +75,12 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
                     val = $(this).prop("checked");
                 }
 
-                /**
-                 * In case the User creates a new Element using the Modal we set uid as "NEW" for the datas-Array
-                 */
+                /** In case the User creates a new Element using the Modal we set uid as "NEW" for the datas-Array */
                 if($(selector).is(Centauri.Helper.ModalHelper.Element)) {
                     uid = "NEW";
                 }
 
-                /**
-                 * If the current found field is an Inline-Record we set its table in the datas-Array to the parents' data-type-Attribute
-                 */
+                /** If the current found field is an Inline-Record we set its table in the datas-Array to the parents' data-type-Attribute */
                 if(isIR) {
                     table = $(this).parents(".accordions.inline-records").data("type");
                     parentuid = $(this).parents(".accordions.inline-records").parents(".accordion").data("uid");
@@ -92,9 +90,7 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
                     table = $(this).parents(".models").data("namespace");
                 }
 
-                /**
-                 * datas-Array logic.
-                 */
+                /** datas-Array logic. */
                 if(Centauri.isUndefined(datas[table])) {
                     datas[table] = {};
                 }
@@ -107,8 +103,6 @@ Centauri.Helper.FieldsHelper.findDatasBySelectors = (selectors) => {
             }
         });
     });
-
-    // console.log(datas);
 
     return datas;
 };

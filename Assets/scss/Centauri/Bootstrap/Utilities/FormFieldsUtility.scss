@@ -30,18 +30,22 @@
             padding-left: 5px;
             background-color: #eee;
 
-            & + label:not(.def-label) {
-                transform: translateY(-25px) scale(0.8);
+            &:not(.ci-select-toggler) {
+                & + label:not(.def-label) {
+                    transform: translateY(-25px) scale(0.8);
+                }
             }
         }
 
         &:focus,
         &:active,
         &:hover {
-            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12) !important;
+            &:not(.ci-select-toggler):not([type="checkbox"]) {
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12) !important;
 
-            & + label:not(.def-label) {
-                transform: translateY(-25px) scale(.8);
+                & + label:not(.def-label) {
+                    transform: translateY(-25px) scale(.8);
+                }
             }
         }
 
@@ -51,6 +55,15 @@
 
             & + label:not(.def-label) {
                 color: $primary;
+            }
+        }
+
+        &.ci-select-toggler {
+            & + label {
+                &:hover {
+                    cursor: pointer;
+                    transform: translateY(12.5px);
+                }
             }
         }
 

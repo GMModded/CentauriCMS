@@ -56,7 +56,26 @@ CentauriJS.Utilities.Form.Select = () => {
                 $that.parents(".ci-field").find("label:last-child").text(txt);
                 $that.parents(".ci-field").find("select").val(val);
                 $that.parents(".ci-field").find("select").trigger("change");
+                $("input.ci-select-toggler").trigger("focusout");
             }
         });
+    });
+
+    $(document).off("click");
+    $(document).on("click", this, function(e) {
+        let eTrgt = $(e.target);
+        
+        if(!eTrgt.hasClass("ci-select-toggler") && !eTrgt.parent().hasClass("ci-select")) {
+            $(".ci-select-toggler").each(function() {
+                $("div.ci-select", $(this).parent()).slideUp();
+                $("div.ci-select", $(this).parent()).removeClass("active");
+            });
+        }
+
+        // if(a) {
+        //     console.log("SELECT CLICKED");
+        // } else {
+        //     console.log("NO SELECT CLICKED");
+        // }
     });
 };

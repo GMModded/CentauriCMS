@@ -47,10 +47,5 @@ class File extends Model
      *
      * @var array
      */
-    protected $attributes = [
-        "title" => "",
-        "description" => "",
-        "link" => "",
-        "cropable" => 0
-    ];
+    protected $attributes = [];
 }

@@ -1,5 +1,5 @@
-Centauri.NewContentElementModal = function($container) {
-    $("button", $container).on("click", this, function() {
+Centauri.NewContentElementModal = ($container) => {
+    $("button.new-content-element", $container).on("click", this, function() {
         let $btn = $(this);
         let action = $(this).data("action");
 

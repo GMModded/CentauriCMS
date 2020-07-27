@@ -11,11 +11,11 @@ interface AdditionalDataInterface
     public function fetch();
 
     /**
-     * Handle custom use-cases on edit
+     * Handle custom use-cases on edit of an element.
      * 
-     * @param array $element
+     * @param object $element
      * 
      * @return void
      */
-    public function onEditListener($element);
+    public function onEditListener(object $element);
 }

@@ -7,3 +7,5 @@ Centauri.Helper.VariablesHelper.__sortingElement = null;
 Centauri.Helper.VariablesHelper.xhr = null;
 
 Centauri.Helper.VariablesHelper.isReloading = false;
+
+Centauri.Helper.VariablesHelper.__CE_SORTING = false;
