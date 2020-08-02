@@ -215,6 +215,7 @@
         </div>
 
         {{-- <script src="{{ asset('public/backend/js/centauri.min.js') }}" async defer></script> --}}
+
         <script src="{{ \Centauri\CMS\Helper\GulpRevHelper::include(
             \Centauri\CMS\Utility\PathUtility::getAbsURL("public/backend"),
             "js",
