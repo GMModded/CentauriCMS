@@ -2,9 +2,6 @@
 namespace Centauri\CMS\Bootstrapping;
 
 use Centauri\CMS\Centauri;
-use Illuminate\Database\Connection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 class CentauriBootstrapping
 {

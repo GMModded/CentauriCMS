@@ -3,7 +3,8 @@
 <div id="headerimage-{{ $element->uid }}" data-contentelement="headerimage">
     @if($element->image)
         <div class="image-view placeholder">
-            <img class="img-fluid w-100" data-src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($element->image) !!}" />
+            {!! $element->html !!}
+            {{-- <img class="img-fluid w-100" data-src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($element->image) !!}" /> --}}
         </div>
     @endif
 

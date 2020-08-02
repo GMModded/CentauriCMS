@@ -38,6 +38,9 @@ Centauri.Helper = {};
 Centauri.Helper.VariablesHelper = {};
 
 Centauri.Events = {};
+Centauri.Events.Window = {};
+Centauri.Events.Window.OnLoad = {};
+
 Centauri.Lib = {};
 Centauri.Listener = {};
 Centauri.Components = {};
@@ -96,6 +99,7 @@ Centauri.load = () => {
      */
     Centauri.Components.ModulesComponent({type: "init"});
     Centauri.Components.EditorComponent.init();
+    Centauri.Components.DropdownsComponent();
 
     /**
      * Listener handling the overlayer (for EditorComponent or ModalUtility)
@@ -110,12 +114,9 @@ Centauri.load = () => {
 
 
 /**
- * DOM ready - Initializing Centauri
- * 
- * @param {function} function - Self calling function by jQuery
- * @returns {void}
+ * Registration of CentauriCore listener for window.onload-event
  */
-$(document).ready(function() {
+Centauri.Events.Window.OnLoad.CentauriCore = () => {
     /**
      * Initializing Centauri Core Functions by this such as Centauri Core itself.
      */
@@ -130,4 +131,4 @@ $(document).ready(function() {
      * Initializations - mainly for functions which should happen after Centauri.load() has been called (async).
      */
     Centauri.Init.HeaderInit();
-});
+};

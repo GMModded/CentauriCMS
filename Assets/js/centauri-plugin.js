@@ -7,6 +7,6 @@
 //     return $(this).data(name);
 // };
 
-$.fn.hasAttr = (name) => {
-    return this.attr(name) !== undefined;
-};
+// $.fn.hasAttr = (name) => {
+//     return this.attr(name) !== undefined;
+// };

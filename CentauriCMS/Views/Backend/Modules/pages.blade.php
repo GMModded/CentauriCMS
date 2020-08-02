@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    <div id="pagecontent" class="col-lg p-3 position-relative" style="overflow-y: auto;">
+                    <div id="pagecontent" class="col-lg p-3 position-relative" style="overflow-x: hidden; overflow-y: auto;">
                         <h5 class="mb-0 h-100 align-items-center justify-content-center d-flex">
                             @if($data["pageTreeHTML"])
                                 Select a page from the pagetree

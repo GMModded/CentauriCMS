@@ -1,10 +1,13 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\Centauri;
 use Centauri\CMS\Model\File;
 use Centauri\CMS\Model\FileReference;
 use \Illuminate\Http\Request;
 use Centauri\CMS\Traits\AjaxTrait;
+use Centauri\CMS\Utility\PathUtility;
+use Illuminate\Support\Facades\Storage;
 
 class ImageAjax
 {
@@ -37,16 +40,63 @@ class ImageAjax
      * 
      * @return json|response
      */
-    public function saveCroppedDataByUidAjax(Request $request)
+    public function cropImageAjax(Request $request)
     {
+        $image = $request->image;
+        $mimeType = $image->getClientMimeType();
+
         $fileReferenceUid = $request->input("fileReferenceUid");
+        $data = $request->input("data");
+        $fileName = $request->input("fileName");
+        $view = $request->input("view");
+
+        $imageExt = explode("/", $mimeType)[1];
+
+        $imageFileName = $fileName . "." . $imageExt;
+
+        if($view != "default") {
+            $imageFileName = $view . "_" . $imageFileName;
+        }
+
+        Storage::disk("centauri_filelist")->put(
+            "cropped/" . $imageFileName,
+
+            base64_decode(
+                explode(
+                    "base64,",
+                    $image->get()
+                )[1]
+            )
+        );
 
         $fileReference = FileReference::where("uid", $fileReferenceUid)->get()->first();
-        $fileReference->data = $request->input("data");
+        dd($data);
+        $fileReference->data = $data;
 
-        echo "<img src='" . $request->input("data")["base64"] . "' class='img-fluid' />";
+        $pathUtility = Centauri::makeInstance(PathUtility::class);
+        $newImagePath = $pathUtility->getBaseURL("storage/Centauri/Filelist/cropped/" . $imageFileName);
 
-        if($fileReference->save()) {
+        /*
+        $exists = Storage::disk("centauri_filelist")->exists("cropped/$imageFileName");
+        if($exists) {
+            return response("The cropped image with the name '$imageFileName' already exists!", 500);
+        }
+        */
+
+        $file = new File;
+
+        $file->name = $fileName;
+        $file->path = $newImagePath;
+        $file->type = $mimeType;
+        $file->cropable = 1;
+
+        if($fileReference->save() && $file->save()) {
+            echo json_encode([
+                "type" => "success",
+                "title" => "Image-Cropper",
+                "description" => "Cropping of this Image has been saved"
+            ]);
+
             return json_encode([
                 "type" => "success",
                 "title" => "Image-Cropper",
@@ -54,6 +104,7 @@ class ImageAjax
             ]);
         }
 
+        echo "FALSE";
         return response("Something failed while saving this image (File-Reference) with cropping data", 500);
     }
 }

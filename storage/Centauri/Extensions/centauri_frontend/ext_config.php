@@ -2,6 +2,7 @@
 return [
     "name" => "centauri_frontend",
     "mainclass" => \Centauri\Extension\Frontend\Frontend::class,
+    // "status" => "DISABLED",
     "localizationFolder" => "Language",
     "state" => "Stable",
     "version" => "1.0",

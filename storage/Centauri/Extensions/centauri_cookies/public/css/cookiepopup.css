@@ -142,7 +142,7 @@
 #cookiepopup .ci-switch label span:after {
     content: " ";
     position: absolute;
-    top: -5px;
+    top: -3px;
     left: -5px;
     background-color: #f1f1f1;
     border-radius: 20px;

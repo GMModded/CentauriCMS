@@ -14,7 +14,8 @@
 
     &:active,
     &:focus,
-    &:hover {
+    &:hover,
+    &.active {
         outline: 0 !important;
         box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1875), 0 5px 15px 0 rgba(0, 0, 0, .15);
 
@@ -29,9 +30,14 @@
         }
     }
 
+    &.active {
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1875), 0 5px 15px 0 rgba(0, 0, 0, .15) !important;
+    }
+
     &:not([disabled]),
     &:not(.disabled) {
-        &:active {
+        &:active,
+        &.active {
             &.btn-primary { background-color: #0b51c5 !important; }
             &.btn-info    { background-color: #14799e !important; }
             &.btn-success { background-color: #006228 !important; }

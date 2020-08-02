@@ -45,8 +45,8 @@ Centauri.Components.ModulesComponent = (data) => {
             });
         });
 
-        setTimeout(function() {
-            if(Centauri.elExists($("#dashboard #modules .module.active"))) {
+        setTimeout(() => {
+            if(Centauri.elExists("#dashboard #modules .module.active")) {
                 $("#dashboard #modules .module.active").trigger("click");
             } else {
                 if((location.href + "/" == location.origin + Centauri.Utility.PathsUtility.root + Centauri.Utility.PathsUtility.centauri)) {

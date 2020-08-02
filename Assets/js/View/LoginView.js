@@ -2,6 +2,9 @@ Centauri.View.LoginView = () => {
     $("#login form").on("submit", this, function(e) {
         e.preventDefault();
 
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
         Centauri.fn.Ajax(
             "Backend",
             "login",
@@ -37,5 +40,7 @@ Centauri.View.LoginView = () => {
                 }
             }
         );
+
+        return false;
     });
 };

@@ -18,7 +18,7 @@
             }
         </style>
 
-        <link rel="stylesheet" href="{{ asset('public/backend/css/centauri.min.css') }}">
+        <link rel="stylesheet" href="{{ asset(mix('public/backend/css/centauri.min.css')) }}">
     </head>
 
     <body>
@@ -58,8 +58,8 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-12 mt-2">
-                                    <button class="btn btn-primary waves-effect w-100 m-0" type="submit">
+                                <div class="col-12 mt-2 text-right">
+                                    <button class="btn btn-primary waves-effect waves-light m-0" type="submit">
                                         Login
                                     </button>
                                 </div>
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <script async src="{{ asset('resources/js/centauri-env.js') }}"></script>
-        <script async src="{{ asset('public/backend/js/centauri.min.js') }}"></script>
+        <script src="{{ asset('resources/js/centauri-env.js') }}" async defer></script>
+        <script src="{{ asset('public/backend/js/centauri.min.js') }}" async defer></script>
     </body>
 </html>

@@ -9,8 +9,7 @@
                         {{ ($cookie->state ? " class=is-state" : "") }}
                         for="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($cookie->name) !!}"
                     >
-                        <input 
-                            type="checkbox"
+                        <input type="checkbox"
                             class="parent"
                             name="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($cookie->name) !!}"
                             id="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($cookie->name) !!}"
@@ -38,8 +37,7 @@
                                         {{ ($cookie->state ? " class=is-state" : "") }}
                                         for="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($childcookie->name) !!}"
                                     >
-                                        <input 
-                                            type="checkbox"
+                                        <input type="checkbox"
                                             class="child"
                                             name="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($childcookie->name) !!}"
                                             id="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($childcookie->name) !!}"

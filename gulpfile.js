@@ -1,85 +1,147 @@
-// gulpfile.js made for :: Gulp v4
-// => Due to changes of how tasks working in version (from 3 to) 4 of gulp,
-//    this can be used either as template (for testing purposes)
-//    or for productive [deployment] tasks.
+/**
+ * gulpfile.js v4
+ * 
+ * @author Mati Sediqi<mati_01@icloud.com>
+ * @description
+ * - This gulpfile can be used as a boilerplate to easier kickstart projects.
+ * - It includes a cache-bust-system (using timestamp as versioning-identifier),
+ * - which can be used for both local and production environments.
+ */
+
+/** Gulpfile Helper. */
+const GulpfileHelper = require("./gulpfile-helper.js");
+let gulpfileHelper = new GulpfileHelper();
+
+/** Compiler object (the node_modules which are required for this gulpfile.js) will be added dynamically if the module exists. */
+let compiler = {};
+
+let compilerModules = [
+	"gulp",
+	"gulp-clean",
+	"gulp-concat",
+	"gulp-terser-js",
+	"gulp-sass",
+	"gulp-minify-css",
+	"gulp-rev",
+	"del"
+];
+
+/** Checking if all modules are installed and if not adding those which ain't yet to display the developer which are still required / not found. */
+let missingCompilerModules = "";
+compilerModules.forEach((compilerModule, index) => {
+	if(!gulpfileHelper.moduleExists(compilerModule)) {
+		console.log(`The module: ${compilerModule} doesn't exists`);
+		// console.log(`Please install this module using yarn add ${compilerModule}`);
+		missingCompilerModules += compilerModule + " ";
+	}
+
+	if(missingCompilerModules == "") {
+		compiler[compilerModule] = require(compilerModule);
+	}
+});
+
+if(missingCompilerModules != "") {
+	missingCompilerModules = missingCompilerModules.replace(/.$/, "");
+	console.log("\nPlease install all necessary modules using the following command:");
+	console.log(`> yarn add ${missingCompilerModules}\n\n`);
+	return false;
+}
+
+let gulp = compiler["gulp"];
+let sass = compiler["gulp-sass"];
+let concat = compiler["gulp-concat"];
+let terser = compiler["gulp-terser-js"];
+let minify = compiler["gulp-minify-css"];
+let rev = compiler["gulp-rev"];
+let del = compiler["del"];
+
 
 // ============================================================================================================
-// Definitions
-var gulp     = require("gulp");
-	clean    = require("gulp-clean");
-	watch    = require("gulp-watch");
-	concat   = require("gulp-concat");
-	terser   = require("gulp-terser-js");
-	sass     = require("gulp-sass");
-	minify   = require("gulp-minify-css");
-
-
-// ============================================================================================================
-// Configurations
+/** Directory-Configuration */
 	inputSrc = "Assets/";
 	outputSrc = "public/backend/";
 	fileName = "centauri.min";
 
 
 // ============================================================================================================
-// For downloaded (via package-manager-tools (e.g. npm, yarn, pmt, etc.))
-// => when you"d like to use the downloaded package / module,
-//    you"ve to link it here in order the task for js recognize it and concat & uglifys it.
-// NOTE: Watch out for case-sensivity of directory names!
+/** node_modules */
+let modules = [
+	"jquery/jquery.min.js",
+	"jquery-ui/jquery-ui.min.js",
 
-	let modules = [
-		"jquery/jquery.min.js",
-		"jquery-ui/jquery-ui.min.js",
+	"waves/dist/waves.min.js",
+	"pickr/dist/pickr.min.js",
 
-		"waves/dist/waves.min.js",
-		"pickr/dist/pickr.min.js",
+	"ckeditor5/build/ckeditor.js",
 
-		"ckeditor5/build/ckeditor.js",
+	"cropperjs/dist/cropper.min.js",
+	"jquery-cropper/dist/jquery-cropper.js",
 
-		"cropperjs/dist/cropper.min.js",
-		"jquery-cropper/dist/jquery-cropper.js",
+	"jquery-focuspoint/js/jquery.focuspoint.min.js"
+];
 
-		"jquery-focuspoint/js/jquery.focuspoint.min.js"
-	];
-
-	let m = 0;
-	modules.forEach(_module => {
-		modules[m] = "packages/" + _module;
-		m++;
-	});
+modules.forEach((_module, index) => {
+	modules[index] = "packages/" + _module;
+});
 
 // ============================================================================================================
 // CSS Tasks
 
-gulp.task("css:build", function() {
+gulp.task("css:clean", () => {
+	return del([
+		outputSrc + "rev/css/*.css",
+		outputSrc + "css/*.css"
+	]);
+});
+
+gulp.task("css:build", () => {
 	return gulp.src(inputSrc + "scss/main.scss")
 		.pipe(sass().on("error", sass.logError))
 		.pipe(concat(fileName + ".css"))
 		.pipe(gulp.dest(outputSrc + "css"))
 });
-gulp.task("css:deploy", function() {
+
+gulp.task("css:deploy", () => {
 	return gulp.src(inputSrc + "scss/main.scss")
 		.pipe(sass().on("error", sass.logError))
-		.pipe(concat(fileName + ".css"))
-		.pipe(minify())
-		.pipe(gulp.dest(outputSrc + "css"))
+	.pipe(concat(fileName + ".css"))
+	.pipe(minify())
+
+	.pipe(rev())
+
+	.pipe(gulp.dest(outputSrc + "css"))
+	.pipe(rev.manifest("public/backend/rev-manifest.json", {
+		base: "public/backend",
+		merge: true
+	}))
+
+	.pipe(gulp.dest(outputSrc));
 });
 
 // ============================================================================================================
 // JS Tasks
 
-gulp.task("js:build", function() {
+gulp.task("js:clean", () => {
+	return del([
+		outputSrc + "rev/js/*.js",
+		outputSrc + "js/*.js"
+	]);
+});
+
+gulp.task("js:build", () => {
 	return gulp.src(
         Array.prototype.concat(
             modules,
 			inputSrc + "js/**/*.js"
         )
     )
+
 	.pipe(concat(fileName + ".js"))
+
 	.pipe(gulp.dest(outputSrc + "js"))
 });
 
-gulp.task("js:deploy", function() {
+gulp.task("js:deploy", () => {
 	return gulp.src(
         Array.prototype.concat(
             modules,
@@ -92,11 +154,19 @@ gulp.task("js:deploy", function() {
 		mangle: {
 			toplevel: true
 		}
-	})).on("error", function(error) {
+	})).on("error", (error) => {
 		this.emit("end")
 	})
 
-	.pipe(gulp.dest(outputSrc + "js"));
+	.pipe(rev())
+
+	.pipe(gulp.dest(outputSrc + "js"))
+	.pipe(rev.manifest("public/backend/rev-manifest.json", {
+		base: "public/backend",
+		merge: true
+	}))
+
+	.pipe(gulp.dest(outputSrc));
 });
 // ============================================================================================================
 
@@ -105,7 +175,7 @@ gulp.task("js:deploy", function() {
 // ============================================================================================================
 // Build with Watcher Task
 
-gulp.task("watch:build:task", function() {
+gulp.task("watch:build:task", () => {
 	gulp.watch(inputSrc + "scss/**/*.{sass,scss}", gulp.series("css:build"));
 	gulp.watch(inputSrc + "js/**/*.js", gulp.series("js:build"));
 });
@@ -124,9 +194,9 @@ gulp.task("build", gulp.series("css:build", "js:build",
 // ============================================================================================================
 // Deploy with Watcher Task
 
-gulp.task("watch:deploy:task", function() {
-	gulp.watch(inputSrc + "scss/**/*.{sass,scss}", gulp.series("css:deploy"));
-	gulp.watch(inputSrc + "js/**/*.js", gulp.series("js:deploy"));
+gulp.task("watch:deploy:task", () => {
+	gulp.watch(inputSrc + "scss/**/*.{sass,scss}", gulp.series("css:clean"), gulp.series("css:deploy"));
+	gulp.watch(inputSrc + "js/**/*.js", gulp.series("js:clean"), gulp.series("js:deploy"));
 });
 
 gulp.task("watch:deploy", gulp.series("css:deploy", "js:deploy", gulp.parallel("watch:deploy:task")));
@@ -138,5 +208,5 @@ gulp.task("watch:deploy", gulp.series("css:deploy", "js:deploy", gulp.parallel("
 // ============================================================================================================
 // Simple deploy task
 
-gulp.task("deploy", gulp.series("css:deploy", "js:deploy"));
+gulp.task("deploy", gulp.series("css:clean", "js:clean", "css:deploy", "js:deploy"));
 // ============================================================================================================

@@ -13,16 +13,16 @@
 @import "../../packages/bootstrap/scss/mixins";
 @import "../../packages/bootstrap/scss/functions";
 @import "../../packages/bootstrap/scss/variables";
-@import "../../../packages/bootstrap/dist/css/bootstrap.min.css";
+@import "../../packages/bootstrap/dist/css/bootstrap.min.css";
 
-@import "../../../packages/waves/dist/waves.min.css";
+@import "../../packages/waves/dist/waves.min.css";
 @import "../../packages/pickr/dist/themes/classic.min.css";
 
-@import "../../../packages/fontawesome5.12.0/css/fontawesome.min.css";
-@import "../../../packages/fontawesome5.12.0/css/solid.min.css";
-@import "../../../packages/fontawesome5.12.0/css/brands.min.css";
+@import "../../packages/fontawesome5.12.0/css/fontawesome.min.css";
+@import "../../packages/fontawesome5.12.0/css/solid.min.css";
+@import "../../packages/fontawesome5.12.0/css/brands.min.css";
 
-@import "../../../packages/cropperjs/dist/cropper.min.css";
+@import "../../packages/cropperjs/dist/cropper.min.css";
 
 /**
  * Centauri-Bootstrap
@@ -90,6 +90,11 @@
  */
  @import "Utility/tablewrapper";
  @import "Utility/modal";
+
+/**
+ * Views
+ */
+@import "View/CroppingView";
 
 /**
  * Libs

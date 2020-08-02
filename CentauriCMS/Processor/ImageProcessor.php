@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Processor;
 
+use Centauri\CMS\Model\FileReference;
 use Illuminate\Support\Str;
 
 class ImageProcessor
@@ -15,6 +16,12 @@ class ImageProcessor
             $value = [$value];
         }
 
-        return $value;
+        $fileReferences = FileReference::where("uid_element", $data["element"]->uid)->get()->all();
+
+        $data["element"]->html = view("Centauri::Frontend.Templates.image", [
+            "fileReferences" => $fileReferences
+        ])->render();
+
+        return $data;
     }
 }

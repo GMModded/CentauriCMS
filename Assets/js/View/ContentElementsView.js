@@ -129,43 +129,128 @@ Centauri.View.ContentElementsView = ($contentelement) => {
                     success: (data) => {
                         $("section#module_pages").append(data);
 
-                        /** Callback when crop image has been clicked */
-                        Centauri.Helper.VariablesHelper.__FN_CROP = (cropper) => {
-                            let cropBoxData = cropper.getCropBoxData();
-                            let base64 = cropper.getCroppedCanvas().toDataURL();
+                        CentauriJS.Utilities.Form.FieldHasValueUtility();
+                        Centauri.Components.AccordionComponent();
 
-                            Centauri.Helper.VariablesHelper.__BASE_64 = base64;
+                        let cropper = null;
+                        let $croppedImage = $("#cropped-image");
+                        let croppedImage = document.getElementById("cropped-image");
 
-                            let contentType = base64.split(";")[0];
-                                contentType = contentType.replace("data:", "");
+                        $croppedImage.cropper({
+                            viewMode: 2,
+                            aspectRatio: 0,
+                            preview: ".img-preview",
 
-                            $img.attr("src", base64);
+                            cropend: (e) => {
+                                let cropper = Centauri.Helper.VariablesHelper.__CROPPER.cropper;
+                                let view = Centauri.Helper.VariablesHelper.__CROPPER.responsiveView;
 
-                            let data = {
-                                cropBoxData: cropBoxData,
-                                base64: base64,
-                                contentType: contentType
+                                Centauri.Helper.VariablesHelper.__CROPPER.responsiveViewData[view] = {
+                                    base64: cropper.getCroppedCanvas().toDataURL(),
+                                    cropBoxData: cropper.getCropBoxData()
+                                };
+                            }
+                        });
+
+                        croppedImage.addEventListener("ready", () => {
+                            cropper = $croppedImage.data("cropper");
+
+                            Centauri.Helper.VariablesHelper.__CROPPER = {
+                                cropper: cropper,
+                                responsiveViewData: {}
                             };
 
-                            Centauri.fn.Ajax(
-                                "Image",
-                                "saveCroppedDataByUid",
+                            let $btn = $("#cropper-panel button[data-type='SET_RESPONSIVE_VIEW']").parent().eq(0).find("button");
+                                $btn.trigger("click");
+                        });
 
-                                {
-                                    fileReferenceUid: fileReferenceUid,
-                                    data: data
-                                },
+                        $("#cropper-panel button").each(function() {
+                            let $this = $(this);
 
-                                {
-                                    success: (data) => {
-                                        data = JSON.parse(data);
-                                        Centauri.Notify(data.type, data.title, data.description);
+                            $this.on("click", this, function() {
+                                let $this = $(this);
+
+                                let type = $this.data("type");
+                                let value = $this.data("value");
+
+                                let cropper = Centauri.Helper.VariablesHelper.__CROPPER.cropper;
+
+                                if($this.hasClass("cropper-btn")) {
+                                    $("#cropper-panel button.cropper-btn.active").removeClass("active");
+                                    $this.addClass("active");
+                                }
+
+                                if(type == "CROP_IMAGE") {
+                                    let responsiveViewDatas = Centauri.Helper.VariablesHelper.__CROPPER.responsiveViewData;
+
+                                    $.each(responsiveViewDatas, (key, responsiveViewData) => {
+                                        let base64 = responsiveViewData.base64;
+                                        let contentType = base64.split(";base64,")[0].replace("data:", "");
+
+                                        let data = {
+                                            cropBoxData: responsiveViewData.cropBoxData
+                                        };
+
+                                        let blob = new Blob([
+                                            base64
+                                        ], {
+                                            type: contentType
+                                        });
+
+                                        let formData = new FormData();
+                                            formData.append("fileReferenceUid", fileReferenceUid);
+                                            formData.append("fileName", $("#cropper_file_name").val());
+                                            formData.append("data", JSON.stringify(data));
+                                            formData.append("image", blob);
+                                            formData.append("view", key);
+
+                                        Centauri.fn.FileAjax(
+                                            "Image",
+                                            "cropImage",
+
+                                            formData,
+
+                                            {
+                                                success: (data) => {
+                                                    data = JSON.parse(data);
+                                                    Centauri.Notify(data.type, data.title, data.description);
+                                                }
+                                            }
+                                        );
+                                    });
+                                }
+
+                                if(type == "CROP_CLOSE") {
+                                    $("section#content > section > #cropper").remove();
+                                }
+
+                                if(type == "SET_ASPECT_RATIO") {
+                                    value = Centauri.Helper.CalcuateRatioAspectHelper(value);
+                                    cropper.setAspectRatio(value);
+                                }
+
+                                if(type == "SET_RESPONSIVE_VIEW") {
+                                    Centauri.Helper.VariablesHelper.__CROPPER.responsiveView = value;
+
+                                    if(Centauri.isNotUndefined(Centauri.Helper.VariablesHelper.__CROPPER.responsiveViewData[value])) {
+                                        let responsiveViewData = Centauri.Helper.VariablesHelper.__CROPPER.responsiveViewData[value];
+
+                                        let cropBoxData = responsiveViewData.cropBoxData;
+                                            cropper.setCropBoxData(cropBoxData);
+                                    } else {
+                                        Centauri.Helper.VariablesHelper.__CROPPER.responsiveView_button = $this;
+
+                                        let view = $this.data("value");
+                                        Centauri.Helper.VariablesHelper.__CROPPER.responsiveView = view;
+
+                                        Centauri.Helper.VariablesHelper.__CROPPER.responsiveViewData[view] = {
+                                            base64: cropper.getCroppedCanvas().toDataURL(),
+                                            cropBoxData: cropper.getCropBoxData()
+                                        };
                                     }
                                 }
-                            )
-
-                            $("section#content > section > #cropper").remove();
-                        };
+                            });
+                        });
                     }
                 }
             );

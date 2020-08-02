@@ -124,6 +124,18 @@ function CentauriCoreFunctions() {
      * @return {boolean}
      */
     Centauri.elExists = function(selector) {
+        if(typeof(selector) == "string") {
+            if(document.querySelectorAll(selector).length > 0) {
+                if(document.querySelectorAll(selector)[0].classList.contains("modal")) {
+                    if(document.querySelectorAll(selector)[0].classList.contains("show")) {
+                        return true;
+                    }
+                }
+            }
+
+            return (document.querySelectorAll(selector).length > 0 ? true : false);
+        }
+
         if($(selector).hasClass("modal")) {
             if($(selector).hasClass("show")) {
                 return true;

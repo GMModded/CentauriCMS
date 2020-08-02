@@ -44,25 +44,27 @@ var CentauriCookie = function() {
             };
         });
 
-        /** Accept all cookies-button - click event */
-        acceptAllCookiesBtn.onclick = function() {
-            Array.prototype.forEach.call(document.querySelectorAll("#cookiepopup input[type='checkbox']"), function(inputNode) {
-                cookieIdStr += inputNode.getAttribute("id") + ",";
-            });
-
-            acceptCookies(cookieIdStr);
-        };
-
-        /** Accept selected / checked (input fields) cookies-button - click event */
-        acceptSelectedCookiesBtn.onclick = function() {
-            Array.prototype.forEach.call(document.querySelectorAll("#cookiepopup input[type='checkbox']"), function(inputNode) {
-                if(inputNode.checked) {
+        if(document.getElementById("cookiepopup") != null) {
+            /** Accept all cookies-button - click event */
+            acceptAllCookiesBtn.onclick = function() {
+                Array.prototype.forEach.call(document.querySelectorAll("#cookiepopup input[type='checkbox']"), function(inputNode) {
                     cookieIdStr += inputNode.getAttribute("id") + ",";
-                }
-            });
+                });
 
-            acceptCookies(cookieIdStr);
-        };
+                acceptCookies(cookieIdStr);
+            };
+
+            /** Accept selected / checked (input fields) cookies-button - click event */
+            acceptSelectedCookiesBtn.onclick = function() {
+                Array.prototype.forEach.call(document.querySelectorAll("#cookiepopup input[type='checkbox']"), function(inputNode) {
+                    if(inputNode.checked) {
+                        cookieIdStr += inputNode.getAttribute("id") + ",";
+                    }
+                });
+
+                acceptCookies(cookieIdStr);
+            };
+        }
     }
 };
 
@@ -74,7 +76,8 @@ function setCookie(name, value, days) {
 
     if(days) {
         var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+
         expires = "; expires=" + date.toUTCString();
     }
 
@@ -87,8 +90,14 @@ function getCookie(name) {
 
     for(var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while(c.charAt(0) == " ") c = c.substring(1, c.length);
-        if(c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+
+        while(c.charAt(0) == " ") {
+            c = c.substring(1, c.length);
+        }
+
+        if(c.indexOf(nameEQ) == 0) {
+            return c.substring(nameEQ.length, c.length);
+        }
     }
 
     return null;

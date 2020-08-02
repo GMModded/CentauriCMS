@@ -43,16 +43,27 @@
             @foreach($fileReferences as $fileReference)
                 <div class="accordion ci-bs-1 mb-2">
                     <div class="top">
-                        {{ Centauri\CMS\BladeHelper\ImageBladeHelper::get($fileReference->uid_image)->name ?? "" }}
+                        <img 
+                            src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($fileReference->uid_image) !!}"
+                            class="img-fluid w-100"
+                            data-uid="{{ $fileReference->uid }}"
+                            data-data="{{ $fileReference->data }}"
+                            style="max-width: 125px; margin-top: -16px;margin-left: -16px;width: 132px !important;margin-bottom: -16px;"
+                        />
+
+                        <span class="ml-2 d-flex align-items-center">
+                            {{ $fileReference->title ?? "Image <i>(no title)</i>" }}
+                        </span>
                     </div>
 
                     <div class="bottom" style="display:none;">
                         <div class="row my-2">
-                            <div class="col-12 col-lg-3">
+                            <div class="col-12 col-lg-3 d-none">
                                 <img 
                                     src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($fileReference->uid_image) !!}"
-                                    class="img-fluid w-100"
+                                    class="img-fluid w-100 d-none"
                                     data-uid="{{ $fileReference->uid }}"
+                                    data-data="{{ $fileReference->data }}"
                                 />
                             </div>
 

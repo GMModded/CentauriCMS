@@ -245,10 +245,16 @@ AddType text/x-vcard                        vcf
   ExpiresByType image/svg+xml             "access plus 1 month"
 
 # CSS and JavaScript
-  ExpiresByType application/javascript    "access plus 1 year"
-  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType application/javascript    "access plus 1 week"
+  ExpiresByType text/css                  "access plus 1 week"
 
 </IfModule>
+
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+  Header set Cache-Control: "public, max-age=31536000"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+</FilesMatch>
 
 
 # ----------------------------------------------------------------------
