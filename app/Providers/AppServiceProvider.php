@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Component\ExtensionsComponent;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $extensionsComponent = Centauri::makeInstance(ExtensionsComponent::class);
         $extensionsComponent->loadExtensions();
+
+        Blade::directive("images", function($fileReference) {
+            dd($fileReference);
+        });
 
         // // Loads localization files of all extensions
         // $extensions = Storage::disk("centauri_extensions")->allDirectories();

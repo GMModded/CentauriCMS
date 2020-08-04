@@ -67,7 +67,7 @@
                                 />
                             </div>
 
-                            <div class="col-12 col-lg text-center">
+                            <div class="col-12 col-lg">
                                 <button class="btn btn-primary waves-effect waves-light p-3 mx-0 mt-3 mr-2" data-centauri-btn="cropimage">
                                     <i class="fas fa-crop-alt mr-2"></i>
 

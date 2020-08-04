@@ -70,8 +70,15 @@ class ImageAjax
         );
 
         $fileReference = FileReference::where("uid", $fileReferenceUid)->get()->first();
-        dd($data);
-        $fileReference->data = $data;
+
+        if(is_null($fileReference->data)) {
+            $dataArr[$view] = json_decode($data, true);
+        } else {
+            $dataArr[$view] = json_decode($data, true);
+            $dataArr = array_merge(json_decode($fileReference->data, true), $dataArr);
+        }
+
+        $fileReference->data = json_encode($dataArr);
 
         $pathUtility = Centauri::makeInstance(PathUtility::class);
         $newImagePath = $pathUtility->getBaseURL("storage/Centauri/Filelist/cropped/" . $imageFileName);

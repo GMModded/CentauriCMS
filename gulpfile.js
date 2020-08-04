@@ -97,8 +97,18 @@ gulp.task("css:clean", () => {
 gulp.task("css:build", () => {
 	return gulp.src(inputSrc + "scss/main.scss")
 		.pipe(sass().on("error", sass.logError))
-		.pipe(concat(fileName + ".css"))
-		.pipe(gulp.dest(outputSrc + "css"))
+
+	.pipe(concat(fileName + ".css"))
+
+	.pipe(rev())
+
+	.pipe(gulp.dest(outputSrc + "css"))
+	.pipe(rev.manifest("public/backend/rev-manifest.json", {
+		base: "public/backend",
+		merge: true
+	}))
+
+	.pipe(gulp.dest(outputSrc));
 });
 
 gulp.task("css:deploy", () => {
@@ -138,7 +148,15 @@ gulp.task("js:build", () => {
 
 	.pipe(concat(fileName + ".js"))
 
+	.pipe(rev())
+
 	.pipe(gulp.dest(outputSrc + "js"))
+	.pipe(rev.manifest("public/backend/rev-manifest.json", {
+		base: "public/backend",
+		merge: true
+	}))
+
+	.pipe(gulp.dest(outputSrc));
 });
 
 gulp.task("js:deploy", () => {
@@ -184,7 +202,7 @@ gulp.task("watch:build", gulp.series("css:build", "js:build",
 	gulp.parallel("watch:build:task")
 ));
 
-gulp.task("build", gulp.series("css:build", "js:build",
+gulp.task("build", gulp.series("css:clean", "css:build", "js:clean", "js:build",
 	gulp.parallel("watch:build")
 ));
 // ============================================================================================================

@@ -31,13 +31,13 @@
                     <i class="fas fa-trash-alt"></i>
                 </button>
 
-                <script id="elementsbladescript">
+                {{-- <script id="elementsbladescript">
                     if(Centauri.Helper.VariablesHelper.__CE_SORTING) {
                         $("#pagecontent .header button.sort i").css("transform", "rotate(135deg)");
                     }
 
                     $("#elementsbladescript").remove();
-                </script>
+                </script> --}}
             </div>
         </div>
     </div>

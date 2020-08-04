@@ -116,6 +116,7 @@ Centauri.View.ContentElementsView = ($contentelement) => {
         if(type == "cropimage") {
             let $img = $(this).parents(".bottom").find("img");
             let fileReferenceUid = $img.data("uid");
+            let imageData = $img.data("data");
 
             Centauri.fn.Ajax(
                 "Image",
@@ -141,6 +142,13 @@ Centauri.View.ContentElementsView = ($contentelement) => {
                             aspectRatio: 0,
                             preview: ".img-preview",
 
+                            crop: (e) => {
+                                let width = Math.ceil(e.detail.width);
+                                let height = Math.ceil(e.detail.height);
+
+                                $("#cropper_imgsizes").text(`${width} x ${height}`);
+                            },
+
                             cropend: (e) => {
                                 let cropper = Centauri.Helper.VariablesHelper.__CROPPER.cropper;
                                 let view = Centauri.Helper.VariablesHelper.__CROPPER.responsiveView;
@@ -157,7 +165,8 @@ Centauri.View.ContentElementsView = ($contentelement) => {
 
                             Centauri.Helper.VariablesHelper.__CROPPER = {
                                 cropper: cropper,
-                                responsiveViewData: {}
+                                responsiveViewData: {},
+                                imageData: imageData
                             };
 
                             let $btn = $("#cropper-panel button[data-type='SET_RESPONSIVE_VIEW']").parent().eq(0).find("button");
@@ -243,10 +252,14 @@ Centauri.View.ContentElementsView = ($contentelement) => {
                                         let view = $this.data("value");
                                         Centauri.Helper.VariablesHelper.__CROPPER.responsiveView = view;
 
-                                        Centauri.Helper.VariablesHelper.__CROPPER.responsiveViewData[view] = {
-                                            base64: cropper.getCroppedCanvas().toDataURL(),
-                                            cropBoxData: cropper.getCropBoxData()
-                                        };
+                                        // Centauri.Helper.VariablesHelper.__CROPPER.responsiveViewData[view] = {
+                                        //     base64: cropper.getCroppedCanvas().toDataURL(),
+                                        //     cropBoxData: cropper.getCropBoxData()
+                                        // };
+                                    }
+
+                                    if(Centauri.isNotUndefined(imageData[value])) {
+                                        cropper.setCropBoxData(imageData[value].cropBoxData);
                                     }
                                 }
                             });

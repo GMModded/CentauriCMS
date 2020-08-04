@@ -48,4 +48,14 @@ class FileReference extends Model
      * @var array
      */
     protected $attributes = [];
+
+    /**
+     * Getter for of the buttons of this slider item.
+     * 
+     * @return object|array|string
+     */
+    public function getData($array = true)
+    {
+        return json_decode($this->data, $array);
+    }
 }

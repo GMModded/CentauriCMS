@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\BladeHelper;
 
+use Centauri\CMS\Model\File;
 use Centauri\CMS\Model\FileReference;
 
 class ImageBladeHelper
@@ -59,5 +60,22 @@ class ImageBladeHelper
 
             dd($fileReference, $imageUid);
         }
+    }
+
+    public static function findPathByView($fileReference, $view)
+    {
+        if($view == "default") {
+            $view = "";
+        } else {
+            $view .= "_";
+        }
+
+        $file = File::where("uid", $fileReference->uid_image)->get()->first();
+
+        $file->path = str_replace("\\", "/", $file->path);
+        $file->path = str_replace("cropped/", "", $file->path);
+
+        $croppedImageViewPath = dirname($file->path) . "/cropped/" . $view . $file->name;
+        return $croppedImageViewPath;
     }
 }

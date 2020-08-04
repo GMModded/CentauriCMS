@@ -11,6 +11,10 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="img-preview preview-lg"></div>
+
+                        <div style="display: flex;justify-content: flex-end;position: absolute;right: 0;bottom: 15px;font-weight: bold;text-decoration: underline;color: white;background: rgba(0, 0, 0, .66);padding: 5px;">
+                            <p id="cropper_imgsizes" style="font-weight: bold;float: right;margin: 0;display: block;"></p>
+                        </div>
                     </div>
                 </div>
 
@@ -35,6 +39,24 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- <div class="row">
+                    <div class="col-12 col-lg">
+                        <div class="ci-field">
+                            <input 
+                                id="cropper_mediaquery_minwidth"
+                                data-id="cropper_mediaquery_minwidth"
+                                type="text"
+                                class="form-control"
+                                required
+                            />
+
+                            <label for="cropper_mediaquery_minwidth">
+                                Cropped Image Name
+                            </label>
+                        </div>
+                    </div>
+                </div> --}}
 
                 <div class="accordions">
                     @foreach(config("centauri")["Cropper"]["items"] as $item)
