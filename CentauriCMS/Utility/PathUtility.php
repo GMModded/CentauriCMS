@@ -31,4 +31,9 @@ class PathUtility
 
         return config("app")["url"] . ($path != "" ? "/" . $path : "");
     }
+
+    public static function getRequestedURL()
+    {
+        return $_SERVER["REQUEST_URI"];
+    }
 }

@@ -38,6 +38,8 @@ Centauri.Component.ATagComponent = () => {
     };
 
     $(window).bind("keydown", function(e) {
+        return;
+
         let reload = false;
         let char = String.fromCharCode(e.which).toLowerCase();
 

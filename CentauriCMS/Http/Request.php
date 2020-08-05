@@ -197,7 +197,8 @@ class Request
         $page = Page::find($page->uid);
         $uid = $page->getAttribute("uid");
 
-        $uniqid = preg_replace("/[^a-zA-Z0-9]+/", "", $host) . "-" . $page->uid;
+        // $uniqid = preg_replace("/[^a-zA-Z0-9]+/", "", $host) . "-" . $page->uid;
+        $uniqid = StaticFileCache::getUniqIdByHostPageUid($host, $page->uid);
 
         $renderedHTML = "";
 

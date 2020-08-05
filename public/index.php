@@ -1,5 +1,8 @@
 <?php
 
+use Centauri\CMS\Caches\StaticFileCache;
+use Centauri\CMS\Utility\PathUtility;
+
 define("CENTAURI_START", microtime(true));
 
 /**
@@ -25,38 +28,54 @@ define("LARAVEL_START", microtime(true));
 
 require __DIR__ . "/../vendor/autoload.php";
 
-/*
-|--------------------------------------------------------------------------
-| Turn On The Lights
-|--------------------------------------------------------------------------
-|
-| We need to illuminate PHP development, so let us turn on the lights.
-| This bootstraps the framework and gets it ready for use, then it
-| will load up this application so that we can run it and send
-| the responses back to the browser and delight our users.
-|
-*/
+/**
+ * Condition before actually capturing the request via Laravel to make sure
+ * that there's no cached version (served as pure .html-format-only) of the requested uri to optimize page speed at its best.
+ */
+$requestedUri = PathUtility::getRequestedURL();
+$staticFileCached = StaticFileCache::hasCacheKernel($requestedUri);
+$isNotCentauriBackend = strpos($requestedUri, "/centauri") === false;
 
-$app = require_once __DIR__ . "/../bootstrap/app.php";
+if($staticFileCached !== false && $isNotCentauriBackend) {
+    echo $staticFileCached;
+} else {
+    /*
+    |--------------------------------------------------------------------------
+    | Turn On The Lights
+    |--------------------------------------------------------------------------
+    |
+    | We need to illuminate PHP development, so let us turn on the lights.
+    | This bootstraps the framework and gets it ready for use, then it
+    | will load up this application so that we can run it and send
+    | the responses back to the browser and delight our users.
+    |
+    */
 
-/*
-|--------------------------------------------------------------------------
-| Run The Application
-|--------------------------------------------------------------------------
-|
-| Once we have the application, we can handle the incoming request
-| through the kernel, and send the associated response back to
-| the client's browser allowing them to enjoy the creative
-| and wonderful application we have prepared for them.
-|
-*/
+    $app = require_once __DIR__ . "/../bootstrap/app.php";
 
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+    /*
+    |--------------------------------------------------------------------------
+    | Run The Application
+    |--------------------------------------------------------------------------
+    |
+    | Once we have the application, we can handle the incoming request
+    | through the kernel, and send the associated response back to
+    | the client's browser allowing them to enjoy the creative
+    | and wonderful application we have prepared for them.
+    |
+    */
 
-$response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
-);
+    $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
-$response->send();
+    $response = $kernel->handle(
+        $request = Illuminate\Http\Request::capture()
+    );
 
-$kernel->terminate($request, $response);
+    if($isNotCentauriBackend) {
+        StaticFileCache::setCacheKernel($requestedUri, $response->getContent());
+    }
+
+    $response->send();
+
+    $kernel->terminate($request, $response);
+}

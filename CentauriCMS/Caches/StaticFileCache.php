@@ -142,4 +142,43 @@ class StaticFileCache
 
         return true;
     }
+
+    /**
+     * Returns the unique identifier (uniqid) of a static file cache by its host and its page-uid.
+     * > Example: centauricmsde-1 (for centauricms.de and page uid '1')
+     * 
+     * @param string $host The hostname of the static file cache.
+     * @param string $uid The page uid which has been requested.
+     * 
+     * @return string
+     */
+    public static function getUniqIdByHostPageUid($host, $uid = -1)
+    {
+        if($uid == -1) {
+            dd("ksmk not found");
+        }
+
+        return preg_replace("/[^a-zA-Z0-9]+/", "", $host) . "-" . $uid;
+    }
+
+    public static function hasCacheKernel($requestedUri)
+    {
+        $pathToCachedFile = dirname(__FILE__) . "/../../storage/Centauri/temp/Cache" . $requestedUri . ".html";
+
+        $exists = file_exists($pathToCachedFile);
+
+        if($exists) {
+            return file_get_contents($pathToCachedFile);
+        }
+
+        return $exists;
+    }
+
+    public static function setCacheKernel($requestedUri, $data)
+    {
+        if(self::hasCacheKernel($requestedUri) === false) {
+            $pathToCachedFile = dirname(__FILE__) . "/../../storage/Centauri/temp/Cache" . $requestedUri . ".html";
+            file_put_contents($pathToCachedFile, $data);
+        }
+    }
 }
