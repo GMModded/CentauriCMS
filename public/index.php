@@ -34,7 +34,7 @@ require __DIR__ . "/../vendor/autoload.php";
  */
 $requestedUri = PathUtility::getRequestedURL();
 $staticFileCached = StaticFileCache::hasCacheKernel($requestedUri);
-$isNotCentauriBackend = strpos($requestedUri, "/centauri") === false;
+$isNotCentauriBackend = strpos($requestedUri, "/centauri/") === false;
 
 if($staticFileCached !== false && $isNotCentauriBackend) {
     echo $staticFileCached;
