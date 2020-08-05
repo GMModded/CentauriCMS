@@ -72,10 +72,11 @@ class ImageBladeHelper
 
         $file = File::where("uid", $fileReference->uid_image)->get()->first();
 
-        $file->path = str_replace("\\", "/", $file->path);
         $file->path = str_replace("cropped/", "", $file->path);
 
-        $croppedImageViewPath = dirname($file->path) . "/cropped/" . $view . $file->name;
+        $croppedImageViewPath = dirname($file->path) . "/Filelist/cropped/" . $view . $file->name;
+        // dd($croppedImageViewPath);
+
         return $croppedImageViewPath;
     }
 }

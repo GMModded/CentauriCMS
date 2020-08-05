@@ -81,7 +81,7 @@ class ImageAjax
         $fileReference->data = json_encode($dataArr);
 
         $pathUtility = Centauri::makeInstance(PathUtility::class);
-        $newImagePath = $pathUtility->getBaseURL("storage/Centauri/Filelist/cropped/" . $imageFileName);
+        // $newImagePath = $pathUtility->getBaseURL("storage/Centauri/Filelist/cropped/" . $imageFileName);
 
         /*
         $exists = Storage::disk("centauri_filelist")->exists("cropped/$imageFileName");
@@ -92,8 +92,8 @@ class ImageAjax
 
         $file = new File;
 
-        $file->name = $fileName;
-        $file->path = $newImagePath;
+        $file->name = $imageFileName;
+        $file->path = $pathUtility->getBaseURL("storage/Centauri/Filelist/cropped/");
         $file->type = $mimeType;
         $file->cropable = 1;
 

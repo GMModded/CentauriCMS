@@ -1,0 +1,13 @@
+.image-view img {
+    width: 100%;
+}
+
+.image-view img:not(.default) {
+    display: none;
+}
+
+@media (max-width: 1399px)                                                      { .image-view img.default { display: none; } }
+@media (min-width: 1200px) and (max-width: 1399px)                              { .image-view img.desktop { display: block; } }
+@media (min-width: 768px) and (max-width: 1199px) and (orientation: portrait)   { .image-view img.tablet-portrait { display: block; } }
+@media (min-width: 768px) and (max-width: 1199px) and (orientation: landscape)  { .image-view img.tablet-landscape { display: block; } }
+@media (max-width: 767px)                                                       { .image-view img.mobile { display: block; } }

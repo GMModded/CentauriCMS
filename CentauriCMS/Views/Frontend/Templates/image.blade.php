@@ -11,12 +11,12 @@
         <source media="(min-width: 1200px)" srcset="">
     </picture>
 
-@elseif($type == "image"){!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "default") !!}
-    <img class="d-none d-xl-block" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "default") !!}" />
-    <img class="d-none d-lg-block" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "desktop") !!}" />
-    <img class="d-none d-md-block" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "tablet-portrait") !!}" />
-    <img class="d-none d-sm-block" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "tablet-landscape") !!}" />
-    <img class="d-block d-sm-none" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "mobile") !!}" />
+@elseif($type == "image")
+    <img class="img-fluid rounded default" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "default") !!}" />
+    <img class="img-fluid rounded desktop" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "desktop") !!}" />
+    <img class="img-fluid rounded tablet-portrait" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "tablet-portrait") !!}" />
+    <img class="img-fluid rounded tablet-landscape" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "tablet-landscape") !!}" />
+    <img class="img-fluid rounded mobile" src="{!! \Centauri\CMS\BladeHelper\ImageBladeHelper::findPathByView($fileReference, "mobile") !!}" />
 
 @endif
 

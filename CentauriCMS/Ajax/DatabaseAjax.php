@@ -78,7 +78,7 @@ class DatabaseAjax extends ServiceProvider
             $path = Storage::disk("centauri_filelist")->path($fileItem);
             $mimeType = \Illuminate\Support\Facades\File::mimeType($path);
 
-            $storagePath = "\\storage\\Centauri\\Filelist\\$fileItem";
+            $storagePath = "/storage/Centauri/Filelist/";
 
             $cropable = 0;
             if(Str::contains($mimeType, "image")) {

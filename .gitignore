@@ -13,6 +13,8 @@ yarn-error.log
 # Centauri
 /resources/js/centauri-env.js
 
+/public/backend/*/centauri-*.*
+
 /storage/Centauri/Domains/*.json
 /storage/Centauri/Filelist/*
 /storage/Centauri/temp

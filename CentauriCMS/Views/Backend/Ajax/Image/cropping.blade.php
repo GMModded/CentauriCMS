@@ -3,7 +3,7 @@
         <div class="row h-100">
             <div class="col-12 col-lg-8 h-100 px-lg-0">
                 <div class="d-flex h-100 justify-content-center align-items-center">
-                    <img id="cropped-image" class="img-fluid w-100" src="{{ $file->path }}" />
+                    <img id="cropped-image" class="img-fluid w-100" src="{{ $file->path }}/{{ $file->name }}" />
                 </div>
             </div>
 
