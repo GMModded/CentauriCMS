@@ -9,17 +9,11 @@ return [
 
     /** @see https://docs.centauricms.de/config/caching */
     "config" => [
-
         /** @see https://docs.centauricms.de/config/caching */
         "Caching" => [
-            "state" => false,
+            "state" => true,
             "type" => "STATIC_FILE_CACHE", # DEFAULT or STATIC_FILE_CACHE
-            "imagesToBase64" => true,
-
-            "staticFiles" => [
-                public_path("backend/js/centauri.min.js"),
-                public_path("backend/css/centauri.min.css")
-            ]
+            "imagesToBase64" => false
         ],
 
         /** @see https://docs.centauricms.de/config/frontend */
@@ -33,7 +27,7 @@ return [
     /** Backend Layouts */
     "beLayouts" => [
         "default" => [
-            /** NOTE: When using AdditionalDatas within the same class here, those additionaldata calls has to be moved into the static rendering method! */
+            /** NOTE: When using AdditionalDatas within the same class here, those additionaldata-calls has to be moved into the static rendering method! */
             "rendering" => \Centauri\Extension\Frontend\Frontend::class,
             "template" => "centauri_frontend::Frontend.Templates.Page.frontend",
             "label" => "backend/be_layout.layouts.default.label",
@@ -208,7 +202,9 @@ return [
             "colorpicker" => [
                 "label" => "Color",
                 "type" => "input",
-                "renderAs" => "colorpicker"
+                "renderAs" => [
+                    "type" => "colorpicker"
+                ]
             ],
 
             "grid_fullsize" => [

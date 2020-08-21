@@ -1,3 +1,18 @@
+/**
+ * An array of callbacks which handles what should/will happen when an user accepted the cookies x, y and z or denied all.
+ * 
+ * @var CentauriCookieCallbacks 
+ */
+var CentauriCookieCallbacks = [];
+
+/**
+ * This function is mainly for the functionality of parent-infinite-child check.
+ * It's written in pure vanilla JavaScript to avoid a dependency of jQuery.
+ * It uses vanilla also to make sure its Browser Support is more extended than using a compiler (like Babel etc).
+ * 
+ * @var {function} CentauriCookie
+ * @returns {void}
+ */
 var CentauriCookie = function() {
     if(getCookie("cookiebox") == "null" || getCookie("cookiebox") == null) {
         /** Selectors */
@@ -44,7 +59,9 @@ var CentauriCookie = function() {
             };
         });
 
-        if(document.getElementById("cookiepopup") != null) {
+        if(typeof document.getElementById("cookiepopup") == "object") {
+            console.log(acceptAllCookiesBtn);
+
             /** Accept all cookies-button - click event */
             acceptAllCookiesBtn.onclick = function() {
                 Array.prototype.forEach.call(document.querySelectorAll("#cookiepopup input[type='checkbox']"), function(inputNode) {
@@ -109,6 +126,13 @@ function eraseCookie(name) {
 
 /** ======================================================================================== */
 
+/**
+ * acceptCookies is the function which handles the click event when clicking on the CTA-Button of the Cookie Policy (which accept, logically and obviously, all cookies).
+ * 
+ * @param {string} cookieIdStr The string of the generated cookie for the entire GLOBAL Frontend of the website.
+ * 
+ * @returns {void}
+ */
 function acceptCookies(cookieIdStr) {
     cookieIdStr = cookieIdStr.replace(/.$/, "");
     setCookie("cookiebox", cookieIdStr, 365);
@@ -116,5 +140,13 @@ function acceptCookies(cookieIdStr) {
     document.getElementById("cookiepopup").style.display = "none";
     document.getElementById("cookiepopupoverlayer").style.display = "none";
 
-    location.reload();
+    if(typeof CentauriCookieCallbacks != "undefined" && (CentauriCookieCallbacks.length > 0)) {
+        CentauriCookieCallbacks.forEach(function(callback) {
+            callback();
+        });
+    } else {
+        location.reload();
+    }
 }
+
+window.addEventListener("load", CentauriCookie);

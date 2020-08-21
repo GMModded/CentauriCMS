@@ -77,6 +77,10 @@ class ImageBladeHelper
         $croppedImageViewPath = dirname($file->path) . "/Filelist/cropped/" . $view . $file->name;
         // dd($croppedImageViewPath);
 
+        if($view == "") {
+            $croppedImageViewPath = str_replace("/cropped/", "/", $croppedImageViewPath);
+        }
+
         return $croppedImageViewPath;
     }
 }

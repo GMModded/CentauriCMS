@@ -30,7 +30,7 @@ window.onload = () => {
         }
     });
 
-    CentauriCookie();
+    // console.log(typeof CentauriCookie);
 
     Centauri.Event.OnWindowLoadEvent();
 

@@ -6,11 +6,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>CentauriCMS » {{ isset($title) ? $title : "" }}</title>
-        <link rel="stylesheet" href="{{ \Centauri\CMS\Helper\GulpRevHelper::include(
-            \Centauri\CMS\Utility\PathUtility::getAbsURL("public/backend"),
-            "css",
-            "centauri.min.css"
-        ) }}">
+
+        @if(!isset($data["LOGIN_AJAX"]))
+            <link rel="stylesheet" href="{{ \Centauri\CMS\Helper\GulpRevHelper::include(
+                "/public/backend",
+                "css",
+                "centauri.min.css"
+            ) }}">
+        @endif
     </head>
 
     <body>
@@ -215,13 +218,15 @@
 
         {{-- <script src="{{ asset('public/backend/js/centauri.min.js') }}" async defer></script> --}}
 
-        <script src="{{ \Centauri\CMS\Helper\GulpRevHelper::include(
-            \Centauri\CMS\Utility\PathUtility::getAbsURL("public/backend"),
-            "js",
-            "centauri.min.js"
-        ) }}" async defer></script>
+        @if(!isset($data["LOGIN_AJAX"]))
+            <script src="{{ \Centauri\CMS\Helper\GulpRevHelper::include(
+                "/public/backend",
+                "js",
+                "centauri.min.js"
+            ) }}" async defer></script>
 
-        <script src="{{ asset('resources/js/centauri-env.js') }}" async defer></script>
+            <script src="{{ asset('resources/js/centauri-env.js') }}" async defer></script>
+        @endif
 
         <script>
             var Centauri__trans = {!! $data["localizedArr"] !!}

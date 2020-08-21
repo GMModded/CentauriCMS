@@ -7,11 +7,10 @@
         top: 0;
         left: 0;
         width: 100%;
-        padding: 2rem;
-        background: linear-gradient(180deg, #303a4f, #2a3345);
+        padding: 0 15px;
         z-index: 100;
-        padding: .75rem .5rem !important;
         height: 100px;
+        background: transparent;
         transition: $transition_66;
 
         @include media-breakpoint-down(lg) {
@@ -28,6 +27,11 @@
             height: 6px;
             background-color: #4285f4;
             box-shadow: 0 0 10px #000;
+            display: none;
+        }
+
+        .nav-wrapper {
+            padding: 0 15px;
         }
 
         .wrappers {

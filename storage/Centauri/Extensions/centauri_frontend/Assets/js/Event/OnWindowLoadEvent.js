@@ -2,6 +2,7 @@ Centauri.Event.OnWindowLoadEvent = () => {
     Centauri.Service.PusherService();
 
     Centauri.Event.OnWindowResizeEvent();
+
     window.onresize = () => {
         Centauri.Event.OnWindowResizeEvent();
     };

@@ -1,7 +1,6 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
-use Illuminate\Http\Request;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Event\OnNewElementEvent;
 use Centauri\CMS\Exception\CentauriException;
@@ -10,6 +9,7 @@ use Centauri\CMS\Model\Element;
 use Centauri\CMS\Model\FileReference;
 use Centauri\CMS\Traits\AjaxTrait;
 use Centauri\CMS\Utility\DomainsUtility;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ContentElementsAjax
@@ -417,11 +417,11 @@ class ContentElementsAjax
 
                     foreach($fieldsValues as $field => $fieldDataArr) {
                         if(
-                            (\Str::contains($field, "image_")
-                        ||
-                            \Str::contains($field, "file_"))
-                        && 
-                            \Str::contains($field, ":")
+                            (Str::contains($field, "image_") ||
+                                Str::contains($field, "file_")
+                            ) && 
+
+                            Str::contains($field, ":")
                         ) {
                             $field = str_replace("file_", "", $field);
                             $field = str_replace("image_", "", $field);
@@ -441,7 +441,7 @@ class ContentElementsAjax
                             $values = [];
 
                             if($CCEfields[$field]["type"] == "file" || $CCEfields[$field]["type"] == "image") {
-                                if(\Str::contains($value, ",")) {
+                                if(Str::contains($value, ",")) {
                                     $values = explode(",", $value);
                                 } else {
                                     $values = [$value];
@@ -484,12 +484,11 @@ class ContentElementsAjax
                         }
                     }
 
-                    // foreach($fieldsValues as $field => $fieldDataArr) {
-                    //     $value = $fieldDataArr["value"];
-                    //     $element->setAttribute($field, $value);
-                    // }
-
-                    $element->save();
+                    try {
+                        $element->save();
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        return response($e->getMessage(), 500);
+                    }
                 } else {
                     if($key == "undefined") {
                         dd($tableInfo);
@@ -520,7 +519,11 @@ class ContentElementsAjax
                         }
                     }
 
-                    $model->save();
+                    try {
+                        $element->save();
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        return response($e->getMessage(), 500);
+                    }
                 }
             }
         }
@@ -717,7 +720,7 @@ class ContentElementsAjax
                 $nSpittedTop = "";
 
                 foreach($splittedTop as $topItem) {
-                    if(\Str::contains($topItem, "{") && \Str::contains($topItem, "}")) {
+                    if(Str::contains($topItem, "{") && Str::contains($topItem, "}")) {
                         $topItem = str_replace("{", "", $topItem);
                         $topItem = str_replace("}", "", $topItem);
 

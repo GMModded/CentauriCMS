@@ -56,6 +56,7 @@ class PageAjax
             $page->lid = $parentPage->lid ?? 1;
             $page->slugs = $data["url"] ?? "/";
             // $page->storage_id = $parentPage->uid;
+            $page->domain_id = $parentPage->uid;
         }
 
         return $this->savePage($page);

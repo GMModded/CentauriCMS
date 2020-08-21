@@ -1,6 +1,7 @@
 <?php
 namespace Centauri\CMS\Ajax;
 
+use Centauri\CMS\Centauri;
 use Illuminate\Http\Request;
 use Centauri\CMS\Model\File;
 use Centauri\CMS\Traits\AjaxTrait;
@@ -22,26 +23,25 @@ class DatabaseAjax extends ServiceProvider
      */
     public function updateAjax(Request $request)
     {
-        // $sqlFiles = config("centauri")["SQLFiles"];
+        /**
+         * DB::unprepared(file_get_contents($path)); -> loads a .sql-file
+         * require_once($path); -> loads a .php-file
+         */
 
-        // foreach($sqlFiles as $sqlFile) {
-        //     Centauri::makeInstance($sqlFile);
-        // }
 
         $sqlFiles = Storage::disk("centauri_core_sql")->allFiles();
 
         // Laoding SQL files from Centauri-Core first
         foreach($sqlFiles as $sqlFile) {
             $path = base_path("CentauriCMS/SQL/" . $sqlFile);
-            // DB::unprepared(file_get_contents($path));
             require_once($path);
         }
 
         // Loading SQL files from extensions
         $extensionsDirs = Storage::disk("centauri_extensions")->allDirectories();
-        $extensionsFiles = Storage::disk("centauri_extensions")->allFiles();
+        $extensionsFiles = Storage::disk("centauri_extensions")->allFiles("SQL");
 
-        $extensions = []; // array_merge($extensionsDirs, $extensionsFiles);
+        $extensions = array_merge($extensionsDirs, $extensionsFiles);
 
         foreach($extensions as $extension) {
             if(!Str::contains($extension, "/")) {
@@ -49,8 +49,10 @@ class DatabaseAjax extends ServiceProvider
 
                 foreach($extSQLFiles as $extSQLFile) {
                     $extSQLPath = storage_path("Centauri/Extensions/$extSQLFile");
-                    DB::unprepared(file_get_contents($extSQLPath));
-                    // require_once($extSQLPath);
+
+                    if(\Illuminate\Support\Str::endsWith($extSQLPath, ".php")) {
+                        require_once($extSQLPath);
+                    }
                 }
             }
         }

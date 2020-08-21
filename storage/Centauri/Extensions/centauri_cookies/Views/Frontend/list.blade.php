@@ -5,10 +5,7 @@
         <div class="col-12">
             <div class="cookie">
                 <div class="ci-switch">
-                    <label 
-                        {{ ($cookie->state ? " class=is-state" : "") }}
-                        for="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($cookie->name) !!}"
-                    >
+                    <label class="{{ ($cookie->state ? "is-state" : "") }}" for="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($cookie->name) !!}">
                         <input type="checkbox"
                             class="parent"
                             name="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($cookie->name) !!}"
@@ -33,10 +30,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="ci-switch">
-                                    <label 
-                                        {{ ($cookie->state ? " class=is-state" : "") }}
-                                        for="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($childcookie->name) !!}"
-                                    >
+                                    <label class="{{ ($cookie->state ? "is-state" : "") }}" for="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($childcookie->name) !!}">
                                         <input type="checkbox"
                                             class="child"
                                             name="{!! Centauri\CMS\BladeHelper\StringToUniqueIdBladeHelper::conv($childcookie->name) !!}"

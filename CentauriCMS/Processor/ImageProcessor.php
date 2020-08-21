@@ -18,6 +18,8 @@ class ImageProcessor
 
         $fileReferences = FileReference::where("uid_element", $data["element"]->uid)->get()->all();
 
+        // dd($fileReferences);
+
         $data["element"]->html = view("Centauri::Frontend.Templates.image", [
             "fileReferences" => $fileReferences
         ])->render();

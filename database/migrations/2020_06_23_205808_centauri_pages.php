@@ -41,6 +41,7 @@ class CentauriPages extends Migration
             $table->string("page_type")->default("rootpage");
             $table->tinyInteger("storage_id")->default(null)->nullable();
             $table->tinyInteger("domain_id")->default(null)->nullable();
+            $table->integer("sorting");
         });
 
         $page = new Page;

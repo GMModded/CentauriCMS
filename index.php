@@ -1,12 +1,15 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set("display_errors", "On");
+
 /**
- * CentauriCMS - Content Management System made using Laravel +7.x
+ * CentauriCMS v7 - Content Management System made using Laravel 7
  * 
  * @package CentauriCMS
- * @author  M.S. <GMModded@centauricms.de>
  */
 include_once __DIR__ . "/CentauriCMS/Application/CentauriApplication.php";
+
 $Centauri = new \Centauri\CMS\Application\CentauriApplication();
 $Centauri = $Centauri->Centauri;
 

@@ -25,8 +25,6 @@ class InlineRecordsAjax
      */
     public function listAjax(Request $request)
     {
-        dd("LEL");
-
         $type = $request->input("type");
 
         if($type == "files") {
@@ -41,7 +39,7 @@ class InlineRecordsAjax
             $files = [];
 
             foreach($uids as $uid) {
-                $files[] = File::where("uid", $uid)->get()->first();
+                $files[$uid] = File::where("uid", $uid)->get()->first();
             }
 
             return view("Centauri::Backend.Modals.inlineRecords", [

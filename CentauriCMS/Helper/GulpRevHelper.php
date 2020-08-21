@@ -22,13 +22,15 @@ class GulpRevHelper
     {
         $manifestFilePath = $path . "/" . $manifestFileName;
 
-        // if(!file_exists($manifestFilePath)) {
-        //     Centauri::throwStaticException("The rev-manifest.json file could not be found - path which has been checked: '" . $manifestFilePath . "'");
-        // }
+        if(!file_exists($manifestFilePath)) {
+            return "$path/$subdir/$name";
+        }
 
         $content = json_decode(file_get_contents($manifestFilePath));
 
         if(!isset($content->$name)) {
+            return "$path/$subdir/$name";
+
             Centauri::throwStaticException("The rev-manifest.json doesn't contains the identifier $name");
         }
 

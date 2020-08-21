@@ -11,10 +11,7 @@ class ExtensionsComponent
 {
     public function loadExtensions()
     {
-        $extensionsDirs = Storage::disk("centauri_extensions")->allDirectories();
-        $extensionsFiles = Storage::disk("centauri_extensions")->allFiles();
-
-        $extensions = array_merge($extensionsDirs, $extensionsFiles);
+        $extensions = Storage::disk("centauri_extensions")->directories();
 
         foreach($extensions as $extension) {
             if(!Str::contains($extension, "/")) {
@@ -38,7 +35,7 @@ class ExtensionsComponent
                             }
                         }
 
-                        if(!isset($GLOBALS["Centauri"]["Extensions"][$extName])) {
+                        // if(!isset($GLOBALS["Centauri"]["Extensions"][$extName])) {
                             if($loadExtension) {
                                 $mainclass = $config["mainclass"];
 
@@ -50,10 +47,13 @@ class ExtensionsComponent
                                     }
                                 }
 
-                                Centauri::makeInstance($mainclass);
-                                $GLOBALS["Centauri"]["Extensions"][$extName] = $config;
+                                Centauri::makeInstance($mainclass)->init();
+
+                                if(!isset($GLOBALS["Centauri"]["Extensions"][$extName])) {
+                                    $GLOBALS["Centauri"]["Extensions"][$extName] = $config;
+                                }
                             }
-                        }
+                        // }
                     }
                 }
             }

@@ -45,7 +45,8 @@ class BackendAjax
                     "modules" => $GLOBALS["Centauri"]["Modules"],
                     "localizedArr" => $localizedArr,
                     "dashboard" => $_GET["dashboard"] ?? "1",
-                    "beuser" => $user
+                    "beuser" => $user,
+                    "loadedBy" => "LOGIN_AJAX"
                 ]
             ])->render();
 

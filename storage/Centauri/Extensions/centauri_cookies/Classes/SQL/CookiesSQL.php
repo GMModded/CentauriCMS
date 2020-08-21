@@ -1,11 +1,13 @@
 <?php
 
+use \Centauri\CMS\Service\SQLService;
+
 $table = "cookies";
-\SQLService::createTable($table);
+SQLService::createTable($table);
 
-\SQLService::createInlineRecordColumns($table);
+SQLService::createInlineRecordColumns($table);
 
-\SQLService::createColumn($table, "name", "string");
-\SQLService::createColumn($table, "teaser", "text");
-\SQLService::createColumn($table, "state", "tinyInteger");
-\SQLService::createColumn($table, "cookies", "integer");
+SQLService::createColumn($table, "name", "string");
+SQLService::createColumn($table, "teaser", "text");
+SQLService::createColumn($table, "state", "tinyInteger");
+SQLService::createColumn($table, "cookies", "integer");

@@ -55,6 +55,7 @@
             "Centauri\\CMS\\BladeHelper\\": "CentauriCMS/BladeHelper/",
             "Centauri\\CMS\\Bootstrapping\\": "CentauriCMS/Bootstrapping/",
             "Centauri\\CMS\\Caches\\": "CentauriCMS/Caches/",
+            "Centauri\\CMS\\CentauriServer\\": "CentauriCMS/CentauriServer/",
             "Centauri\\CMS\\Component\\": "CentauriCMS/Component/",
             "Centauri\\CMS\\Controller\\": "CentauriCMS/Controller/",
             "Centauri\\CMS\\Event\\": "CentauriCMS/Event/",

@@ -1,9 +1,13 @@
 <?php
 
 use Centauri\CMS\Caches\StaticFileCache;
+use Centauri\CMS\Centauri;
+use Centauri\CMS\CentauriServer;
+use Centauri\CMS\CentauriServer\KernelLevelCaching;
 use Centauri\CMS\Utility\PathUtility;
 
 define("CENTAURI_START", microtime(true));
+
 
 /**
  * Laravel - A PHP Framework For Web Artisans
@@ -28,59 +32,72 @@ define("LARAVEL_START", microtime(true));
 
 require __DIR__ . "/../vendor/autoload.php";
 
+
 /**
- * Condition before actually capturing the request via Laravel to make sure
- * that there's no cached version (served as pure .html-format-only) of the requested uri to optimize page speed at its best.
+ * CentauriCMS - Server-Level-Configuration
+ * 
+ * This configuration handling will take care before actual web-/http-requests are sent to the server.
+ * Those could be for use when e.g. making a Kernel-Level-Caching (as below) or anything similiar.
  */
-$requestedUri = PathUtility::getRequestedURL();
-$staticFileCached = StaticFileCache::hasCacheKernel($requestedUri);
+$centauriServer = Centauri::makeInstance(CentauriServer::class);
 
-$filteredArr = [
-    "/centauri/",
-    "Filelist",
-    "/storage/"
-];
+$centauriServerConfig = $centauriServer->init();
 
-if($staticFileCached !== false && !in_array($requestedUri, $filteredArr)) {
-    echo $staticFileCached;
-} else {
-    /*
-    |--------------------------------------------------------------------------
-    | Turn On The Lights
-    |--------------------------------------------------------------------------
-    |
-    | We need to illuminate PHP development, so let us turn on the lights.
-    | This bootstraps the framework and gets it ready for use, then it
-    | will load up this application so that we can run it and send
-    | the responses back to the browser and delight our users.
-    |
-    */
-
-    $app = require_once __DIR__ . "/../bootstrap/app.php";
-
-    /*
-    |--------------------------------------------------------------------------
-    | Run The Application
-    |--------------------------------------------------------------------------
-    |
-    | Once we have the application, we can handle the incoming request
-    | through the kernel, and send the associated response back to
-    | the client's browser allowing them to enjoy the creative
-    | and wonderful application we have prepared for them.
-    |
-    */
-
-    $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-
-    $response = $kernel->handle(
-        $request = Illuminate\Http\Request::capture()
-    );
-
-    if(!in_array($requestedUri, $filteredArr)) {
-        StaticFileCache::setCacheKernel($requestedUri, $response->getContent());
-    }
-
-    $response->send();
-
-    $kernel->terminate($request, $response);
+if(
+    $centauriServerConfig["KERNEL_LEVEL_CACHING"]["status"] &&
+    $centauriServerConfig["KERNEL_LEVEL_CACHING"]["__handle"]
+) {
+    return;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Turn On The Lights
+|--------------------------------------------------------------------------
+|
+| We need to illuminate PHP development, so let us turn on the lights.
+| This bootstraps the framework and gets it ready for use, then it
+| will load up this application so that we can run it and send
+| the responses back to the browser and delight our users.
+|
+*/
+
+$app = require_once __DIR__ . "/../bootstrap/app.php";
+
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can handle the incoming request
+| through the kernel, and send the associated response back to
+| the client's browser allowing them to enjoy the creative
+| and wonderful application we have prepared for them.
+|
+*/
+
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+
+$response = $kernel->handle(
+    $request = Illuminate\Http\Request::capture()
+);
+
+/**
+ * CentauriCMS - Kernel-Level-Caching
+ * 
+ * The cache will only be set if the config for this is active (manually) to true and it's not filtered.
+ */
+if($centauriServerConfig["KERNEL_LEVEL_CACHING"]["status"]) {
+    $kernelLevelCaching = Centauri::makeInstance(KernelLevelCaching::class);
+
+    if(!$kernelLevelCaching->cachableRequestUri()) {
+        StaticFileCache::setCacheKernel(
+            PathUtility::getRequestedURL(),
+            $response->getContent()
+        );
+    }
+}
+
+$response->send();
+
+$kernel->terminate($request, $response);

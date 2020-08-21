@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\View;
 class Centauri extends ServiceProvider
 {
     /**
-     * Centauri Core version
+     * Centauri Core version.
      * 
      * @var string $version
      */
-    protected static $version = "1.0";
+    protected static $version = "7.0";
 
     /**
-     * Centauri Core state-version
+     * Centauri Core state-version.
      * 
      * @var string $state
      */
@@ -42,7 +42,7 @@ class Centauri extends ServiceProvider
     protected static $throwExceptionOnAjax = true;
 
     /**
-     * Tables for initDB-method
+     * Tables for initDB-method.
      * 
      * @var array $tables
      */
@@ -55,28 +55,28 @@ class Centauri extends ServiceProvider
     ];
 
     /**
-     * CentauriCMS root directory
+     * CentauriCMS root directory.
      * 
      * @var static $centauriDir string
      */
     protected static $centauriDir = __DIR__;
 
     /**
-     * Centauri Modules-Service
+     * Centauri Modules-Service.
      * 
      * @var class $modulesService class
      */
     private $modulesService;
 
     /**
-     * Centauri Path-Service
+     * Centauri Path-Service.
      * 
      * @var class $pathService class
      */
     private $pathService;
 
     /**
-     * Centauri Core Constructor
+     * Centauri Core Constructor.
      */
     public function __construct()
     {
@@ -94,11 +94,11 @@ class Centauri extends ServiceProvider
 
 
     /**
-     * Makes an instance of the given $class param
+     * Makes an instance of the given $class param.
      * 
-     * @param class $class - Class name as class-object
+     * @param class $class Class name as class-object.
      * 
-     * @return class
+     * @return mixed
      */
     public static function makeInstance($class, $params = [])
     {
@@ -106,7 +106,7 @@ class Centauri extends ServiceProvider
     }
 
     /**
-     * Initialization of the backend when an user logged into it
+     * Initialization of the backend when an user logged into it.
      * 
      * @return void
      */
@@ -124,6 +124,8 @@ class Centauri extends ServiceProvider
 
     /**
      * Initialization of the tables which are required in order to run Centauri properly.
+     * 
+     * @return void
      */
     public function initDB()
     {
@@ -136,7 +138,7 @@ class Centauri extends ServiceProvider
 
     /**
      * Determines if the application is running on production (e.g. live) mode
-     * And returns possibly true, else false.
+     * and returns possibly true, else false.
      * 
      * @return boolean
      */
@@ -156,7 +158,7 @@ class Centauri extends ServiceProvider
 
     /**
      * Determines if the application is running in local (e.g. docker/development) mode
-     * And returns possibly true, else false.
+     * and returns possibly true, else false.
      * 
      * @return boolean
      */
@@ -253,5 +255,29 @@ class Centauri extends ServiceProvider
     public static function FrontendUser()
     {
         return Centauri::makeInstance(FrontendUser::class);
+    }
+
+    public static function getHookByKey($key)
+    {
+        return $GLOBALS["Centauri"]["Hooks"][$key] ?? null;
+    }
+
+    public static function getArrayBetweenKeys($array, $startKey, $endKey, $imploded = false)
+    {
+        $result = [];
+
+        for($i = $startKey; $i != $endKey + 1; $i++) {
+            $value = $array[$i];
+
+            if($value != "") {
+                $result[] = $value;
+            }
+        }
+
+        if($imploded) {
+            return implode("", $result);
+        }
+
+        return $result;
     }
 }

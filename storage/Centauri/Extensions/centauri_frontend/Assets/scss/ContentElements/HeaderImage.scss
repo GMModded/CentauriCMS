@@ -1,8 +1,11 @@
 #{ce("headerimage")} {
     position: relative;
 
-    & > div {
-        .image-view::before {
+    .image-view {
+        max-height: 100vh;
+        overflow: hidden;
+
+        &:before {
             content: " ";
             position: absolute;
             top: 0;
@@ -12,25 +15,18 @@
             background-color: rgba(0, 0, 0, .5);
         }
 
-        .text-view {
-            padding-bottom: 45px;
-
-            & > div {
-                & > div {
-                    cursor: default;
-                    transition: $transition_66;
-
-                    &:hover {
-                        box-shadow: 0 16px 28px 0 rgba(0,0,0,.22),0 25px 55px 0 rgba(0,0,0,.21)!important;
-                    }
-                }
-            }
+        img {
+            width: 100%;
+            transform: scale(1.1);
+            filter: blur(10px);
         }
+    }
 
-        .boxitem {
-            p {
-                margin-bottom: 0;
-            }
-        }
+    .text-view {
+        position: absolute;
+        top: calc(50% + 100px);
+        left: 50%;
+        transform: translate(-50%, calc(-50% - 100px));
+        width: 100%;
     }
 }

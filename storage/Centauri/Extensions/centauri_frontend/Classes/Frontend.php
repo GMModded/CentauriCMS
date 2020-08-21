@@ -4,43 +4,44 @@ namespace Centauri\Extension\Frontend;
 use Centauri\CMS\Abstracts\ExtensionAbstract;
 use Centauri\CMS\Centauri;
 use Centauri\CMS\Component\ElementComponent;
+use Centauri\CMS\Interfaces\ExtensionInterface;
 use Centauri\CMS\Resolver\ViewResolver;
 use Centauri\CMS\Service\BodyAdditionalDataService;
 use Centauri\CMS\Service\HeadAdditionalDataService;
 use Centauri\Extension\Cookie\Models\ParentCookieModel;
 use Centauri\Extension\Frontend\Elements\Elements;
+use Centauri\Extension\Frontend\Hook\KernelStaticFileCacheGetCacheHook;
+use Centauri\Extension\Frontend\Hook\KernelStaticFileCacheSetCacheHook;
 use Centauri\Extension\Frontend\Http\Routes;
 
-class Frontend extends ExtensionAbstract
+class Frontend extends ExtensionAbstract implements ExtensionInterface
 {
     /**
-     * Constructor of this class
-     * 
+     * Initialization of this Extension's main class.
+     *
      * @return void
      */
-    public function __construct()
+    public function init()
     {
         $this->setExtensionKey("centauri_frontend");
 
-        /** Registration of additional head tag for CSS file */
+        /** Registration of additional head- and body-tags for CSS- and JS-file. */
         HeadAdditionalDataService::add("centauri_frontend", \Centauri\Extension\Frontend\AdditionalDatas\HeadTagAdditionalDatas::class);
-
-        /** Registration of additional body tag for JS file */
         BodyAdditionalDataService::add("centauri_frontend", \Centauri\Extension\Frontend\AdditionalDatas\BodyTagAdditionalDatas::class);
 
-        /** Register of all Frontend Elements */
+        /** Register of all Frontend Elements. */
         Centauri::makeInstance(Elements::class);
 
-        /** Register of Configuration-Array for $GLOBALS["Centauri"]["Extensions"][$this->extensionKey] */
+        /** Register of Configuration-Array for $GLOBALS["Centauri"]["Extensions"][$this->extensionKey]. */
         $GLOBALS["Centauri"]["Extensions"][$this->getExtensionKey()] = $this->getConfig();
 
-        /** Register of custom pageNotFound Handler */
+        /** Register of custom pageNotFound Handler. */
         $GLOBALS["Centauri"]["Handlers"]["pageNotFound"] = \Centauri\Extension\Frontend\Http\PageNotFound::class;
 
-        /** Views registration for this extension */
+        /** Views registration for this extension. */
         ViewResolver::register($this->getExtensionKey(), "EXT:" . $this->getExtensionKey() . "/Views");
 
-        /** Custom route logic for frontend login */
+        /** Custom route logic for frontend login. */
         Centauri::makeInstance(Routes::class);
     }
 
@@ -104,5 +105,12 @@ class Frontend extends ExtensionAbstract
             "contentColHTML" => $contentColHTML,
             "cookies" => $cookies
         ])->render();
+    }
+
+    public function kernelRegistrationLoader()
+    {
+        /** Registration of Hooks for KernelStaticFileCache (Set-/GetCache) */
+        $GLOBALS["Centauri"]["Hooks"]["Cache"]["KernelStaticFileCache"]["setCache"]["centauri_frontend"] = KernelStaticFileCacheSetCacheHook::class;
+        $GLOBALS["Centauri"]["Hooks"]["Cache"]["KernelStaticFileCache"]["getCache"]["centauri_frontend"] = KernelStaticFileCacheGetCacheHook::class;
     }
 }

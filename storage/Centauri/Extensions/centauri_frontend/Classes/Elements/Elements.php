@@ -6,10 +6,15 @@ use Centauri\CMS\Service\ElementService;
 
 class Elements
 {
+    /**
+     * ElementService class instance.
+     * 
+     * @var ElementService
+     */
     public $ElementService;
 
     /**
-     * Constructor for this Elements class
+     * Constructor for this Elements class.
      * 
      * @return void
      */
@@ -75,7 +80,9 @@ class Elements
                         "bgcolor" => [
                             "label" => "Background-Color",
                             "type" => "input",
-                            "renderAs" => "colorpicker"
+                            "renderAs" => [
+                                "type" => "colorpicker"
+                            ]
                         ],
 
                         "link" => [
@@ -122,7 +129,9 @@ class Elements
                         "bgcolor" => [
                             "label" => "Background-Color",
                             "type" => "input",
-                            "renderAs" => "colorpicker"
+                            "renderAs" => [
+                                "type" => "colorpicker"
+                            ]
                         ]
                     ]
                 ]
@@ -180,17 +189,46 @@ class Elements
                         "bgcolor_start" => [
                             "label" => "Background-Color - Gradient - Start",
                             "type" => "input",
-                            "renderAs" => "colorpicker"
+                            "renderAs" => [
+                                "type" => "colorpicker"
+                            ]
                         ],
 
                         "bgcolor_end" => [
                             "label" => "Background-Color - Gradient - End",
                             "type" => "input",
-                            "renderAs" => "colorpicker"
+                            "renderAs" => [
+                                "type" => "colorpicker"
+                            ]
                         ]
                     ]
                 ]
-            ]
+            ],
+
+            "bgoverlayer" => [
+                "label" => "Background Overlayer",
+                "type" => "input",
+                "renderAs" => [
+                    "type" => "colorpicker"
+                ]
+            ],
+
+            "slug" => [
+                "type" => "input",
+                "label" => "SLUG YA KOSOMK",
+
+                "renderAs" => [
+                    "type" => "button",
+                    "action" => "generate-slug",
+                    "sourceField" => "header",
+                    "iconClass" => "fas fa-sync-alt"
+                ],
+
+                "config" => [
+                    "required" => 1,
+                    "readOnly" => 1
+                ]
+            ],
         ]);
 
         $this->ElementService->setElements([
@@ -206,6 +244,7 @@ class Elements
             "headerimage" => [
                 "image",
                 "header;subheader",
+                "bgoverlayer;slug",
                 "RTE"
             ],
 

@@ -89,8 +89,9 @@ gulp.task("css:clean", () => {
 gulp.task("css:build", () => {
 	return gulp.src(inputSrc + "scss/main.scss")
 		.pipe(sass().on("error", sass.logError))
-		.pipe(concat(fileName + ".css"))
-		.pipe(gulp.dest(outputSrc + "css"))
+	.pipe(concat(fileName + ".css"))
+
+	.pipe(gulp.dest(outputSrc + "css"))
 });
 
 gulp.task("css:deploy", () => {
@@ -127,7 +128,6 @@ gulp.task("js:build", () => {
 			inputSrc + "js/**/*.js"
         )
     )
-
 	.pipe(concat(fileName + ".js"))
 
 	.pipe(gulp.dest(outputSrc + "js"))
@@ -176,9 +176,7 @@ gulp.task("watch:build", gulp.series("css:build", "js:build",
 	gulp.parallel("watch:build:task")
 ));
 
-gulp.task("build", gulp.series("css:build", "js:build",
-	gulp.parallel("watch:build")
-));
+gulp.task("build", gulp.series("watch:build"));
 // ============================================================================================================
 
 

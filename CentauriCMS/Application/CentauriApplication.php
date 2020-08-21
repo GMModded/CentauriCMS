@@ -6,7 +6,7 @@ use \Centauri\CMS\AdditionalDatas;
 class CentauriApplication
 {
     /**
-     * This is Centauri's core array.
+     * This is Centauri's Core array.
      * 
      * Extensions may manipulate e.g. AdditionalDatas with their own Datas by hooking
      * into the CentauriApplication class and update the public-array $this->Centauri.
@@ -90,6 +90,15 @@ class CentauriApplication
                 "VariablesHelper" => [
                     "__ContentElementsAjax__IteratorForFields" => 0,
                     "__LoadedViews" => []
+                ]
+            ],
+
+            "Hooks" => [
+                "Cache" => [
+                    "KernelStaticFileCache" => [
+                        "setCache" => [],
+                        "getCache" => []
+                    ]
                 ]
             ],
 

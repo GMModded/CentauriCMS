@@ -1,13 +1,16 @@
 <?php
 namespace Centauri\Extension\Cookie;
 
+use Centauri\CMS\Abstracts\ExtensionAbstract;
+use Centauri\CMS\Interfaces\ExtensionInterface;
 use Centauri\CMS\Resolver\ViewResolver;
-use Exception;
+use Centauri\CMS\Service\BodyAdditionalDataService;
+use Centauri\CMS\Service\HeadAdditionalDataService;
 
-class Cookie
+use \Centauri\Extension\Cookie\AdditionalDatas as CookieAdditionalDatas;
+
+class Cookie extends ExtensionAbstract implements ExtensionInterface
 {
-    private $extKey = "centauri_cookies";
-
     /**
      * The (parent) model namespace.
      * 
@@ -23,17 +26,19 @@ class Cookie
     private $childModelNamespace = "\Centauri\Extension\Cookie\Models\ChildCookieModel";
 
     /**
-     * The constructor for this extension.
+     * Initialization of this Extension's main class.
      * 
      * @return void
      */
-    public function __construct()
+    public function init()
     {
+        $this->setExtensionKey("centauri_cookies");
+
         /** Views registration for this extension */
-        ViewResolver::register($this->extKey, "EXT:" . $this->extKey . "/Views");
+        ViewResolver::register($this->getExtensionKey(), "EXT:" . $this->getExtensionKey() . "/Views");
 
         /** Cookies Plugin */
-        $GLOBALS["Centauri"]["Plugins"][$this->extKey . "_pi1"] = [
+        $GLOBALS["Centauri"]["Plugins"][$this->getExtensionKey() . "_pi1"] = [
             "Cookies Plugin" => "\Centauri\Extension\Cookie\Plugins\CookiePlugin"
         ];
 
@@ -48,7 +53,7 @@ class Cookie
             "fields" => [
                 "name" => [
                     "type" => "input",
-                    "label" => trans($this->extKey . "::backend/global.label.name"),
+                    "label" => trans($this->getExtensionKey() . "::backend/global.label.name"),
                     "additionalClasses" => "preview-update-title"
                 ],
 
@@ -106,10 +111,8 @@ class Cookie
             ]
         ];
 
-        /** Registration of additional head tag for CSS file */
-        $GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Head"][] = \Centauri\Extension\Cookie\AdditionalDatas\HeadTagAdditionalDatas::class;
-
-        /** Registration of additional body tag for JS file */
-        $GLOBALS["Centauri"]["AdditionalDataFuncs"]["Frontend"]["Tags"]["Body"][] = \Centauri\Extension\Cookie\AdditionalDatas\BodyTagAdditionalDatas::class;
+        /** Registration of additional head- and body-tags for CSS- and JS-file. */
+        HeadAdditionalDataService::add("centauri_cookie", CookieAdditionalDatas\HeadTagAdditionalDatas::class);
+        BodyAdditionalDataService::add("centauri_cookie", CookieAdditionalDatas\BodyTagAdditionalDatas::class);
     }
 }

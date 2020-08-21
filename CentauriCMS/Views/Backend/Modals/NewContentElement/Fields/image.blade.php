@@ -41,8 +41,8 @@
     <div class="accordions inline-records mt-2" data-type="image">
         @if(isset($fileReferences) && !empty($fileReferences))
             @foreach($fileReferences as $fileReference)
-                <div class="accordion ci-bs-1 mb-2">
-                    <div class="top">
+                <div class="accordion mb-2">
+                    <div class="top ci-bs-1">
                         <img 
                             src="{!! Centauri\CMS\BladeHelper\ImageBladeHelper::getPath($fileReference->uid_image) !!}"
                             class="img-fluid w-100"
@@ -56,7 +56,7 @@
                         </span>
                     </div>
 
-                    <div class="bottom" style="display:none;">
+                    <div class="bottom ci-bs-1" style="display:none;">
                         <div class="row my-2">
                             <div class="col-12 col-lg-3 d-none">
                                 <img 

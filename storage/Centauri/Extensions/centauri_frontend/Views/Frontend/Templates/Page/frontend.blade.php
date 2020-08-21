@@ -5,11 +5,12 @@
     $time = time();
 
     $domain = $origPage->getDomain();
+
     if(!is_null($domain)) {
         $startId = $origPage->getDomain()->rootpageuid;
     } else {
         $startId = 0;
-        dd("HH PRANK YA BRO", $origPage);
+        dd("HH PRANK YA BRO", $origPage, $domain);
     }
 @endphp
 
@@ -28,55 +29,49 @@
                         <div class="indeterminate" style="background:white;"></div>
                     </div>
 
-                    <div class="container h-100">
-                        <div class="row h-100">
-                            <div class="col-12">
-                                <div class="row h-100 wrappers">
-                                    <div class="col-2 logo align-items-center d-flex h-100">
-                                        <a href="/" class="anim-underline" style="color: #fff;font-size: 28px;letter-spacing: -1px;font-weight: bold;">
-                                            CentauriCMS
+                    <div class="nav-wrapper justify-content-space-between h-100-childs flex-centration-childs flex-ai-center-childs px-3">
+                        <div>
+                            <a href="/" class="anim-underline" style="color: #fff;font-size: 28px;font-weight: bold;color: #ff699b;font-family: fatfrank;">
+                                CentauriCMS
+                            </a>
+                        </div>
+
+                        <ul class="list-unstyled w-100 justify-content-center">
+                            @foreach(Centauri\CMS\BladeHelper\BuildBladeHelper::treeByPid($startId, $origPage->uid, $origPage->lid) as $page)
+                                @if($page->page_type == "page" && $page->storage_id == null)
+                                    <li class="px-2">
+                                        <a 
+                                            class="nav-item anim-underline{{ $page->current ? ' active' : '' }}"
+                                            href="{{ Centauri\CMS\BladeHelper\BuildBladeHelper::linkByUid($page->uid) }}"
+                                            data-uid="{{ $page->uid }}"
+                                        >
+                                            {{ $page->title }}
                                         </a>
-                                    </div>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
 
-                                    <div class="col desktop d-xl-flex d-none" style="justify-content: flex-end;">
-                                        <ul class="list-unstyled d-flex align-items-center h-100">
-                                            @foreach(Centauri\CMS\BladeHelper\BuildBladeHelper::treeByPid($startId, $origPage->uid, $origPage->lid) as $page)
-                                                @if($page->page_type == "page" && $page->storage_id == null)
-                                                    <li class="px-2">
-                                                        <a 
-                                                            class="nav-item anim-underline{{ $page->current ? ' active' : '' }}"
-                                                            href="{{ Centauri\CMS\BladeHelper\BuildBladeHelper::linkByUid($page->uid) }}"
-                                                            data-uid="{{ $page->uid }}"
-                                                        >
-                                                            {{ $page->title }}
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                            @endforeach
+                        <div>
+                            <a 
+                                href="{!!
+                                    \Centauri\CMS\BladeHelper\URIBladeHelper::linkAction(
+                                        "\Centauri\Extension\Frontend\Controller\FrontendController",
+                                        "login"
+                                    )
+                                !!}"
+                                style="font-size: 16px; text-transform: capitalize; border-radius: 0;"
+                                class="nav-item btn btn-hotpink px-3 py-2 waves-effect waves-light"
+                            >
+                                Login
+                            </a>
+                        </div>
 
-                                            <a 
-                                                href="{!!
-                                                    \Centauri\CMS\BladeHelper\URIBladeHelper::linkAction(
-                                                        "\Centauri\Extension\Frontend\Controller\FrontendController",
-                                                        "login"
-                                                    )
-                                                !!}"
-                                                style="font-size: 16px; text-transform: capitalize; border-radius: 0;"
-                                                class="nav-item btn btn-info px-3 py-2 ml-3 waves-effect waves-light"
-                                            >
-                                                Login
-                                            </a>
-                                        </ul>
-                                    </div>
-
-                                    <div class="col mobile d-block d-xl-none">
-                                        <div id="hamburger">
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="col mobile d-block d-xl-none p-xl-0">
+                            <div id="hamburger">
+                                <span></span>
+                                <span></span>
+                                <span></span>
                             </div>
                         </div>
                     </div>

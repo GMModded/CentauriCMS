@@ -18,30 +18,36 @@
         }
     }
 
-if(isset($fieldConfig["ciFieldAdditionalClasses"])) {
-    $ciFieldAdditionalClasses .= " " . $fieldConfig["ciFieldAdditionalClasses"];
-}
+    if(isset($fieldConfig["ciFieldAdditionalClasses"])) {
+        $ciFieldAdditionalClasses .= " " . $fieldConfig["ciFieldAdditionalClasses"];
+    }
 
-if(isset($fieldConfig["additionalClasses"])) {
-    $additionalClasses .= " " . $fieldConfig["additionalClasses"];
-}
+    if(isset($fieldConfig["additionalClasses"])) {
+        $additionalClasses .= " " . $fieldConfig["additionalClasses"];
+    }
+
+    // if(isset($fieldConfig["renderAs"])) dd($jsonData, $renderAs, $dataRenderAsStr, $additionalClasses, $ciFieldAdditionalClasses);
 @endphp
 
 <div class="ci-field{{ $ciFieldAdditionalClasses }}"{{ $dataRenderAsStr }}>
     @if($dataRenderAsStr != "")
         @switch($fieldConfig["renderAs"]["type"])
             @case("button")
-                <button
+                <button 
                     class="btn btn-default waves-effect waves-light"
                     data-centauri-btn="{{ $jsonData }}"
                     style="padding: 10px 15px;margin: 10px 0;"
                 >
-                    <i class="fas fa-sync-alt"></i>
+                    @php
+                        $iconClass = json_decode($jsonData, true)["iconClass"] ?? "fas";
+                    @endphp
+
+                    <i class="{{ $iconClass }}"></i>
                 </button>
                 @break
 
             @case("colorpicker")
-                <div class="color-picker" class="position-absolute" style="margin-top: 10px;"></div>
+                <div class="color-picker position-absolute" style="margin-top: 10px;"></div>
                 @break
             @default
         @endswitch
