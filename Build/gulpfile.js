@@ -81,7 +81,7 @@ let modules = [
 ];
 
 modules.forEach((_module, index) => {
-	modules[index] = "../packages/" + _module;
+	modules[index] = "../lib/" + _module;
 });
 
 gulp.task("rev:del", () => {
