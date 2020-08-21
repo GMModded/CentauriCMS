@@ -1,5 +1,5 @@
 Centauri.Service.CKEditorInitService = () => {
-	console.log("555");
+	console.log("CKEDITORINITSERVICE: @todo CUSTOM CKEDITOR?");
 
 	/*
     if(!!$(".ck.ck-reset_all.ck-body.ck-rounded-corners").length) {
