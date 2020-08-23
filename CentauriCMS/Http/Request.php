@@ -42,6 +42,7 @@ class Request
         }
 
         if(is_null($domain)) {
+            dd(DomainsUtility::findAll());
             throw new Exception("The requested domain could not be resolved");
         }
 
@@ -299,6 +300,10 @@ class Request
         if($throwNotFound) {
             $additionalHeadTagContent = FrontendRenderingHandler::getAdditonalHeadTagContent();
             $additionalBodyTagContent = FrontendRenderingHandler::getAdditonalBodyTagContent();
+
+            if(!isset($GLOBALS["Centauri"]["Handlers"]["pageNotFound"])) {
+                var_dump("Page not found");
+            }
 
             $class = Centauri::makeInstance($GLOBALS["Centauri"]["Handlers"]["pageNotFound"]);
 

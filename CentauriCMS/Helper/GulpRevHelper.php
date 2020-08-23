@@ -20,7 +20,7 @@ class GulpRevHelper
      */
     public static function include($path, $subdir, $name, $manifestFileName = "rev-manifest.json")
     {
-        $manifestFilePath = $path . "/" . $manifestFileName;
+        $manifestFilePath = __DIR__ . "/../.." . $path . "/" . $manifestFileName;
 
         if(!file_exists($manifestFilePath)) {
             return "$path/$subdir/$name";
@@ -29,7 +29,7 @@ class GulpRevHelper
         $content = json_decode(file_get_contents($manifestFilePath));
 
         if(!isset($content->$name)) {
-            return "$path/$subdir/$name";
+            // return "$path/$subdir/$name";
 
             Centauri::throwStaticException("The rev-manifest.json doesn't contains the identifier $name");
         }

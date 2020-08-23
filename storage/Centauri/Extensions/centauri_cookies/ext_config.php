@@ -1,5 +1,4 @@
 <?php
-
 return [
     "name" => "centauri_cookies",
     "mainclass" => Centauri\Extension\Cookie\Cookie::class,

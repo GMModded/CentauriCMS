@@ -1,7 +1,7 @@
 {
     "id": "Main",
     "ssl": false,
-    "domain": "centauri.msediqi.lan",
+    "domain": "test.msediqi.lan",
     "rootpageuid": "1",
     "pageNotFound": "3"
 }

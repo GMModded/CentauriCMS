@@ -7,7 +7,7 @@ return [
     ],
 
     "KERNEL_LEVEL_CACHING" => [
-        "status" => true,
+        "status" => false,
         "callback" => \Centauri\CMS\Caches\KernelLevelCache::class,
 
         "filteredSlugs" => [

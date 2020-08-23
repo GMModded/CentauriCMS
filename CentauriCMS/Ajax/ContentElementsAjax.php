@@ -9,6 +9,7 @@ use Centauri\CMS\Model\Element;
 use Centauri\CMS\Model\FileReference;
 use Centauri\CMS\Traits\AjaxTrait;
 use Centauri\CMS\Utility\DomainsUtility;
+use Centauri\CMS\Utility\ToastUtility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -362,6 +363,10 @@ class ContentElementsAjax
         $elements = $CCE["elements"];
 
         $elementShowsFields = $elements[$ctype] ?? null;
+
+        if(is_null($elementShowsFields)) {
+            return response("This element has no shown-fields configuration.", 500);
+        }
 
         foreach($GLOBALS["Centauri"]["ContentElements"] as $extension => $exArr) {
             if(isset($exArr["elements"])) {

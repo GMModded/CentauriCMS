@@ -8,21 +8,17 @@
  * Waves 1.0.1
  * pickr 1.6.0
  */
-@import "../../../lib/toastr/toastr";
-
-@import "../../../lib/bootstrap/scss/mixins";
-@import "../../../lib/bootstrap/scss/functions";
-@import "../../../lib/bootstrap/scss/variables";
-@import "../../../lib/bootstrap/dist/css/bootstrap.min.css";
-
-@import "../../../lib/waves/dist/waves.min.css";
-@import "../../../lib/pickr/dist/themes/classic.min.css";
-
-@import "../../../lib/fontawesome5.12.0/css/fontawesome.min.css";
-@import "../../../lib/fontawesome5.12.0/css/solid.min.css";
-@import "../../../lib/fontawesome5.12.0/css/brands.min.css";
-
-@import "../../../lib/cropperjs/dist/cropper.min.css";
+@import "../../Packages/toastr/toastr";
+@import "../../Packages/bootstrap/scss/mixins";
+@import "../../Packages/bootstrap/scss/functions";
+@import "../../Packages/bootstrap/scss/variables";
+@import "../../Packages/bootstrap/dist/css/bootstrap.min.css";
+@import "../../Packages/waves/dist/waves.min.css";
+@import "../../Packages/pickr/dist/themes/classic.min.css";
+@import "../../Packages/fontawesome5.12.0/css/fontawesome.min.css";
+@import "../../Packages/fontawesome5.12.0/css/solid.min.css";
+@import "../../Packages/fontawesome5.12.0/css/brands.min.css";
+@import "../../Packages/cropperjs/dist/cropper.min.css";
 
 /**
  * Centauri-Bootstrap

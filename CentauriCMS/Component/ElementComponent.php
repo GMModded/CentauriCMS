@@ -55,7 +55,7 @@ class ElementComponent
 
         $CCEelements = config("centauri")["CCE"]["elements"];
 
-        foreach($GLOBALS["Centauri"]["Extensions"] as $extension => $exArr) {
+        foreach($GLOBALS["Centauri"]["Extensions"] ?? [] as $extension => $exArr) {
             if(isset($exArr["config"])) {
                 if(isset($exArr["config"]["Elements"])) {
                     if(isset($exArr["config"]["Elements"]["ViewNamespace"])) {

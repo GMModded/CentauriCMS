@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
+    "gulp-rename": "^2.0.0",
+    "jquery": "^3.5.1",
+    "node-waves": "^0.7.6",
+    "slick": "^1.12.2",
+    "slick-carousel": "^1.8.1"
+  }
+}

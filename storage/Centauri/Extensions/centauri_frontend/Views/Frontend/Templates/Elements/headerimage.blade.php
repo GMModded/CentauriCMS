@@ -1,7 +1,6 @@
 <div id="headerimage-{{ $element->uid }}" data-contentelement="headerimage">
     @if($element->image)
         <div class="image-view">
-            {!! $element->html !!}
         </div>
     @endif
 

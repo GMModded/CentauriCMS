@@ -1,0 +1,100 @@
+/**
+ * Libs
+ */
+@import "../lib/toastr/toastr";
+
+@import "../lib/bootstrap/scss/mixins";
+@import "../lib/bootstrap/scss/functions";
+@import "../lib/bootstrap/scss/variables";
+@import "../lib/bootstrap/dist/css/bootstrap.min.css";
+
+@import "../lib/slick/slick-theme.css";
+@import "../lib/slick/slick.css";
+
+@import "../lib/fontawesome5.12.0/css/fontawesome.min.css";
+@import "../lib/fontawesome5.12.0/css/solid.min.css";
+@import "../lib/fontawesome5.12.0/css/brands.min.css";
+
+@import "../../node_modules/node-waves/dist/waves.min.css";
+
+/**
+ * Bootstrap Custom Extended
+ */
+@import "BootstrapExtended/bootstrapextended";
+
+/**
+ * Colors
+ */
+@import "colors";
+
+/**
+ * Fonts
+ */
+@import "font";
+
+/**
+ * Variables
+ */
+@import "variables";
+
+/**
+ * Global
+ */
+@import "global";
+
+/**
+ * Custom
+ */
+@import "custom";
+
+/**
+ * Sections
+ */
+@import "Sections/Header";
+@import "Sections/Content";
+
+/**
+ * Functions
+ */
+@import "Functions/ContentElements";
+
+/**
+ * Content Elements
+ */
+@import "ContentElements/Slider";
+@import "ContentElements/HeaderDescription";
+@import "ContentElements/HeaderImage";
+@import "ContentElements/Boxitems";
+
+
+/**
+ * Utilities
+ */
+@import "Utilities/PlaceholderUtility";
+
+
+@media (max-width: 767px) {
+    #header {
+        position: unset !important;
+    }
+
+    #content .item .text-view h4 {
+        font-size: 30px;
+        white-space: nowrap;
+    }
+
+    .button-view {
+        white-space: nowrap;
+    }
+}
+
+.progress {
+    &.inactive {
+        background-color: white !important;
+
+        &:before,
+        &:after {
+            animation: none !important;
+        }
+    }
+}
