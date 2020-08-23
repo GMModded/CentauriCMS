@@ -364,16 +364,16 @@ class ContentElementsAjax
 
         $elementShowsFields = $elements[$ctype] ?? null;
 
-        if(is_null($elementShowsFields)) {
-            return response("This element has no shown-fields configuration.", 500);
-        }
-
         foreach($GLOBALS["Centauri"]["ContentElements"] as $extension => $exArr) {
             if(isset($exArr["elements"])) {
                 if(isset($exArr["elements"][$ctype])) {
                     $elementShowsFields = $exArr["elements"][$ctype];
                 }
             }
+        }
+
+        if(is_null($elementShowsFields)) {
+            return response("This element has no shown-fields configuration.", 500);
         }
 
         $html = "";

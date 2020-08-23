@@ -19,7 +19,7 @@ return [
         /** @see https://docs.centauricms.de/config/frontend */
         "FE" => [
             # "Default" in case a beLayout has no "template"-definition so it will use this one as default.
-            // "DefaultMainTemplate" => "centauri_frontend::Frontend.Templates.frontend",
+            "DefaultMainTemplate" => "centauri_frontend::Frontend.Templates.frontend",
             "keepSiteAlive" => false
         ]
     ],
@@ -28,8 +28,8 @@ return [
     "beLayouts" => [
         "default" => [
             /** NOTE: When using AdditionalDatas within the same class here, those additionaldata-calls has to be moved into the static rendering method! */
-            // "rendering" => \Centauri\Extension\Frontend\Frontend::class,
-            // "template" => "centauri_frontend::Frontend.Templates.Page.frontend",
+            "rendering" => \Centauri\Extension\Frontend\Frontend::class,
+            "template" => "centauri_frontend::Frontend.Templates.Page.frontend",
             "label" => "backend/be_layout.layouts.default.label",
 
             "config" => [
@@ -50,7 +50,7 @@ return [
     /** Grids */
     "grids" => [
         "config" => [
-            // "templateRootPath" => "EXT:centauri_frontend"
+            "templateRootPath" => "EXT:centauri_frontend"
         ]
     ],
 
